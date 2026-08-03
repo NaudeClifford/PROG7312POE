@@ -53,7 +53,7 @@ namespace SmartX.WPF.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;component/views/logniwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;V1.0.0.0;component/views/logniwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\LogniWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

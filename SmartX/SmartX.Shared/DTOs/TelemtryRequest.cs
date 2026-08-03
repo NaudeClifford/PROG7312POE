@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace SmartX.Shared.DTOs;
 
-namespace SmartX.Shared.DTOs
+public class TelemetryRequest
 {
-    internal class TelemtryRequest
-    {
-    }
+    public string SensorId { get; set; } = string.Empty;
+
+    public double Voltage { get; set; }
+
+    public double Current { get; set; }
+
+    public double Temperature { get; set; }
 }

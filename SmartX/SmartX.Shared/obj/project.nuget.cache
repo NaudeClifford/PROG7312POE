@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "t3KY2HphWxg=",
+  "dgSpecHash": "gcPfzYEbviA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\emeris\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\emeris\\.nuget\\packages\\mongodb.bson\\3.10.0\\mongodb.bson.3.10.0.nupkg.sha512"
+  ],
   "logs": []
 }

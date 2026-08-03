@@ -2,9 +2,25 @@
   "version": 4,
   "targets": {
     "net10.0-windows": {
+      "MongoDB.Bson/3.10.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/MongoDB.Bson.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/MongoDB.Bson.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "SmartX.Shared/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "MongoDB.Bson": "3.10.0"
+        },
         "compile": {
           "bin/placeholder/SmartX.Shared.dll": {}
         },
@@ -15,6 +31,25 @@
     }
   },
   "libraries": {
+    "MongoDB.Bson/3.10.0": {
+      "sha512": "dpM9EXd3evUW7qPpSjfWshPYjbD26rxm+e32LWNDpRWBZZZo4WaO5Azy/Xro55u3IZ/8u1Z4hCZnlI72Y+/5jg==",
+      "type": "package",
+      "path": "mongodb.bson/3.10.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net472/MongoDB.Bson.dll",
+        "lib/net472/MongoDB.Bson.xml",
+        "lib/net6.0/MongoDB.Bson.dll",
+        "lib/net6.0/MongoDB.Bson.xml",
+        "lib/netstandard2.1/MongoDB.Bson.dll",
+        "lib/netstandard2.1/MongoDB.Bson.xml",
+        "mongodb.bson.3.10.0.nupkg.sha512",
+        "mongodb.bson.nuspec",
+        "packageIcon.png"
+      ]
+    },
     "SmartX.Shared/1.0.0": {
       "type": "project",
       "path": "../SmartX.Shared/SmartX.Shared.csproj",
@@ -33,11 +68,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\emeris\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\SmartX.WPF.csproj",
+      "projectUniqueName": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\SmartX.WPF.csproj",
       "projectName": "SmartX.WPF",
-      "projectPath": "C:\\Users\\emeris\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\SmartX.WPF.csproj",
+      "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\SmartX.WPF.csproj",
       "packagesPath": "C:\\Users\\emeris\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\emeris\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\obj\\",
+      "outputPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -59,8 +94,8 @@
           "framework": "net10.0-windows7.0",
           "targetAlias": "net10.0-windows",
           "projectReferences": {
-            "C:\\Users\\emeris\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj": {
-              "projectPath": "C:\\Users\\emeris\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj"
+            "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj": {
+              "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj"
             }
           }
         }

@@ -10,6 +10,8 @@
 
   <ItemGroup>
     <Folder Include="Assets\" />
+    <Folder Include="Authentication\" />
+    <Folder Include="LocalData\" />
     <Folder Include="Resources\" />
   </ItemGroup>
 

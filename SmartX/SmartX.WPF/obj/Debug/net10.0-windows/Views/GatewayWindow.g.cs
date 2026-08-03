@@ -53,7 +53,7 @@ namespace SmartX.WPF.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;component/views/gatewaywindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;V1.0.0.0;component/views/gatewaywindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\GatewayWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
