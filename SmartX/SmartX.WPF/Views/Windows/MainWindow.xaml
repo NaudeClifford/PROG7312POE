@@ -1,0 +1,184 @@
+﻿<Window x:Class="SmartX.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SmartX.WPF"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize"
+        WindowStyle="None"
+        WindowState="Maximized"
+        Background="{StaticResource BackgroundBrush}"
+        Title="SmartX">
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+
+            <!-- Custom title bar -->
+            <RowDefinition Height="25"/>
+
+            <!-- Navigation -->
+            <RowDefinition Height="70"/>
+
+            <!-- Content -->
+            <RowDefinition Height="*"/>
+
+            <!-- Footer -->
+            <RowDefinition Height="40"/>
+
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+        Background="{StaticResource DarkBrush}"
+        MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+
+                <!-- Logo + Name -->
+
+                <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    Margin="15,0">
+
+                    <Image Source="/Assets/Logo/Logo.jpg"
+                   Width="50"
+                   Height="30"
+                   Margin="0,0,10,0"/>
+
+
+                    <TextBlock Text="SmartX"
+                       Foreground="{StaticResource LightTextBrush}"
+                       FontWeight="Bold"
+                       FontSize="16"/>
+
+                </StackPanel>
+
+
+
+                <!-- Close buttons -->
+
+                <StackPanel Grid.Column="1"
+                    Orientation="Horizontal">
+
+
+                    <Button Content="—"
+                    Width="40"
+                    Click="Minimize_Click"/>
+
+
+                    <Button Content="□"
+                    Width="40"
+                    Click="Maximize_Click"/>
+
+
+                    <Button Content="X"
+                    Width="40"
+                    Click="Close_Click"/>
+
+
+                </StackPanel>
+
+
+            </Grid>
+
+        </Border>
+
+        <!-- TOP NAVIGATION -->
+        <Border Grid.Row="1"
+                Background="{StaticResource DarkBrush}">
+
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+
+
+                <Button Grid.Column="0"
+                        Content="Home"
+                        Click="Home_Click"
+                        Style="{StaticResource BaseButtonStyle}"/>
+
+
+                <Button Grid.Column="1"
+                        Content="Expenses"
+                        Click="Expenses_Click"
+                        Style="{StaticResource BaseButtonStyle}"/>
+
+
+                <Button Grid.Column="2"
+                        Content="Balances"
+                        Click="Balances_Click"
+                        Style="{StaticResource BaseButtonStyle}"/>
+
+
+                <Button Grid.Column="3"
+                        Content="Settle Up"
+                        Click="Settle_Click"
+                        Style="{StaticResource BaseButtonStyle}"/>
+
+
+                <Button Grid.Column="4"
+                        Content="Analytics"
+                        Click="Analytics_Click"
+                        Style="{StaticResource BaseButtonStyle}"/>
+
+                <Button Grid.Column="5"
+                        Content="People"
+                        Click="People_Click"
+                        Style="{StaticResource BaseButtonStyle}"/>
+
+                <Button Grid.Column="6"
+                        Content="About"
+                        Click="AboutUs_Click"
+                        Style="{StaticResource BaseButtonStyle}"/>
+
+            </Grid>
+
+
+        </Border>
+
+        <!-- PAGE CONTENT -->
+        <Border Grid.Row="2"
+                Background="{StaticResource BackgroundBrush}">
+
+
+            <Frame x:Name="MainFrame"
+                   NavigationUIVisibility="Hidden"
+                   BorderThickness="0"/>
+
+
+        </Border>
+
+        <!-- FOOTER -->
+        <Border Grid.Row="3"
+                Background="{StaticResource DarkBrush}">
+
+
+            <Label
+                Content="SmartX © Clifford Naude ST10258513"
+                Foreground="{StaticResource LightTextBrush}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"/>
+
+
+        </Border>
+    </Grid>
+</Window>

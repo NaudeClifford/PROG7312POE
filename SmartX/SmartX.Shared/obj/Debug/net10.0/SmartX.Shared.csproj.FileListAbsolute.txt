@@ -10,3 +10,4 @@ C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\Smart
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\refint\SmartX.Shared.dll
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\SmartX.Shared.pdb
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\ref\SmartX.Shared.dll
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\SmartX.Shared.csproj.AssemblyReference.cache

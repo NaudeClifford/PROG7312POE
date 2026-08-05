@@ -1,0 +1,260 @@
+﻿<Page x:Class="SmartX.WPF.Views.Pages.Telemetry.TelemetryPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Title="Telemetry"
+      Background="{StaticResource BackgroundBrush}">
+
+    <Grid Margin="35">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <!-- HEADER -->
+
+        <Grid Grid.Row="0">
+
+            <StackPanel>
+
+                <TextBlock Text="Telemetry"
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource DarkBrush}"/>
+
+                <TextBlock Text="Live readings received from your connected sensors."
+                           FontSize="14"
+                           Foreground="#737A82"
+                           Margin="0,6,0,0"/>
+
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+
+                <Ellipse Width="9"
+                         Height="9"
+                         Fill="#28A745"
+                         Margin="0,0,8,0"
+                         VerticalAlignment="Center"/>
+
+                <TextBlock Text="Live"
+                           FontWeight="SemiBold"
+                           Foreground="#218838"
+                           VerticalAlignment="Center"/>
+
+            </StackPanel>
+
+        </Grid>
+
+
+        <!-- CURRENT VALUES -->
+
+        <Grid Grid.Row="1"
+              Margin="0,30,0,25">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+
+            <!-- Temperature -->
+
+            <Border Grid.Column="0"
+                    Margin="0,0,12,0"
+                    Padding="25"
+                    Background="White"
+                    CornerRadius="15">
+
+                <StackPanel>
+
+                    <TextBlock Text="TEMPERATURE"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="#8A929A"/>
+
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,10,0,0">
+
+                        <TextBlock x:Name="TemperatureValue"
+                                   Text="24.6"
+                                   FontSize="36"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource DarkBrush}"/>
+
+                        <TextBlock Text="°C"
+                                   FontSize="18"
+                                   Foreground="#737A82"
+                                   VerticalAlignment="Bottom"
+                                   Margin="6,0,0,7"/>
+
+                    </StackPanel>
+
+                    <TextBlock Text="Normal range"
+                               Foreground="#28A745"
+                               FontSize="12"
+                               Margin="0,5,0,0"/>
+
+                </StackPanel>
+
+            </Border>
+
+
+            <!-- Humidity -->
+
+            <Border Grid.Column="1"
+                    Margin="12,0"
+                    Padding="25"
+                    Background="White"
+                    CornerRadius="15">
+
+                <StackPanel>
+
+                    <TextBlock Text="HUMIDITY"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="#8A929A"/>
+
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,10,0,0">
+
+                        <TextBlock x:Name="HumidityValue"
+                                   Text="58"
+                                   FontSize="36"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource DarkBrush}"/>
+
+                        <TextBlock Text="%"
+                                   FontSize="18"
+                                   Foreground="#737A82"
+                                   VerticalAlignment="Bottom"
+                                   Margin="6,0,0,7"/>
+
+                    </StackPanel>
+
+                    <TextBlock Text="Normal range"
+                               Foreground="#28A745"
+                               FontSize="12"
+                               Margin="0,5,0,0"/>
+
+                </StackPanel>
+
+            </Border>
+
+
+            <!-- Pressure -->
+
+            <Border Grid.Column="2"
+                    Margin="12,0,0,0"
+                    Padding="25"
+                    Background="White"
+                    CornerRadius="15">
+
+                <StackPanel>
+
+                    <TextBlock Text="PRESSURE"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="#8A929A"/>
+
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,10,0,0">
+
+                        <TextBlock x:Name="PressureValue"
+                                   Text="101.3"
+                                   FontSize="36"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource DarkBrush}"/>
+
+                        <TextBlock Text="kPa"
+                                   FontSize="18"
+                                   Foreground="#737A82"
+                                   VerticalAlignment="Bottom"
+                                   Margin="6,0,0,7"/>
+
+                    </StackPanel>
+
+                    <TextBlock Text="Normal range"
+                               Foreground="#28A745"
+                               FontSize="12"
+                               Margin="0,5,0,0"/>
+
+                </StackPanel>
+
+            </Border>
+
+        </Grid>
+
+
+        <!-- TELEMETRY TABLE -->
+
+        <Border Grid.Row="2"
+                Background="White"
+                CornerRadius="15"
+                Padding="25">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Live Telemetry"
+                           FontSize="19"
+                           FontWeight="SemiBold"
+                           Foreground="{StaticResource DarkBrush}"/>
+
+
+                <DataGrid Grid.Row="1"
+                          x:Name="TelemetryDataGrid"
+                          Margin="0,20,0,0"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          BorderThickness="0"
+                          GridLinesVisibility="Horizontal">
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Timestamp"
+                                            Binding="{Binding Timestamp}"
+                                            Width="1.5*"/>
+
+                        <DataGridTextColumn Header="Sensor"
+                                            Binding="{Binding Sensor}"
+                                            Width="1.5*"/>
+
+                        <DataGridTextColumn Header="Metric"
+                                            Binding="{Binding Metric}"
+                                            Width="*"/>
+
+                        <DataGridTextColumn Header="Value"
+                                            Binding="{Binding Value}"
+                                            Width="*"/>
+
+                        <DataGridTextColumn Header="Unit"
+                                            Binding="{Binding Unit}"
+                                            Width="*"/>
+
+                        <DataGridTextColumn Header="Status"
+                                            Binding="{Binding Status}"
+                                            Width="*"/>
+
+                    </DataGrid.Columns>
+
+                </DataGrid>
+
+            </Grid>
+
+        </Border>
+
+    </Grid>
+
+</Page>

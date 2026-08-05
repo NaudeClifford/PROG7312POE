@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET10_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NET10_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\App.xaml
-5-1708474757
+101348572177
+11413424753
+22-249085719
+226-1305664323
+Resources\Styles\ButtonStyles.xaml;Resources\Styles\CardStyles.xaml;Resources\Styles\Colors.xaml;Views\Pages\History\HistoryPage.xaml;Views\Pages\Home\HomePage.xaml;Views\Pages\Login\LoginPage.xaml;Views\Pages\Sensor\SensorsPage.xaml;Views\Pages\Signin\SigninPage.xaml;Views\Pages\Telemetry\TelemetryPage.xaml;Views\Windows\MainWindow.xaml;
 
-21-135414243
-208-1642863325
-MainWindow.xaml;Views\GatewayWindow.xaml;Views\LogniWindow.xaml;Views\SensorWindow.xaml;Views\TelemtryWindow.xaml;
-
-True
+False
 

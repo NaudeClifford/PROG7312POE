@@ -1,0 +1,99 @@
+﻿<Page x:Class="SmartX.WPF.Views.Pages.Home.HomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Title="SmartX">
+
+    <Grid Background="{StaticResource BackgroundBrush}">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="1"
+                Width="720"
+                Padding="55"
+                CornerRadius="24"
+                Background="{StaticResource DarkBrush}"
+                HorizontalAlignment="Center">
+
+            <StackPanel>
+
+                <!-- Logo -->
+                <Border Width="75"
+                        Height="75"
+                        CornerRadius="18"
+                        Background="{StaticResource BackgroundBrush}"
+                        HorizontalAlignment="Center">
+
+                    <TextBlock Text="SX"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource LightTextBrush}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Border>
+
+                <TextBlock Text="SmartX"
+                           FontSize="42"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource LightTextBrush}"
+                           HorizontalAlignment="Center"
+                           Margin="0,20,0,5"/>
+
+                <TextBlock Text="Smart Sensor Monitoring Platform"
+                           FontSize="17"
+                           Foreground="{StaticResource LightTextBrush}"
+                           Opacity="0.7"
+                           HorizontalAlignment="Center"/>
+
+                <TextBlock Text="Monitor your sensors, view live telemetry and explore historical data from one central platform."
+                           FontSize="15"
+                           Foreground="{StaticResource LightTextBrush}"
+                           Opacity="0.65"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           Margin="50,25,50,40"/>
+
+
+                <!-- Login -->
+                <Button x:Name="LoginButton"
+                        Content="Login"
+                        Height="52"
+                        Margin="40,0,40,12"
+                        FontSize="15"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="LoginButton_Click"
+                        Style="{StaticResource BaseButtonStyle}"/>
+
+
+                <!-- Sign Up -->
+                <Button x:Name="SignUpButton"
+                        Content="Create an Account"
+                        Height="52"
+                        Margin="40,0,40,10"
+                        FontSize="15"
+                        Cursor="Hand"
+                        Click="SignUpButton_Click"
+                        Style="{StaticResource BaseButtonStyle}"/>
+
+
+                <TextBlock Text="Secure authentication powered by Firebase"
+                           Foreground="{StaticResource LightTextBrush}"
+                           Opacity="0.45"
+                           FontSize="11"
+                           HorizontalAlignment="Center"
+                           Margin="0,25,0,0"/>
+
+            </StackPanel>
+
+        </Border>
+
+    </Grid>
+
+</Page>

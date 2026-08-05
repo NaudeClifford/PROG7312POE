@@ -1,3 +1,7 @@
+using Microsoft.AspNetCore.Authentication;
+using SmartX.Application;
+using SmartX.Infrastructure;
+using SmartX.Infrastructure.Authentication.Firebase;
 
 namespace SmartX.API
 {
@@ -8,11 +12,18 @@ namespace SmartX.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddEndpointsApiExplorer()
+                            .AddSwaggerGen()
+                            .AddApplication()
+                            .AddInfrastructure(builder.Configuration)
+                            .AddControllers();
 
-            builder.Services.AddSwaggerGen();
+            builder.Services
+                .AddAuthentication("Firebase")
+                .AddScheme<AuthenticationSchemeOptions, FirebaseAuthHandler>(
+                    "Firebase",
+                    options => { });
 
-            builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
@@ -30,8 +41,9 @@ namespace SmartX.API
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseAuthentication();
 
+            app.UseAuthorization();
 
             app.MapControllers();
 

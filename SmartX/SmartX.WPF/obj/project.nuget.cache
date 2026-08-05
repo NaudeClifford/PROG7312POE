@@ -1,9 +1,27 @@
 {
   "version": 2,
-  "dgSpecHash": "54HPwg+m0FE=",
+  "dgSpecHash": "8zmB5jfsoJk=",
   "success": true,
   "projectFilePath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\SmartX.WPF.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.configuration\\10.0.10\\microsoft.extensions.configuration.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\10.0.10\\microsoft.extensions.configuration.abstractions.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.configuration.binder\\10.0.10\\microsoft.extensions.configuration.binder.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.configuration.fileextensions\\10.0.10\\microsoft.extensions.configuration.fileextensions.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.configuration.json\\10.0.10\\microsoft.extensions.configuration.json.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\10.0.10\\microsoft.extensions.dependencyinjection.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.10\\microsoft.extensions.dependencyinjection.abstractions.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.diagnostics\\10.0.10\\microsoft.extensions.diagnostics.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.diagnostics.abstractions\\10.0.10\\microsoft.extensions.diagnostics.abstractions.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\10.0.10\\microsoft.extensions.fileproviders.abstractions.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.fileproviders.physical\\10.0.10\\microsoft.extensions.fileproviders.physical.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.filesystemglobbing\\10.0.10\\microsoft.extensions.filesystemglobbing.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.http\\10.0.10\\microsoft.extensions.http.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.logging\\10.0.10\\microsoft.extensions.logging.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\10.0.10\\microsoft.extensions.logging.abstractions.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.options\\10.0.10\\microsoft.extensions.options.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.options.configurationextensions\\10.0.10\\microsoft.extensions.options.configurationextensions.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.10\\microsoft.extensions.primitives.10.0.10.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\mongodb.bson\\3.10.0\\mongodb.bson.3.10.0.nupkg.sha512"
   ],
   "logs": []

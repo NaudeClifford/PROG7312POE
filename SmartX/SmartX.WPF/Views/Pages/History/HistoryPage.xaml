@@ -1,0 +1,214 @@
+﻿<Page x:Class="SmartX.WPF.Views.Pages.History.HistoryPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      Title="History"
+      Background="{StaticResource BackgroundBrush}">
+
+    <Grid Margin="35">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <!-- HEADER -->
+
+        <StackPanel Grid.Row="0">
+
+            <TextBlock Text="History"
+                       FontSize="32"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource DarkBrush}"/>
+
+            <TextBlock Text="Review historical sensor readings and telemetry."
+                       FontSize="14"
+                       Foreground="#737A82"
+                       Margin="0,6,0,0"/>
+
+        </StackPanel>
+
+
+        <!-- FILTER BAR -->
+
+        <Border Grid.Row="1"
+                Background="White"
+                CornerRadius="15"
+                Padding="20"
+                Margin="0,30,0,25">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="180"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="180"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="180"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+
+                <!-- Sensor -->
+
+                <TextBlock Grid.Column="0"
+                           Text="Sensor"
+                           FontWeight="SemiBold"
+                           Foreground="#50565C"
+                           VerticalAlignment="Center"
+                           Margin="0,0,12,0"/>
+
+                <ComboBox Grid.Column="1"
+                          x:Name="SensorFilterComboBox"
+                          Height="38"
+                          SelectedIndex="0">
+
+                    <ComboBoxItem Content="All Sensors"/>
+                    <ComboBoxItem Content="Temperature Sensor"/>
+                    <ComboBoxItem Content="Humidity Sensor"/>
+                    <ComboBoxItem Content="Pressure Sensor"/>
+
+                </ComboBox>
+
+
+                <!-- From -->
+
+                <TextBlock Grid.Column="2"
+                           Text="From"
+                           FontWeight="SemiBold"
+                           Foreground="#50565C"
+                           VerticalAlignment="Center"
+                           Margin="20,0,12,0"/>
+
+                <DatePicker Grid.Column="3"
+                            x:Name="FromDatePicker"
+                            Height="38"/>
+
+
+                <!-- To -->
+
+                <TextBlock Grid.Column="4"
+                           Text="To"
+                           FontWeight="SemiBold"
+                           Foreground="#50565C"
+                           VerticalAlignment="Center"
+                           Margin="20,0,12,0"/>
+
+                <DatePicker Grid.Column="5"
+                            x:Name="ToDatePicker"
+                            Height="38"/>
+
+
+                <!-- Search -->
+
+                <Button Grid.Column="7"
+                        x:Name="SearchButton"
+                        Content="Search"
+                        Height="38"
+                        Width="100"
+                        Margin="20,0,0,0"
+                        Cursor="Hand"
+                        Style="{StaticResource BaseButtonStyle}"/>
+
+            </Grid>
+
+        </Border>
+
+
+        <!-- HISTORY TABLE -->
+
+        <Border Grid.Row="2"
+                Background="White"
+                CornerRadius="15"
+                Padding="25">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+
+                <Grid>
+
+                    <StackPanel>
+
+                        <TextBlock Text="Historical Readings"
+                                   FontSize="19"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource DarkBrush}"/>
+
+                        <TextBlock Text="Sensor measurements recorded by SmartX."
+                                   FontSize="12"
+                                   Foreground="#8A929A"
+                                   Margin="0,4,0,0"/>
+
+                    </StackPanel>
+
+
+                    <Button Content="Export"
+                            HorizontalAlignment="Right"
+                            Width="90"
+                            Height="36"
+                            Cursor="Hand"
+                            Style="{StaticResource BaseButtonStyle}"/>
+
+                </Grid>
+
+
+                <DataGrid Grid.Row="1"
+                          x:Name="HistoryDataGrid"
+                          Margin="0,20,0,0"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          BorderThickness="0"
+                          GridLinesVisibility="Horizontal">
+
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Date"
+                                            Binding="{Binding Date}"
+                                            Width="1.2*"/>
+
+                        <DataGridTextColumn Header="Time"
+                                            Binding="{Binding Time}"
+                                            Width="1.2*"/>
+
+                        <DataGridTextColumn Header="Sensor"
+                                            Binding="{Binding Sensor}"
+                                            Width="1.5*"/>
+
+                        <DataGridTextColumn Header="Measurement"
+                                            Binding="{Binding Measurement}"
+                                            Width="1.5*"/>
+
+                        <DataGridTextColumn Header="Value"
+                                            Binding="{Binding Value}"
+                                            Width="*"/>
+
+                        <DataGridTextColumn Header="Unit"
+                                            Binding="{Binding Unit}"
+                                            Width="*"/>
+
+                        <DataGridTextColumn Header="Status"
+                                            Binding="{Binding Status}"
+                                            Width="*"/>
+
+                    </DataGrid.Columns>
+
+                </DataGrid>
+
+            </Grid>
+
+        </Border>
+
+    </Grid>
+
+</Page>

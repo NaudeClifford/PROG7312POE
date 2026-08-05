@@ -7,16 +7,22 @@
     <ActiveDebugProfile>SmartX.WPF</ActiveDebugProfile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Update="Views\GatewayWindow.xaml.cs">
+    <Compile Update="Views\Pages\History\HistoryPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\LogniWindow.xaml.cs">
+    <Compile Update="Views\Pages\Home\HomePage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\SensorWindow.xaml.cs">
+    <Compile Update="Views\Pages\Sensor\SensorsPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\TelemtryWindow.xaml.cs">
+    <Compile Update="Views\Pages\Login\LoginPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Pages\Signin\SigninPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Pages\Telemetry\TelemetryPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

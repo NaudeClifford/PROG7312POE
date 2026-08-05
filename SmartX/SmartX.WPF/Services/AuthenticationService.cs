@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace SmartX.WPF.Services;
 
-namespace SmartX.WPF.Services
+public class AuthenticationService
 {
-    internal class AuthenticationService
-    {
-    }
 }

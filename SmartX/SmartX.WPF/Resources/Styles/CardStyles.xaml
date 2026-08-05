@@ -1,0 +1,126 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--Base Card Style-->
+    <Style x:Key="BaseCardStyle"
+       TargetType="Border">
+
+        <Setter Property="Background"
+            Value="White"/>
+
+        <Setter Property="CornerRadius"
+            Value="10"/>
+
+        <Setter Property="Padding"
+            Value="16"/>
+
+        <Setter Property="Margin"
+            Value="8"/>
+
+        <Setter Property="BorderBrush"
+            Value="#FFE0E0E0"/>
+
+        <Setter Property="BorderThickness"
+            Value="1"/>
+
+        <Setter Property="SnapsToDevicePixels"
+            Value="True"/>
+
+    </Style>
+
+    <!--Elevated Card Style-->
+    <Style x:Key="ElevatedCardStyle"
+       TargetType="Border"
+       BasedOn="{StaticResource BaseCardStyle}">
+
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect
+                BlurRadius="5"
+                ShadowDepth="1"
+                Direction="270"
+                Opacity="0.15"
+                Color="Black"/>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+
+    <!--Dark Card Style -->
+    <Style x:Key="DarkCardStyle"
+       TargetType="Border"
+       BasedOn="{StaticResource BaseCardStyle}">
+
+        <Setter Property="Background"
+            Value="{StaticResource DarkBrush}"/>
+
+        <Setter Property="BorderBrush"
+            Value="{StaticResource DarkBrush}"/>
+
+    </Style>
+
+    <!--Primary Card Style-->
+    <Style x:Key="PrimaryCardStyle"
+       TargetType="Border"
+       BasedOn="{StaticResource BaseCardStyle}">
+
+        <Setter Property="BorderBrush"
+            Value="{StaticResource PrimaryBrush}"/>
+
+        <Setter Property="BorderThickness"
+            Value="2"/>
+
+    </Style>
+
+    <!--Success Card Style-->
+    <Style x:Key="SuccessCardStyle"
+       TargetType="Border"
+       BasedOn="{StaticResource BaseCardStyle}">
+
+        <Setter Property="BorderBrush"
+            Value="{StaticResource SuccessBrush}"/>
+
+        <Setter Property="BorderThickness"
+            Value="2"/>
+
+    </Style>
+
+    <!--Danger Card Style-->
+    <Style x:Key="DangerCardStyle"
+       TargetType="Border"
+       BasedOn="{StaticResource BaseCardStyle}">
+
+        <Setter Property="BorderBrush"
+            Value="{StaticResource DangerBrush}"/>
+
+        <Setter Property="BorderThickness"
+            Value="2"/>
+
+    </Style>
+
+    <!--Warning Card Style-->
+    <Style x:Key="WarningCardStyle"
+       TargetType="Border"
+       BasedOn="{StaticResource BaseCardStyle}">
+
+        <Setter Property="BorderBrush"
+            Value="{StaticResource WarningBrush}"/>
+
+        <Setter Property="BorderThickness"
+            Value="2"/>
+
+    </Style>
+
+    <!--Transparent Card Style-->
+    <Style x:Key="TransparentCardStyle"
+       TargetType="Border"
+       BasedOn="{StaticResource BaseCardStyle}">
+
+        <Setter Property="Background"
+            Value="Transparent"/>
+
+        <Setter Property="BorderThickness"
+            Value="0"/>
+
+    </Style>
+</ResourceDictionary>
