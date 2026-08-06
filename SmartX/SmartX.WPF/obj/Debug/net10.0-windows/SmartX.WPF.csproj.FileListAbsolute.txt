@@ -32,3 +32,12 @@ C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\Smart
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Home\HomePage.baml
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Signin\SigninPage.baml
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Windows\MainWindow.baml
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\History\HistoryPage.baml
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Login\LoginPage.baml
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorsPage.baml
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Telemetry\TelemetryPage.baml
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\History\HistoryPage.g.cs
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Login\LoginPage.g.cs
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorsPage.g.cs
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Telemetry\TelemetryPage.g.cs
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF_Content.g.cs

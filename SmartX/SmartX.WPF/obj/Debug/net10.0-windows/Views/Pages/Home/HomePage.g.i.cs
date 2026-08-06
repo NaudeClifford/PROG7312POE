@@ -68,7 +68,7 @@ namespace SmartX.WPF.Views.Pages.Home {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;V1.0.0.0;component/views/pages/home/homepage.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;component/views/pages/home/homepage.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Views\Pages\Home\HomePage.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

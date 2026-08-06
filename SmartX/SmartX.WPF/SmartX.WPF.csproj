@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="Assets\Images\" />
-    <Folder Include="LocalData\" />
     <Folder Include="ViewModels\History\" />
     <Folder Include="ViewModels\Home\" />
     <Folder Include="ViewModels\Network\" />

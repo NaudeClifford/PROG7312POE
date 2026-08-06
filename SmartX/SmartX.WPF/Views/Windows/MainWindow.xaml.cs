@@ -1,4 +1,5 @@
 ﻿using SmartX.WPF.Views.Pages;
+using SmartX.WPF.Views.Pages.Home;
 using SmartX.WPF.Views.Pages.Signin;
 using System.Windows;
 using System.Windows.Input;

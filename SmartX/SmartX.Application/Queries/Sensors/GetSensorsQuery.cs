@@ -2,5 +2,7 @@
 {
     public class GetSensorsQuery
     {
+
+        public Guid SensorId { get; set; }
     }
 }

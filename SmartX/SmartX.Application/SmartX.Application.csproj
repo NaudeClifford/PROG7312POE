@@ -10,9 +10,9 @@
     <Folder Include="Behaviors\" />
     <Folder Include="Commands\Telemetry\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="DTOs\" />
     <Folder Include="Queries\Dashboard\" />
     <Folder Include="Queries\Telemetry\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>

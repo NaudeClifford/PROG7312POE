@@ -22,7 +22,9 @@ public class CreateSensorHandler
             Id = Guid.NewGuid(),
             Name = command.Name,
             Location = command.Location,
+            DeviceIdentifier = command.DeviceIdentifier,
             Description = command.Description,
+            Category = command.Category,
             GatewayId = command.GatewayId,
             CreatedAt = DateTime.UtcNow,
             IsActive = true
