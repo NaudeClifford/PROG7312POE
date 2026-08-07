@@ -16,6 +16,12 @@ public class DeleteSensorHandler
         DeleteSensorCommand command,
         CancellationToken cancellationToken = default)
     {
+
+        if (command.Id == Guid.Empty)
+        {
+            return Result<bool>.Fail("Sensor ID is required.");
+        }
+
         var sensor = await _sensorRepository.GetByIdAsync(
             command.Id,
             cancellationToken);

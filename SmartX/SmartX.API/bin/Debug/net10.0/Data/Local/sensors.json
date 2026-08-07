@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "Id": "773e6c97-d371-45df-9145-b32f25ca2d42",
+    "Name": "",
+    "DeviceIdentifier": "not-a-valid-mac",
+    "Category": 99,
+    "Location": "",
+    "Description": "test",
+    "IsActive": true,
+    "GatewayId": null,
+    "CreatedAt": "2026-08-07T12:06:03.6791007Z"
+  }
+]

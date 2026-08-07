@@ -10,12 +10,12 @@
     <Folder Include="Behaviors\" />
     <Folder Include="Commands\Telemetry\" />
     <Folder Include="Interfaces\" />
-    <Folder Include="DTOs\" />
     <Folder Include="Queries\Dashboard\" />
     <Folder Include="Queries\Telemetry\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.2.0" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.10" />

@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("2c8955d8-c8bb-4375-95cb-837d87680abb")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartX.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec4f69bfae6ef262db86c8135632e304fc5da8bc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ff249f22038df2132fc8324baa1a25b66cac3918")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartX.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartX.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

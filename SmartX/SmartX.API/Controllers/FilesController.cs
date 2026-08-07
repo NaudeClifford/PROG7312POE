@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace SmartX.API.Controller
+namespace SmartX.API.Controllers
 {
-    /*public class TelemetryController : Controller
+    /*public class FilesController : Controller
     {
         public IActionResult Index()
         {
             return View();
         }
-    }*/
+    }
+    */
 }

@@ -18,7 +18,7 @@ public static class DependencyInjection
         services.AddSingleton<MongoContext>();
         services.AddSingleton<FirebaseAuthService>();
 
-        services.AddScoped<ISensorRepository, SensorRepository>();
+        services.AddScoped<ISensorRepository, JsonSensorRepository>();
         services.AddScoped<ITelemetryRepository, TelemetryRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
 

@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "lQzPF5l2cLM=",
+  "dgSpecHash": "xMfQvOZDt5U=",
   "success": true,
   "projectFilePath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\emeris\\.nuget\\packages\\automapper\\16.2.0\\automapper.16.2.0.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\firebaseadmin\\3.6.0\\firebaseadmin.3.6.0.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\fluentvalidation\\12.1.1\\fluentvalidation.12.1.1.nupkg.sha512",
@@ -34,12 +35,16 @@
     "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.diagnostics.abstractions\\8.0.1\\microsoft.extensions.diagnostics.abstractions.8.0.1.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\8.0.0\\microsoft.extensions.fileproviders.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.hosting.abstractions\\8.0.1\\microsoft.extensions.hosting.abstractions.8.0.1.nupkg.sha512",
-    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.2\\microsoft.extensions.logging.abstractions.8.0.2.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\10.0.0\\microsoft.extensions.logging.abstractions.10.0.0.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.objectpool\\8.0.11\\microsoft.extensions.objectpool.8.0.11.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.options\\10.0.10\\microsoft.extensions.options.10.0.10.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.options.configurationextensions\\10.0.10\\microsoft.extensions.options.configurationextensions.10.0.10.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.10\\microsoft.extensions.primitives.10.0.10.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.webencoders\\8.0.11\\microsoft.extensions.webencoders.8.0.11.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.identitymodel.abstractions\\8.14.0\\microsoft.identitymodel.abstractions.8.14.0.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\8.14.0\\microsoft.identitymodel.jsonwebtokens.8.14.0.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.identitymodel.logging\\8.14.0\\microsoft.identitymodel.logging.8.14.0.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.identitymodel.tokens\\8.14.0\\microsoft.identitymodel.tokens.8.14.0.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\microsoft.net.http.headers\\2.3.9\\microsoft.net.http.headers.2.3.9.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\mongodb.bson\\3.10.0\\mongodb.bson.3.10.0.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\mongodb.driver\\3.10.0\\mongodb.driver.3.10.0.nupkg.sha512",
@@ -48,70 +53,9 @@
     "C:\\Users\\emeris\\.nuget\\packages\\snappier\\1.3.1\\snappier.1.3.1.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\system.codedom\\7.0.0\\system.codedom.7.0.0.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\system.management\\7.0.2\\system.management.7.0.2.nupkg.sha512",
-    "C:\\Users\\emeris\\.nuget\\packages\\system.security.cryptography.pkcs\\8.0.1\\system.security.cryptography.pkcs.8.0.1.nupkg.sha512",
-    "C:\\Users\\emeris\\.nuget\\packages\\system.security.cryptography.xml\\8.0.3\\system.security.cryptography.xml.8.0.3.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\system.security.cryptography.pkcs\\10.0.10\\system.security.cryptography.pkcs.10.0.10.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\system.security.cryptography.xml\\10.0.10\\system.security.cryptography.xml.10.0.10.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\zstdsharp.port\\0.7.3\\zstdsharp.port.0.7.3.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "message": "Package 'System.Security.Cryptography.Xml' 8.0.3 has a known high severity vulnerability, https://github.com/advisories/GHSA-23rf-6693-g89p",
-      "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
-      "libraryId": "System.Security.Cryptography.Xml",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "message": "Package 'System.Security.Cryptography.Xml' 8.0.3 has a known high severity vulnerability, https://github.com/advisories/GHSA-8q5v-6pqq-x66h",
-      "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
-      "libraryId": "System.Security.Cryptography.Xml",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "message": "Package 'System.Security.Cryptography.Xml' 8.0.3 has a known high severity vulnerability, https://github.com/advisories/GHSA-cvvh-rhrc-wg4q",
-      "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
-      "libraryId": "System.Security.Cryptography.Xml",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "message": "Package 'System.Security.Cryptography.Xml' 8.0.3 has a known high severity vulnerability, https://github.com/advisories/GHSA-g8r8-53c2-pm3f",
-      "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
-      "libraryId": "System.Security.Cryptography.Xml",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "message": "Package 'System.Security.Cryptography.Xml' 8.0.3 has a known high severity vulnerability, https://github.com/advisories/GHSA-mmjf-rqrv-855v",
-      "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
-      "warningLevel": 1,
-      "filePath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
-      "libraryId": "System.Security.Cryptography.Xml",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  "logs": []
 }

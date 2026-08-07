@@ -1,25 +1,32 @@
-﻿using SmartX.Application.Common;
+﻿using AutoMapper;
+using SmartX.Application.Common;
 using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
+using SmartX.Shared.DTOs.Sensors;
 
 namespace SmartX.Application.Queries.Sensors;
 
 public class GetSensorsHandler
 {
     private readonly ISensorRepository _sensorRepository;
-
-    public GetSensorsHandler(ISensorRepository sensorRepository)
+    private readonly IMapper _mapper;
+    public GetSensorsHandler(ISensorRepository sensorRepository, IMapper mapper)
     {
         _sensorRepository = sensorRepository;
+        _mapper = mapper;
     }
 
-    public async Task<Result<IReadOnlyList<Sensor>>> HandleAsync(
+    public async Task<Result<IReadOnlyList<SensorDto>>> HandleAsync(
         GetSensorsQuery query,
         CancellationToken cancellationToken = default)
     {
         var sensors = await _sensorRepository.GetAllAsync(
             cancellationToken);
 
-        return Result<IReadOnlyList<Sensor>>.Ok(sensors);
+        var dtos = _mapper.Map<List<SensorDto>>(sensors);
+
+
+        return Result<IReadOnlyList<SensorDto>>.Ok(dtos);
     }
+
 }

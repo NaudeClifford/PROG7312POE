@@ -1,6 +1,8 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using SmartX.Application.Commands.Sensors;
+using SmartX.Application.Mapping;
 using SmartX.Application.Queries.Sensors;
 using SmartX.Application.Validators;
 
@@ -16,8 +18,15 @@ public static class DependencyInjection
         //Sensor handlers
         services.AddScoped<CreateSensorHandler>();
         services.AddScoped<GetSensorsHandler>();
+        services.AddScoped<GetSensorByIdHandler>();
         services.AddScoped<UpdateSensorHandler>();
         services.AddScoped<DeleteSensorHandler>();
+
+        //Auto Mapper
+        services.AddAutoMapper(cfg =>
+        {
+            cfg.AddProfile<SensorMappingProfile>();
+        });
 
         return services;
     }

@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "8NRW+WFPfBs=",
+  "dgSpecHash": "N7uLTaOEJGI=",
   "success": true,
   "projectFilePath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\SmartX.API.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\emeris\\.nuget\\packages\\automapper\\16.2.0\\automapper.16.2.0.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\firebaseadmin\\3.6.0\\firebaseadmin.3.6.0.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\fluentvalidation\\12.1.1\\fluentvalidation.12.1.1.nupkg.sha512",
@@ -15,6 +16,10 @@
     "C:\\Users\\emeris\\.nuget\\packages\\google.apis.core\\1.73.0\\google.apis.core.1.73.0.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.10\\microsoft.aspnetcore.openapi.10.0.10.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.identitymodel.abstractions\\8.14.0\\microsoft.identitymodel.abstractions.8.14.0.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.identitymodel.jsonwebtokens\\8.14.0\\microsoft.identitymodel.jsonwebtokens.8.14.0.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.identitymodel.logging\\8.14.0\\microsoft.identitymodel.logging.8.14.0.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.identitymodel.tokens\\8.14.0\\microsoft.identitymodel.tokens.8.14.0.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\microsoft.openapi\\2.7.5\\microsoft.openapi.2.7.5.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\mongodb.bson\\3.10.0\\mongodb.bson.3.10.0.nupkg.sha512",
     "C:\\Users\\emeris\\.nuget\\packages\\mongodb.driver\\3.10.0\\mongodb.driver.3.10.0.nupkg.sha512",

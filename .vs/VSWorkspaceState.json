@@ -2,8 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\SmartX",
+    "\\SmartX\\SmartX.API",
+    "\\SmartX\\SmartX.API\\bin",
+    "\\SmartX\\SmartX.API\\bin\\Debug",
+    "\\SmartX\\SmartX.API\\bin\\Debug\\net10.0",
+    "\\SmartX\\SmartX.API\\bin\\Debug\\net10.0\\Data",
+    "\\SmartX\\SmartX.API\\bin\\Debug\\net10.0\\Data\\Local",
+    "\\SmartX\\SmartX.Application",
     "\\SmartX\\SmartX.Shared"
   ],
-  "SelectedNode": "\\SmartX\\SmartX.slnx",
-  "PreviewInSolutionExplorer": false
+  "SelectedNode": "\\SmartX\\SmartX.API\\Program.cs",
+  "PreviewInSolutionExplorer": true
 }

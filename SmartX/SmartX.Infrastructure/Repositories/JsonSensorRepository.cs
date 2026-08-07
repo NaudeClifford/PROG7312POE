@@ -13,7 +13,7 @@ namespace SmartX.Infrastructure.Repositories
         {
             _filePath = Path.Combine(
                 AppContext.BaseDirectory,
-                "Data", "Local", "sensor.json");
+                "Data", "Local", "sensors.json");
         }
 
         public async Task<Sensor?> GetByIdAsync(

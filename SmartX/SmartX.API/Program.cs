@@ -45,9 +45,12 @@ namespace SmartX.API
 
             app.UseAuthorization();
 
+            app.MapGet("/", () => "API Running");
+
+            app.MapGet("/test", () => "Test works");
+
             app.MapControllers();
 
-            app.MapGet("/", () => "API Running");
 
             app.Run();
         }
