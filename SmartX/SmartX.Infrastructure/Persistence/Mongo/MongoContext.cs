@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 
 namespace SmartX.Infrastructure.Persistence.Mongo;
 
@@ -13,7 +16,7 @@ public class MongoContext
             configuration["Mongo:ConnectionString"];
 
         var databaseName =
-            configuration["Mongo:DatabaseName"];
+            configuration["Mongo:Database"];
 
         if (string.IsNullOrWhiteSpace(connectionString))
         {
@@ -24,8 +27,11 @@ public class MongoContext
         if (string.IsNullOrWhiteSpace(databaseName))
         {
             throw new InvalidOperationException(
-                "Mongo:DatabaseName is not configured.");
+                "Mongo:Database is not configured.");
         }
+
+        BsonSerializer.RegisterSerializer(
+            new GuidSerializer(GuidRepresentation.Standard));
 
         var client = new MongoClient(connectionString);
 

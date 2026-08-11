@@ -15,4 +15,6 @@ public class Telemetry
     public double? Power { get; set; }
 
     public double? Temperature { get; set; }
+
+
 }

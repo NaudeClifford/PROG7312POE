@@ -8,10 +8,8 @@
 
   <ItemGroup>
     <Folder Include="Behaviors\" />
-    <Folder Include="Commands\Telemetry\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Queries\Dashboard\" />
-    <Folder Include="Queries\Telemetry\" />
   </ItemGroup>
 
   <ItemGroup>

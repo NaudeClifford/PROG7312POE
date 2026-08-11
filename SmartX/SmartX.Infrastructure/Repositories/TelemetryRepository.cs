@@ -23,7 +23,32 @@ public class TelemetryRepository : ITelemetryRepository
             cancellationToken: cancellationToken);
     }
 
-    public async Task<IReadOnlyList<Telemetry>> GetBySensorAsync(
+    public async Task<Telemetry?> GetByIdAsync(
+        Guid id, CancellationToken cancellationToken) 
+    {
+        return await _collection
+            .Find(x => x.Id == id)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<Telemetry>> GetBySensorIdAsync(
+        Guid sensorId, CancellationToken cancellationToken)
+    {
+        return await _collection
+            .Find(x =>x.SensorId == sensorId)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<Telemetry?> GetLatestBySensorIdAsync(
+        Guid sensorId, CancellationToken cancellationToken = default) 
+    {
+        return await _collection
+            .Find(x => x.SensorId == sensorId)
+            .SortByDescending(x => x.Timestamp)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<Telemetry>> GetBySensorAndDateAsync(
         Guid sensorId,
         DateTime from,
         DateTime to,

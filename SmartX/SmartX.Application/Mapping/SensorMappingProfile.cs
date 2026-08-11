@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using SmartX.Domain.Entities;
 using SmartX.Shared.DTOs.Sensors;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using SmartX.Shared.DTOs.Telemetry;
 
 namespace SmartX.Application.Mapping;
 
@@ -13,5 +13,8 @@ public class SensorMappingProfile : Profile
             .ForMember(
                 dest => dest.Category,
                 opt => opt.MapFrom(src => (int)src.Category));
+
+        CreateMap<Telemetry, TelemetryDto>();
+
     }
 }

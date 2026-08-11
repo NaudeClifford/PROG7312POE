@@ -8,9 +8,12 @@
     "\\SmartX\\SmartX.API\\bin\\Debug\\net10.0",
     "\\SmartX\\SmartX.API\\bin\\Debug\\net10.0\\Data",
     "\\SmartX\\SmartX.API\\bin\\Debug\\net10.0\\Data\\Local",
+    "\\SmartX\\SmartX.API\\Controllers",
     "\\SmartX\\SmartX.Application",
+    "\\SmartX\\SmartX.Infrastructure",
+    "\\SmartX\\SmartX.Infrastructure\\Repositories",
     "\\SmartX\\SmartX.Shared"
   ],
-  "SelectedNode": "\\SmartX\\SmartX.API\\Program.cs",
+  "SelectedNode": "\\SmartX\\SmartX.API\\Controllers\\SensorsController.cs",
   "PreviewInSolutionExplorer": true
 }

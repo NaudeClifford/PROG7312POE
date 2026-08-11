@@ -1,0 +1,11 @@
+[
+  {
+    "Id": "e0113986-e61d-4d27-8bd6-a78aba0ad46e",
+    "SensorId": "773e6c97-d371-45df-9145-b32f25ca2d42",
+    "Timestamp": "2026-08-11T11:30:00Z",
+    "Voltage": 230,
+    "Current": 2.4,
+    "Power": 552,
+    "Temperature": 24.7
+  }
+]

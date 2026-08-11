@@ -2,8 +2,10 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using SmartX.Application.Commands.Sensors;
+using SmartX.Application.Commands.Telemetry;
 using SmartX.Application.Mapping;
 using SmartX.Application.Queries.Sensors;
+using SmartX.Application.Queries.Telemetry;
 using SmartX.Application.Validators;
 
 namespace SmartX.Application;
@@ -21,6 +23,13 @@ public static class DependencyInjection
         services.AddScoped<GetSensorByIdHandler>();
         services.AddScoped<UpdateSensorHandler>();
         services.AddScoped<DeleteSensorHandler>();
+
+        //Telemetry handlers
+        services.AddScoped<CreateTelemetryHandler>();
+        services.AddScoped<GetTelemetryByIdHandler>();
+        services.AddScoped<GetTelemetryBySensorHandler>();
+        services.AddScoped<GetLatestTelemetryBySensorHandler>();
+        services.AddScoped<GetTelemetryByDateRangeHandler>();
 
         //Auto Mapper
         services.AddAutoMapper(cfg =>

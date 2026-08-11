@@ -8,7 +8,19 @@ public interface ITelemetryRepository
         Telemetry telemetry,
         CancellationToken cancellationToken = default);
 
-    Task<IReadOnlyList<Telemetry>> GetBySensorAsync(
+    Task<Telemetry?> GetByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<Telemetry>> GetBySensorIdAsync(
+        Guid sensorId,
+        CancellationToken cancellationToken = default);
+
+    Task<Telemetry?> GetLatestBySensorIdAsync(
+        Guid sensorId,
+        CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<Telemetry>> GetBySensorAndDateAsync(
         Guid sensorId,
         DateTime from,
         DateTime to,

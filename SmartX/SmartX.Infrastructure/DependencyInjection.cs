@@ -19,7 +19,7 @@ public static class DependencyInjection
         services.AddSingleton<FirebaseAuthService>();
 
         services.AddScoped<ISensorRepository, JsonSensorRepository>();
-        services.AddScoped<ITelemetryRepository, TelemetryRepository>();
+        services.AddScoped<ITelemetryRepository, JsonTelemetryRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
 
 
