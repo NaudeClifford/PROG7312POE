@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using SmartX.Application.Common;
 using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
+using SmartX.Shared.Models;
 
 namespace SmartX.Application.Commands.Sensors;
 

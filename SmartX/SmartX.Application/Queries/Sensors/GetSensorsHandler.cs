@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using SmartX.Application.Common;
+using SmartX.Shared.Models;
 using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.DTOs.Sensors;

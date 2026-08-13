@@ -1,4 +1,4 @@
-﻿namespace SmartX.Application.Common;
+﻿namespace SmartX.Shared.Models;
 
 public class Result<T>
 {

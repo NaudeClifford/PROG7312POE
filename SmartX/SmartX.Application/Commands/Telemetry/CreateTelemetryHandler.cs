@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SmartX.Application.Common;
+using SmartX.Shared.Models;
 using SmartX.Domain.Interfaces;
 
 namespace SmartX.Application.Commands.Telemetry
