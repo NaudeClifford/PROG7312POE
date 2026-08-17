@@ -91,65 +91,49 @@
 
         <!-- TOP NAVIGATION -->
         <Border Grid.Row="1"
-                Background="{StaticResource DarkBrush}">
-
+        Background="{StaticResource DarkBrush}">
 
             <Grid>
 
                 <Grid.ColumnDefinitions>
-
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
+                <Button x:Name="HomeButton"
+                Grid.Column="0"
+                Content="Home"
+                Click="Home_Click"
+                Style="{StaticResource BaseButtonStyle}"/>
 
+                <Button x:Name="SensorsButton"
+                Grid.Column="1"
+                Content="Sensors"
+                Click="Sensors_Click"
+                Style="{StaticResource BaseButtonStyle}"/>
 
-                <Button Grid.Column="0"
-                        Content="Home"
-                        Click="Home_Click"
-                        Style="{StaticResource BaseButtonStyle}"/>
+                <Button x:Name="TelemetryButton"
+                Grid.Column="2"
+                Content="Telemetry"
+                Click="Telemetry_Click"
+                Style="{StaticResource BaseButtonStyle}"/>
 
+                <Button x:Name="HistoryButton"
+                Grid.Column="3"
+                Content="History"
+                Click="History_Click"
+                Style="{StaticResource BaseButtonStyle}"/>
 
-                <Button Grid.Column="1"
-                        Content="Expenses"
-                        Click="Expenses_Click"
-                        Style="{StaticResource BaseButtonStyle}"/>
-
-
-                <Button Grid.Column="2"
-                        Content="Balances"
-                        Click="Balances_Click"
-                        Style="{StaticResource BaseButtonStyle}"/>
-
-
-                <Button Grid.Column="3"
-                        Content="Settle Up"
-                        Click="Settle_Click"
-                        Style="{StaticResource BaseButtonStyle}"/>
-
-
-                <Button Grid.Column="4"
-                        Content="Analytics"
-                        Click="Analytics_Click"
-                        Style="{StaticResource BaseButtonStyle}"/>
-
-                <Button Grid.Column="5"
-                        Content="People"
-                        Click="People_Click"
-                        Style="{StaticResource BaseButtonStyle}"/>
-
-                <Button Grid.Column="6"
-                        Content="About"
-                        Click="AboutUs_Click"
-                        Style="{StaticResource BaseButtonStyle}"/>
+                <Button x:Name="AdministrationButton"
+                Grid.Column="4"
+                Content="Administration"
+                Click="Administration_Click"
+                Style="{StaticResource BaseButtonStyle}"/>
 
             </Grid>
-
 
         </Border>
 

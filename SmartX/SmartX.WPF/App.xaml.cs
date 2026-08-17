@@ -3,9 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using SmartX.WPF.Authentication;
 using SmartX.WPF.Data;
 using SmartX.WPF.Repositories.Local;
+using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Sync;
-using SmartX.WPF.Views.Pages;
+using SmartX.WPF.ViewModels.Home;
+using SmartX.WPF.ViewModels.Signin;
 using SmartX.WPF.Views.Pages.History;
 using SmartX.WPF.Views.Pages.Home;
 using SmartX.WPF.Views.Pages.Sensor;
@@ -37,7 +39,7 @@ public partial class App : Application
                 optional: false,
                 reloadOnChange: false)
             .Build();
-
+        /*
         // Firebase configuration
         var firebaseOptions = configuration
             .GetSection("Firebase")
@@ -51,6 +53,7 @@ public partial class App : Application
         }
 
         services.AddSingleton(firebaseOptions);
+        */
 
         // API configuration
         var apiOptions = configuration
@@ -74,6 +77,9 @@ public partial class App : Application
                     new Uri(apiOptions.BaseUrl);
             });
 
+        //Session
+        services.AddSingleton<SmartXSession>();
+
         // Firebase
         services.AddHttpClient<FirebaseAuthService>();
 
@@ -87,6 +93,10 @@ public partial class App : Application
         // Synchronization
         services.AddSingleton<ICacheSyncService, CacheSyncService>();
 
+        // ViewModels
+        services.AddTransient<HomeViewModel>();
+        services.AddTransient<SigninViewModel>();
+
         // Pages
         services.AddTransient<HomePage>();
         services.AddTransient<MainWindow>();
@@ -96,27 +106,31 @@ public partial class App : Application
         services.AddTransient<HistoryPage>();
     }
 
-    protected override async void OnStartup(
-        StartupEventArgs e)
+    protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
 
-        var database =
-            ServiceProvider.GetRequiredService<
-                SmartXCacheDatabase>();
+        try
+        {
+            var database =
+                ServiceProvider.GetRequiredService<SmartXCacheDatabase>();
 
-        await database.InitializeAsync();
+            await database.InitializeAsync();
 
-        var cacheSyncService =
-                ServiceProvider.GetRequiredService<ICacheSyncService>();
+            var mainWindow =
+                ServiceProvider.GetRequiredService<MainWindow>();
 
-        await cacheSyncService.SyncSensorsAsync();
+            mainWindow.Show();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                ex.ToString(),
+                "SmartX Startup Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
 
-        var mainWindow =
-            ServiceProvider.GetRequiredService<MainWindow>();
-
-        mainWindow.Show();
-
-        //ok, i can't run because my pages are givinbg errors. this is too confusing. lets finish the api, do the management operations for the users. lets finish other things, then update the pages and test
+            Shutdown();
+        }
     }
 }

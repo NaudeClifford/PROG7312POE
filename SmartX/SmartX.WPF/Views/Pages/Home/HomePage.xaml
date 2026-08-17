@@ -23,7 +23,6 @@
 
             <StackPanel>
 
-                <!-- Logo -->
                 <Border Width="75"
                         Height="75"
                         CornerRadius="18"
@@ -38,20 +37,20 @@
                                VerticalAlignment="Center"/>
                 </Border>
 
-                <TextBlock Text="SmartX"
+                <TextBlock Text="{Binding Title}"
                            FontSize="42"
                            FontWeight="Bold"
                            Foreground="{StaticResource LightTextBrush}"
                            HorizontalAlignment="Center"
                            Margin="0,20,0,5"/>
 
-                <TextBlock Text="Smart Sensor Monitoring Platform"
+                <TextBlock Text="{Binding Subtitle}"
                            FontSize="17"
                            Foreground="{StaticResource LightTextBrush}"
                            Opacity="0.7"
                            HorizontalAlignment="Center"/>
 
-                <TextBlock Text="Monitor your sensors, view live telemetry and explore historical data from one central platform."
+                <TextBlock Text="{Binding Description}"
                            FontSize="15"
                            Foreground="{StaticResource LightTextBrush}"
                            Opacity="0.65"
@@ -59,10 +58,7 @@
                            TextAlignment="Center"
                            Margin="50,25,50,40"/>
 
-
-                <!-- Login -->
-                <Button x:Name="LoginButton"
-                        Content="Login"
+                <Button Content="Login"
                         Height="52"
                         Margin="40,0,40,12"
                         FontSize="15"
@@ -71,10 +67,7 @@
                         Click="LoginButton_Click"
                         Style="{StaticResource BaseButtonStyle}"/>
 
-
-                <!-- Sign Up -->
-                <Button x:Name="SignUpButton"
-                        Content="Create an Account"
+                <Button Content="Create an Account"
                         Height="52"
                         Margin="40,0,40,10"
                         FontSize="15"
@@ -82,8 +75,7 @@
                         Click="SignUpButton_Click"
                         Style="{StaticResource BaseButtonStyle}"/>
 
-
-                <TextBlock Text="Secure authentication powered by Firebase"
+                <TextBlock Text="Secure authentication"
                            Foreground="{StaticResource LightTextBrush}"
                            Opacity="0.45"
                            FontSize="11"

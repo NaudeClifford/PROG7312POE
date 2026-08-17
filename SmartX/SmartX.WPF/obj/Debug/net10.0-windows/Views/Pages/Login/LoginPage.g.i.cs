@@ -116,7 +116,7 @@ namespace SmartX.WPF.Views.Pages.Login {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;component/views/pages/login/loginpage.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;V1.0.0.0;component/views/pages/login/loginpage.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Views\Pages\Login\LoginPage.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
