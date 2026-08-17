@@ -8,7 +8,8 @@
     ".NETCoreApp,Version=v10.0": {
       "SmartX.Shared/1.0.0": {
         "dependencies": {
-          "MongoDB.Bson": "3.10.0"
+          "MongoDB.Bson": "3.10.0",
+          "SmartX.Domain": "1.0.0"
         },
         "runtime": {
           "SmartX.Shared.dll": {}
@@ -19,6 +20,14 @@
           "lib/net6.0/MongoDB.Bson.dll": {
             "assemblyVersion": "3.10.0.0",
             "fileVersion": "3.10.0.0"
+          }
+        }
+      },
+      "SmartX.Domain/1.0.0": {
+        "runtime": {
+          "SmartX.Domain.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
           }
         }
       }
@@ -36,6 +45,11 @@
       "sha512": "sha512-dpM9EXd3evUW7qPpSjfWshPYjbD26rxm+e32LWNDpRWBZZZo4WaO5Azy/Xro55u3IZ/8u1Z4hCZnlI72Y+/5jg==",
       "path": "mongodb.bson/3.10.0",
       "hashPath": "mongodb.bson.3.10.0.nupkg.sha512"
+    },
+    "SmartX.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

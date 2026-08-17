@@ -17,6 +17,7 @@ public static class SensorMapper
         var isActive = reader.GetOrdinal("IsActive");
         var gatewayId = reader.GetOrdinal("GatewayId");
         var createdAt = reader.GetOrdinal("CreatedAt");
+        var updatedAt = reader.GetOrdinal("UpdatedAt");
 
         return new Sensor
         {
@@ -39,7 +40,10 @@ public static class SensorMapper
                 : Guid.Parse(reader.GetString(gatewayId)),
 
             CreatedAt = DateTime.Parse(
-                reader.GetString(createdAt))
+                reader.GetString(createdAt)),
+
+            UpdatedAt = DateTime.Parse(
+                reader.GetString(updatedAt))
         };
     }
 }

@@ -20,7 +20,7 @@ public static class DependencyInjection
 
         services.AddScoped<ISensorRepository, JsonSensorRepository>();
         services.AddScoped<ITelemetryRepository, JsonTelemetryRepository>();
-        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserRepository, JsonUserRepository>();
 
 
         return services;

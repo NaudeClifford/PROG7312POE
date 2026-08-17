@@ -15,4 +15,7 @@ public class TelemetryDto
     public double? Power { get; set; }
 
     public double? Temperature { get; set; }
+
+    public DateTime UpdatedAt { get; set; }
+
 }

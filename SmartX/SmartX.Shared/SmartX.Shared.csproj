@@ -16,4 +16,8 @@
     <PackageReference Include="MongoDB.Bson" Version="3.10.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SmartX.Domain\SmartX.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

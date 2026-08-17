@@ -20,7 +20,7 @@ namespace SmartX.WPF.Views.Pages.Sensor
     {
         public SensorsPage()
         {
-            InitializeComponent();
+            //InitializeComponent();
         }
     }
 }

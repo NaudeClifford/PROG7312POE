@@ -92,7 +92,7 @@ namespace SmartX.WPF.Views.Pages.Sensors {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;V1.0.0.0;component/views/pages/sensor/sensorspage.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;component/views/pages/sensor/sensorspage.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Views\Pages\Sensor\SensorsPage.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -51,6 +51,8 @@ public class UpdateSensorHandler
         sensor.GatewayId = command.GatewayId;
         sensor.IsActive = command.IsActive;
 
+        sensor.UpdatedAt = DateTime.UtcNow;
+
         await _sensorRepository.UpdateAsync(
             sensor,
             cancellationToken);

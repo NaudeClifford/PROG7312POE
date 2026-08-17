@@ -1,1 +1,38 @@
-[]
+﻿[
+  {
+    "Id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+    "Name": "Main Room Environment",
+    "DeviceIdentifier": "ENV-001",
+    "Category": 0,
+    "Location": "Main Office",
+    "Description": "Environmental monitoring sensor for the main office.",
+    "IsActive": true,
+    "GatewayId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+    "CreatedAt": "2026-01-01T08:00:00Z",
+    "UpdatedAt": "2026-08-17T08:00:00Z"
+  },
+  {
+    "Id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+    "Name": "Server Room Power",
+    "DeviceIdentifier": "PWR-001",
+    "Category": 1,
+    "Location": "Server Room",
+    "Description": "Power consumption monitoring for the server room.",
+    "IsActive": true,
+    "GatewayId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+    "CreatedAt": "2026-01-01T08:00:00Z",
+    "UpdatedAt": "2026-08-17T08:05:00Z"
+  },
+  {
+    "Id": "dddddddd-dddd-dddd-dddd-dddddddddddd",
+    "Name": "Ventilation Controller",
+    "DeviceIdentifier": "ACT-001",
+    "Category": 2,
+    "Location": "HVAC Room",
+    "Description": "Actuator used to control the ventilation system.",
+    "IsActive": true,
+    "GatewayId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+    "CreatedAt": "2026-01-01T08:00:00Z",
+    "UpdatedAt": "2026-08-17T08:10:00Z"
+  }
+]

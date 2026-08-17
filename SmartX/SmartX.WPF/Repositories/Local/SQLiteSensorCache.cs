@@ -1,10 +1,6 @@
-﻿using Microsoft.Data.Sqlite;
-using SmartX.Domain.Entities;
-using SmartX.Domain.Enums;
+﻿using SmartX.Domain.Entities;
 using SmartX.WPF.Data;
 using SmartX.WPF.Data.Mappers;
-using System.Data;
-using System.Text;
 
 namespace SmartX.WPF.Repositories.Local
 {
@@ -34,7 +30,8 @@ namespace SmartX.WPF.Repositories.Local
                     Description,
                     IsActive,
                     GatewayId,
-                    CreatedAt
+                    CreatedAt,
+                    UpdatedAt
                 FROM Sensors
                 WHERE Id = $id;
                 """;
@@ -68,7 +65,8 @@ namespace SmartX.WPF.Repositories.Local
                     Description,
                     IsActive,
                     GatewayId,
-                    CreatedAt
+                    CreatedAt,
+                    UpdatedAt
                 FROM Sensors
                 """;
 
@@ -101,7 +99,8 @@ namespace SmartX.WPF.Repositories.Local
                     Description = $description,
                     IsActive = $isActive,
                     GatewayId = $gatewayId,
-                    CreatedAt = $createdAt
+                    CreatedAt = $createdAt,
+                    UpdatedAt = $updatedAt
                WHERE Id = $id;
                """;
 
@@ -114,6 +113,7 @@ namespace SmartX.WPF.Repositories.Local
             command.Parameters.AddWithValue("$isActive", sensor.IsActive ? 1 : 0);
             command.Parameters.AddWithValue("$gatewayId", sensor.GatewayId?.ToString() ?? (object)DBNull.Value);
             command.Parameters.AddWithValue("$createdAt", sensor.CreatedAt.ToString());
+            command.Parameters.AddWithValue("$updatedAt", sensor.UpdatedAt.ToString());
 
             var rowsaffected = await command.ExecuteNonQueryAsync(cancellationToken);
 
@@ -131,7 +131,8 @@ namespace SmartX.WPF.Repositories.Local
                     Description,
                     IsActive,
                     GatewayId,
-                    CreatedAt
+                    CreatedAt,
+                    UpdatedAt
                 )
                 VALUES
                 (
@@ -143,7 +144,8 @@ namespace SmartX.WPF.Repositories.Local
                     $description,
                     $isActive,
                     $gatewayId,
-                    $createdAt
+                    $createdAt,
+                    $updatedAt
                 );
                 """;
 

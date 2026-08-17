@@ -16,5 +16,6 @@ public class Telemetry
 
     public double? Temperature { get; set; }
 
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
 }

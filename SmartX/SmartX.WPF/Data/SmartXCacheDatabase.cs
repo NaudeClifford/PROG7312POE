@@ -9,6 +9,7 @@ public class SmartXCacheDatabase
     public SmartXCacheDatabase()
     {
         _connectionString = "Data Source=smartx-cache.db";
+
     }
 
     public SqliteConnection CreateConnection()
@@ -35,7 +36,9 @@ public class SmartXCacheDatabase
             Description TEXT NOT NULL,
             IsActive INTEGER NOT NULL,
             GatewayId TEXT NULL,
-            CreatedAt TEXT NOT NULL
+            CreatedAt TEXT NOT NULL,
+            UpdatedAt TEXT NOT NULL
+        
         );
         """;
 
@@ -65,6 +68,17 @@ public class SmartXCacheDatabase
                 DisplayName TEXT NOT NULL,
                 Role INTEGER NOT NULL,
                 CreatedAt TEXT NOT NULL
+            );
+            """;
+
+        await command.ExecuteNonQueryAsync();
+
+        command.CommandText = """
+            CREATE TABLE IF NOT EXISTS CacheMetadata
+            (
+                EntityId TEXT PRIMARY KEY,
+                EntityType TEXT NOT NULL,
+                LastSyncedAt TEXT NOT NULL
             );
             """;
 

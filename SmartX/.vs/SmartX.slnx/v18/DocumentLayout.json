@@ -3,20 +3,124 @@
   "WorkspaceRootPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\validators\\createusercommandvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\validators\\createusercommandvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\api\\ismartxapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\api\\ismartxapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\validators\\updatesensorcommandvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\validators\\updatesensorcommandvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\sync\\cachesyncservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\sync\\cachesyncservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\validators\\updateusercommandvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\validators\\updateusercommandvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\sync\\icachesyncservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\sync\\icachesyncservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\validators\\createsensorcommandvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\validators\\createsensorcommandvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\users\\updateusercommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\users\\updateusercommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\sensors\\createsensorcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\sensors\\createsensorcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\sensors\\updatesensorcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\sensors\\updatesensorcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\users\\updateuserhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\users\\updateuserhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\users\\createusercommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\users\\createusercommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\validators\\createtelemetrycommandvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\validators\\createtelemetrycommandvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FC033E8-F118-24ED-0DDC-C7AEE228B8D8}|SmartX.API\\SmartX.API.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.api\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FC033E8-F118-24ED-0DDC-C7AEE228B8D8}|SmartX.API\\SmartX.API.csproj|solutionrelative:smartx.api\\controllers\\userscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\queries\\users\\getuserbyidquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\queries\\users\\getuserbyidquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FC033E8-F118-24ED-0DDC-C7AEE228B8D8}|SmartX.API\\SmartX.API.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.api\\controllers\\telemetrycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FC033E8-F118-24ED-0DDC-C7AEE228B8D8}|SmartX.API\\SmartX.API.csproj|solutionrelative:smartx.api\\controllers\\telemetrycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\queries\\users\\getusersquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\queries\\users\\getusersquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FC033E8-F118-24ED-0DDC-C7AEE228B8D8}|SmartX.API\\SmartX.API.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.api\\controllers\\sensorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FC033E8-F118-24ED-0DDC-C7AEE228B8D8}|SmartX.API\\SmartX.API.csproj|solutionrelative:smartx.api\\controllers\\sensorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FC033E8-F118-24ED-0DDC-C7AEE228B8D8}|SmartX.API\\SmartX.API.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.api\\controllers\\filescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FC033E8-F118-24ED-0DDC-C7AEE228B8D8}|SmartX.API\\SmartX.API.csproj|solutionrelative:smartx.api\\controllers\\filescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\users\\createuserhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\users\\createuserhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\mapping\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\mapping\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\queries\\users\\getusershandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\queries\\users\\getusershandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{99D9586E-11EE-9F77-CF80-FB8604540D9E}|SmartX.Shared\\SmartX.Shared.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.shared\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99D9586E-11EE-9F77-CF80-FB8604540D9E}|SmartX.Shared\\SmartX.Shared.csproj|solutionrelative:smartx.shared\\dtos\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\queries\\users\\getuserbyidhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\queries\\users\\getuserbyidhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\users\\deleteuserhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\users\\deleteuserhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.infrastructure\\data\\local\\gateways.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|solutionrelative:smartx.infrastructure\\data\\local\\gateways.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\api\\apioptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\api\\apioptions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.infrastructure\\data\\local\\telemetry.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|solutionrelative:smartx.infrastructure\\data\\local\\telemetry.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.infrastructure\\data\\local\\sensors.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|solutionrelative:smartx.infrastructure\\data\\local\\sensors.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.infrastructure\\data\\local\\users.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|solutionrelative:smartx.infrastructure\\data\\local\\users.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.domain\\enums\\sensorcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|solutionrelative:smartx.domain\\enums\\sensorcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,58 +130,400 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "users.json",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Data\\Local\\users.json",
+              "RelativeDocumentMoniker": "SmartX.Infrastructure\\Data\\Local\\users.json",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Data\\Local\\users.json",
+              "RelativeToolTip": "SmartX.Infrastructure\\Data\\Local\\users.json",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAAB8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-08-17T15:54:45.352Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "gateways.json",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Data\\Local\\gateways.json",
+              "RelativeDocumentMoniker": "SmartX.Infrastructure\\Data\\Local\\gateways.json",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Data\\Local\\gateways.json",
+              "RelativeToolTip": "SmartX.Infrastructure\\Data\\Local\\gateways.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-08-17T15:58:59.438Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "telemetry.json",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Data\\Local\\telemetry.json",
+              "RelativeDocumentMoniker": "SmartX.Infrastructure\\Data\\Local\\telemetry.json",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Data\\Local\\telemetry.json",
+              "RelativeToolTip": "SmartX.Infrastructure\\Data\\Local\\telemetry.json",
+              "ViewState": "AgIAADYAAAAAAAAAAAAIwD0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-08-17T16:01:00.388Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "sensors.json",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Data\\Local\\sensors.json",
+              "RelativeDocumentMoniker": "SmartX.Infrastructure\\Data\\Local\\sensors.json",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Data\\Local\\sensors.json",
+              "RelativeToolTip": "SmartX.Infrastructure\\Data\\Local\\sensors.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-08-17T16:03:03.396Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "App.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\App.xaml.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\App.xaml.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\App.xaml.cs",
-              "RelativeToolTip": "SmartX.WPF\\App.xaml.cs",
-              "ViewState": "AgIAADgAAAAAAAAAAAAgwEEAAAAYAAAAAAAAAA==",
+              "Title": "CreateUserCommandValidator.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Validators\\CreateUserCommandValidator.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Validators\\CreateUserCommandValidator.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Validators\\CreateUserCommandValidator.cs",
+              "RelativeToolTip": "SmartX.Application\\Validators\\CreateUserCommandValidator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-13T19:41:25.561Z",
+              "WhenOpened": "2026-08-17T17:31:37.656Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ISmartXApiClient.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Api\\ISmartXApiClient.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Api\\ISmartXApiClient.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Api\\ISmartXApiClient.cs",
-              "RelativeToolTip": "SmartX.WPF\\Services\\Api\\ISmartXApiClient.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAowBUAAAAWAAAAAAAAAA==",
+              "Title": "UpdateSensorCommandValidator.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Validators\\UpdateSensorCommandValidator.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Validators\\UpdateSensorCommandValidator.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Validators\\UpdateSensorCommandValidator.cs",
+              "RelativeToolTip": "SmartX.Application\\Validators\\UpdateSensorCommandValidator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-13T19:41:07.44Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "CacheSyncService.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
-              "RelativeToolTip": "SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAgwA4AAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-13T19:40:53.623Z",
+              "WhenOpened": "2026-08-17T17:36:33.577Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "ICacheSyncService.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Sync\\ICacheSyncService.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Sync\\ICacheSyncService.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Sync\\ICacheSyncService.cs",
-              "RelativeToolTip": "SmartX.WPF\\Services\\Sync\\ICacheSyncService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAWAAAAAAAAAA==",
+              "Title": "CreateSensorCommandValidator.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Validators\\CreateSensorCommandValidator.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Validators\\CreateSensorCommandValidator.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Validators\\CreateSensorCommandValidator.cs",
+              "RelativeToolTip": "SmartX.Application\\Validators\\CreateSensorCommandValidator.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-13T19:40:41.601Z",
+              "WhenOpened": "2026-08-17T17:33:33.728Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UpdateUserCommandValidator.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Validators\\UpdateUserCommandValidator.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Validators\\UpdateUserCommandValidator.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Validators\\UpdateUserCommandValidator.cs",
+              "RelativeToolTip": "SmartX.Application\\Validators\\UpdateUserCommandValidator.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAA0wBgAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:32:04.3Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UpdateUserCommand.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Users\\UpdateUserCommand.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Users\\UpdateUserCommand.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Users\\UpdateUserCommand.cs",
+              "RelativeToolTip": "SmartX.Application\\Commands\\Users\\UpdateUserCommand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:33:06.231Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CreateSensorCommand.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Sensors\\CreateSensorCommand.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Sensors\\CreateSensorCommand.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Sensors\\CreateSensorCommand.cs",
+              "RelativeToolTip": "SmartX.Application\\Commands\\Sensors\\CreateSensorCommand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:36:15.222Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "UpdateSensorCommand.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Sensors\\UpdateSensorCommand.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Sensors\\UpdateSensorCommand.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Sensors\\UpdateSensorCommand.cs",
+              "RelativeToolTip": "SmartX.Application\\Commands\\Sensors\\UpdateSensorCommand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:36:11.537Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "UpdateUserHandler.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Users\\UpdateUserHandler.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Users\\UpdateUserHandler.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Users\\UpdateUserHandler.cs",
+              "RelativeToolTip": "SmartX.Application\\Commands\\Users\\UpdateUserHandler.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAYwDQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:12:16.595Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "CreateUserCommand.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Users\\CreateUserCommand.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Users\\CreateUserCommand.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Users\\CreateUserCommand.cs",
+              "RelativeToolTip": "SmartX.Application\\Commands\\Users\\CreateUserCommand.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:32:58.439Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "CreateTelemetryCommandValidator.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Validators\\CreateTelemetryCommandValidator.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Validators\\CreateTelemetryCommandValidator.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Validators\\CreateTelemetryCommandValidator.cs",
+              "RelativeToolTip": "SmartX.Application\\Validators\\CreateTelemetryCommandValidator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:33:35.632Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "DependencyInjection.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\DependencyInjection.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\DependencyInjection.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\DependencyInjection.cs",
+              "RelativeToolTip": "SmartX.Application\\DependencyInjection.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAQwCgAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:28:07.703Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "TelemetryController.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\Controllers\\TelemetryController.cs",
+              "RelativeDocumentMoniker": "SmartX.API\\Controllers\\TelemetryController.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\Controllers\\TelemetryController.cs",
+              "RelativeToolTip": "SmartX.API\\Controllers\\TelemetryController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:23:17.737Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "SensorsController.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\Controllers\\SensorsController.cs",
+              "RelativeDocumentMoniker": "SmartX.API\\Controllers\\SensorsController.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\Controllers\\SensorsController.cs",
+              "RelativeToolTip": "SmartX.API\\Controllers\\SensorsController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:23:16.947Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "FilesController.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\Controllers\\FilesController.cs",
+              "RelativeDocumentMoniker": "SmartX.API\\Controllers\\FilesController.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\Controllers\\FilesController.cs",
+              "RelativeToolTip": "SmartX.API\\Controllers\\FilesController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:23:15.227Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "MappingProfile.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Mapping\\MappingProfile.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Mapping\\MappingProfile.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Mapping\\MappingProfile.cs",
+              "RelativeToolTip": "SmartX.Application\\Mapping\\MappingProfile.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:19:32.946Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "GetUsersQuery.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Users\\GetUsersQuery.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Queries\\Users\\GetUsersQuery.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Users\\GetUsersQuery.cs",
+              "RelativeToolTip": "SmartX.Application\\Queries\\Users\\GetUsersQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:18:43.808Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "UserDto.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\DTOs\\UserDto.cs",
+              "RelativeDocumentMoniker": "SmartX.Shared\\DTOs\\UserDto.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\DTOs\\UserDto.cs",
+              "RelativeToolTip": "SmartX.Shared\\DTOs\\UserDto.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAA6wBgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:17:18.404Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "GetUsersHandler.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Users\\GetUsersHandler.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Queries\\Users\\GetUsersHandler.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Users\\GetUsersHandler.cs",
+              "RelativeToolTip": "SmartX.Application\\Queries\\Users\\GetUsersHandler.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABsAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:12:54.994Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "GetUserByIdQuery.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Users\\GetUserByIdQuery.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Queries\\Users\\GetUserByIdQuery.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Users\\GetUserByIdQuery.cs",
+              "RelativeToolTip": "SmartX.Application\\Queries\\Users\\GetUserByIdQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:12:53.869Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "GetUserByIdHandler.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Users\\GetUserByIdHandler.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Queries\\Users\\GetUserByIdHandler.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Users\\GetUserByIdHandler.cs",
+              "RelativeToolTip": "SmartX.Application\\Queries\\Users\\GetUserByIdHandler.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAQwBMAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:12:45.834Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "DeleteUserHandler.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Users\\DeleteUserHandler.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Users\\DeleteUserHandler.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Users\\DeleteUserHandler.cs",
+              "RelativeToolTip": "SmartX.Application\\Commands\\Users\\DeleteUserHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:12:02.722Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "CreateUserHandler.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Users\\CreateUserHandler.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Users\\CreateUserHandler.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Users\\CreateUserHandler.cs",
+              "RelativeToolTip": "SmartX.Application\\Commands\\Users\\CreateUserHandler.cs",
+              "ViewState": "AgIAACIAAAAAAAAAAAAYwDAAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:11:54.642Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "UsersController.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\Controllers\\UsersController.cs",
+              "RelativeDocumentMoniker": "SmartX.API\\Controllers\\UsersController.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\Controllers\\UsersController.cs",
+              "RelativeToolTip": "SmartX.API\\Controllers\\UsersController.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAADwvzYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T17:10:54.652Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\appsettings.json",
+              "RelativeDocumentMoniker": "SmartX.WPF\\appsettings.json",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\appsettings.json",
+              "RelativeToolTip": "SmartX.WPF\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-08-17T16:23:16.949Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "ApiOptions.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Api\\ApiOptions.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Api\\ApiOptions.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Api\\ApiOptions.cs",
+              "RelativeToolTip": "SmartX.WPF\\Services\\Api\\ApiOptions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T16:23:06.284Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "SensorCategory.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\Enums\\SensorCategory.cs",
+              "RelativeDocumentMoniker": "SmartX.Domain\\Enums\\SensorCategory.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\Enums\\SensorCategory.cs",
+              "RelativeToolTip": "SmartX.Domain\\Enums\\SensorCategory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-17T16:00:09.066Z",
               "EditorCaption": ""
             }
           ]

@@ -12,18 +12,18 @@ public partial class HomePage : Page
         InitializeComponent();
     }
 
-    private void SignIn_Click(object sender, RoutedEventArgs e)
+    private void SignUpButton_Click(object sender, RoutedEventArgs e)
+    {
+        MessageBox.Show(
+            "Sign up will be added next.",
+            "SmartX");
+    }
+
+    private void LoginButton_Click(object sender, RoutedEventArgs e)
     {
         var signinPage =
             App.ServiceProvider.GetRequiredService<Signin.SigninPage>();
 
         NavigationService?.Navigate(signinPage);
-    }
-
-    private void SignUp_Click(object sender, RoutedEventArgs e)
-    {
-        MessageBox.Show(
-            "Sign up will be added next.",
-            "SmartX");
     }
 }

@@ -14,6 +14,16 @@
             "related": ".xml"
           }
         }
+      },
+      "SmartX.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/SmartX.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SmartX.Domain.dll": {}
+        }
       }
     }
   },
@@ -36,11 +46,17 @@
         "mongodb.bson.nuspec",
         "packageIcon.png"
       ]
+    },
+    "SmartX.Domain/1.0.0": {
+      "type": "project",
+      "path": "../SmartX.Domain/SmartX.Domain.csproj",
+      "msbuildProject": "../SmartX.Domain/SmartX.Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "MongoDB.Bson >= 3.10.0"
+      "MongoDB.Bson >= 3.10.0",
+      "SmartX.Domain >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -75,7 +91,11 @@
         "net10.0": {
           "framework": "net10.0",
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj": {
+              "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

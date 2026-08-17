@@ -8,6 +8,9 @@ public interface IUserRepository
         Guid id,
         CancellationToken cancellationToken = default);
 
+    Task<IReadOnlyList<User>> GetAllAsync(
+        CancellationToken cancellationToken = default);
+
     Task<User?> GetByFirebaseUidAsync(
         string firebaseUid,
         CancellationToken cancellationToken = default);
@@ -23,4 +26,5 @@ public interface IUserRepository
     Task UpdateAsync(
         User user,
         CancellationToken cancellationToken = default);
+    Task DeleteAsync(Guid userId, CancellationToken cancellationToken);
 }

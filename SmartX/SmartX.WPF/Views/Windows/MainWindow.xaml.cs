@@ -62,5 +62,40 @@ namespace SmartX.WPF
         {
             Close();
         }
+
+        private void AboutUs_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void People_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Analytics_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Settle_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Balances_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Expenses_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Home_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

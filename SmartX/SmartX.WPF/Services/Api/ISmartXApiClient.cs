@@ -1,32 +1,36 @@
-﻿using SmartX.Domain.Entities;
+﻿using SmartX.Shared.DTOs;
+using SmartX.Shared.DTOs.Sensors;
+using SmartX.Shared.DTOs.Telemetry;
 
 namespace SmartX.WPF.Services.Api;
 
 public interface ISmartXApiClient
 {
     // Sensors
-    Task<IReadOnlyList<Sensor>> GetSensorsAsync(
+    Task<IReadOnlyList<SensorDto>> GetSensorsAsync(
         CancellationToken cancellationToken = default);
 
-    Task<Sensor?> GetSensorByIdAsync(
+    Task<SensorDto?> GetSensorByIdAsync(
         Guid id,
         CancellationToken cancellationToken = default);
 
+    
     // Telemetry
-    Task<IReadOnlyList<Telemetry>> GetTelemetryBySensorIdAsync(
+    Task<IReadOnlyList<TelemetryDto>> GetTelemetryBySensorIdAsync(
         Guid sensorId,
         CancellationToken cancellationToken = default);
 
-    Task<Telemetry?> GetLatestTelemetryBySensorIdAsync(
+    Task<TelemetryDto?> GetLatestTelemetryBySensorIdAsync(
         Guid sensorId,
         CancellationToken cancellationToken = default);
 
     // Users
-    Task<User?> GetUserByIdAsync(
+    Task<UserDto?> GetUserByIdAsync(
         Guid id,
         CancellationToken cancellationToken = default);
 
-    Task<User?> GetUserByFirebaseUidAsync(
+    Task<UserDto?> GetUserByFirebaseUidAsync(
         string firebaseUid,
         CancellationToken cancellationToken = default);
+    
 }

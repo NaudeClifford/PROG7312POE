@@ -1,13 +1,62 @@
 [
   {
-    "Id": "773e6c97-d371-45df-9145-b32f25ca2d42",
-    "Name": "",
-    "DeviceIdentifier": "not-a-valid-mac",
-    "Category": 99,
-    "Location": "",
-    "Description": "test",
+    "Id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+    "Name": "Main Room Environment",
+    "DeviceIdentifier": "ENV-001",
+    "Category": 0,
+    "Location": "Main Office",
+    "Description": "Environmental monitoring sensor for the main office.",
+    "IsActive": true,
+    "GatewayId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+    "CreatedAt": "2026-01-01T08:00:00Z",
+    "UpdatedAt": "2026-08-17T08:00:00Z"
+  },
+  {
+    "Id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+    "Name": "Server Room Power",
+    "DeviceIdentifier": "PWR-001",
+    "Category": 1,
+    "Location": "Server Room",
+    "Description": "Power consumption monitoring for the server room.",
+    "IsActive": true,
+    "GatewayId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+    "CreatedAt": "2026-01-01T08:00:00Z",
+    "UpdatedAt": "2026-08-17T08:05:00Z"
+  },
+  {
+    "Id": "dddddddd-dddd-dddd-dddd-dddddddddddd",
+    "Name": "Ventilation Controller",
+    "DeviceIdentifier": "ACT-001",
+    "Category": 2,
+    "Location": "HVAC Room",
+    "Description": "Actuator used to control the ventilation system.",
+    "IsActive": true,
+    "GatewayId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+    "CreatedAt": "2026-01-01T08:00:00Z",
+    "UpdatedAt": "2026-08-17T08:10:00Z"
+  },
+  {
+    "Id": "9b347b56-4b17-4674-8334-9be838de2089",
+    "Name": "Power Meter 01",
+    "DeviceIdentifier": "POWER-001",
+    "Category": 1,
+    "Location": "Main Distribution Board",
+    "Description": "Measures electrical power consumption",
     "IsActive": true,
     "GatewayId": null,
-    "CreatedAt": "2026-08-07T12:06:03.6791007Z"
+    "CreatedAt": "2026-08-17T16:50:36.6347452Z",
+    "UpdatedAt": "2026-08-17T16:50:36.6347452Z"
+  },
+  {
+    "Id": "23507498-45d7-4db5-b3fa-e593a9ef7b52",
+    "Name": "Cooling Fan 01",
+    "DeviceIdentifier": "ACT-001",
+    "Category": 2,
+    "Location": "Server Room A",
+    "Description": "Automated cooling fan actuator",
+    "IsActive": true,
+    "GatewayId": null,
+    "CreatedAt": "2026-08-17T16:50:48.7413351Z",
+    "UpdatedAt": "2026-08-17T16:50:48.7413351Z"
   }
 ]

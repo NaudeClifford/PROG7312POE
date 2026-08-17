@@ -1,0 +1,62 @@
+[
+  {
+    "Id": "10000000-0000-0000-0000-000000000001",
+    "SensorId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+    "Timestamp": "2026-08-17T08:00:00Z",
+    "Voltage": null,
+    "Current": null,
+    "Power": null,
+    "Temperature": 22.4,
+    "UpdatedAt": "2026-08-17T08:00:00Z"
+  },
+  {
+    "Id": "10000000-0000-0000-0000-000000000002",
+    "SensorId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+    "Timestamp": "2026-08-17T08:05:00Z",
+    "Voltage": null,
+    "Current": null,
+    "Power": null,
+    "Temperature": 22.7,
+    "UpdatedAt": "2026-08-17T08:05:00Z"
+  },
+  {
+    "Id": "10000000-0000-0000-0000-000000000003",
+    "SensorId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+    "Timestamp": "2026-08-17T08:10:00Z",
+    "Voltage": null,
+    "Current": null,
+    "Power": null,
+    "Temperature": 23.1,
+    "UpdatedAt": "2026-08-17T08:10:00Z"
+  },
+  {
+    "Id": "20000000-0000-0000-0000-000000000001",
+    "SensorId": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+    "Timestamp": "2026-08-17T08:00:00Z",
+    "Voltage": 230.2,
+    "Current": 1.8,
+    "Power": 414.36,
+    "Temperature": null,
+    "UpdatedAt": "2026-08-17T08:00:00Z"
+  },
+  {
+    "Id": "20000000-0000-0000-0000-000000000002",
+    "SensorId": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+    "Timestamp": "2026-08-17T08:05:00Z",
+    "Voltage": 229.8,
+    "Current": 1.9,
+    "Power": 436.62,
+    "Temperature": null,
+    "UpdatedAt": "2026-08-17T08:05:00Z"
+  },
+  {
+    "Id": "20000000-0000-0000-0000-000000000003",
+    "SensorId": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+    "Timestamp": "2026-08-17T08:10:00Z",
+    "Voltage": 230.5,
+    "Current": 2.0,
+    "Power": 461.0,
+    "Temperature": null,
+    "UpdatedAt": "2026-08-17T08:10:00Z"
+  }
+]

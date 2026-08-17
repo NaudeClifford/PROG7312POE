@@ -1,4 +1,3 @@
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\Data\Local\sensors.json
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\SmartX.Infrastructure.deps.json
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\SmartX.Infrastructure.dll
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\SmartX.Infrastructure.pdb
@@ -19,3 +18,7 @@ C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\Smart
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\refint\SmartX.Infrastructure.dll
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.pdb
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\ref\SmartX.Infrastructure.dll
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\Data\Local\sensors.json
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\Data\Local\gateways.json
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\Data\Local\telemetry.json
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\Data\Local\users.json

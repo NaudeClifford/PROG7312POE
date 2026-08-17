@@ -7,11 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Data\Local\sensors.json" />
+    <None Remove="Data\Local\gateways.json" />
+    <None Remove="Data\Local\telemetry.json" />
+    <None Remove="Data\Local\users.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Data\Local\sensors.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Data\Local\gateways.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Local\telemetry.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Local\users.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

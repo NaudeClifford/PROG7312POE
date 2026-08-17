@@ -22,5 +22,15 @@ namespace SmartX.WPF.Views.Pages.Login
         {
             InitializeComponent();
         }
+
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CreateAccountButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

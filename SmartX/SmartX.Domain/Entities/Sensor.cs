@@ -21,4 +21,6 @@ public class Sensor
     public Guid? GatewayId { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 }

@@ -14,6 +14,14 @@ public class UserRepository : IUserRepository
         _collection = context.GetCollection<User>("Users");
     }
 
+    public async Task<IReadOnlyList<User>> GetAllAsync(
+       CancellationToken cancellationToken = default)
+    {
+        return await _collection
+            .Find(_ => true)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<User?> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken = default)
@@ -58,5 +66,12 @@ public class UserRepository : IUserRepository
             existing => existing.Id == user.Id,
             user,
             cancellationToken: cancellationToken);
+    }
+
+    public async Task DeleteAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        await _collection.DeleteOneAsync(
+            x => x.Id == userId,
+            cancellationToken);
     }
 }

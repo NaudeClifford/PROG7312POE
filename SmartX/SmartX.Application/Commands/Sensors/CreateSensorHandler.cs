@@ -32,6 +32,7 @@ public class CreateSensorHandler
 
             return Result<Guid>.Fail(errors);
         }
+        var now = DateTime.UtcNow;
 
         var sensor = new Sensor
         {
@@ -42,7 +43,8 @@ public class CreateSensorHandler
             Description = command.Description,
             Category = command.Category,
             GatewayId = command.GatewayId,
-            CreatedAt = DateTime.UtcNow,
+            CreatedAt = now,
+            UpdatedAt = now,
             IsActive = true
         };
 

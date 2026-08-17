@@ -641,7 +641,8 @@
       },
       "SmartX.Shared/1.0.0": {
         "dependencies": {
-          "MongoDB.Bson": "3.10.0"
+          "MongoDB.Bson": "3.10.0",
+          "SmartX.Domain": "1.0.0"
         },
         "runtime": {
           "SmartX.Shared.dll": {
