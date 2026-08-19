@@ -2,23 +2,23 @@
 using SmartX.Shared.Models;
 using SmartX.Domain.Interfaces;
 
-namespace SmartX.Application.Commands.Sensors;
+namespace SmartX.Application.Commands.Gateway;
 
 public class UpdateGatewayHandler
 {
-    private readonly ISensorRepository _sensorRepository;
-    private readonly IValidator<UpdateCompanyCommand> _validator;
+    private readonly IGatewayRepository _gatewayRepository;
+    private readonly IValidator<UpdateGatewayCommand> _validator;
 
     public UpdateGatewayHandler(
-        ISensorRepository sensorRepository,
-        IValidator<UpdateCompanyCommand> validator)
+        IGatewayRepository gatewayRepository,
+        IValidator<UpdateGatewayCommand> validator)
     {
-        _sensorRepository = sensorRepository;
+        _gatewayRepository = gatewayRepository;
         _validator = validator;
     }
 
     public async Task<Result<bool>> HandleAsync(
-        UpdateCompanyCommand command,
+        UpdateGatewayCommand command,
         CancellationToken cancellationToken = default)
     {
         var validationResult = await _validator.ValidateAsync(
@@ -34,27 +34,27 @@ public class UpdateGatewayHandler
             return Result<bool>.Fail(errors);
         }
 
-        var sensor = await _sensorRepository.GetByIdAsync(
+        var gateway = await _gatewayRepository.GetByIdAsync(
             command.Id,
             cancellationToken);
 
-        if (sensor is null)
+        if (gateway is null)
         {
-            return Result<bool>.Fail("Sensor not found.");
+            return Result<bool>.Fail("gateway not found.");
         }
 
-        sensor.Name = command.Name;
-        sensor.Location = command.Location;
-        sensor.Category = command.Category;
-        sensor.DeviceIdentifier = command.DeviceIdentifier;
-        sensor.Description = command.Description;
-        sensor.GatewayId = command.GatewayId;
-        sensor.IsActive = command.IsActive;
+        gateway.Name = command.Name;
+        gateway.IpAddress = command.IpAddress;  
+        gateway.UpdatedAt = command.UpdatedAt;
+        gateway.CreatedAt = command.CreatedAt;
+        gateway.Description = command.Description;
+        gateway.CompanyId = command.CompanyId;
+        gateway.SerialNumber = command.SerialNumber;
 
-        sensor.UpdatedAt = DateTime.UtcNow;
+        gateway.UpdatedAt = DateTime.UtcNow;
 
-        await _sensorRepository.UpdateAsync(
-            sensor,
+        await _gatewayRepository.UpdateAsync(
+            gateway,
             cancellationToken);
 
         return Result<bool>.Ok(true);

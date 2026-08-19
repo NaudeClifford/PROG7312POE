@@ -1,8 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
 using SmartX.Domain.Entities;
-using SmartX.Domain.Enums;
-using SmartX.Shared;
-using System.Data;
 
 namespace SmartX.WPF.Data.Mappers
 {
@@ -17,6 +14,7 @@ namespace SmartX.WPF.Data.Mappers
             var current = reader.GetOrdinal("Current");
             var power = reader.GetOrdinal("Power");
             var temperature = reader.GetOrdinal("Temperature");
+            var CreatedAt = reader.GetOrdinal("UpdatedAt");
 
             return new Telemetry
             {
@@ -38,7 +36,9 @@ namespace SmartX.WPF.Data.Mappers
 
                 Temperature = reader.IsDBNull(temperature)
                     ? null
-                    : reader.GetDouble(temperature)
+                    : reader.GetDouble(temperature),
+
+                    CreatedAt = DateTime.Parse(reader.GetString(CreatedAt))
             };
         }
     }

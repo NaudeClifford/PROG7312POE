@@ -1,19 +1,19 @@
 ﻿using FluentValidation;
-using SmartX.Shared.Models;
 using SmartX.Domain.Interfaces;
+using SmartX.Shared.Models;
 
-namespace SmartX.Application.Commands.Sensors;
+namespace SmartX.Application.Commands.Company;
 
 public class UpdateCompanyHandler
 {
-    private readonly ISensorRepository _sensorRepository;
+    private readonly ICompanyRepository _companyRepository;
     private readonly IValidator<UpdateCompanyCommand> _validator;
 
     public UpdateCompanyHandler(
-        ISensorRepository sensorRepository,
+        ICompanyRepository companyRepository,
         IValidator<UpdateCompanyCommand> validator)
     {
-        _sensorRepository = sensorRepository;
+        _companyRepository = companyRepository;
         _validator = validator;
     }
 
@@ -34,27 +34,23 @@ public class UpdateCompanyHandler
             return Result<bool>.Fail(errors);
         }
 
-        var sensor = await _sensorRepository.GetByIdAsync(
+        var company = await _companyRepository.GetByIdAsync(
             command.Id,
             cancellationToken);
 
-        if (sensor is null)
+        if (company is null)
         {
-            return Result<bool>.Fail("Sensor not found.");
+            return Result<bool>.Fail("Company not found.");
         }
 
-        sensor.Name = command.Name;
-        sensor.Location = command.Location;
-        sensor.Category = command.Category;
-        sensor.DeviceIdentifier = command.DeviceIdentifier;
-        sensor.Description = command.Description;
-        sensor.GatewayId = command.GatewayId;
-        sensor.IsActive = command.IsActive;
+        company.Name = command.Name;
+        company.Description = command.Description;
+        company.IsActive = command.IsActive;
 
-        sensor.UpdatedAt = DateTime.UtcNow;
+        company.UpdatedAt = DateTime.UtcNow;
 
-        await _sensorRepository.UpdateAsync(
-            sensor,
+        await _companyRepository.UpdateAsync(
+            company,
             cancellationToken);
 
         return Result<bool>.Ok(true);

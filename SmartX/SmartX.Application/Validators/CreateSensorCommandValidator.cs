@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace SmartX.Application.Validators;
 
-public class CreateSensorCommandValidator : AbstractValidator<CreateCompanyCommand>
+public class CreateSensorCommandValidator : AbstractValidator<CreateSensorCommand>
 {
     public CreateSensorCommandValidator()
     {

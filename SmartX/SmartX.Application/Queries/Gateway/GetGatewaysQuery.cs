@@ -1,8 +1,8 @@
-﻿namespace SmartX.Application.Queries.Sensors
+﻿namespace SmartX.Application.Queries.Gateway
 {
     public class GetGatewaysQuery
     {
 
-        public Guid SensorId { get; set; }
+        public Guid Id { get; set; }
     }
 }

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SmartX.Application.Queries.Sensors
+﻿
+namespace SmartX.Application.Queries.Company
 {
-    public class GetGatewayByIdQuery
+    public class GetCompanyByIdQuery
     {
-        public Guid SensorId { get; set; }
+        public Guid Id { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using SmartX.Domain.Enums;
 
-namespace SmartX.Application.Commands.Sensors;
+namespace SmartX.Application.Commands.Company;
 
 public class UpdateCompanyCommand
 {

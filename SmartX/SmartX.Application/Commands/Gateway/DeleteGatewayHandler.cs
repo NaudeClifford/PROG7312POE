@@ -1,37 +1,37 @@
 ﻿using SmartX.Shared.Models;
 using SmartX.Domain.Interfaces;
 
-namespace SmartX.Application.Commands.Sensors;
+namespace SmartX.Application.Commands.Gateway;
 
 public class DeleteGatewayHandler
 {
-    private readonly ISensorRepository _sensorRepository;
+    private readonly IGatewayRepository _gatewayRepository;
 
-    public DeleteCompanyHandler(ISensorRepository sensorRepository)
+    public DeleteGatewayHandler(IGatewayRepository gatewayRepository)
     {
-        _sensorRepository = sensorRepository;
+        _gatewayRepository = gatewayRepository;
     }
 
     public async Task<Result<bool>> HandleAsync(
-        DeleteCompanyCommand command,
+        DeleteGatewayCommand command,
         CancellationToken cancellationToken = default)
     {
 
         if (command.Id == Guid.Empty)
         {
-            return Result<bool>.Fail("Sensor ID is required.");
+            return Result<bool>.Fail("gateway ID is required.");
         }
 
-        var sensor = await _sensorRepository.GetByIdAsync(
+        var gateway = await _gatewayRepository.GetByIdAsync(
             command.Id,
             cancellationToken);
 
-        if (sensor is null)
+        if (gateway is null)
         {
-            return Result<bool>.Fail("Sensor not found.");
+            return Result<bool>.Fail("gateway not found.");
         }
 
-        await _sensorRepository.DeleteAsync(
+        await _gatewayRepository.DeleteAsync(
             command.Id,
             cancellationToken);
 

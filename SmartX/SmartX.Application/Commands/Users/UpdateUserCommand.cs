@@ -9,6 +9,8 @@ namespace SmartX.Application.Commands.Users
     {
         public Guid Id { get; set; }
 
+        public Guid CompanyId { get; set; }
+
         public string FirebaseUid { get; set; } = string.Empty;
 
         public string Email { get; set; } = string.Empty;

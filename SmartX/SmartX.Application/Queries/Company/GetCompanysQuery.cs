@@ -1,8 +1,8 @@
-﻿namespace SmartX.Application.Queries.Sensors
+﻿namespace SmartX.Application.Queries.Company
 {
-    public class GetGatewaysQuery
+    public class GetCompanysQuery
     {
 
-        public Guid SensorId { get; set; }
+        public Guid Id { get; set; }
     }
 }

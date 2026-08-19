@@ -1,41 +1,37 @@
 ﻿using AutoMapper;
 using SmartX.Shared.Models;
-using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
-using SmartX.Shared.DTOs.Sensors;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using SmartX.Shared.DTOs;
 
-namespace SmartX.Application.Queries.Sensors
+namespace SmartX.Application.Queries.Company
 {
     public class GetCompanyByIdHandler
     {
         private readonly IMapper _mapper;
-        private readonly ISensorRepository _sensorRepository;
+        private readonly ICompanyRepository _companyRepository;
 
-        public GetCompanyByIdHandler(ISensorRepository sensorRepository,
+        public GetCompanyByIdHandler(ICompanyRepository companyRepository,
             IMapper mapper)
         {
-            _sensorRepository = sensorRepository;
+            _companyRepository = companyRepository;
             _mapper = mapper;
         }
 
-        public async Task<Result<SensorDto?>> HandleAsync(
-            GetGatewayByIdQuery query,
+        public async Task<Result<CompanyDto>> HandleAsync(
+            GetCompanyByIdQuery query,
             CancellationToken cancellationToken = default)
         {
-            var sensor = await _sensorRepository.GetByIdAsync(query.SensorId,
+            var company = await _companyRepository.GetByIdAsync(query.Id,
                 cancellationToken);
 
-            if (sensor is null)
+            if (company is null)
             {
-                return Result<SensorDto>.Fail("Sensor not found.");
+                return Result<CompanyDto>.Fail("company not found.");
             }
 
-            var dto = _mapper.Map<SensorDto>(sensor);
+            var dto = _mapper.Map<CompanyDto>(company);
 
-            return Result<SensorDto>.Ok(dto);
+            return Result<CompanyDto>.Ok(dto);
         }
     }
 }

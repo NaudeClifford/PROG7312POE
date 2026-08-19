@@ -3,40 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.domain\\entities\\company.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|solutionrelative:smartx.domain\\entities\\company.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\company\\deletecompanyhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\company\\deletecompanyhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\company\\createcompanyhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\company\\createcompanyhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\company\\createcompanycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\company\\createcompanycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\company\\updatecompanycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\company\\updatecompanycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.infrastructure\\authentication\\firebase\\firebaseauthhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|solutionrelative:smartx.infrastructure\\authentication\\firebase\\firebaseauthhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\company\\deletecompanycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\company\\deletecompanycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.infrastructure\\repositories\\jsoncompanyrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|solutionrelative:smartx.infrastructure\\repositories\\jsoncompanyrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.infrastructure\\repositories\\jsongatewayrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|solutionrelative:smartx.infrastructure\\repositories\\jsongatewayrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.infrastructure\\data\\local\\company.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|solutionrelative:smartx.infrastructure\\data\\local\\company.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.infrastructure\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|solutionrelative:smartx.infrastructure\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.domain\\entities\\company.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|solutionrelative:smartx.domain\\entities\\company.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,123 +30,71 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Company.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\Entities\\Company.cs",
-              "RelativeDocumentMoniker": "SmartX.Domain\\Entities\\Company.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\Entities\\Company.cs",
-              "RelativeToolTip": "SmartX.Domain\\Entities\\Company.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-18T19:05:18.043Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "DeleteCompanyHandler.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\DeleteCompanyHandler.cs",
-              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Company\\DeleteCompanyHandler.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\DeleteCompanyHandler.cs",
-              "RelativeToolTip": "SmartX.Application\\Commands\\Company\\DeleteCompanyHandler.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-18T19:00:06.929Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "CreateCompanyCommand.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\CreateCompanyCommand.cs",
-              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Company\\CreateCompanyCommand.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\CreateCompanyCommand.cs",
-              "RelativeToolTip": "SmartX.Application\\Commands\\Company\\CreateCompanyCommand.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "UpdateCompanyCommand.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\UpdateCompanyCommand.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Company\\UpdateCompanyCommand.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\UpdateCompanyCommand.cs",
+              "RelativeToolTip": "SmartX.Application\\Commands\\Company\\UpdateCompanyCommand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-18T18:59:06.072Z",
+              "WhenOpened": "2026-08-18T20:33:01.548Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "DependencyInjection.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\DependencyInjection.cs",
-              "RelativeDocumentMoniker": "SmartX.Application\\DependencyInjection.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\DependencyInjection.cs",
-              "RelativeToolTip": "SmartX.Application\\DependencyInjection.cs",
-              "ViewState": "AgIAACgAAAAAAAAAAAAQwDcAAAAoAAAAAAAAAA==",
+              "Title": "DeleteCompanyCommand.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\DeleteCompanyCommand.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Company\\DeleteCompanyCommand.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\DeleteCompanyCommand.cs",
+              "RelativeToolTip": "SmartX.Application\\Commands\\Company\\DeleteCompanyCommand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-18T18:55:48.106Z",
+              "WhenOpened": "2026-08-18T20:32:59.217Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "FirebaseAuthHandler.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Authentication\\Firebase\\FirebaseAuthHandler.cs",
-              "RelativeDocumentMoniker": "SmartX.Infrastructure\\Authentication\\Firebase\\FirebaseAuthHandler.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Authentication\\Firebase\\FirebaseAuthHandler.cs",
-              "RelativeToolTip": "SmartX.Infrastructure\\Authentication\\Firebase\\FirebaseAuthHandler.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Title": "Company.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\Entities\\Company.cs",
+              "RelativeDocumentMoniker": "SmartX.Domain\\Entities\\Company.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\Entities\\Company.cs",
+              "RelativeToolTip": "SmartX.Domain\\Entities\\Company.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-18T18:55:04.683Z",
+              "WhenOpened": "2026-08-18T20:30:47.922Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "company.json",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Data\\Local\\company.json",
-              "RelativeDocumentMoniker": "SmartX.Infrastructure\\Data\\Local\\company.json",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Data\\Local\\company.json",
-              "RelativeToolTip": "SmartX.Infrastructure\\Data\\Local\\company.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-08-18T18:53:47.855Z",
+              "DocumentIndex": 0,
+              "Title": "CreateCompanyHandler.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\CreateCompanyHandler.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Company\\CreateCompanyHandler.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\CreateCompanyHandler.cs",
+              "RelativeToolTip": "SmartX.Application\\Commands\\Company\\CreateCompanyHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADIAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-18T20:28:30.242Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "DependencyInjection.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\DependencyInjection.cs",
-              "RelativeDocumentMoniker": "SmartX.Infrastructure\\DependencyInjection.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\DependencyInjection.cs",
-              "RelativeToolTip": "SmartX.Infrastructure\\DependencyInjection.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "CreateCompanyCommand.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\CreateCompanyCommand.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Company\\CreateCompanyCommand.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\CreateCompanyCommand.cs",
+              "RelativeToolTip": "SmartX.Application\\Commands\\Company\\CreateCompanyCommand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-18T18:52:18.801Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "JsonGatewayRepository.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Repositories\\JsonGatewayRepository.cs",
-              "RelativeDocumentMoniker": "SmartX.Infrastructure\\Repositories\\JsonGatewayRepository.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Repositories\\JsonGatewayRepository.cs",
-              "RelativeToolTip": "SmartX.Infrastructure\\Repositories\\JsonGatewayRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-18T18:47:54.073Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "JsonCompanyRepository.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Repositories\\JsonCompanyRepository.cs",
-              "RelativeDocumentMoniker": "SmartX.Infrastructure\\Repositories\\JsonCompanyRepository.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Repositories\\JsonCompanyRepository.cs",
-              "RelativeToolTip": "SmartX.Infrastructure\\Repositories\\JsonCompanyRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHMAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-18T14:11:38.269Z",
+              "WhenOpened": "2026-08-18T20:28:28.236Z",
               "EditorCaption": ""
             }
           ]

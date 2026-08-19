@@ -9,18 +9,23 @@ namespace SmartX.WPF.Services.Sync;
 
 public class CacheSyncService(
     ISmartXApiClient apiClient,
-    ILocalSensorCache sensorCache, ILocalTelemetryCache telemetryCache,
-    ILocalUserCache userCache) : ICacheSyncService
+    ILocalSensorCache sensorCache, 
+    ILocalTelemetryCache telemetryCache,
+    ILocalUserCache userCache,
+    ILocalCompanyCache companyCache,
+    ILocalGatewayCache gatewayCache) : ICacheSyncService
 {
     private readonly ISmartXApiClient _apiClient = apiClient;
     private readonly ILocalSensorCache _sensorCache = sensorCache;
 
     private readonly ILocalTelemetryCache _telemetryCache = telemetryCache;
     private readonly ILocalUserCache _userCache = userCache;
+    private readonly ILocalCompanyCache _companyCache = companyCache;
 
+    private readonly ILocalGatewayCache _gatewayCache = gatewayCache;
 
     public async Task SyncSensorsAsync(
-        CancellationToken cancellationToken = default)
+    CancellationToken cancellationToken = default)
     {
         var sensors = await _apiClient.GetSensorsAsync(
             cancellationToken);
@@ -74,11 +79,10 @@ public class CacheSyncService(
 
             var cachedTelemetry =
                 await _telemetryCache.GetByIdAsync(
-                    dto.Id,
-                    cancellationToken);
+                        dto.Id,
+                        cancellationToken);
 
-            if (cachedTelemetry is not null &&
-                dto.UpdatedAt <= cachedTelemetry.UpdatedAt)
+            if (cachedTelemetry is not null)
             {
                 continue;
             }
@@ -92,12 +96,13 @@ public class CacheSyncService(
                 Current = dto.Current,
                 Power = dto.Power,
                 Temperature = dto.Temperature,
-                UpdatedAt = dto.UpdatedAt
+                CreatedAt = dto.CreatedAt
             };
 
             await _telemetryCache.UpdateAsync(
                 telemetry,
                 cancellationToken);
+
         }
     }
 
@@ -126,11 +131,95 @@ public class CacheSyncService(
 
         var user = new User
         {
-            Id = dto.Id
+            Id = dto.Id,
+            FirebaseUid = dto.FirebaseUid,
+            Email = dto.Email,
+            CompanyId = dto.CompanyId,
+            DisplayName = dto.DisplayName,
+            Role = dto.Role,
+            IsActive = dto.IsActive,
+            CreatedAt = dto.CreatedAt,
+            UpdatedAt = dto.UpdatedAt
         };
 
         await _userCache.UpdateAsync(
             user,
             cancellationToken);
+    }
+
+    public async Task SyncCompaniesAsync(
+        CancellationToken cancellationToken = default)
+    {
+        var companies = await _apiClient.GetCompaniesAsync(
+            cancellationToken);
+
+        foreach (var dto in companies)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var cachedCompany = await _companyCache.GetByIdAsync(
+                dto.Id,
+                cancellationToken);
+
+            if (cachedCompany is not null &&
+                dto.UpdatedAt <= cachedCompany.UpdatedAt)
+            {
+                continue;
+            }
+
+            var company = new Company
+            {
+                Id = dto.Id,
+                Name = dto.Name,
+                Description = dto.Description,
+                IsActive = dto.IsActive,
+                CreatedAt = dto.CreatedAt,
+                UpdatedAt = dto.UpdatedAt
+            };
+
+            await _companyCache.UpdateAsync(
+                company,
+                cancellationToken);
+        }
+    }
+
+    public async Task SyncGatewaysAsync(
+        CancellationToken cancellationToken = default)
+    {
+        var gateways = await _apiClient.GetGatewaysAsync(
+            cancellationToken);
+
+        foreach (var dto in gateways)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var cachedGateway =
+                await _gatewayCache.GetByIdAsync(
+                    dto.Id,
+                    cancellationToken);
+
+            if (cachedGateway is not null &&
+                dto.UpdatedAt <= cachedGateway.UpdatedAt)
+            {
+                continue;
+            }
+
+            var gateway = new Gateway
+            {
+                Id = dto.Id,
+                CompanyId = dto.CompanyId,
+                Name = dto.Name,
+                Description = dto.Description,
+                SerialNumber = dto.SerialNumber,
+                IpAddress = dto.IpAddress,
+                IsActive = dto.IsActive,
+                CreatedAt = dto.CreatedAt,
+                UpdatedAt = dto.UpdatedAt
+            };
+
+            await _gatewayCache.UpdateAsync(
+                gateway,
+                cancellationToken);
+        }
     }
 }

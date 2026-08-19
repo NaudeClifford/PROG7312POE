@@ -4,7 +4,7 @@ using SmartX.WPF.Data.Mappers;
 
 namespace SmartX.WPF.Repositories.Local
 {
-    public class SQLiteCachedMetadataRepository(SmartXCacheDatabase database) : ICacheMetadataRepository
+    public class SQLiteCachedMetadataCache(SmartXCacheDatabase database) : ICacheMetadataCache
     {
 
         private readonly SmartXCacheDatabase _database = database;

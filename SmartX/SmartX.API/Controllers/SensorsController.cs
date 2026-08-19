@@ -1,123 +1,104 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartX.Application.Commands.Sensors;
-using SmartX.Application.Queries.Sensors;
-using SmartX.Domain.Entities;
+using SmartX.Application.Services.CRUD;
 
-namespace SmartX.API.Controllers
+namespace SmartX.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class SensorsController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class SensorsController : ControllerBase
+    private readonly SensorCrudService _crud;
+
+    public SensorsController(
+        SensorCrudService crud)
     {
-        private readonly GetGatewaysHandler _getSensorsHandler;
-        private readonly GetGatewayByIdHandler _getSensorByIdHandler;
+        _crud = crud;
+    }
 
-        private readonly CreateCompanyHandler _createSensorHandler;
+    [HttpGet]
+    public async Task<IActionResult> GetAll(
+        CancellationToken cancellationToken)
+    {
+        var result = await _crud.GetAllAsync(
+            cancellationToken);
 
-        private readonly UpdateCompanyHandler _updateSensorHandler;
+        if (!result.Success)
+            return BadRequest(result);
 
-        private readonly DeleteCompanyHandler _deleteSensorHandler;
+        return Ok(result);
+    }
 
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var result = await _crud.GetByIdAsync(
+            id,
+            cancellationToken);
 
-        public SensorsController(
-            GetGatewaysHandler getSensorsHandler,
-            GetGatewayByIdHandler getSensorByIdHandler,
-            CreateCompanyHandler createSensorHandler,
-            UpdateCompanyHandler updateSensorHandler,
-            DeleteCompanyHandler deleteSensorHandler)
+        if (!result.Success)
+            return NotFound(result);
+
+        return Ok(result);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(
+        CreateSensorCommand command,
+        CancellationToken cancellationToken)
+    {
+        var result = await _crud.CreateAsync(
+            command,
+            cancellationToken);
+
+        if (!result.Success)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(
+        Guid id,
+        UpdateSensorCommand command,
+        CancellationToken cancellationToken)
+    {
+        command.Id = id;
+
+        var result = await _crud.UpdateAsync(
+            command,
+            cancellationToken);
+
+        if (!result.Success)
         {
-            _getSensorsHandler = getSensorsHandler;
-            _getSensorByIdHandler = getSensorByIdHandler;
-            _createSensorHandler = createSensorHandler;
-            _updateSensorHandler = updateSensorHandler;
-            _deleteSensorHandler = deleteSensorHandler;
+            if (result.Error == "Sensor not found.")
+                return NotFound(result);
+
+            return BadRequest(result);
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetSensorById(
-            Guid id,
-            CancellationToken cancellationToken)
+        return Ok(result);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        var result = await _crud.DeleteAsync(
+            id,
+            cancellationToken);
+
+        if (!result.Success)
         {
-            var result = await _getSensorByIdHandler.HandleAsync(
-                new GetGatewayByIdQuery
-                {
-                    SensorId = id
-                }, cancellationToken);
+            if (result.Error == "Sensor not found.")
+                return NotFound(result);
 
-            if (!result.Success) return NotFound(result);
-
-            return Ok(result);
+            return BadRequest(result);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetSensors(
-            CancellationToken cancellationToken)
-        {
-            var result = await _getSensorsHandler.HandleAsync(
-                new GetGatewaysQuery(), cancellationToken);
-
-            if (!result.Success) return BadRequest(result);
-
-            return Ok(result);
-        }
-
-
-        [HttpPost]
-        public async Task<IActionResult> CreateSensor(
-            CreateCompanyCommand command,
-            CancellationToken cancellationToken)
-        {
-            var result = await _createSensorHandler.HandleAsync(
-                command, cancellationToken);
-
-            if (!result.Success) return BadRequest(result);
-
-            return Ok(result);
-        }
-
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateSensor(
-            Guid id,
-            [FromBody] UpdateCompanyCommand command,
-            CancellationToken cancellationToken
-            )
-        {
-            command.Id = id;
-
-            var result = await _updateSensorHandler.HandleAsync(
-                command, cancellationToken);
-
-            if (!result.Success) {
-                if (result.Error == "Sensor not found.")
-                    return NotFound(result);
-                return BadRequest(result);
-            }
-            return Ok(result);
-        }
-
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteSensor(
-            Guid id,
-            CancellationToken cancellationToken
-            )
-        {
-
-            var result = await _deleteSensorHandler.HandleAsync(
-                new DeleteCompanyCommand 
-                {
-                    Id = id
-                }, cancellationToken);
-
-            if (!result.Success)
-            {
-                if (result.Error == "Sensor not found.")
-                    return NotFound(result);
-                return BadRequest(result);
-            }
-
-            return Ok(result);
-        }
-
-
+        return Ok(result);
     }
 }

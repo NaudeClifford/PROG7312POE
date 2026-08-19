@@ -1,4 +1,4 @@
-﻿namespace SmartX.Application.Commands.Sensors;
+﻿namespace SmartX.Application.Commands.Gateway;
 
 public class DeleteGatewayCommand
 {

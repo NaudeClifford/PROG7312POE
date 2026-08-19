@@ -27,7 +27,8 @@ public class SQLiteTelemetryCache(
                 Voltage,
                 Current,
                 Power,
-                Temperature
+                Temperature,
+                CreatedAt
             FROM Telemetry;
             """;
 
@@ -62,12 +63,15 @@ public class SQLiteTelemetryCache(
                 Voltage,
                 Current,
                 Power,
-                Temperature
+                Temperature,
+                CreatedAt
             FROM Telemetry
             WHERE Id = $id;
             """;
 
-        command.Parameters.AddWithValue("$id", id.ToString());
+        command.Parameters.AddWithValue(
+            "$id",
+            id.ToString());
 
         using var reader =
             await command.ExecuteReaderAsync(cancellationToken);
@@ -98,7 +102,8 @@ public class SQLiteTelemetryCache(
                 Voltage,
                 Current,
                 Power,
-                Temperature
+                Temperature,
+                CreatedAt
             FROM Telemetry
             WHERE SensorId = $sensorId
               AND Timestamp >= $from
@@ -149,7 +154,8 @@ public class SQLiteTelemetryCache(
                 Voltage,
                 Current,
                 Power,
-                Temperature
+                Temperature,
+                CreatedAt
             FROM Telemetry
             WHERE SensorId = $sensorId
             ORDER BY Timestamp ASC;
@@ -190,7 +196,8 @@ public class SQLiteTelemetryCache(
                 Voltage,
                 Current,
                 Power,
-                Temperature
+                Temperature,
+                CreatedAt
             FROM Telemetry
             WHERE SensorId = $sensorId
             ORDER BY Timestamp DESC
@@ -232,7 +239,8 @@ public class SQLiteTelemetryCache(
                 Voltage = $voltage,
                 Current = $current,
                 Power = $power,
-                Temperature = $temperature
+                Temperature = $temperature,
+                CreatedAt = $createdAt
             WHERE Id = $id;
             """;
 
@@ -264,6 +272,10 @@ public class SQLiteTelemetryCache(
             "$temperature",
             telemetry.Temperature ?? (object)DBNull.Value);
 
+        command.Parameters.AddWithValue(
+            "$createdAt",
+            telemetry.CreatedAt.ToString("O"));
+
         var rowsAffected =
             await command.ExecuteNonQueryAsync(cancellationToken);
 
@@ -278,7 +290,8 @@ public class SQLiteTelemetryCache(
                     Voltage,
                     Current,
                     Power,
-                    Temperature
+                    Temperature,
+                    CreatedAt
                 )
                 VALUES
                 (
@@ -288,7 +301,8 @@ public class SQLiteTelemetryCache(
                     $voltage,
                     $current,
                     $power,
-                    $temperature
+                    $temperature,
+                    $createdAt
                 );
                 """;
 

@@ -14,7 +14,6 @@ public interface ISmartXApiClient
         Guid id,
         CancellationToken cancellationToken = default);
 
-    
     // Telemetry
     Task<IReadOnlyList<TelemetryDto>> GetTelemetryBySensorIdAsync(
         Guid sensorId,
@@ -32,5 +31,20 @@ public interface ISmartXApiClient
     Task<UserDto?> GetUserByFirebaseUidAsync(
         string firebaseUid,
         CancellationToken cancellationToken = default);
-    
+
+    // Companies
+    Task<IReadOnlyList<CompanyDto>> GetCompaniesAsync(
+        CancellationToken cancellationToken = default);
+
+    Task<CompanyDto?> GetCompanyByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default);
+
+    // Gateways
+    Task<IReadOnlyList<GatewayDto>> GetGatewaysAsync(
+        CancellationToken cancellationToken = default);
+
+    Task<GatewayDto?> GetGatewayByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default);
 }

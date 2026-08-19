@@ -1,6 +1,4 @@
-﻿using SmartX.Domain.Entities;
-using SmartX.Shared;
-using SmartX.Shared.DTOs;
+﻿using SmartX.Shared.DTOs;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
 using SmartX.Shared.Models;
@@ -15,6 +13,7 @@ public class SmartXApiClient(
 {
     private readonly HttpClient _httpClient = httpClient;
 
+    // Sensors
     public async Task<IReadOnlyList<SensorDto>> GetSensorsAsync(
         CancellationToken cancellationToken = default)
     {
@@ -30,16 +29,12 @@ public class SmartXApiClient(
                 cancellationToken);
 
         if (result is null)
-        {
             throw new InvalidOperationException(
                 "The API returned an empty response.");
-        }
 
         if (!result.Success)
-        {
             throw new InvalidOperationException(
                 result.Error ?? "Failed to retrieve sensors.");
-        }
 
         return result.Data ?? [];
     }
@@ -63,26 +58,28 @@ public class SmartXApiClient(
                 cancellationToken);
 
         if (result is null)
-        {
             throw new InvalidOperationException(
                 "The API returned an empty response.");
-        }
 
         if (!result.Success)
-        {
             throw new InvalidOperationException(
                 result.Error ?? "Failed to retrieve sensor.");
-        }
 
         return result.Data;
     }
 
-    public async Task<IReadOnlyList<TelemetryDto>> GetTelemetryBySensorIdAsync(Guid sensorId, CancellationToken cancellationToken = default)
+    // Telemetry
+    public async Task<IReadOnlyList<TelemetryDto>>
+        GetTelemetryBySensorIdAsync(
+            Guid sensorId,
+            CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.GetAsync($"api/Telemetry/{sensorId}",
-                    cancellationToken);
+        var response = await _httpClient.GetAsync(
+            $"api/Telemetry/sensor/{sensorId}",
+            cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound) return [];
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return [];
 
         response.EnsureSuccessStatusCode();
 
@@ -92,26 +89,27 @@ public class SmartXApiClient(
                 cancellationToken);
 
         if (result is null)
-        {
             throw new InvalidOperationException(
                 "The API returned an empty response.");
-        }
 
         if (!result.Success)
-        {
             throw new InvalidOperationException(
-                result.Error ?? "Failed to retrieve Telemetry.");
-        }
+                result.Error ?? "Failed to retrieve telemetry.");
 
         return result.Data ?? [];
     }
 
-    public async Task<TelemetryDto?> GetLatestTelemetryBySensorIdAsync(Guid sensorId, CancellationToken cancellationToken = default)
+    public async Task<TelemetryDto?>
+        GetLatestTelemetryBySensorIdAsync(
+            Guid sensorId,
+            CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.GetAsync($"api/Telemetry/Latest/{sensorId}",
-                    cancellationToken);
+        var response = await _httpClient.GetAsync(
+            $"api/Telemetry/sensor/{sensorId}/latest",
+            cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound) return null;
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
 
         response.EnsureSuccessStatusCode();
 
@@ -121,26 +119,27 @@ public class SmartXApiClient(
                 cancellationToken);
 
         if (result is null)
-        {
             throw new InvalidOperationException(
                 "The API returned an empty response.");
-        }
 
         if (!result.Success)
-        {
             throw new InvalidOperationException(
-                result.Error ?? "Failed to retrieve lastest Telemetry.");
-        }
+                result.Error ?? "Failed to retrieve latest telemetry.");
 
         return result.Data;
     }
-
-    public async Task<UserDto?> GetUserByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    
+    // Users
+    public async Task<UserDto?> GetUserByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.GetAsync($"api/User/{id}",
-                    cancellationToken);
+        var response = await _httpClient.GetAsync(
+            $"api/User/{id}",
+            cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound) return null;
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
 
         response.EnsureSuccessStatusCode();
 
@@ -150,26 +149,26 @@ public class SmartXApiClient(
                 cancellationToken);
 
         if (result is null)
-        {
             throw new InvalidOperationException(
                 "The API returned an empty response.");
-        }
 
         if (!result.Success)
-        {
             throw new InvalidOperationException(
-                result.Error ?? "Failed to retrieve User.");
-        }
+                result.Error ?? "Failed to retrieve user.");
 
         return result.Data;
     }
 
-    public async Task<UserDto?> GetUserByFirebaseUidAsync(string firebaseUid, CancellationToken cancellationToken = default)
+    public async Task<UserDto?> GetUserByFirebaseUidAsync(
+        string firebaseUid,
+        CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.GetAsync($"api/user/{firebaseUid}",
-                    cancellationToken);
+        var response = await _httpClient.GetAsync(
+            $"api/User/{firebaseUid}",
+            cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound) return null;
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
 
         response.EnsureSuccessStatusCode();
 
@@ -179,16 +178,122 @@ public class SmartXApiClient(
                 cancellationToken);
 
         if (result is null)
-        {
             throw new InvalidOperationException(
                 "The API returned an empty response.");
-        }
 
         if (!result.Success)
-        {
             throw new InvalidOperationException(
-                result.Error ?? "Failed to retrieve User.");
-        }
+                result.Error ?? "Failed to retrieve user.");
+
+        return result.Data;
+    }
+
+    // Companies
+    public async Task<IReadOnlyList<CompanyDto>> GetCompaniesAsync(
+        CancellationToken cancellationToken = default)
+    {
+        var response = await _httpClient.GetAsync(
+            "api/Company",
+            cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+
+        var result =
+            await response.Content.ReadFromJsonAsync<
+                Result<IReadOnlyList<CompanyDto>>>(
+                cancellationToken);
+
+        if (result is null)
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+
+        if (!result.Success)
+            throw new InvalidOperationException(
+                result.Error ?? "Failed to retrieve companies.");
+
+        return result.Data ?? [];
+    }
+
+    public async Task<CompanyDto?> GetCompanyByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default)
+    {
+        var response = await _httpClient.GetAsync(
+            $"api/Company/{id}",
+            cancellationToken);
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        response.EnsureSuccessStatusCode();
+
+        var result =
+            await response.Content.ReadFromJsonAsync<
+                Result<CompanyDto>>(
+                cancellationToken);
+
+        if (result is null)
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+
+        if (!result.Success)
+            throw new InvalidOperationException(
+                result.Error ?? "Failed to retrieve company.");
+
+        return result.Data;
+    }
+
+    // Gateways
+    public async Task<IReadOnlyList<GatewayDto>> GetGatewaysAsync(
+        CancellationToken cancellationToken = default)
+    {
+        var response = await _httpClient.GetAsync(
+            "api/Gateway",
+            cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+
+        var result =
+            await response.Content.ReadFromJsonAsync<
+                Result<IReadOnlyList<GatewayDto>>>(
+                cancellationToken);
+
+        if (result is null)
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+
+        if (!result.Success)
+            throw new InvalidOperationException(
+                result.Error ?? "Failed to retrieve gateways.");
+
+        return result.Data ?? [];
+    }
+
+    public async Task<GatewayDto?> GetGatewayByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default)
+    {
+        var response = await _httpClient.GetAsync(
+            $"api/Gateway/{id}",
+            cancellationToken);
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+
+        response.EnsureSuccessStatusCode();
+
+        var result =
+            await response.Content.ReadFromJsonAsync<
+                Result<GatewayDto>>(
+                cancellationToken);
+
+        if (result is null)
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+
+        if (!result.Success)
+            throw new InvalidOperationException(
+                result.Error ?? "Failed to retrieve gateway.");
 
         return result.Data;
     }

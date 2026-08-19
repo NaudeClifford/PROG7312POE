@@ -7,6 +7,7 @@ namespace SmartX.Application.Commands.Users
 {
     public class CreateUserCommand
     {
+        public Guid CompanyId { get; set; }
 
         public string FirebaseUid { get; set; } = string.Empty;
 

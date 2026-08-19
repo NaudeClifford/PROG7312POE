@@ -3,26 +3,23 @@ using SmartX.Shared.Models;
 using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.DTOs.Sensors;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SmartX.Application.Queries.Sensors
 {
-    public class GetGatewayByIdHandler
+    public class GetSensorByIdHandler
     {
         private readonly IMapper _mapper;
         private readonly ISensorRepository _sensorRepository;
 
-        public GetGatewayByIdHandler(ISensorRepository sensorRepository,
+        public GetSensorByIdHandler(ISensorRepository sensorRepository,
             IMapper mapper)
         {
             _sensorRepository = sensorRepository;
             _mapper = mapper;
         }
 
-        public async Task<Result<SensorDto?>> HandleAsync(
-            GetGatewayByIdQuery query,
+        public async Task<Result<SensorDto>> HandleAsync(
+            GetSensorByIdQuery query,
             CancellationToken cancellationToken = default)
         {
             var sensor = await _sensorRepository.GetByIdAsync(query.SensorId,

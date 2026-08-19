@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SmartX.Application.Services
+namespace SmartX.WPF.ViewModels.SignUp
 {
-    internal class UserService
+    public class SignUpViewModel
     {
     }
 }

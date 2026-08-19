@@ -65,7 +65,9 @@ public class FirebaseAuthService : IAuthenticationService
         {
             Success = true,
             UserId = firebaseResult.LocalId,
-            Email = firebaseResult.Email
+            Email = firebaseResult.Email,
+            IdToken = firebaseResult.IdToken,
+            RefreshToken = firebaseResult.RefreshToken
         };
     }
     public class FirebaseLoginResponse

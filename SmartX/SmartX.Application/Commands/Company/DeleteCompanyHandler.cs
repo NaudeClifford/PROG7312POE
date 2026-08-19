@@ -1,7 +1,7 @@
 ﻿using SmartX.Shared.Models;
 using SmartX.Domain.Interfaces;
 
-namespace SmartX.Application.Commands.Sensors;
+namespace SmartX.Application.Commands.Company;
 
 public class DeleteCompanyHandler
 {

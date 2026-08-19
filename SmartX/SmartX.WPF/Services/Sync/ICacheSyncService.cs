@@ -2,6 +2,12 @@
 
 public interface ICacheSyncService
 {
+    Task SyncCompaniesAsync(
+       CancellationToken cancellationToken = default);
+
+    Task SyncGatewaysAsync(
+        CancellationToken cancellationToken = default);
+
     Task SyncSensorsAsync(
         CancellationToken cancellationToken = default);
 

@@ -77,8 +77,7 @@ public partial class App
         services.AddHttpClient<ISmartXApiClient, SmartXApiClient>(
             client =>
             {
-                client.BaseAddress =
-                    new Uri(apiOptions.BaseUrl);
+                client.BaseAddress = new Uri(apiOptions.BaseUrl);
             });
 
         //Session
@@ -90,6 +89,8 @@ public partial class App
         services.AddSingleton<ILocalSensorCache, SQLiteSensorCache>();
         services.AddSingleton<ILocalTelemetryCache, SQLiteTelemetryCache>();
         services.AddSingleton<ILocalUserCache, SQLiteUserCache>();
+        services.AddSingleton<ILocalCompanyCache, SQLiteCompanyCache>();
+        services.AddSingleton<ILocalGatewayCache, SQLiteGatewayCache>();
 
         // Synchronization
         services.AddSingleton<ICacheSyncService, CacheSyncService>();
@@ -103,7 +104,6 @@ public partial class App
 
         // Pages
         services.AddTransient<HomePage>();
-        services.AddTransient<MainWindow>();
         services.AddTransient<SigninPage>();
         services.AddTransient<SensorsPage>();
         services.AddTransient<TelemetryPage>();

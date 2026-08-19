@@ -1,25 +1,26 @@
 ﻿using FluentValidation;
-using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.Models;
+using SmartX.Domain.Entities;
 
-namespace SmartX.Application.Commands.Sensors;
+
+namespace SmartX.Application.Commands.Gateway;
 
 public class CreateGatewayHandler
 {
-    private readonly ISensorRepository _sensorRepository;
-    private readonly IValidator<CreateCompanyCommand> _validator;
+    private readonly IGatewayRepository _gatewayRepository;
+    private readonly IValidator<CreateGatewayCommand> _validator;
 
     public CreateGatewayHandler(
-        ISensorRepository sensorRepository,
-        IValidator<CreateCompanyCommand> validator)
+        IGatewayRepository gatewayRepository,
+        IValidator<CreateGatewayCommand> validator)
     {
-        _sensorRepository = sensorRepository;
+        _gatewayRepository = gatewayRepository;
         _validator = validator;
     }
 
     public async Task<Result<Guid>> HandleAsync(
-        CreateCompanyCommand command,
+        CreateGatewayCommand command,
         CancellationToken cancellationToken = default)
     {
         var validationResult = await _validator.ValidateAsync(
@@ -34,24 +35,17 @@ public class CreateGatewayHandler
         }
         var now = DateTime.UtcNow;
 
-        var sensor = new Sensor
+        var gateway = new Gateway
         {
             Id = Guid.NewGuid(),
-            Name = command.Name,
-            Location = command.Location,
-            DeviceIdentifier = command.DeviceIdentifier,
-            Description = command.Description,
-            Category = command.Category,
-            GatewayId = command.GatewayId,
-            CreatedAt = now,
-            UpdatedAt = now,
-            IsActive = true
+            CompanyId = command.CompanyId
+
         };
 
-        await _sensorRepository.AddAsync(
-            sensor,
+        await _gatewayRepository.AddAsync(
+            gateway,
             cancellationToken);
 
-        return Result<Guid>.Ok(sensor.Id);
+        return Result<Guid>.Ok(gateway.Id);
     }
 }

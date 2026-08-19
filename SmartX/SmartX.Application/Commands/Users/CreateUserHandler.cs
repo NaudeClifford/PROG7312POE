@@ -39,6 +39,7 @@ namespace SmartX.Application.Commands.Users
             var user = new User
             {
                 Id = Guid.NewGuid(),
+                CompanyId = command.CompanyId,
                 FirebaseUid = command.FirebaseUid,
                 Email = command.Email,
                 DisplayName = command.DisplayName,

@@ -55,6 +55,7 @@ namespace SmartX.Application.Commands.Telemetry
                 Current = command.Current,
                 Power = command.Power,
                 Temperature = command.Temperature,
+                CreatedAt = DateTime.UtcNow
             };
 
             await _telemetryRepository.AddAsync(

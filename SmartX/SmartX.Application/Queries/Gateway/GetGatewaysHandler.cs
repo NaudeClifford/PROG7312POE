@@ -2,31 +2,31 @@
 using SmartX.Shared.Models;
 using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
-using SmartX.Shared.DTOs.Sensors;
+using SmartX.Shared.DTOs;
 
-namespace SmartX.Application.Queries.Sensors;
+namespace SmartX.Application.Queries.Gateway;
 
 public class GetGatewaysHandler
 {
-    private readonly ISensorRepository _sensorRepository;
+    private readonly IGatewayRepository _gatewayRepository;
     private readonly IMapper _mapper;
-    public GetGatewaysHandler(ISensorRepository sensorRepository, IMapper mapper)
+    public GetGatewaysHandler(IGatewayRepository gatewayRepository, IMapper mapper)
     {
-        _sensorRepository = sensorRepository;
+        _gatewayRepository = gatewayRepository;
         _mapper = mapper;
     }
 
-    public async Task<Result<IReadOnlyList<SensorDto>>> HandleAsync(
+    public async Task<Result<IReadOnlyList<GatewayDto>>> HandleAsync(
         GetGatewaysQuery query,
         CancellationToken cancellationToken = default)
     {
-        var sensors = await _sensorRepository.GetAllAsync(
+        var gateways = await _gatewayRepository.GetAllAsync(
             cancellationToken);
 
-        var dtos = _mapper.Map<List<SensorDto>>(sensors);
+        var dtos = _mapper.Map<List<GatewayDto>>(gateways);
 
 
-        return Result<IReadOnlyList<SensorDto>>.Ok(dtos);
+        return Result<IReadOnlyList<GatewayDto>>.Ok(dtos);
     }
 
 }

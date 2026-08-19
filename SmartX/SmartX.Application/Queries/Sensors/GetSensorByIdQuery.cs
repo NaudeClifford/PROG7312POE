@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SmartX.Application.Queries.Sensors
 {
-    public class GetGatewayByIdQuery
+    public class GetSensorByIdQuery
     {
         public Guid SensorId { get; set; }
     }

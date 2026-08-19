@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SmartX.Application.Commands.Sensors;
+using SmartX.Application.Commands.Company;
 using System.Text.RegularExpressions;
 
 namespace SmartX.Application.Validators;

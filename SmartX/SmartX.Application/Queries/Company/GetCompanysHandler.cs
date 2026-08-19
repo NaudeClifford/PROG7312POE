@@ -1,32 +1,31 @@
 ﻿using AutoMapper;
 using SmartX.Shared.Models;
-using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
-using SmartX.Shared.DTOs.Sensors;
+using SmartX.Shared.DTOs;
 
-namespace SmartX.Application.Queries.Sensors;
+namespace SmartX.Application.Queries.Company;
 
 public class GetCompanysHandler
 {
-    private readonly ISensorRepository _sensorRepository;
+    private readonly ICompanyRepository _companyRepository;
     private readonly IMapper _mapper;
-    public GetCompanysHandler(ISensorRepository sensorRepository, IMapper mapper)
+    public GetCompanysHandler(ICompanyRepository companyRepository, IMapper mapper)
     {
-        _sensorRepository = sensorRepository;
+        _companyRepository = companyRepository;
         _mapper = mapper;
     }
 
-    public async Task<Result<IReadOnlyList<SensorDto>>> HandleAsync(
-        GetGatewaysQuery query,
+    public async Task<Result<IReadOnlyList<CompanyDto>>> HandleAsync(
+        GetCompanysQuery query,
         CancellationToken cancellationToken = default)
     {
-        var sensors = await _sensorRepository.GetAllAsync(
+        var companys = await _companyRepository.GetAllAsync(
             cancellationToken);
 
-        var dtos = _mapper.Map<List<SensorDto>>(sensors);
+        var dtos = _mapper.Map<List<CompanyDto>>(companys);
 
 
-        return Result<IReadOnlyList<SensorDto>>.Ok(dtos);
+        return Result<IReadOnlyList<CompanyDto>>.Ok(dtos);
     }
 
 }

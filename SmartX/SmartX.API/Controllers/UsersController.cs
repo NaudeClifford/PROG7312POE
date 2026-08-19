@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartX.Application.Commands.Users;
-using SmartX.Application.Queries.Users;
-using SmartX.Shared.Models;
+using SmartX.Application.Services.CRUD;
 
 namespace SmartX.API.Controllers;
 
@@ -9,32 +8,19 @@ namespace SmartX.API.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
-    private readonly GetUsersHandler _getUsersHandler;
-    private readonly GetUserByIdHandler _getUserByIdHandler;
-    private readonly CreateUserHandler _createUserHandler;
-    private readonly UpdateUserHandler _updateUserHandler;
-    private readonly DeleteUserHandler _deleteUserHandler;
+    private readonly UserCrudService _crud;
 
     public UsersController(
-        GetUsersHandler getUserHandler,
-        GetUserByIdHandler getUserByIdHandler,
-        CreateUserHandler createUserHandler,
-        UpdateUserHandler updateUserHandler,
-        DeleteUserHandler deleteUserHandler)
+        UserCrudService crud)
     {
-        _getUsersHandler = getUserHandler;
-        _getUserByIdHandler = getUserByIdHandler;
-        _createUserHandler = createUserHandler;
-        _updateUserHandler = updateUserHandler;
-        _deleteUserHandler = deleteUserHandler;
+        _crud = crud;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll(
         CancellationToken cancellationToken)
     {
-        var result = await _getUsersHandler.HandleAsync(
-            new GetUsersQuery(),
+        var result = await _crud.GetAllAsync(
             cancellationToken);
 
         if (!result.Success)
@@ -48,11 +34,8 @@ public class UsersController : ControllerBase
         Guid id,
         CancellationToken cancellationToken)
     {
-        var result = await _getUserByIdHandler.HandleAsync(
-            new GetUserByIdQuery
-            {
-                UserId = id
-            },
+        var result = await _crud.GetByIdAsync(
+            id,
             cancellationToken);
 
         if (!result.Success)
@@ -63,10 +46,10 @@ public class UsersController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> Create(
-        [FromBody] CreateUserCommand command,
+        CreateUserCommand command,
         CancellationToken cancellationToken)
     {
-        var result = await _createUserHandler.HandleAsync(
+        var result = await _crud.CreateAsync(
             command,
             cancellationToken);
 
@@ -79,24 +62,22 @@ public class UsersController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(
         Guid id,
-        [FromBody] UpdateUserCommand command,
+        UpdateUserCommand command,
         CancellationToken cancellationToken)
     {
-        if (id != command.Id)
-        {
-            return BadRequest(
-                Result<bool>.Fail(
-                    "The route ID does not match the command ID."));
-        }
+        command.Id = id;
 
-        var result = await _updateUserHandler.HandleAsync(
+        var result = await _crud.UpdateAsync(
             command,
             cancellationToken);
 
         if (!result.Success)
-            return result.Error == "User not found."
-                ? NotFound(result)
-                : BadRequest(result);
+        {
+            if (result.Error == "User not found.")
+                return NotFound(result);
+
+            return BadRequest(result);
+        }
 
         return Ok(result);
     }
@@ -106,17 +87,17 @@ public class UsersController : ControllerBase
         Guid id,
         CancellationToken cancellationToken)
     {
-        var command = new DeleteUserCommand
-        {
-            UserId = id
-        };
-
-        var result = await _deleteUserHandler.HandleAsync(
-            command,
+        var result = await _crud.DeleteAsync(
+            id,
             cancellationToken);
 
         if (!result.Success)
-            return NotFound(result);
+        {
+            if (result.Error == "User not found.")
+                return NotFound(result);
+
+            return BadRequest(result);
+        }
 
         return Ok(result);
     }

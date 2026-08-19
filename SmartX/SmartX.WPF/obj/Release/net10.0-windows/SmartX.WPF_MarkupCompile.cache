@@ -10,11 +10,11 @@ none
 false
 TRACE;RELEASE;NET;NET10_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NET10_0_OR_GREATER;NETCOREAPP1_0_OR_GREATER;NETCOREAPP1_1_OR_GREATER;NETCOREAPP2_0_OR_GREATER;NETCOREAPP2_1_OR_GREATER;NETCOREAPP2_2_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\App.xaml
-101348572177
+10-1204963445
 11413424753
-35-106837646
-231-269691371
-Resources\Styles\ButtonStyles.xaml;Resources\Styles\CardStyles.xaml;Resources\Styles\Colors.xaml;Views\Pages\History\HistoryPage.xaml;Views\Pages\Home\HomePage.xaml;Views\Pages\Login\LoginPage.xaml;Views\Pages\Sensor\SensorsPage.xaml;Views\Pages\Signin\SigninPage.xaml;Views\Pages\Telemetry\TelemetryPage.xaml;Views\Windows\MainWindow.xaml;
+52316104595
+239-925906002
+Resources\Styles\ButtonStyles.xaml;Resources\Styles\CardStyles.xaml;Resources\Styles\Colors.xaml;Views\Pages\History\HistoryPage.xaml;Views\Pages\Home\HomePage.xaml;Views\Pages\Sensor\SensorsPage.xaml;Views\Pages\Signin\SigninPage.xaml;Views\Pages\SignUp\SignUpPage.xaml;Views\Pages\Telemetry\TelemetryPage.xaml;Views\Windows\MainWindow.xaml;
 
 True
 

@@ -16,6 +16,6 @@ public class TelemetryDto
 
     public double? Temperature { get; set; }
 
-    public DateTime UpdatedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 
 }

@@ -3,7 +3,7 @@ using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.Models;
 
-namespace SmartX.Application.Commands.Sensors;
+namespace SmartX.Application.Commands.Company;
 
 public class CreateCompanyHandler
 {
@@ -34,7 +34,7 @@ public class CreateCompanyHandler
         }
         var now = DateTime.UtcNow;
 
-        var company = new Company
+        var company = new Domain.Entities.Company
         {
             Id = Guid.NewGuid(),
             Name = command.Name,

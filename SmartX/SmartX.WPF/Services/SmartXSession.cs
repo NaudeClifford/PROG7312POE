@@ -1,49 +1,64 @@
 ﻿using SmartX.Domain.Enums;
 using SmartX.Shared.DTOs;
 
-namespace SmartX.WPF.Services
+namespace SmartX.WPF.Services;
+
+public class SmartXSession
 {
-    public class SmartXSession
+    public Guid UserId { get; private set; }
+
+    public Guid CompanyId { get; private set; }
+
+    public string? FirebaseUid { get; private set; }
+
+    public string? Email { get; private set; }
+
+    public string? DisplayName { get; private set; }
+
+    public UserRole? Role { get; private set; }
+
+    public string? IdToken { get; private set; }
+
+    public string? RefreshToken { get; private set; }
+
+    public bool IsAuthenticated { get; private set; }
+
+    public bool IsGuest { get; private set; }
+
+    public void SignIn(
+        UserDto user,
+        string idToken,
+        string refreshToken)
     {
-        public Guid Id { get; private set; }
+        UserId = user.Id;
+        CompanyId = user.CompanyId;
 
-        public string? FirebaseUid { get; private set; }
+        FirebaseUid = user.FirebaseUid;
+        Email = user.Email;
+        DisplayName = user.DisplayName;
+        Role = user.Role;
 
-        public Guid CompanyId { get; private set; }
+        IdToken = idToken;
+        RefreshToken = refreshToken;
 
-        public Guid UserId { get; private set; }
+        IsAuthenticated = true;
+        IsGuest = false;
+    }
 
-        public string? Email { get; private set; }
+    public void StartGuestSession(string name)
+    {
+        UserId = Guid.Empty;
+        CompanyId = Guid.Empty;
 
-        public string? DisplayName { get; private set; }
+        FirebaseUid = null;
+        Email = null;
+        DisplayName = name;
+        Role = null;
 
-        public UserRole? Role { get; private set; }
+        IdToken = null;
+        RefreshToken = null;
 
-        public bool IsAuthenticated { get; private set; }
-
-        public bool IsGuest { get; private set; }
-
-        public void SignIn(UserDto user)
-        {
-            Id = user.Id;
-            Email = user.Email;
-            Role = user.Role;
-            FirebaseUid = user.FirebaseUid;
-            DisplayName = user.DisplayName;
-
-            IsAuthenticated = true;
-            IsGuest = false;
-        }
-
-        public void StartGuestSession(string name)
-        {
-            Id = Guid.NewGuid();
-            Email = null;
-            Role = null;
-            FirebaseUid = null;
-            IsAuthenticated = false;
-            DisplayName = name;
-            IsGuest = true;
-        }
+        IsAuthenticated = false;
+        IsGuest = true;
     }
 }

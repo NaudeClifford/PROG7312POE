@@ -13,6 +13,6 @@
     "\\SmartX\\SmartX.WPF\\bin",
     "\\SmartX\\SmartX.WPF\\bin\\Debug"
   ],
-  "SelectedNode": "\\SmartX\\SmartX.API\\SmartX.API.csproj",
+  "SelectedNode": "\\SmartX\\SmartX.API\\bin\\Debug\\net10.0\\Data\\Local",
   "PreviewInSolutionExplorer": true
 }

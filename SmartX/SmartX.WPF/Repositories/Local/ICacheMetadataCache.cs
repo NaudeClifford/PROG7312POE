@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SmartX.WPF.Repositories.Local
 {
-    public interface ICacheMetadataRepository
+    public interface ICacheMetadataCache
     {
 
         Task<CacheMetadata?> GetByIdAsync(

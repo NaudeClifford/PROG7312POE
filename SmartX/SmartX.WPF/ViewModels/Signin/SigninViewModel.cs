@@ -1,7 +1,11 @@
 ﻿using SmartX.Application.Authentication;
+using SmartX.WPF.Navigation;
 using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
+using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels.Base;
+using SmartX.WPF.Views.Pages.Sensor;
+using System.Net.Http;
 using System.Windows.Input;
 
 namespace SmartX.WPF.ViewModels;
@@ -11,36 +15,25 @@ public class SigninViewModel : ViewModelBase
     private readonly IAuthenticationService _authenticationService;
     private readonly ISmartXApiClient _apiClient;
     private readonly SmartXSession _session;
+    private readonly ICacheSyncService _cacheSyncService;
+    private readonly INavigationService _navigationService;
 
     private string _email = string.Empty;
     private string _password = string.Empty;
     private string _errorMessage = string.Empty;
     private bool _isBusy;
 
+
     public string Email
     {
         get => _email;
-        set
-        {
-            if (SetProperty(ref _email, value))
-            {
-                (SignInCommand as AsyncRelayCommand)
-                    ?.RaiseCanExecuteChanged();
-            }
-        }
+        set => SetProperty(ref _email, value);
     }
 
     public string Password
     {
         get => _password;
-        set
-        {
-            if (SetProperty(ref _password, value))
-            {
-                (SignInCommand as AsyncRelayCommand)
-                    ?.RaiseCanExecuteChanged();
-            }
-        }
+        set => SetProperty(ref _password, value);
     }
 
     public string ErrorMessage
@@ -52,30 +45,37 @@ public class SigninViewModel : ViewModelBase
     public bool IsBusy
     {
         get => _isBusy;
-        private set
-        {
-            if (SetProperty(ref _isBusy, value))
-            {
-                (SignInCommand as AsyncRelayCommand)
-                    ?.RaiseCanExecuteChanged();
-            }
-        }
+        private set => SetProperty(ref _isBusy, value);
+    }
+
+    private void EnterGuestMode()
+    {
+        _session.StartGuestSession("Guest");
+
+        _navigationService.NavigateTo<SensorsPage>();
     }
 
     public ICommand SignInCommand { get; }
+    public ICommand GuestCommand { get; }
 
     public SigninViewModel(
         IAuthenticationService authenticationService,
         ISmartXApiClient apiClient,
-        SmartXSession session)
+        SmartXSession session,
+        ICacheSyncService cacheSyncService,
+        INavigationService navigationService)
     {
         _authenticationService = authenticationService;
         _apiClient = apiClient;
         _session = session;
+        _cacheSyncService = cacheSyncService;
+        _navigationService = navigationService;
 
         SignInCommand = new AsyncRelayCommand(
             SignInAsync,
             CanSignIn);
+
+        GuestCommand = new RelayCommand(_ => EnterGuestMode());
     }
 
     private bool CanSignIn()
@@ -87,49 +87,76 @@ public class SigninViewModel : ViewModelBase
 
     private async Task SignInAsync()
     {
-        ErrorMessage = string.Empty;
-        IsBusy = true;
-
         try
         {
-            // 1. Authenticate with Firebase
-            var authenticationResult =
+            IsBusy = true;
+            ErrorMessage = string.Empty;
+
+            var result =
                 await _authenticationService.SignInAsync(
                     Email,
                     Password);
 
-            if (!authenticationResult.Success)
+            if (!result.Success)
             {
                 ErrorMessage =
-                    authenticationResult.ErrorMessage ??
-                    "Sign in failed.";
+                    result.ErrorMessage ??
+                    "Login failed.";
 
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(
-                    authenticationResult.UserId))
+            if (string.IsNullOrWhiteSpace(result.UserId))
             {
                 ErrorMessage =
-                    "Authentication succeeded, but no user ID was returned.";
+                    "Firebase did not return a user ID.";
 
                 return;
             }
 
-            // 2. Find the SmartX user using Firebase UID
             var user =
                 await _apiClient.GetUserByFirebaseUidAsync(
-                authenticationResult.UserId);
+                    result.UserId);
 
             if (user is null)
             {
                 ErrorMessage =
-                    "Your account is authenticated, but no SmartX user account was found.";
+                    "Your Firebase account is not registered in SmartX.";
 
                 return;
             }
 
-            _session.SignIn(user);
+            if (!user.IsActive)
+            {
+                ErrorMessage =
+                    "Your SmartX account is inactive.";
+
+                return;
+            }
+
+            // Store authenticated user/session
+            _session.SignIn(
+                user,
+                result.IdToken ?? string.Empty,
+                result.RefreshToken ?? string.Empty);
+
+            // Synchronize local cache
+            await _cacheSyncService.SyncUserAsync(
+                user.Id);
+
+            await _cacheSyncService.SyncCompaniesAsync();
+
+            await _cacheSyncService.SyncGatewaysAsync();
+
+            await _cacheSyncService.SyncSensorsAsync();
+
+            // Continue into the application
+            _navigationService.NavigateTo<SensorsPage>();
+        }
+        catch (HttpRequestException)
+        {
+            ErrorMessage =
+                "Unable to connect to the SmartX API.";
         }
         catch (Exception ex)
         {

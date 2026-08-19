@@ -3,24 +3,72 @@
   "WorkspaceRootPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\company\\createcompanyhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\company\\createcompanyhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\signin\\signinviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\signin\\signinviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\company\\createcompanycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\company\\createcompanycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\company\\updatecompanycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\company\\updatecompanycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\smartxsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\smartxsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.application\\commands\\company\\deletecompanycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\company\\deletecompanycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\sync\\icachesyncservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\sync\\icachesyncservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.domain\\entities\\company.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|solutionrelative:smartx.domain\\entities\\company.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\sync\\cachesyncservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\sync\\cachesyncservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\api\\smartxapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\api\\smartxapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\repositories\\local\\sqlitegatewaycache.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\repositories\\local\\sqlitegatewaycache.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\repositories\\local\\ilocalgatewaycache.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\repositories\\local\\ilocalgatewaycache.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\repositories\\local\\sqlitecompanycache.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\repositories\\local\\sqlitecompanycache.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\data\\mappers\\gatewaymapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\data\\mappers\\gatewaymapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\repositories\\local\\sqlitetelemetrycache.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\repositories\\local\\sqlitetelemetrycache.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\data\\mappers\\telemetrymapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\data\\mappers\\telemetrymapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\data\\smartxcachedatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\data\\smartxcachedatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\api\\ismartxapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\api\\ismartxapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{99D9586E-11EE-9F77-CF80-FB8604540D9E}|SmartX.Shared\\SmartX.Shared.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.shared\\dtos\\companydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{99D9586E-11EE-9F77-CF80-FB8604540D9E}|SmartX.Shared\\SmartX.Shared.csproj|solutionrelative:smartx.shared\\dtos\\companydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\repositories\\local\\ilocalcompanycache.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\repositories\\local\\ilocalcompanycache.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\data\\mappers\\companymapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\data\\mappers\\companymapper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,71 +78,227 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "UpdateCompanyCommand.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\UpdateCompanyCommand.cs",
-              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Company\\UpdateCompanyCommand.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\UpdateCompanyCommand.cs",
-              "RelativeToolTip": "SmartX.Application\\Commands\\Company\\UpdateCompanyCommand.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAArAAAAAAAAAA==",
+              "Title": "SmartXSession.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\SmartXSession.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\SmartXSession.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\SmartXSession.cs",
+              "RelativeToolTip": "SmartX.WPF\\Services\\SmartXSession.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAmwD8AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-18T20:33:01.548Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "DeleteCompanyCommand.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\DeleteCompanyCommand.cs",
-              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Company\\DeleteCompanyCommand.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\DeleteCompanyCommand.cs",
-              "RelativeToolTip": "SmartX.Application\\Commands\\Company\\DeleteCompanyCommand.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-18T20:32:59.217Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Company.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\Entities\\Company.cs",
-              "RelativeDocumentMoniker": "SmartX.Domain\\Entities\\Company.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\Entities\\Company.cs",
-              "RelativeToolTip": "SmartX.Domain\\Entities\\Company.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-18T20:30:47.922Z",
+              "WhenOpened": "2026-08-19T17:54:23.397Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "CreateCompanyHandler.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\CreateCompanyHandler.cs",
-              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Company\\CreateCompanyHandler.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\CreateCompanyHandler.cs",
-              "RelativeToolTip": "SmartX.Application\\Commands\\Company\\CreateCompanyHandler.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADIAAAAmAAAAAAAAAA==",
+              "Title": "SigninViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Signin\\SigninViewModel.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Signin\\SigninViewModel.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Signin\\SigninViewModel.cs",
+              "RelativeToolTip": "SmartX.WPF\\ViewModels\\Signin\\SigninViewModel.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAADwvzkAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-18T20:28:30.242Z",
+              "WhenOpened": "2026-08-19T17:51:20.04Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "CreateCompanyCommand.cs",
-              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\CreateCompanyCommand.cs",
-              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Company\\CreateCompanyCommand.cs",
-              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Company\\CreateCompanyCommand.cs",
-              "RelativeToolTip": "SmartX.Application\\Commands\\Company\\CreateCompanyCommand.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\App.xaml.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\App.xaml.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\App.xaml.cs",
+              "RelativeToolTip": "SmartX.WPF\\App.xaml.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAgwE4AAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-18T20:28:28.236Z",
+              "WhenOpened": "2026-08-19T17:16:45.41Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CacheSyncService.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
+              "RelativeToolTip": "SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
+              "ViewState": "AgIAAMUAAAAAAAAAAAAqwOAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-19T17:13:50.32Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ICacheSyncService.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Sync\\ICacheSyncService.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Sync\\ICacheSyncService.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Sync\\ICacheSyncService.cs",
+              "RelativeToolTip": "SmartX.WPF\\Services\\Sync\\ICacheSyncService.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAxwA4AAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-19T17:13:36.74Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "SQLiteGatewayCache.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Repositories\\Local\\SQLiteGatewayCache.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Repositories\\Local\\SQLiteGatewayCache.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Repositories\\Local\\SQLiteGatewayCache.cs",
+              "RelativeToolTip": "SmartX.WPF\\Repositories\\Local\\SQLiteGatewayCache.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAwNoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-19T17:35:08.042Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "SQLiteTelemetryCache.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Repositories\\Local\\SQLiteTelemetryCache.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Repositories\\Local\\SQLiteTelemetryCache.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Repositories\\Local\\SQLiteTelemetryCache.cs",
+              "RelativeToolTip": "SmartX.WPF\\Repositories\\Local\\SQLiteTelemetryCache.cs",
+              "ViewState": "AgIAADYBAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-19T17:33:02.191Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "TelemetryMapper.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Data\\Mappers\\TelemetryMapper.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Data\\Mappers\\TelemetryMapper.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Data\\Mappers\\TelemetryMapper.cs",
+              "RelativeToolTip": "SmartX.WPF\\Data\\Mappers\\TelemetryMapper.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-19T17:33:30.929Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CompanyDto.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\DTOs\\CompanyDto.cs",
+              "RelativeDocumentMoniker": "SmartX.Shared\\DTOs\\CompanyDto.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\DTOs\\CompanyDto.cs",
+              "RelativeToolTip": "SmartX.Shared\\DTOs\\CompanyDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-19T17:15:55.995Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "SmartXApiClient.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Api\\SmartXApiClient.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Api\\SmartXApiClient.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Api\\SmartXApiClient.cs",
+              "RelativeToolTip": "SmartX.WPF\\Services\\Api\\SmartXApiClient.cs",
+              "ViewState": "AgIAAO0AAAAAAAAAAAAIwGsAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-19T17:12:43.902Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ISmartXApiClient.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Api\\ISmartXApiClient.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Api\\ISmartXApiClient.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Api\\ISmartXApiClient.cs",
+              "RelativeToolTip": "SmartX.WPF\\Services\\Api\\ISmartXApiClient.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAADwvzEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-19T17:11:57.44Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "SQLiteCompanyCache.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Repositories\\Local\\SQLiteCompanyCache.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Repositories\\Local\\SQLiteCompanyCache.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Repositories\\Local\\SQLiteCompanyCache.cs",
+              "RelativeToolTip": "SmartX.WPF\\Repositories\\Local\\SQLiteCompanyCache.cs",
+              "ViewState": "AgIAAIkAAAAAAAAAAAAAwKIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-19T17:07:28.223Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "SmartXCacheDatabase.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Data\\SmartXCacheDatabase.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Data\\SmartXCacheDatabase.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Data\\SmartXCacheDatabase.cs",
+              "RelativeToolTip": "SmartX.WPF\\Data\\SmartXCacheDatabase.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAkwHEAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-19T17:03:21.581Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "GatewayMapper.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Data\\Mappers\\GatewayMapper.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Data\\Mappers\\GatewayMapper.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Data\\Mappers\\GatewayMapper.cs",
+              "RelativeToolTip": "SmartX.WPF\\Data\\Mappers\\GatewayMapper.cs",
+              "ViewState": "AgIAABYAAAAAAAAAAAAYwCsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-19T17:02:49.565Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "CompanyMapper.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Data\\Mappers\\CompanyMapper.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Data\\Mappers\\CompanyMapper.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Data\\Mappers\\CompanyMapper.cs",
+              "RelativeToolTip": "SmartX.WPF\\Data\\Mappers\\CompanyMapper.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAYwBoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-19T17:02:32.998Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ILocalGatewayCache.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Repositories\\Local\\ILocalGatewayCache.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Repositories\\Local\\ILocalGatewayCache.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Repositories\\Local\\ILocalGatewayCache.cs",
+              "RelativeToolTip": "SmartX.WPF\\Repositories\\Local\\ILocalGatewayCache.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAAwBQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-19T17:02:17.945Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "ILocalCompanyCache.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Repositories\\Local\\ILocalCompanyCache.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Repositories\\Local\\ILocalCompanyCache.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Repositories\\Local\\ILocalCompanyCache.cs",
+              "RelativeToolTip": "SmartX.WPF\\Repositories\\Local\\ILocalCompanyCache.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABQAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-19T17:01:06.789Z",
               "EditorCaption": ""
             }
           ]

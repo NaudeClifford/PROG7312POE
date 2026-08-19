@@ -2,40 +2,38 @@
 using SmartX.Shared.Models;
 using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
-using SmartX.Shared.DTOs.Sensors;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using SmartX.Shared.DTOs;
+using SmartX.Application.Queries.Gateway;
 
-namespace SmartX.Application.Queries.Sensors
+namespace SmartX.Application.Queries.Gateway
 {
     public class GetGatewayByIdHandler
     {
         private readonly IMapper _mapper;
-        private readonly ISensorRepository _sensorRepository;
+        private readonly IGatewayRepository _gatewayRepository;
 
-        public GetGatewayByIdHandler(ISensorRepository sensorRepository,
+        public GetGatewayByIdHandler(IGatewayRepository sensorRepository,
             IMapper mapper)
         {
-            _sensorRepository = sensorRepository;
+            _gatewayRepository = sensorRepository;
             _mapper = mapper;
         }
 
-        public async Task<Result<SensorDto?>> HandleAsync(
+        public async Task<Result<GatewayDto>> HandleAsync(
             GetGatewayByIdQuery query,
             CancellationToken cancellationToken = default)
         {
-            var sensor = await _sensorRepository.GetByIdAsync(query.SensorId,
+            var sensor = await _gatewayRepository.GetByIdAsync(query.Id,
                 cancellationToken);
 
             if (sensor is null)
             {
-                return Result<SensorDto>.Fail("Sensor not found.");
+                return Result<GatewayDto>.Fail("Sensor not found.");
             }
 
-            var dto = _mapper.Map<SensorDto>(sensor);
+            var dto = _mapper.Map<GatewayDto>(sensor);
 
-            return Result<SensorDto>.Ok(dto);
+            return Result<GatewayDto>.Ok(dto);
         }
     }
 }

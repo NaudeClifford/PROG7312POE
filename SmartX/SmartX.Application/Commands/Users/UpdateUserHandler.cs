@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using SmartX.Application.Commands.Sensors;
+using SmartX.Application.Commands.Company;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.Models;
 using System;
@@ -44,6 +44,7 @@ namespace SmartX.Application.Commands.Users
 
             if (user is null) return Result<bool>.Fail("User not found.");
 
+            user.CompanyId = command.CompanyId;
             user.FirebaseUid = command.FirebaseUid;
             user.DisplayName = command.DisplayName;
             user.Email = command.Email;
