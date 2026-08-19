@@ -1,27 +1,21 @@
-﻿using SmartX.WPF.Authentication;
+﻿using SmartX.Application.Authentication;
+using SmartX.WPF.Services;
+using SmartX.WPF.Services.Api;
 using SmartX.WPF.ViewModels.Base;
+using System.Windows.Input;
 
-namespace SmartX.WPF.ViewModels.Signin;
+namespace SmartX.WPF.ViewModels;
 
 public class SigninViewModel : ViewModelBase
 {
-    private readonly FirebaseAuthService _firebaseAuthService;
+    private readonly IAuthenticationService _authenticationService;
+    private readonly ISmartXApiClient _apiClient;
+    private readonly SmartXSession _session;
 
     private string _email = string.Empty;
     private string _password = string.Empty;
     private string _errorMessage = string.Empty;
-    private bool _hasError;
     private bool _isBusy;
-
-    public SigninViewModel(
-        FirebaseAuthService firebaseAuthService)
-    {
-        _firebaseAuthService = firebaseAuthService;
-
-        SignInCommand = new AsyncRelayCommand(
-            SignInAsync,
-            CanSignIn);
-    }
 
     public string Email
     {
@@ -30,8 +24,8 @@ public class SigninViewModel : ViewModelBase
         {
             if (SetProperty(ref _email, value))
             {
-                ClearError();
-                SignInCommand.RaiseCanExecuteChanged();
+                (SignInCommand as AsyncRelayCommand)
+                    ?.RaiseCanExecuteChanged();
             }
         }
     }
@@ -43,8 +37,8 @@ public class SigninViewModel : ViewModelBase
         {
             if (SetProperty(ref _password, value))
             {
-                ClearError();
-                SignInCommand.RaiseCanExecuteChanged();
+                (SignInCommand as AsyncRelayCommand)
+                    ?.RaiseCanExecuteChanged();
             }
         }
     }
@@ -52,17 +46,7 @@ public class SigninViewModel : ViewModelBase
     public string ErrorMessage
     {
         get => _errorMessage;
-        private set => SetProperty(
-            ref _errorMessage,
-            value);
-    }
-
-    public bool HasError
-    {
-        get => _hasError;
-        private set => SetProperty(
-            ref _hasError,
-            value);
+        private set => SetProperty(ref _errorMessage, value);
     }
 
     public bool IsBusy
@@ -72,20 +56,27 @@ public class SigninViewModel : ViewModelBase
         {
             if (SetProperty(ref _isBusy, value))
             {
-                OnPropertyChanged(nameof(SignInButtonText));
-                SignInCommand.RaiseCanExecuteChanged();
+                (SignInCommand as AsyncRelayCommand)
+                    ?.RaiseCanExecuteChanged();
             }
         }
     }
 
-    public string SignInButtonText =>
-        IsBusy
-            ? "Signing in..."
-            : "Sign In";
+    public ICommand SignInCommand { get; }
 
-    public AsyncRelayCommand SignInCommand { get; }
+    public SigninViewModel(
+        IAuthenticationService authenticationService,
+        ISmartXApiClient apiClient,
+        SmartXSession session)
+    {
+        _authenticationService = authenticationService;
+        _apiClient = apiClient;
+        _session = session;
 
-    public event EventHandler? SignInSucceeded;
+        SignInCommand = new AsyncRelayCommand(
+            SignInAsync,
+            CanSignIn);
+    }
 
     private bool CanSignIn()
     {
@@ -96,57 +87,57 @@ public class SigninViewModel : ViewModelBase
 
     private async Task SignInAsync()
     {
-        ClearError();
-
-        if (string.IsNullOrWhiteSpace(Email))
-        {
-            ShowError(
-                "Please enter your email address.");
-
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(Password))
-        {
-            ShowError(
-                "Please enter your password.");
-
-            return;
-        }
+        ErrorMessage = string.Empty;
+        IsBusy = true;
 
         try
         {
-            IsBusy = true;
-
-            var result =
-                await _firebaseAuthService.SignInAsync(
-                    Email.Trim(),
+            // 1. Authenticate with Firebase
+            var authenticationResult =
+                await _authenticationService.SignInAsync(
+                    Email,
                     Password);
 
-            SignInSucceeded?.Invoke(
-                this,
-                EventArgs.Empty);
+            if (!authenticationResult.Success)
+            {
+                ErrorMessage =
+                    authenticationResult.ErrorMessage ??
+                    "Sign in failed.";
+
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(
+                    authenticationResult.UserId))
+            {
+                ErrorMessage =
+                    "Authentication succeeded, but no user ID was returned.";
+
+                return;
+            }
+
+            // 2. Find the SmartX user using Firebase UID
+            var user =
+                await _apiClient.GetUserByFirebaseUidAsync(
+                authenticationResult.UserId);
+
+            if (user is null)
+            {
+                ErrorMessage =
+                    "Your account is authenticated, but no SmartX user account was found.";
+
+                return;
+            }
+
+            _session.SignIn(user);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            ShowError(
-                "Unable to sign in. Please check your email and password.");
+            ErrorMessage = ex.Message;
         }
         finally
         {
             IsBusy = false;
         }
-    }
-
-    private void ShowError(string message)
-    {
-        ErrorMessage = message;
-        HasError = true;
-    }
-
-    private void ClearError()
-    {
-        ErrorMessage = string.Empty;
-        HasError = false;
     }
 }

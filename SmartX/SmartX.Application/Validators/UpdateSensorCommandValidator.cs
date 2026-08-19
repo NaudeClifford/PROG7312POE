@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 namespace SmartX.Application.Validators;
 
 public class UpdateSensorCommandValidator
-    : AbstractValidator<UpdateSensorCommand>
+    : AbstractValidator<UpdateCompanyCommand>
 {
     public UpdateSensorCommandValidator()
     {

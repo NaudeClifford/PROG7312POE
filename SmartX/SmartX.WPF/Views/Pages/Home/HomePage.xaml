@@ -64,7 +64,7 @@
                         FontSize="15"
                         FontWeight="SemiBold"
                         Cursor="Hand"
-                        Click="LoginButton_Click"
+                        Command="{Binding SignInCommand}"
                         Style="{StaticResource BaseButtonStyle}"/>
 
                 <Button Content="Create an Account"
@@ -72,7 +72,6 @@
                         Margin="40,0,40,10"
                         FontSize="15"
                         Cursor="Hand"
-                        Click="SignUpButton_Click"
                         Style="{StaticResource BaseButtonStyle}"/>
 
                 <TextBlock Text="Secure authentication"

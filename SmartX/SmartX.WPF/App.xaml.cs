@@ -1,13 +1,17 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SmartX.Application.Authentication;
 using SmartX.WPF.Authentication;
 using SmartX.WPF.Data;
+using SmartX.WPF.Navigation;
 using SmartX.WPF.Repositories.Local;
 using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Sync;
-using SmartX.WPF.ViewModels.Home;
-using SmartX.WPF.ViewModels.Signin;
+using SmartX.WPF.ViewModels;
+using SmartX.WPF.ViewModels.History;
+using SmartX.WPF.ViewModels.Pages.Sensor;
+using SmartX.WPF.ViewModels.Telemetry;
 using SmartX.WPF.Views.Pages.History;
 using SmartX.WPF.Views.Pages.Home;
 using SmartX.WPF.Views.Pages.Sensor;
@@ -17,7 +21,7 @@ using System.Windows;
 
 namespace SmartX.WPF;
 
-public partial class App : Application
+public partial class App
 {
     public static ServiceProvider ServiceProvider { get; private set; } = null!;
 
@@ -39,7 +43,7 @@ public partial class App : Application
                 optional: false,
                 reloadOnChange: false)
             .Build();
-        /*
+        
         // Firebase configuration
         var firebaseOptions = configuration
             .GetSection("Firebase")
@@ -53,7 +57,7 @@ public partial class App : Application
         }
 
         services.AddSingleton(firebaseOptions);
-        */
+        
 
         // API configuration
         var apiOptions = configuration
@@ -80,9 +84,6 @@ public partial class App : Application
         //Session
         services.AddSingleton<SmartXSession>();
 
-        // Firebase
-        services.AddHttpClient<FirebaseAuthService>();
-
         // SQLite Cache
         services.AddSingleton<SmartXCacheDatabase>();
 
@@ -96,6 +97,9 @@ public partial class App : Application
         // ViewModels
         services.AddTransient<HomeViewModel>();
         services.AddTransient<SigninViewModel>();
+        services.AddTransient<HistoryViewModel>();
+        services.AddTransient<SensorViewModel>();
+        services.AddTransient<TelemetryViewModel>();
 
         // Pages
         services.AddTransient<HomePage>();
@@ -104,6 +108,15 @@ public partial class App : Application
         services.AddTransient<SensorsPage>();
         services.AddTransient<TelemetryPage>();
         services.AddTransient<HistoryPage>();
+
+        //Main window
+        services.AddSingleton<MainWindow>();
+
+        // Navigation
+        services.AddSingleton<INavigationService, NavigationService>();
+
+        //Authentication
+        services.AddHttpClient<IAuthenticationService,FirebaseAuthService>();
     }
 
     protected override async void OnStartup(StartupEventArgs e)

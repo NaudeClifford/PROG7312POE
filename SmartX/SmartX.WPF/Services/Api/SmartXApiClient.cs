@@ -82,7 +82,7 @@ public class SmartXApiClient(
         var response = await _httpClient.GetAsync($"api/Telemetry/{sensorId}",
                     cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound) return null;
+        if (response.StatusCode == HttpStatusCode.NotFound) return [];
 
         response.EnsureSuccessStatusCode();
 

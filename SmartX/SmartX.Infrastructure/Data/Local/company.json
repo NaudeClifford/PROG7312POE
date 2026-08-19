@@ -1,0 +1,10 @@
+[
+  {
+    "id": "11111111-1111-1111-1111-111111111111",
+    "name": "Acme Manufacturing",
+    "description": "Industrial monitoring company",
+    "isActive": true,
+    "createdAt": "2026-08-18T10:00:00Z",
+    "updatedAt": "2026-08-18T10:00:00Z"
+  }
+]

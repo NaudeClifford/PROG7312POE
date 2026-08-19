@@ -20,9 +20,6 @@
 
   <ItemGroup>
     <Folder Include="Assets\Images\" />
-    <Folder Include="ViewModels\History\" />
-    <Folder Include="ViewModels\Network\" />
-    <Folder Include="ViewModels\Sensor\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SmartX.Application\SmartX.Application.csproj" />
     <ProjectReference Include="..\SmartX.Domain\SmartX.Domain.csproj" />
     <ProjectReference Include="..\SmartX.Shared\SmartX.Shared.csproj" />
   </ItemGroup>

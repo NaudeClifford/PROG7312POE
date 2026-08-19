@@ -9,22 +9,22 @@ namespace SmartX.API.Controllers
     [Route("api/[controller]")]
     public class SensorsController : ControllerBase
     {
-        private readonly GetSensorsHandler _getSensorsHandler;
-        private readonly GetSensorByIdHandler _getSensorByIdHandler;
+        private readonly GetGatewaysHandler _getSensorsHandler;
+        private readonly GetGatewayByIdHandler _getSensorByIdHandler;
 
-        private readonly CreateSensorHandler _createSensorHandler;
+        private readonly CreateCompanyHandler _createSensorHandler;
 
-        private readonly UpdateSensorHandler _updateSensorHandler;
+        private readonly UpdateCompanyHandler _updateSensorHandler;
 
-        private readonly DeleteSensorHandler _deleteSensorHandler;
+        private readonly DeleteCompanyHandler _deleteSensorHandler;
 
 
         public SensorsController(
-            GetSensorsHandler getSensorsHandler,
-            GetSensorByIdHandler getSensorByIdHandler,
-            CreateSensorHandler createSensorHandler,
-            UpdateSensorHandler updateSensorHandler,
-            DeleteSensorHandler deleteSensorHandler)
+            GetGatewaysHandler getSensorsHandler,
+            GetGatewayByIdHandler getSensorByIdHandler,
+            CreateCompanyHandler createSensorHandler,
+            UpdateCompanyHandler updateSensorHandler,
+            DeleteCompanyHandler deleteSensorHandler)
         {
             _getSensorsHandler = getSensorsHandler;
             _getSensorByIdHandler = getSensorByIdHandler;
@@ -39,7 +39,7 @@ namespace SmartX.API.Controllers
             CancellationToken cancellationToken)
         {
             var result = await _getSensorByIdHandler.HandleAsync(
-                new GetSensorByIdQuery
+                new GetGatewayByIdQuery
                 {
                     SensorId = id
                 }, cancellationToken);
@@ -54,7 +54,7 @@ namespace SmartX.API.Controllers
             CancellationToken cancellationToken)
         {
             var result = await _getSensorsHandler.HandleAsync(
-                new GetSensorsQuery(), cancellationToken);
+                new GetGatewaysQuery(), cancellationToken);
 
             if (!result.Success) return BadRequest(result);
 
@@ -64,7 +64,7 @@ namespace SmartX.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateSensor(
-            CreateSensorCommand command,
+            CreateCompanyCommand command,
             CancellationToken cancellationToken)
         {
             var result = await _createSensorHandler.HandleAsync(
@@ -78,7 +78,7 @@ namespace SmartX.API.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateSensor(
             Guid id,
-            [FromBody] UpdateSensorCommand command,
+            [FromBody] UpdateCompanyCommand command,
             CancellationToken cancellationToken
             )
         {
@@ -103,7 +103,7 @@ namespace SmartX.API.Controllers
         {
 
             var result = await _deleteSensorHandler.HandleAsync(
-                new DeleteSensorCommand 
+                new DeleteCompanyCommand 
                 {
                     Id = id
                 }, cancellationToken);

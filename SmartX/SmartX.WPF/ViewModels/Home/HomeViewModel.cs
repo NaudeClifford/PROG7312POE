@@ -1,14 +1,28 @@
-﻿using SmartX.WPF.ViewModels.Base;
+﻿using SmartX.WPF.Navigation;
+using SmartX.WPF.ViewModels.Base;
+using SmartX.WPF.Views.Pages;
+using SmartX.WPF.Views.Pages.Signin;
+using System.Windows.Input;
 
-namespace SmartX.WPF.ViewModels.Home;
-
-public class HomeViewModel : ViewModelBase
+namespace SmartX.WPF.ViewModels
 {
-    public string Title => "SmartX";
+    public class HomeViewModel : ViewModelBase
+    {
+        private readonly INavigationService _navigationService;
 
-    public string Subtitle =>
-        "Smart Sensor Monitoring Platform";
+        public ICommand SignInCommand { get; }
 
-    public string Description =>
-        "Monitor your sensors, view live telemetry and explore historical data from one central platform.";
+        public HomeViewModel(INavigationService navigationService)
+        {
+            _navigationService = navigationService;
+
+            SignInCommand = new RelayCommand(
+                NavigateToSignIn);
+        }
+
+        private void NavigateToSignIn(object? parameter)
+        {
+            _navigationService.NavigateTo<SigninPage>();
+        }
+    }
 }

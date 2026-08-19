@@ -1,10 +1,11 @@
-﻿using System.Net.Http;
+﻿using SmartX.Application.Authentication;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 
 namespace SmartX.WPF.Authentication;
 
-public class FirebaseAuthService
+public class FirebaseAuthService : IAuthenticationService
 {
     private readonly HttpClient _httpClient;
     private readonly string _apiKey;
@@ -17,7 +18,7 @@ public class FirebaseAuthService
         _apiKey = options.ApiKey;
     }
 
-    public async Task<FirebaseLoginResponse> SignInAsync(
+    public async Task<AuthenticationResult> SignInAsync(
         string email,
         string password)
     {
@@ -37,51 +38,63 @@ public class FirebaseAuthService
 
         if (!response.IsSuccessStatusCode)
         {
-            var error = await response.Content.ReadAsStringAsync();
+            var error =
+                await response.Content.ReadAsStringAsync();
 
-            throw new InvalidOperationException(
-                $"Firebase login failed: {error}");
+            return new AuthenticationResult
+            {
+                Success = false,
+                ErrorMessage = "Invalid email or password."
+            };
         }
 
-        var result =
-            await response.Content.ReadFromJsonAsync<FirebaseLoginResponse>();
+        var firebaseResult =
+            await response.Content
+                .ReadFromJsonAsync<FirebaseLoginResponse>();
 
-        if (result is null)
+        if (firebaseResult is null)
         {
-            throw new InvalidOperationException(
-                "Firebase returned an empty response.");
+            return new AuthenticationResult
+            {
+                Success = false,
+                ErrorMessage = "Firebase returned an empty response."
+            };
         }
 
-        return result;
+        return new AuthenticationResult
+        {
+            Success = true,
+            UserId = firebaseResult.LocalId,
+            Email = firebaseResult.Email
+        };
     }
-}
+    public class FirebaseLoginResponse
+    {
+        [JsonPropertyName("idToken")]
+        public string IdToken { get; set; } = string.Empty;
 
-public class FirebaseLoginRequest
-{
-    [JsonPropertyName("email")]
-    public string Email { get; set; } = string.Empty;
+        [JsonPropertyName("refreshToken")]
+        public string RefreshToken { get; set; } = string.Empty;
 
-    [JsonPropertyName("password")]
-    public string Password { get; set; } = string.Empty;
+        [JsonPropertyName("expiresIn")]
+        public string ExpiresIn { get; set; } = string.Empty;
 
-    [JsonPropertyName("returnSecureToken")]
-    public bool ReturnSecureToken { get; set; }
-}
+        [JsonPropertyName("localId")]
+        public string LocalId { get; set; } = string.Empty;
 
-public class FirebaseLoginResponse
-{
-    [JsonPropertyName("idToken")]
-    public string IdToken { get; set; } = string.Empty;
+        [JsonPropertyName("email")]
+        public string Email { get; set; } = string.Empty;
+    }
 
-    [JsonPropertyName("refreshToken")]
-    public string RefreshToken { get; set; } = string.Empty;
+    public class FirebaseLoginRequest
+    {
+        [JsonPropertyName("email")]
+        public string Email { get; set; } = string.Empty;
 
-    [JsonPropertyName("expiresIn")]
-    public string ExpiresIn { get; set; } = string.Empty;
+        [JsonPropertyName("password")]
+        public string Password { get; set; } = string.Empty;
 
-    [JsonPropertyName("localId")]
-    public string LocalId { get; set; } = string.Empty;
-
-    [JsonPropertyName("email")]
-    public string Email { get; set; } = string.Empty;
-}
+        [JsonPropertyName("returnSecureToken")]
+        public bool ReturnSecureToken { get; set; }
+    }
+} 

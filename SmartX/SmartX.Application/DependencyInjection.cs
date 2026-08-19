@@ -20,11 +20,11 @@ public static class DependencyInjection
         services.AddValidatorsFromAssemblyContaining<CreateSensorCommandValidator>();
 
         //Sensor handlers
-        services.AddScoped<CreateSensorHandler>();
-        services.AddScoped<GetSensorsHandler>();
-        services.AddScoped<GetSensorByIdHandler>();
-        services.AddScoped<UpdateSensorHandler>();
-        services.AddScoped<DeleteSensorHandler>();
+        services.AddScoped<CreateCompanyHandler>();
+        services.AddScoped<GetGatewaysHandler>();
+        services.AddScoped<GetGatewayByIdHandler>();
+        services.AddScoped<UpdateCompanyHandler>();
+        services.AddScoped<DeleteCompanyHandler>();
 
         //Telemetry handlers
         services.AddScoped<CreateTelemetryHandler>();
@@ -40,6 +40,20 @@ public static class DependencyInjection
 
         services.AddScoped<GetUsersHandler>();
         services.AddScoped<GetUserByIdHandler>();
+
+        //Company
+        services.AddScoped<CreateCompanyHandler>();
+        services.AddScoped<GetCompanysHandler>();
+        services.AddScoped<GetCompanyByIdHandler>();
+        services.AddScoped<UpdateCompanyHandler>();
+        services.AddScoped<DeleteCompanyHandler>();
+
+        //Gateway
+        services.AddScoped<CreateGatewayHandler>();
+        services.AddScoped<GetGatewaysHandler>();
+        services.AddScoped<GetGatewayByIdHandler>();
+        services.AddScoped<UpdateGatewayHandler>();
+        services.AddScoped<DeleteGatewayHandler>();
 
         //Auto Mapper
         services.AddAutoMapper(cfg =>

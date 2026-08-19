@@ -16,9 +16,6 @@
     <Compile Update="Views\Pages\Sensor\SensorsPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Pages\Login\LoginPage.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\Pages\Signin\SigninPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

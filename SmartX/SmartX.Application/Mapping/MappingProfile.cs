@@ -21,5 +21,11 @@ public class MappingProfile : Profile
 
         //Users
         CreateMap<User, UserDto>();
+
+        //Company
+        CreateMap<Company, CompanyDto>();
+
+        //Gateway
+        CreateMap<Gateway, GatewayDto>();
     }
 }

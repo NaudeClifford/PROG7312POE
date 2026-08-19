@@ -1,6 +1,5 @@
-﻿using SmartX.Domain.Entities;
-using SmartX.Domain.Enums;
-using SmartX.Shared.Models;
+﻿using SmartX.Domain.Enums;
+using SmartX.Shared.DTOs;
 
 namespace SmartX.WPF.Services
 {
@@ -10,29 +9,34 @@ namespace SmartX.WPF.Services
 
         public string? FirebaseUid { get; private set; }
 
+        public Guid CompanyId { get; private set; }
+
+        public Guid UserId { get; private set; }
+
         public string? Email { get; private set; }
 
         public string? DisplayName { get; private set; }
 
         public UserRole? Role { get; private set; }
 
-        public bool IsAuthenticated { get; private set; } = false;
-        public bool IsGuest { get; private set; } = false;
+        public bool IsAuthenticated { get; private set; }
 
-        public void SignIn(User user) 
+        public bool IsGuest { get; private set; }
+
+        public void SignIn(UserDto user)
         {
             Id = user.Id;
             Email = user.Email;
             Role = user.Role;
             FirebaseUid = user.FirebaseUid;
-            IsAuthenticated = true;
             DisplayName = user.DisplayName;
+
+            IsAuthenticated = true;
             IsGuest = false;
         }
 
-        public void StartGuestSession(string name) 
+        public void StartGuestSession(string name)
         {
-
             Id = Guid.NewGuid();
             Email = null;
             Role = null;
@@ -40,8 +44,6 @@ namespace SmartX.WPF.Services
             IsAuthenticated = false;
             DisplayName = name;
             IsGuest = true;
-
         }
-
     }
 }
