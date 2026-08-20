@@ -2,11 +2,19 @@
 
 public class TelemetryRequest
 {
-    public string SensorId { get; set; } = string.Empty;
+    public Guid Id { get; set; }
 
-    public double Voltage { get; set; }
+    public Guid SensorId { get; set; }
 
-    public double Current { get; set; }
+    public DateTime Timestamp { get; set; }
 
-    public double Temperature { get; set; }
+    public double? Voltage { get; set; }
+
+    public double? Current { get; set; }
+
+    public double? Power { get; set; }
+
+    public double? Temperature { get; set; }
+
+    public DateTime CreatedAt { get; set; }
 }

@@ -11,4 +11,5 @@ public partial class HomePage : Page
 
         DataContext = viewModel;
     }
+
 }

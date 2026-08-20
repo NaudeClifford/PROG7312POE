@@ -4,5 +4,6 @@ public enum UserRole
 {
     Viewer = 0,
     Technician = 1,
-    Administrator = 2
+    Administrator = 2,
+    SuperAdmin = 3
 }

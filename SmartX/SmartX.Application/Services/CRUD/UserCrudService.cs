@@ -16,19 +16,34 @@ public class UserCrudService :
     private readonly CreateUserHandler _createUser;
     private readonly UpdateUserHandler _updateUser;
     private readonly DeleteUserHandler _deleteUser;
+    private readonly GetUserByFirebaseUidHandler _getUserByFirebaseUid;
 
     public UserCrudService(
         GetUsersHandler getUsers,
         GetUserByIdHandler getUserById,
+        GetUserByFirebaseUidHandler getUserByFirebaseUid,
         CreateUserHandler createUser,
         UpdateUserHandler updateUser,
         DeleteUserHandler deleteUser)
     {
         _getUsers = getUsers;
         _getUserById = getUserById;
+        _getUserByFirebaseUid = getUserByFirebaseUid;
         _createUser = createUser;
         _updateUser = updateUser;
         _deleteUser = deleteUser;
+    }
+
+    public Task<Result<UserDto>> GetByFirebaseUidAsync(
+    string firebaseUid,
+    CancellationToken cancellationToken = default)
+    {
+        return _getUserByFirebaseUid.HandleAsync(
+            new GetUserByFirebaseUidQuery
+            {
+                FirebaseUid = firebaseUid
+            },
+            cancellationToken);
     }
 
     public Task<Result<IReadOnlyList<UserDto>>> GetAllAsync(

@@ -10,3 +10,15 @@ C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\Smart
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\refint\SmartX.Domain.dll
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\SmartX.Domain.pdb
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\ref\SmartX.Domain.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\bin\Debug\net10.0\SmartX.Domain.deps.json
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\bin\Debug\net10.0\SmartX.Domain.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\bin\Debug\net10.0\SmartX.Domain.pdb
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\SmartX.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\SmartX.Domain.AssemblyInfoInputs.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\SmartX.Domain.AssemblyInfo.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\SmartX.Domain.csproj.CoreCompileInputs.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\SmartX.Domain.sourcelink.json
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\SmartX.Domain.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\refint\SmartX.Domain.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\SmartX.Domain.pdb
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\ref\SmartX.Domain.dll

@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using SmartX.Application.Commands.Company;
+using SmartX.Application.Commands.Sensors;
 using System.Text.RegularExpressions;
 
 namespace SmartX.Application.Validators;
 
 public class UpdateSensorCommandValidator
-    : AbstractValidator<UpdateCompanyCommand>
+    : AbstractValidator<UpdateSensorCommand>
 {
     public UpdateSensorCommandValidator()
     {

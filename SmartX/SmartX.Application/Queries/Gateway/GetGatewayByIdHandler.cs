@@ -12,10 +12,10 @@ namespace SmartX.Application.Queries.Gateway
         private readonly IMapper _mapper;
         private readonly IGatewayRepository _gatewayRepository;
 
-        public GetGatewayByIdHandler(IGatewayRepository sensorRepository,
+        public GetGatewayByIdHandler(IGatewayRepository gatewayRepository,
             IMapper mapper)
         {
-            _gatewayRepository = sensorRepository;
+            _gatewayRepository = gatewayRepository;
             _mapper = mapper;
         }
 
@@ -28,7 +28,7 @@ namespace SmartX.Application.Queries.Gateway
 
             if (sensor is null)
             {
-                return Result<GatewayDto>.Fail("Sensor not found.");
+                return Result<GatewayDto>.Fail("Gateway not found.");
             }
 
             var dto = _mapper.Map<GatewayDto>(sensor);

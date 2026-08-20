@@ -101,4 +101,19 @@ public class UsersController : ControllerBase
 
         return Ok(result);
     }
+    [HttpGet("{firebaseUid}")]
+    public async Task<IActionResult> GetByFirebaseUid(
+    string firebaseUid,
+    CancellationToken cancellationToken)
+    {
+        var result =
+            await _crud.GetByFirebaseUidAsync(
+                firebaseUid,
+                cancellationToken);
+
+        if (!result.Success)
+            return NotFound(result);
+
+        return Ok(result);
+    }
 }

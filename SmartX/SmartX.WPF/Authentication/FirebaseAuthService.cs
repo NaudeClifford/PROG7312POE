@@ -70,6 +70,58 @@ public class FirebaseAuthService : IAuthenticationService
             RefreshToken = firebaseResult.RefreshToken
         };
     }
+
+    public async Task<AuthenticationResult> SignUpAsync(
+        string email,
+        string password)
+    {
+        var url =
+            $"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={_apiKey}";
+
+        var request = new FirebaseSignUpRequest
+        {
+            Email = email,
+            Password = password,
+            ReturnSecureToken = true
+        };
+
+        var response = await _httpClient.PostAsJsonAsync(
+            url,
+            request);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return new AuthenticationResult
+            {
+                Success = false,
+                ErrorMessage =
+                    "Unable to create the Firebase account."
+            };
+        }
+
+        var firebaseResult =
+            await response.Content
+                .ReadFromJsonAsync<FirebaseLoginResponse>();
+
+        if (firebaseResult is null)
+        {
+            return new AuthenticationResult
+            {
+                Success = false,
+                ErrorMessage =
+                    "Firebase returned an empty response."
+            };
+        }
+
+        return new AuthenticationResult
+        {
+            Success = true,
+            UserId = firebaseResult.LocalId,
+            Email = firebaseResult.Email,
+            IdToken = firebaseResult.IdToken,
+            RefreshToken = firebaseResult.RefreshToken
+        };
+    }
     public class FirebaseLoginResponse
     {
         [JsonPropertyName("idToken")]
@@ -99,4 +151,17 @@ public class FirebaseAuthService : IAuthenticationService
         [JsonPropertyName("returnSecureToken")]
         public bool ReturnSecureToken { get; set; }
     }
+
+    public class FirebaseSignUpRequest
+    {
+        [JsonPropertyName("email")]
+        public string Email { get; set; } = string.Empty;
+
+        [JsonPropertyName("password")]
+        public string Password { get; set; } = string.Empty;
+
+        [JsonPropertyName("returnSecureToken")]
+        public bool ReturnSecureToken { get; set; }
+    }
+
 } 

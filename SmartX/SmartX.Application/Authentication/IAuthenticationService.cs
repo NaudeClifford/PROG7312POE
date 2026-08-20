@@ -5,5 +5,9 @@
         Task<AuthenticationResult> SignInAsync(
             string email,
             string password);
+
+        Task<AuthenticationResult> SignUpAsync(
+            string email,
+            string password);
     }
 }

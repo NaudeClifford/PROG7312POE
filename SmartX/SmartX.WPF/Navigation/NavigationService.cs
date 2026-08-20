@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using SmartX.WPF.Views.Pages;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace SmartX.WPF.Navigation
 {
@@ -20,6 +18,19 @@ namespace SmartX.WPF.Navigation
         public void NavigateTo<TPage>() where TPage : class
         {
             var page = _serviceProvider.GetRequiredService<TPage>();
+
+            _mainWindow.MainFrame.Navigate(page);
+        }
+
+        public void NavigateTo<TPage>(object parameter)
+            where TPage : class
+        {
+            var page = _serviceProvider.GetRequiredService<TPage>();
+
+            if (page is INavigationAware navigationAware)
+            {
+                navigationAware.OnNavigatedTo(parameter);
+            }
 
             _mainWindow.MainFrame.Navigate(page);
         }

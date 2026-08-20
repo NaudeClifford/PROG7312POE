@@ -72,7 +72,8 @@
                         Margin="40,0,40,10"
                         FontSize="15"
                         Cursor="Hand"
-                        Style="{StaticResource BaseButtonStyle}"/>
+                        Style="{StaticResource BaseButtonStyle}" 
+                        Command="{Binding SignUpCommand}"/>
 
                 <TextBlock Text="Secure authentication"
                            Foreground="{StaticResource LightTextBrush}"

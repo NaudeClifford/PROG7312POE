@@ -101,4 +101,18 @@ public class GatewaysController : ControllerBase
 
         return Ok(result);
     }
+    [HttpGet("company/{companyId:guid}")]
+    public async Task<IActionResult> GetByCompanyId(
+    Guid companyId,
+    CancellationToken cancellationToken)
+    {
+        var result = await _crud.GetByCompanyIdAsync(
+            companyId,
+            cancellationToken);
+
+        if (!result.Success)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
 }

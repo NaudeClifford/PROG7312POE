@@ -161,10 +161,10 @@
           }
         }
       },
-      "Microsoft.AspNetCore.OpenApi/10.0.10": {
+      "Microsoft.AspNetCore.OpenApi/10.0.11": {
         "type": "package",
         "dependencies": {
-          "Microsoft.OpenApi": "2.0.0"
+          "Microsoft.OpenApi": "[2.7.5, 3.0.0)"
         },
         "compile": {
           "lib/net10.0/Microsoft.AspNetCore.OpenApi.dll": {
@@ -270,7 +270,7 @@
           }
         }
       },
-      "MongoDB.Bson/3.10.0": {
+      "MongoDB.Bson/3.11.0": {
         "type": "package",
         "compile": {
           "lib/net6.0/MongoDB.Bson.dll": {
@@ -283,11 +283,11 @@
           }
         }
       },
-      "MongoDB.Driver/3.10.0": {
+      "MongoDB.Driver/3.11.0": {
         "type": "package",
         "dependencies": {
           "DnsClient": "1.6.1",
-          "MongoDB.Bson": "3.10.0",
+          "MongoDB.Bson": "3.11.0",
           "SharpCompress": "0.48.1",
           "Snappier": "1.3.1",
           "ZstdSharp.Port": "0.7.3"
@@ -471,7 +471,7 @@
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
           "FirebaseAdmin": "3.6.0",
-          "MongoDB.Driver": "3.10.0",
+          "MongoDB.Driver": "3.11.0",
           "SmartX.Application": "1.0.0",
           "SmartX.Domain": "1.0.0",
           "SmartX.Shared": "1.0.0"
@@ -487,7 +487,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
-          "MongoDB.Bson": "3.10.0",
+          "MongoDB.Bson": "3.11.0",
           "SmartX.Domain": "1.0.0"
         },
         "compile": {
@@ -700,10 +700,10 @@
         "lib/netstandard2.0/Google.Apis.Core.xml"
       ]
     },
-    "Microsoft.AspNetCore.OpenApi/10.0.10": {
-      "sha512": "d4Atx9IHq7JgX0F/h7Db+m9zAUzC+cKdI9k+OWnnyQIOUQtfvjIEuhvbjPigVMkAmPUgCbJ8Yp6M9ghUqHtJSQ==",
+    "Microsoft.AspNetCore.OpenApi/10.0.11": {
+      "sha512": "R/1EATnPLU+gRfB6lwVkMcymmyAY5ppBBdRN/5lhNEiT3xP1sWccuSFkU/f1lQvN/WgRq5Vn8AhCdE3fqgsL/w==",
       "type": "package",
-      "path": "microsoft.aspnetcore.openapi/10.0.10",
+      "path": "microsoft.aspnetcore.openapi/10.0.11",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -714,7 +714,7 @@
         "build/Microsoft.AspNetCore.OpenApi.targets",
         "lib/net10.0/Microsoft.AspNetCore.OpenApi.dll",
         "lib/net10.0/Microsoft.AspNetCore.OpenApi.xml",
-        "microsoft.aspnetcore.openapi.10.0.10.nupkg.sha512",
+        "microsoft.aspnetcore.openapi.10.0.11.nupkg.sha512",
         "microsoft.aspnetcore.openapi.nuspec"
       ]
     },
@@ -853,10 +853,10 @@
         "microsoft.openapi.nuspec"
       ]
     },
-    "MongoDB.Bson/3.10.0": {
-      "sha512": "dpM9EXd3evUW7qPpSjfWshPYjbD26rxm+e32LWNDpRWBZZZo4WaO5Azy/Xro55u3IZ/8u1Z4hCZnlI72Y+/5jg==",
+    "MongoDB.Bson/3.11.0": {
+      "sha512": "M3yEubl7SbOl6N+m0L4geRejb3jZTXTs4J77fZUeXgireOPzFTT7taZpVSVOVXAMmS2deb6aS1HPe52oxX/Vyg==",
       "type": "package",
-      "path": "mongodb.bson/3.10.0",
+      "path": "mongodb.bson/3.11.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -867,15 +867,15 @@
         "lib/net6.0/MongoDB.Bson.xml",
         "lib/netstandard2.1/MongoDB.Bson.dll",
         "lib/netstandard2.1/MongoDB.Bson.xml",
-        "mongodb.bson.3.10.0.nupkg.sha512",
+        "mongodb.bson.3.11.0.nupkg.sha512",
         "mongodb.bson.nuspec",
         "packageIcon.png"
       ]
     },
-    "MongoDB.Driver/3.10.0": {
-      "sha512": "FEX71Cjn6VFNI6RsQQjNBs7x2nqz9P+oXF0zspnNXzf9N1txhgEO4faIw5aAJknaObmD6cC6X42yiuOQHu27DA==",
+    "MongoDB.Driver/3.11.0": {
+      "sha512": "xE6TBMsbFL7CYsBKe5S/fC5LYnHXMPwwiZVh7G7lsyNBe6Jr9qUuxt5pWkgb49HC3GlTYIvME1GgkAJgekhG/A==",
       "type": "package",
-      "path": "mongodb.driver/3.10.0",
+      "path": "mongodb.driver/3.11.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -886,7 +886,7 @@
         "lib/net6.0/MongoDB.Driver.xml",
         "lib/netstandard2.1/MongoDB.Driver.dll",
         "lib/netstandard2.1/MongoDB.Driver.xml",
-        "mongodb.driver.3.10.0.nupkg.sha512",
+        "mongodb.driver.3.11.0.nupkg.sha512",
         "mongodb.driver.nuspec",
         "packageIcon.png"
       ]
@@ -1121,8 +1121,8 @@
   "projectFileDependencyGroups": {
     "net10.0": [
       "FirebaseAdmin >= 3.6.0",
-      "Microsoft.AspNetCore.OpenApi >= 10.0.10",
-      "MongoDB.Driver >= 3.10.0",
+      "Microsoft.AspNetCore.OpenApi >= 10.0.11",
+      "MongoDB.Driver >= 3.11.0",
       "SmartX.Application >= 1.0.0",
       "SmartX.Infrastructure >= 1.0.0",
       "SmartX.Shared >= 1.0.0",
@@ -1131,23 +1131,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\emeris\\.nuget\\packages\\": {},
+    "C:\\Users\\cliff\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\SmartX.API.csproj",
+      "projectUniqueName": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\SmartX.API.csproj",
       "projectName": "SmartX.API",
-      "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\SmartX.API.csproj",
-      "packagesPath": "C:\\Users\\emeris\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\obj\\",
+      "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\SmartX.API.csproj",
+      "packagesPath": "C:\\Users\\cliff\\.nuget\\packages\\",
+      "outputPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\emeris\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\cliff\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -1156,6 +1156,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -1163,14 +1164,14 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj": {
-              "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj"
+            "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj": {
+              "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj"
             },
-            "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj"
+            "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj": {
+              "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj"
             },
-            "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj": {
-              "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj"
+            "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj": {
+              "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj"
             }
           }
         }
@@ -1198,11 +1199,11 @@
           },
           "Microsoft.AspNetCore.OpenApi": {
             "target": "Package",
-            "version": "[10.0.10, )"
+            "version": "[10.0.11, )"
           },
           "MongoDB.Driver": {
             "target": "Package",
-            "version": "[3.10.0, )"
+            "version": "[3.11.0, )"
           },
           "Swashbuckle.AspNetCore.SwaggerGen": {
             "target": "Package",

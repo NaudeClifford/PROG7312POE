@@ -1,26 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SmartX.WPF.ViewModels.SignUp;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace SmartX.WPF.Views.Pages.SignUp
+namespace SmartX.WPF.Views.Pages.SignUp;
+
+public partial class SignUpPage : Page
 {
-    /// <summary>
-    /// Interaction logic for SignUpPage.xaml
-    /// </summary>
-    public partial class SignUpPage : Page
+    private readonly SignUpViewModel _viewModel;
+
+    public SignUpPage(
+        SignUpViewModel viewModel)
     {
-        public SignUpPage()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+
+        _viewModel = viewModel;
+
+        DataContext = _viewModel;
+    }
+
+    private void PasswordBox_PasswordChanged(
+        object sender,
+        RoutedEventArgs e)
+    {
+        _viewModel.Password =
+            PasswordBox.Password;
+    }
+
+    private void ConfirmPasswordBox_PasswordChanged(
+        object sender,
+        RoutedEventArgs e)
+    {
+        _viewModel.ConfirmPassword =
+            ConfirmPasswordBox.Password;
     }
 }

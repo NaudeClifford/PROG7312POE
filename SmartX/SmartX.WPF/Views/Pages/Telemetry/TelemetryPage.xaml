@@ -62,10 +62,11 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
 
-            <!-- Temperature -->
+            <!-- TEMPERATURE -->
 
             <Border Grid.Column="0"
                     Margin="0,0,12,0"
@@ -83,8 +84,7 @@
                     <StackPanel Orientation="Horizontal"
                                 Margin="0,10,0,0">
 
-                        <TextBlock x:Name="TemperatureValue"
-                                   Text="24.6"
+                        <TextBlock Text="{Binding Temperature, StringFormat={}{0:F2}}"
                                    FontSize="36"
                                    FontWeight="Bold"
                                    Foreground="{StaticResource DarkBrush}"/>
@@ -97,7 +97,7 @@
 
                     </StackPanel>
 
-                    <TextBlock Text="Normal range"
+                    <TextBlock Text="Latest reading"
                                Foreground="#28A745"
                                FontSize="12"
                                Margin="0,5,0,0"/>
@@ -107,7 +107,7 @@
             </Border>
 
 
-            <!-- Humidity -->
+            <!-- VOLTAGE -->
 
             <Border Grid.Column="1"
                     Margin="12,0"
@@ -117,7 +117,7 @@
 
                 <StackPanel>
 
-                    <TextBlock Text="HUMIDITY"
+                    <TextBlock Text="VOLTAGE"
                                FontSize="11"
                                FontWeight="SemiBold"
                                Foreground="#8A929A"/>
@@ -125,13 +125,12 @@
                     <StackPanel Orientation="Horizontal"
                                 Margin="0,10,0,0">
 
-                        <TextBlock x:Name="HumidityValue"
-                                   Text="58"
+                        <TextBlock Text="{Binding Voltage, StringFormat={}{0:F2}}"
                                    FontSize="36"
                                    FontWeight="Bold"
                                    Foreground="{StaticResource DarkBrush}"/>
 
-                        <TextBlock Text="%"
+                        <TextBlock Text="V"
                                    FontSize="18"
                                    Foreground="#737A82"
                                    VerticalAlignment="Bottom"
@@ -139,7 +138,7 @@
 
                     </StackPanel>
 
-                    <TextBlock Text="Normal range"
+                    <TextBlock Text="Latest reading"
                                Foreground="#28A745"
                                FontSize="12"
                                Margin="0,5,0,0"/>
@@ -149,17 +148,17 @@
             </Border>
 
 
-            <!-- Pressure -->
+            <!-- CURRENT -->
 
             <Border Grid.Column="2"
-                    Margin="12,0,0,0"
+                    Margin="12,0"
                     Padding="25"
                     Background="White"
                     CornerRadius="15">
 
                 <StackPanel>
 
-                    <TextBlock Text="PRESSURE"
+                    <TextBlock Text="CURRENT"
                                FontSize="11"
                                FontWeight="SemiBold"
                                Foreground="#8A929A"/>
@@ -167,13 +166,12 @@
                     <StackPanel Orientation="Horizontal"
                                 Margin="0,10,0,0">
 
-                        <TextBlock x:Name="PressureValue"
-                                   Text="101.3"
+                        <TextBlock Text="{Binding Current, StringFormat={}{0:F2}}"
                                    FontSize="36"
                                    FontWeight="Bold"
                                    Foreground="{StaticResource DarkBrush}"/>
 
-                        <TextBlock Text="kPa"
+                        <TextBlock Text="A"
                                    FontSize="18"
                                    Foreground="#737A82"
                                    VerticalAlignment="Bottom"
@@ -181,7 +179,48 @@
 
                     </StackPanel>
 
-                    <TextBlock Text="Normal range"
+                    <TextBlock Text="Latest reading"
+                               Foreground="#28A745"
+                               FontSize="12"
+                               Margin="0,5,0,0"/>
+
+                </StackPanel>
+
+            </Border>
+
+
+            <!-- POWER -->
+
+            <Border Grid.Column="3"
+                    Margin="12,0,0,0"
+                    Padding="25"
+                    Background="White"
+                    CornerRadius="15">
+
+                <StackPanel>
+
+                    <TextBlock Text="POWER"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="#8A929A"/>
+
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,10,0,0">
+
+                        <TextBlock Text="{Binding Power, StringFormat={}{0:F2}}"
+                                   FontSize="36"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource DarkBrush}"/>
+
+                        <TextBlock Text="W"
+                                   FontSize="18"
+                                   Foreground="#737A82"
+                                   VerticalAlignment="Bottom"
+                                   Margin="6,0,0,7"/>
+
+                    </StackPanel>
+
+                    <TextBlock Text="Latest reading"
                                Foreground="#28A745"
                                FontSize="12"
                                Margin="0,5,0,0"/>
@@ -214,12 +253,12 @@
 
 
                 <DataGrid Grid.Row="1"
-                          x:Name="TelemetryDataGrid"
                           Margin="0,20,0,0"
                           AutoGenerateColumns="False"
                           IsReadOnly="True"
                           BorderThickness="0"
-                          GridLinesVisibility="Horizontal">
+                          GridLinesVisibility="Horizontal"
+                          ItemsSource="{Binding Telemetry}">
 
                     <DataGrid.Columns>
 
@@ -227,24 +266,20 @@
                                             Binding="{Binding Timestamp}"
                                             Width="1.5*"/>
 
-                        <DataGridTextColumn Header="Sensor"
-                                            Binding="{Binding Sensor}"
-                                            Width="1.5*"/>
-
-                        <DataGridTextColumn Header="Metric"
-                                            Binding="{Binding Metric}"
+                        <DataGridTextColumn Header="Voltage"
+                                            Binding="{Binding Voltage, StringFormat={}{0:F2}}"
                                             Width="*"/>
 
-                        <DataGridTextColumn Header="Value"
-                                            Binding="{Binding Value}"
+                        <DataGridTextColumn Header="Current"
+                                            Binding="{Binding Current, StringFormat={}{0:F2}}"
                                             Width="*"/>
 
-                        <DataGridTextColumn Header="Unit"
-                                            Binding="{Binding Unit}"
+                        <DataGridTextColumn Header="Power"
+                                            Binding="{Binding Power, StringFormat={}{0:F2}}"
                                             Width="*"/>
 
-                        <DataGridTextColumn Header="Status"
-                                            Binding="{Binding Status}"
+                        <DataGridTextColumn Header="Temperature"
+                                            Binding="{Binding Temperature, StringFormat={}{0:F2}}"
                                             Width="*"/>
 
                     </DataGrid.Columns>

@@ -1,8 +1,7 @@
 ﻿using FluentValidation;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.Models;
-using SmartX.Domain.Entities;
-
+using DomainGateway = SmartX.Domain.Entities.Gateway;
 
 namespace SmartX.Application.Commands.Gateway;
 
@@ -24,22 +23,37 @@ public class CreateGatewayHandler
         CancellationToken cancellationToken = default)
     {
         var validationResult = await _validator.ValidateAsync(
-            command, cancellationToken);
+            command,
+            cancellationToken);
 
         if (!validationResult.IsValid)
         {
-            var errors = string.Join("; ", validationResult
-                .Errors.Select(x => x.ErrorMessage));
+            var errors = string.Join(
+                "; ",
+                validationResult.Errors.Select(
+                    x => x.ErrorMessage));
 
             return Result<Guid>.Fail(errors);
         }
+
         var now = DateTime.UtcNow;
 
-        var gateway = new Gateway
+        var gateway = new DomainGateway
         {
             Id = Guid.NewGuid(),
-            CompanyId = command.CompanyId
 
+            CompanyId = command.CompanyId,
+
+            Name = command.Name,
+            Description = command.Description,
+
+            SerialNumber = command.SerialNumber,
+            IpAddress = command.IpAddress,
+
+            IsActive = true,
+
+            CreatedAt = now,
+            UpdatedAt = now
         };
 
         await _gatewayRepository.AddAsync(

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartX.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1a1f9958605ae85bbb3849efbf5080a95ec8e386")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f9624bfb622038072ea1c1552d31b127064d4f0")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartX.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartX.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

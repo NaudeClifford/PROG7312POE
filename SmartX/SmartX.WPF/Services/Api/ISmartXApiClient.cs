@@ -1,4 +1,8 @@
-﻿using SmartX.Shared.DTOs;
+﻿using SmartX.Application.Commands.Company;
+using SmartX.Application.Commands.Gateway;
+using SmartX.Application.Commands.Sensors;
+using SmartX.Application.Commands.Users;
+using SmartX.Shared.DTOs;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
 
@@ -14,6 +18,19 @@ public interface ISmartXApiClient
         Guid id,
         CancellationToken cancellationToken = default);
 
+    Task<Guid> CreateSensorAsync(
+        CreateSensorCommand command,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> UpdateSensorAsync(
+        UpdateSensorCommand command,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> DeleteSensorAsync(
+        Guid id,
+        CancellationToken cancellationToken = default);
+
+
     // Telemetry
     Task<IReadOnlyList<TelemetryDto>> GetTelemetryBySensorIdAsync(
         Guid sensorId,
@@ -22,6 +39,7 @@ public interface ISmartXApiClient
     Task<TelemetryDto?> GetLatestTelemetryBySensorIdAsync(
         Guid sensorId,
         CancellationToken cancellationToken = default);
+
 
     // Users
     Task<UserDto?> GetUserByIdAsync(
@@ -32,6 +50,21 @@ public interface ISmartXApiClient
         string firebaseUid,
         CancellationToken cancellationToken = default);
 
+    Task<IReadOnlyList<UserDto>> GetUsersAsync(
+        CancellationToken cancellationToken = default);
+
+    Task<Guid> CreateUserAsync(
+        CreateUserCommand command,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> UpdateUserAsync(
+        UpdateUserCommand command,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> DeleteUserAsync(
+        Guid id,
+        CancellationToken cancellationToken = default);
+
     // Companies
     Task<IReadOnlyList<CompanyDto>> GetCompaniesAsync(
         CancellationToken cancellationToken = default);
@@ -40,11 +73,40 @@ public interface ISmartXApiClient
         Guid id,
         CancellationToken cancellationToken = default);
 
+    Task<Guid> CreateCompanyAsync(
+        CreateCompanyCommand command,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> UpdateCompanyAsync(
+        UpdateCompanyCommand command,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> DeleteCompanyAsync(
+        Guid id,
+        CancellationToken cancellationToken = default);
+
     // Gateways
+
     Task<IReadOnlyList<GatewayDto>> GetGatewaysAsync(
         CancellationToken cancellationToken = default);
 
+    Task<IReadOnlyList<GatewayDto>> GetGatewaysByCompanyIdAsync(
+        Guid companyId,
+        CancellationToken cancellationToken = default);
+
     Task<GatewayDto?> GetGatewayByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default);
+
+    Task<Guid> CreateGatewayAsync(
+        CreateGatewayCommand command,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> UpdateGatewayAsync(
+        UpdateGatewayCommand command,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> DeleteGatewayAsync(
         Guid id,
         CancellationToken cancellationToken = default);
 }

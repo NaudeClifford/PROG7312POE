@@ -118,5 +118,16 @@ namespace SmartX.Infrastructure.Repositories
                 json,
                 cancellationToken);
         }
+
+        public async Task<IReadOnlyList<Gateway>> GetByCompanyIdAsync(
+        Guid companyId,
+        CancellationToken cancellationToken = default)
+        {
+            var gateways = await GetAllAsync(cancellationToken);
+
+            return gateways
+                .Where(x => x.CompanyId == companyId)
+                .ToList();
+        }
     }
 }

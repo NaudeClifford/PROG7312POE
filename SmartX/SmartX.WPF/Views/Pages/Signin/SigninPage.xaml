@@ -7,14 +7,22 @@
       Title="Sign In"
       Background="{StaticResource BackgroundBrush}">
 
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Page.Resources>
+
     <Grid Margin="60">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="11*"/>
+            <RowDefinition Height="50*"/>
+        </Grid.RowDefinitions>
 
         <Border Width="520"
                 Padding="45"
                 CornerRadius="22"
                 Background="White"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center">
+                VerticalAlignment="Top" Grid.RowSpan="2">
 
             <StackPanel>
 

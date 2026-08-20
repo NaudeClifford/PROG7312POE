@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartX.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8f4823283c1721654598e86ddfc0917892403e7b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f9624bfb622038072ea1c1552d31b127064d4f0")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartX.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartX.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

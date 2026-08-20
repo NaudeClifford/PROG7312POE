@@ -2,7 +2,7 @@
   "version": 4,
   "targets": {
     "net10.0": {
-      "MongoDB.Bson/3.10.0": {
+      "MongoDB.Bson/3.11.0": {
         "type": "package",
         "compile": {
           "lib/net6.0/MongoDB.Bson.dll": {
@@ -28,10 +28,10 @@
     }
   },
   "libraries": {
-    "MongoDB.Bson/3.10.0": {
-      "sha512": "dpM9EXd3evUW7qPpSjfWshPYjbD26rxm+e32LWNDpRWBZZZo4WaO5Azy/Xro55u3IZ/8u1Z4hCZnlI72Y+/5jg==",
+    "MongoDB.Bson/3.11.0": {
+      "sha512": "M3yEubl7SbOl6N+m0L4geRejb3jZTXTs4J77fZUeXgireOPzFTT7taZpVSVOVXAMmS2deb6aS1HPe52oxX/Vyg==",
       "type": "package",
-      "path": "mongodb.bson/3.10.0",
+      "path": "mongodb.bson/3.11.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -42,7 +42,7 @@
         "lib/net6.0/MongoDB.Bson.xml",
         "lib/netstandard2.1/MongoDB.Bson.dll",
         "lib/netstandard2.1/MongoDB.Bson.xml",
-        "mongodb.bson.3.10.0.nupkg.sha512",
+        "mongodb.bson.3.11.0.nupkg.sha512",
         "mongodb.bson.nuspec",
         "packageIcon.png"
       ]
@@ -55,28 +55,28 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "MongoDB.Bson >= 3.10.0",
+      "MongoDB.Bson >= 3.11.0",
       "SmartX.Domain >= 1.0.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\emeris\\.nuget\\packages\\": {},
+    "C:\\Users\\cliff\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj",
+      "projectUniqueName": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj",
       "projectName": "SmartX.Shared",
-      "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj",
-      "packagesPath": "C:\\Users\\emeris\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\obj\\",
+      "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj",
+      "packagesPath": "C:\\Users\\cliff\\.nuget\\packages\\",
+      "outputPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\emeris\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\cliff\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -85,6 +85,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -92,8 +93,8 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj": {
-              "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj"
+            "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj": {
+              "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj"
             }
           }
         }
@@ -117,7 +118,7 @@
         "dependencies": {
           "MongoDB.Bson": {
             "target": "Package",
-            "version": "[3.10.0, )"
+            "version": "[3.11.0, )"
           }
         },
         "imports": [

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartX.Infrastructure")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f59e47e5e8685b1251ff9cd947fe1907b42e59ec")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9f9624bfb622038072ea1c1552d31b127064d4f0")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartX.Infrastructure")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartX.Infrastructure")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

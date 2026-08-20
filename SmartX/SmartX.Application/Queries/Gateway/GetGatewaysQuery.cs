@@ -1,8 +1,6 @@
-﻿namespace SmartX.Application.Queries.Gateway
-{
-    public class GetGatewaysQuery
-    {
+﻿namespace SmartX.Application.Queries.Gateway;
 
-        public Guid Id { get; set; }
-    }
+public class GetGatewaysQuery
+{
+    public Guid? CompanyId { get; set; }
 }

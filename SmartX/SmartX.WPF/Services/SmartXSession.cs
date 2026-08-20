@@ -9,6 +9,8 @@ public class SmartXSession
 
     public Guid CompanyId { get; private set; }
 
+    public Guid? GatewayId { get; private set; }
+
     public string? FirebaseUid { get; private set; }
 
     public string? Email { get; private set; }
@@ -60,5 +62,27 @@ public class SmartXSession
 
         IsAuthenticated = false;
         IsGuest = true;
+    }
+
+    public void SignOut()
+    {
+        UserId = Guid.Empty;
+        CompanyId = Guid.Empty;
+
+        FirebaseUid = null;
+        Email = null;
+        DisplayName = null;
+        Role = null;
+
+        IdToken = null;
+        RefreshToken = null;
+
+        IsAuthenticated = false;
+        IsGuest = false;
+    }
+
+    public void SelectGateway(Guid gatewayId)
+    {
+        GatewayId = gatewayId;
     }
 }

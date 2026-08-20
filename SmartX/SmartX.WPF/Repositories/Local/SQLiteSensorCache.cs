@@ -152,5 +152,73 @@ namespace SmartX.WPF.Repositories.Local
                 await command.ExecuteNonQueryAsync(cancellationToken);
             }
         }
+
+        public async Task DeleteAsync(
+            Guid id,
+            CancellationToken cancellationToken = default)
+        {
+            using var connection = _database.CreateConnection();
+
+            await connection.OpenAsync(cancellationToken);
+
+            using var command = connection.CreateCommand();
+
+            command.CommandText = """
+        DELETE FROM Sensors
+        WHERE Id = $id;
+        """;
+
+            command.Parameters.AddWithValue(
+                "$id",
+                id.ToString());
+
+            await command.ExecuteNonQueryAsync(
+                cancellationToken);
+        }
+
+        public async Task<IReadOnlyList<Sensor>> GetByCompanyIdAsync(
+            Guid companyId,
+            CancellationToken cancellationToken = default)
+        {
+            using var connection = _database.CreateConnection();
+
+            await connection.OpenAsync(cancellationToken);
+
+            using var command = connection.CreateCommand();
+
+            command.CommandText = """
+        SELECT
+            s.Id,
+            s.Name,
+            s.DeviceIdentifier,
+            s.Category,
+            s.Location,
+            s.Description,
+            s.IsActive,
+            s.GatewayId,
+            s.CreatedAt,
+            s.UpdatedAt
+        FROM Sensors s
+        INNER JOIN Gateways g
+            ON s.GatewayId = g.Id
+        WHERE g.CompanyId = $companyId;
+        """;
+
+            command.Parameters.AddWithValue(
+                "$companyId",
+                companyId.ToString());
+
+            using var reader =
+                await command.ExecuteReaderAsync(cancellationToken);
+
+            var sensors = new List<Sensor>();
+
+            while (await reader.ReadAsync(cancellationToken))
+            {
+                sensors.Add(SensorMapper.Map(reader));
+            }
+
+            return sensors;
+        }
     }
 }

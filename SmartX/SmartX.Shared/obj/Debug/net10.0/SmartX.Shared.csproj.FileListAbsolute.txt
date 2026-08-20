@@ -14,3 +14,19 @@ C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\Smart
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Shared\bin\Debug\net10.0\SmartX.Domain.dll
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Shared\bin\Debug\net10.0\SmartX.Domain.pdb
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\SmartX.S.760530F7.Up2Date
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\bin\Debug\net10.0\SmartX.Shared.deps.json
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\bin\Debug\net10.0\SmartX.Shared.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\bin\Debug\net10.0\SmartX.Shared.pdb
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\bin\Debug\net10.0\SmartX.Domain.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\bin\Debug\net10.0\SmartX.Domain.pdb
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\SmartX.Shared.csproj.AssemblyReference.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\SmartX.Shared.GeneratedMSBuildEditorConfig.editorconfig
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\SmartX.Shared.AssemblyInfoInputs.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\SmartX.Shared.AssemblyInfo.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\SmartX.Shared.csproj.CoreCompileInputs.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\SmartX.Shared.sourcelink.json
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\SmartX.S.760530F7.Up2Date
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\SmartX.Shared.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\refint\SmartX.Shared.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\SmartX.Shared.pdb
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Shared\obj\Debug\net10.0\ref\SmartX.Shared.dll

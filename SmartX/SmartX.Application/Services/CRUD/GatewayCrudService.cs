@@ -79,5 +79,17 @@ public class GatewayCrudService :
                 Id = id
             },
             cancellationToken);
-    } 
+    }
+
+    public Task<Result<IReadOnlyList<GatewayDto>>> GetByCompanyIdAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default)
+    {
+        return _getGateways.HandleAsync(
+            new GetGatewaysQuery
+            {
+                CompanyId = companyId
+            },
+            cancellationToken);
+    }
 }

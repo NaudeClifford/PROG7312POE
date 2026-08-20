@@ -4,6 +4,7 @@ using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels.Base;
+using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.Sensor;
 using System.Net.Http;
 using System.Windows.Input;
@@ -39,20 +40,30 @@ public class SigninViewModel : ViewModelBase
     public string ErrorMessage
     {
         get => _errorMessage;
-        private set => SetProperty(ref _errorMessage, value);
+        private set
+        {
+            if (SetProperty(ref _errorMessage, value))
+                OnPropertyChanged(nameof(HasError));
+        }
     }
 
     public bool IsBusy
     {
         get => _isBusy;
-        private set => SetProperty(ref _isBusy, value);
+        private set
+        {
+            if (SetProperty(ref _isBusy, value))
+            {
+                OnPropertyChanged(nameof(SignInButtonText));
+            }
+        }
     }
 
     private void EnterGuestMode()
     {
         _session.StartGuestSession("Guest");
 
-        _navigationService.NavigateTo<SensorsPage>();
+        _navigationService.NavigateTo<GatewayPage>();
     }
 
     public ICommand SignInCommand { get; }
@@ -151,7 +162,7 @@ public class SigninViewModel : ViewModelBase
             await _cacheSyncService.SyncSensorsAsync();
 
             // Continue into the application
-            _navigationService.NavigateTo<SensorsPage>();
+            _navigationService.NavigateTo<GatewayPage>();
         }
         catch (HttpRequestException)
         {
@@ -167,4 +178,10 @@ public class SigninViewModel : ViewModelBase
             IsBusy = false;
         }
     }
+
+    public bool HasError =>
+    !string.IsNullOrWhiteSpace(ErrorMessage);
+
+    public string SignInButtonText =>
+        IsBusy ? "Signing in..." : "Sign In";
 }

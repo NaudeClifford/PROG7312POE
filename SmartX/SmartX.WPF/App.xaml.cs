@@ -9,13 +9,17 @@ using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels;
+using SmartX.WPF.ViewModels.Gateway;
 using SmartX.WPF.ViewModels.History;
 using SmartX.WPF.ViewModels.Pages.Sensor;
+using SmartX.WPF.ViewModels.SignUp;
 using SmartX.WPF.ViewModels.Telemetry;
+using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.History;
 using SmartX.WPF.Views.Pages.Home;
 using SmartX.WPF.Views.Pages.Sensor;
 using SmartX.WPF.Views.Pages.Signin;
+using SmartX.WPF.Views.Pages.SignUp;
 using SmartX.WPF.Views.Pages.Telemetry;
 using System.Windows;
 
@@ -98,17 +102,22 @@ public partial class App
         // ViewModels
         services.AddTransient<HomeViewModel>();
         services.AddTransient<SigninViewModel>();
+        services.AddTransient<SignUpViewModel>();
         services.AddTransient<HistoryViewModel>();
         services.AddTransient<SensorViewModel>();
         services.AddTransient<TelemetryViewModel>();
+        services.AddTransient<GatewaySetupViewModel>();
+        services.AddTransient<GatewayViewModel>();
 
         // Pages
         services.AddTransient<HomePage>();
         services.AddTransient<SigninPage>();
+        services.AddTransient<SignUpPage>();
         services.AddTransient<SensorsPage>();
         services.AddTransient<TelemetryPage>();
         services.AddTransient<HistoryPage>();
-
+        services.AddTransient<GatewaySetupPage>();
+        services.AddTransient<GatewayPage>();
         //Main window
         services.AddSingleton<MainWindow>();
 

@@ -1,26 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using SmartX.WPF.Navigation;
+using SmartX.WPF.ViewModels.Telemetry;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace SmartX.WPF.Views.Pages.Telemetry
+namespace SmartX.WPF.Views.Pages.Telemetry;
+
+public partial class TelemetryPage : Page, INavigationAware
 {
-    /// <summary>
-    /// Interaction logic for TelemetryPage.xaml
-    /// </summary>
-    public partial class TelemetryPage : Page
+    private readonly TelemetryViewModel _viewModel;
+
+    public TelemetryPage(TelemetryViewModel viewModel)
     {
-        public TelemetryPage()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+
+        _viewModel = viewModel;
+        DataContext = _viewModel;
+    }
+
+    public async void OnNavigatedTo(object parameter)
+    {
+        if (parameter is not Guid sensorId)
+            return;
+
+        await _viewModel.LoadAsync(sensorId);
     }
 }

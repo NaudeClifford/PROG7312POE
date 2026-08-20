@@ -14,5 +14,13 @@ namespace SmartX.WPF.Repositories.Local
 
         Task UpdateAsync(
             Sensor sensor, CancellationToken cancellationToken = default);
+
+        Task DeleteAsync(
+            Guid id,
+            CancellationToken cancellationToken = default);
+
+        Task<IReadOnlyList<Sensor>> GetByCompanyIdAsync(
+            Guid companyId,
+            CancellationToken cancellationToken = default);
     }
 }

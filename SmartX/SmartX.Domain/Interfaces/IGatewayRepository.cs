@@ -25,5 +25,9 @@ namespace SmartX.Domain.Interfaces
         Task DeleteAsync(
             Guid id,
             CancellationToken cancellationToken = default);
+
+        Task<IReadOnlyList<Gateway>> GetByCompanyIdAsync(
+            Guid companyId,
+            CancellationToken cancellationToken = default);
     }
 }

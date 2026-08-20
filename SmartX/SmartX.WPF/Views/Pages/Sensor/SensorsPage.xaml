@@ -1,4 +1,4 @@
-﻿<Page x:Class="SmartX.WPF.Views.Pages.Sensors.SensorsPage"
+﻿<Page x:Class="SmartX.WPF.Views.Pages.Sensor.SensorsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -16,9 +16,7 @@
         </Grid.RowDefinitions>
 
 
-        <!-- ===================================================== -->
-        <!-- HEADER                                                -->
-        <!-- ===================================================== -->
+        <!-- HEADER -->
 
         <Grid Grid.Row="0">
 
@@ -60,9 +58,7 @@
         </Grid>
 
 
-        <!-- ===================================================== -->
-        <!-- SUMMARY CARDS                                         -->
-        <!-- ===================================================== -->
+        <!-- SUMMARY CARDS -->
 
         <Grid Grid.Row="1"
               Margin="0,30,0,25">
@@ -89,8 +85,7 @@
                                FontWeight="SemiBold"
                                Foreground="#8A929A"/>
 
-                    <TextBlock x:Name="TotalSensorsText"
-                               Text="12"
+                    <TextBlock Text="{Binding TotalSensors}"
                                FontSize="30"
                                FontWeight="Bold"
                                Foreground="{StaticResource DarkBrush}"
@@ -115,8 +110,7 @@
                                FontWeight="SemiBold"
                                Foreground="#8A929A"/>
 
-                    <TextBlock x:Name="OnlineSensorsText"
-                               Text="9"
+                    <TextBlock Text="{Binding OnlineSensors}"
                                FontSize="30"
                                FontWeight="Bold"
                                Foreground="#28A745"
@@ -141,8 +135,7 @@
                                FontWeight="SemiBold"
                                Foreground="#8A929A"/>
 
-                    <TextBlock x:Name="OfflineSensorsText"
-                               Text="3"
+                    <TextBlock Text="{Binding OfflineSensors}"
                                FontSize="30"
                                FontWeight="Bold"
                                Foreground="#DC3545"
@@ -167,8 +160,7 @@
                                FontWeight="SemiBold"
                                Foreground="#8A929A"/>
 
-                    <TextBlock x:Name="ActiveAlertsText"
-                               Text="2"
+                    <TextBlock Text="{Binding ActiveAlerts}"
                                FontSize="30"
                                FontWeight="Bold"
                                Foreground="#E09F00"
@@ -181,9 +173,7 @@
         </Grid>
 
 
-        <!-- ===================================================== -->
-        <!-- SENSOR LIST                                           -->
-        <!-- ===================================================== -->
+        <!-- SENSOR LIST -->
 
         <Border Grid.Row="2"
                 Background="White"
@@ -214,42 +204,58 @@
 
 
                 <DataGrid Grid.Row="1"
-                          x:Name="SensorsDataGrid"
-                          Margin="0,20,0,0"
-                          AutoGenerateColumns="False"
-                          IsReadOnly="True"
-                          HeadersVisibility="Column"
-                          BorderThickness="0"
-                          GridLinesVisibility="Horizontal">
+          x:Name="SensorsDataGrid"
+          Margin="0,20,0,0"
+          AutoGenerateColumns="False"
+          SelectedItem="{Binding SelectedSensor, Mode=TwoWay}"
+          IsReadOnly="True"
+          HeadersVisibility="Column"
+          BorderThickness="0"
+          GridLinesVisibility="Horizontal"
+          ItemsSource="{Binding Sensors}">
 
                     <DataGrid.Columns>
 
                         <DataGridTextColumn Header="Sensor"
-                                            Binding="{Binding Name}"
-                                            Width="2*"/>
+                        Binding="{Binding Name}"
+                        Width="2*"/>
 
                         <DataGridTextColumn Header="Type"
-                                            Binding="{Binding Type}"
-                                            Width="*"/>
+                        Binding="{Binding Category}"
+                        Width="*"/>
 
                         <DataGridTextColumn Header="Location"
-                                            Binding="{Binding Location}"
-                                            Width="1.5*"/>
+                        Binding="{Binding Location}"
+                        Width="1.5*"/>
 
-                        <DataGridTextColumn Header="Value"
-                                            Binding="{Binding Value}"
-                                            Width="*"/>
-
-                        <DataGridTextColumn Header="Last Updated"
-                                            Binding="{Binding LastUpdated}"
-                                            Width="1.5*"/>
+                        <DataGridTextColumn Header="Device"
+                        Binding="{Binding DeviceIdentifier}"
+                        Width="1.5*"/>
 
                         <DataGridTextColumn Header="Status"
-                                            Binding="{Binding Status}"
-                                            Width="*"/>
+                        Binding="{Binding IsActive}"
+                        Width="*"/>
+
+                        <DataGridTemplateColumn Header="Actions"
+                            Width="Auto">
+
+                            <DataGridTemplateColumn.CellTemplate>
+
+                                <DataTemplate>
+
+                                    <Button Content="Telemetry"
+                                            Command="{Binding DataContext.OpenTelemetryCommand,
+                                            RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"
+                                            Padding="12,6"/>
+
+                                </DataTemplate>
+
+                            </DataGridTemplateColumn.CellTemplate>
+
+                        </DataGridTemplateColumn>
 
                     </DataGrid.Columns>
-
                 </DataGrid>
 
             </Grid>

@@ -7,13 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Enums\" />
-    <Folder Include="Contants\" />
-    <Folder Include="Validation\" />
+    <Compile Remove="Contants\**" />
+    <Compile Remove="Enums\**" />
+    <Compile Remove="Validation\**" />
+    <EmbeddedResource Remove="Contants\**" />
+    <EmbeddedResource Remove="Enums\**" />
+    <EmbeddedResource Remove="Validation\**" />
+    <None Remove="Contants\**" />
+    <None Remove="Enums\**" />
+    <None Remove="Validation\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Bson" Version="3.10.0" />
+    <PackageReference Include="MongoDB.Bson" Version="3.11.0" />
   </ItemGroup>
 
   <ItemGroup>

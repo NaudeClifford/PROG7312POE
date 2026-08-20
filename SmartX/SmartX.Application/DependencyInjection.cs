@@ -50,6 +50,8 @@ public static class DependencyInjection
 
         services.AddScoped<GetUsersHandler>();
         services.AddScoped<GetUserByIdHandler>();
+        services.AddScoped<GetUserByFirebaseUidHandler>();
+
 
         //Company
         services.AddScoped<CreateCompanyHandler>();
@@ -64,6 +66,7 @@ public static class DependencyInjection
         services.AddScoped<GetGatewayByIdHandler>();
         services.AddScoped<UpdateGatewayHandler>();
         services.AddScoped<DeleteGatewayHandler>();
+
 
         //Auto Mapper
         services.AddAutoMapper(cfg =>
