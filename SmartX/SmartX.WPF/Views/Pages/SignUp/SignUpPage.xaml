@@ -5,7 +5,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d"
       Title="Sign Up"
-      Background="{StaticResource BackgroundBrush}">
+      Background="{StaticResource BackgroundBrush}"
+          PreviewKeyDown="Page_PreviewKeyDown">
 
     <Page.Resources>
 

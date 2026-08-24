@@ -58,11 +58,14 @@ public class SQLiteUserCache(
         command.CommandText = """
             SELECT
                 Id,
+                CompanyId,
                 FirebaseUid,
                 Email,
                 DisplayName,
                 Role,
-                CreatedAt
+                IsActive,
+                CreatedAt,
+                UpdatedAt
             FROM Users
             WHERE FirebaseUid = $firebaseUid;
             """;
@@ -93,11 +96,14 @@ public class SQLiteUserCache(
         command.CommandText = """
             SELECT
                 Id,
+                CompanyId,
                 FirebaseUid,
                 Email,
                 DisplayName,
                 Role,
-                CreatedAt
+                IsActive,
+                CreatedAt,
+                UpdatedAt
             FROM Users
             WHERE Email = $email;
             """;
@@ -126,19 +132,26 @@ public class SQLiteUserCache(
         using var command = connection.CreateCommand();
 
         command.CommandText = """
-            UPDATE Users
-            SET
-                FirebaseUid = $firebaseUid,
-                Email = $email,
-                DisplayName = $displayName,
-                Role = $role,
-                CreatedAt = $createdAt
-            WHERE Id = $id;
-            """;
+    UPDATE Users
+    SET
+        CompanyId = $companyId,
+        FirebaseUid = $firebaseUid,
+        Email = $email,
+        DisplayName = $displayName,
+        Role = $role,
+        IsActive = $isActive,
+        CreatedAt = $createdAt,
+        UpdatedAt = $updatedAt
+    WHERE Id = $id;
+    """;
 
         command.Parameters.AddWithValue(
             "$id",
             user.Id.ToString());
+
+        command.Parameters.AddWithValue(
+            "$companyId",
+            user.CompanyId.ToString());
 
         command.Parameters.AddWithValue(
             "$firebaseUid",
@@ -157,8 +170,16 @@ public class SQLiteUserCache(
             (int)user.Role);
 
         command.Parameters.AddWithValue(
+            "$isActive",
+            user.IsActive ? 1 : 0);
+
+        command.Parameters.AddWithValue(
             "$createdAt",
             user.CreatedAt.ToString("O"));
+
+        command.Parameters.AddWithValue(
+            "$updatedAt",
+            user.UpdatedAt.ToString("O"));
 
         var rowsAffected =
             await command.ExecuteNonQueryAsync(cancellationToken);
@@ -166,25 +187,31 @@ public class SQLiteUserCache(
         if (rowsAffected == 0)
         {
             command.CommandText = """
-                INSERT INTO Users
-                (
-                    Id,
-                    FirebaseUid,
-                    Email,
-                    DisplayName,
-                    Role,
-                    CreatedAt
-                )
-                VALUES
-                (
-                    $id,
-                    $firebaseUid,
-                    $email,
-                    $displayName,
-                    $role,
-                    $createdAt
-                );
-                """;
+    INSERT INTO Users
+    (
+        Id,
+        CompanyId,
+        FirebaseUid,
+        Email,
+        DisplayName,
+        Role,
+        IsActive,
+        CreatedAt,
+        UpdatedAt
+    )
+    VALUES
+    (
+        $id,
+        $companyId,
+        $firebaseUid,
+        $email,
+        $displayName,
+        $role,
+        $isActive,
+        $createdAt,
+        $updatedAt
+    );
+    """;
 
             await command.ExecuteNonQueryAsync(cancellationToken);
         }

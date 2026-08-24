@@ -146,3 +146,9 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Sm
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.csproj.Up2Date
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.genruntimeconfig.cache
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\ref\SmartX.WPF.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewayEditPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorEditPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorSetupPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewayEditPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorEditPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorSetupPage.g.cs

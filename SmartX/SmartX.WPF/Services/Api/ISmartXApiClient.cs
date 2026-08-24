@@ -3,13 +3,19 @@ using SmartX.Application.Commands.Gateway;
 using SmartX.Application.Commands.Sensors;
 using SmartX.Application.Commands.Users;
 using SmartX.Shared.DTOs;
+using SmartX.Shared.DTOs.SensorLog;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
+using System.IO;
 
 namespace SmartX.WPF.Services.Api;
 
 public interface ISmartXApiClient
 {
+
+    Task<bool> IsAvailableAsync(
+    CancellationToken cancellationToken = default);
+
     // Sensors
     Task<IReadOnlyList<SensorDto>> GetSensorsAsync(
         CancellationToken cancellationToken = default);
@@ -30,6 +36,19 @@ public interface ISmartXApiClient
         Guid id,
         CancellationToken cancellationToken = default);
 
+    Task<IReadOnlyList<SensorLogFileDto>>
+        GetSensorLogFilesAsync(
+            Guid sensorId,
+            CancellationToken cancellationToken = default);
+
+    Task<SensorLogFileUploadResultDto>
+        UploadSensorLogFileAsync(
+            Guid sensorId,
+            string fileName,
+            Stream fileStream,
+            string contentType,
+            Guid userId,
+            CancellationToken cancellationToken = default);
 
     // Telemetry
     Task<IReadOnlyList<TelemetryDto>> GetTelemetryBySensorIdAsync(

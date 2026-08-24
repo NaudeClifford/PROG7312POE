@@ -2,210 +2,346 @@
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
+using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Gateway;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Net.Http;
 
 namespace SmartX.WPF.ViewModels.Gateway;
 
-public class GatewaySetupViewModel : INotifyPropertyChanged
+public class GatewaySetupViewModel : ViewModelBase
 {
     private readonly ISmartXApiClient _apiClient;
     private readonly SmartXSession _session;
+    private readonly INavigationService _navigationService;
+    private readonly ICacheSyncService _cacheSyncService;
 
     private string _name = string.Empty;
     private string _description = string.Empty;
     private string? _serialNumber;
     private string? _ipAddress;
+
     private bool _isBusy;
-    private string? _errorMessage;
+    private bool _isOnline;
     private bool _isCreated;
+
     private Guid? _gatewayId;
-    private readonly INavigationService _navigationService;
+
+    private string _errorMessage = string.Empty;
 
     public GatewaySetupViewModel(
         ISmartXApiClient apiClient,
         SmartXSession session,
-        INavigationService navigationService)
+        INavigationService navigationService,
+        ICacheSyncService cacheSyncService)
     {
         _apiClient = apiClient;
         _session = session;
         _navigationService = navigationService;
+        _cacheSyncService = cacheSyncService;
 
-        CreateGatewayCommand = new AsyncRelayCommand(
-            CreateGatewayAsync,
-            CanCreateGateway);
+        CreateGatewayCommand =
+            new AsyncRelayCommand(
+                CreateGatewayAsync,
+                CanCreateGateway);
     }
+
+
+    // =========================================================
+    // PROPERTIES
+    // =========================================================
 
     public string Name
     {
         get => _name;
+
         set
         {
-            if (_name == value)
+            if (!SetProperty(ref _name, value))
                 return;
 
-            _name = value;
-            OnPropertyChanged();
-
-            CreateGatewayCommand.RaiseCanExecuteChanged();
+            RaiseCommandStates();
         }
     }
+
 
     public string Description
     {
         get => _description;
-        set
-        {
-            if (_description == value)
-                return;
 
-            _description = value;
-            OnPropertyChanged();
-        }
+        set => SetProperty(
+            ref _description,
+            value);
     }
+
 
     public string? SerialNumber
     {
         get => _serialNumber;
-        set
-        {
-            if (_serialNumber == value)
-                return;
 
-            _serialNumber = value;
-            OnPropertyChanged();
-        }
+        set => SetProperty(
+            ref _serialNumber,
+            value);
     }
+
 
     public string? IpAddress
     {
         get => _ipAddress;
-        set
-        {
-            if (_ipAddress == value)
-                return;
 
-            _ipAddress = value;
-            OnPropertyChanged();
-        }
+        set => SetProperty(
+            ref _ipAddress,
+            value);
     }
+
 
     public bool IsBusy
     {
         get => _isBusy;
+
         private set
         {
-            if (_isBusy == value)
+            if (!SetProperty(
+                    ref _isBusy,
+                    value))
+            {
                 return;
+            }
 
-            _isBusy = value;
-            OnPropertyChanged();
-
-            CreateGatewayCommand.RaiseCanExecuteChanged();
+            RaiseCommandStates();
         }
     }
+
+
+    public bool IsOnline
+    {
+        get => _isOnline;
+
+        private set
+        {
+            if (!SetProperty(
+                    ref _isOnline,
+                    value))
+            {
+                return;
+            }
+
+            RaiseCommandStates();
+        }
+    }
+
 
     public bool IsCreated
     {
         get => _isCreated;
+
         private set
         {
-            if (_isCreated == value)
+            if (!SetProperty(
+                    ref _isCreated,
+                    value))
+            {
                 return;
+            }
 
-            _isCreated = value;
-            OnPropertyChanged();
-
-            CreateGatewayCommand.RaiseCanExecuteChanged();
+            RaiseCommandStates();
         }
     }
+
 
     public Guid? GatewayId
     {
         get => _gatewayId;
-        private set
-        {
-            if (_gatewayId == value)
-                return;
 
-            _gatewayId = value;
-            OnPropertyChanged();
-        }
+        private set => SetProperty(
+            ref _gatewayId,
+            value);
     }
 
-    public string? ErrorMessage
+
+    public string ErrorMessage
     {
         get => _errorMessage;
-        private set
-        {
-            if (_errorMessage == value)
-                return;
 
-            _errorMessage = value;
-            OnPropertyChanged();
-        }
+        private set => SetProperty(
+            ref _errorMessage,
+            value);
     }
+
+
+    // =========================================================
+    // COMMAND
+    // =========================================================
 
     public AsyncRelayCommand CreateGatewayCommand { get; }
 
+
+    // =========================================================
+    // LOAD
+    // =========================================================
+
+    public async Task LoadAsync(
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            IsBusy = true;
+            ErrorMessage = string.Empty;
+
+            IsOnline =
+                await _apiClient.IsAvailableAsync(
+                    cancellationToken);
+
+            if (!IsOnline)
+            {
+                ErrorMessage =
+                    "The SmartX API is currently unavailable.";
+
+                return;
+            }
+
+            // Make sure the command is evaluated after
+            // the API availability check.
+            RaiseCommandStates();
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            IsOnline = false;
+
+            ErrorMessage =
+                $"Unable to connect to the SmartX API: {ex.Message}";
+        }
+        finally
+        {
+            IsBusy = false;
+            RaiseCommandStates();
+        }
+    }
+
+
+    // =========================================================
+    // CAN CREATE
+    // =========================================================
+
     private bool CanCreateGateway()
     {
-        return !IsBusy &&
-               !IsCreated &&
-               !string.IsNullOrWhiteSpace(Name);
+        return
+            IsOnline &&
+            !IsBusy &&
+            !IsCreated &&
+            !string.IsNullOrWhiteSpace(Name) &&
+            _session.CompanyId != Guid.Empty;
     }
+
+
+    // =========================================================
+    // CREATE
+    // =========================================================
 
     private async Task CreateGatewayAsync()
     {
-        if (_session.CompanyId == Guid.Empty)
-        {
-            ErrorMessage =
-                "No company is associated with this session.";
-
+        if (!CanCreateGateway())
             return;
-        }
 
         try
         {
             IsBusy = true;
-            ErrorMessage = null;
+            ErrorMessage = string.Empty;
 
-            var command = new CreateGatewayCommand
+            var companyId = _session.CompanyId;
+
+            if (companyId == Guid.Empty)
             {
-                CompanyId = _session.CompanyId,
+                ErrorMessage =
+                    "No company is associated with the current user.";
 
-                Name = Name.Trim(),
-
-                Description = Description.Trim(),
-
-                SerialNumber =
-                    string.IsNullOrWhiteSpace(SerialNumber)
-                        ? null
-                        : SerialNumber.Trim(),
-
-                IpAddress =
-                    string.IsNullOrWhiteSpace(IpAddress)
-                        ? null
-                        : IpAddress.Trim(),
-
-                IsActive = true
-            };
-
-            var gatewayId =
-                await _apiClient.CreateGatewayAsync(command);
-
-            if (gatewayId == Guid.Empty)
-            {
-                ErrorMessage = "The gateway could not be created.";
                 return;
             }
 
+            var command =
+                new CreateGatewayCommand
+                {
+                    CompanyId = companyId,
+
+                    Name = Name.Trim(),
+
+                    Description =
+                        Description.Trim(),
+
+                    SerialNumber =
+                        string.IsNullOrWhiteSpace(
+                            SerialNumber)
+                            ? null
+                            : SerialNumber.Trim(),
+
+                    IpAddress =
+                        string.IsNullOrWhiteSpace(
+                            IpAddress)
+                            ? null
+                            : IpAddress.Trim(),
+
+                    IsActive = true
+                };
+
+
+            // -------------------------------------------------
+            // CREATE ON API
+            // -------------------------------------------------
+
+            var gatewayId =
+                await _apiClient.CreateGatewayAsync(
+                    command);
+
+
+            if (gatewayId == Guid.Empty)
+            {
+                ErrorMessage =
+                    "The gateway could not be created.";
+
+                return;
+            }
+
+
             GatewayId = gatewayId;
+
+
+            // -------------------------------------------------
+            // REFRESH LOCAL CACHE
+            // -------------------------------------------------
+
+            await _cacheSyncService.SyncGatewaysAsync();
+
+
+            // -------------------------------------------------
+            // MARK CREATED
+            // -------------------------------------------------
+
             IsCreated = true;
 
+
+            // -------------------------------------------------
+            // NAVIGATE
+            // -------------------------------------------------
+            _session.SelectGateway(
+            gatewayId,
+            Name.Trim());
+
             _navigationService.NavigateTo<GatewayPage>();
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (HttpRequestException)
+        {
+            IsOnline = false;
+
+            ErrorMessage =
+                "Unable to connect to the SmartX API.";
         }
         catch (Exception ex)
         {
@@ -214,16 +350,18 @@ public class GatewaySetupViewModel : INotifyPropertyChanged
         finally
         {
             IsBusy = false;
+            RaiseCommandStates();
         }
     }
 
-    public event PropertyChangedEventHandler? PropertyChanged;
 
-    private void OnPropertyChanged(
-        [CallerMemberName] string? propertyName = null)
+    // =========================================================
+    // COMMAND STATE
+    // =========================================================
+
+    private void RaiseCommandStates()
     {
-        PropertyChanged?.Invoke(
-            this,
-            new PropertyChangedEventArgs(propertyName));
+        CreateGatewayCommand
+            .RaiseCanExecuteChanged();
     }
 }

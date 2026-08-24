@@ -1,7 +1,8 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using SmartX.Application.Commands.Gateway;
 using SmartX.Application.Commands.Company;
+using SmartX.Application.Commands.Gateway;
+using SmartX.Application.Commands.Sensors;
 using SmartX.Application.Commands.Telemetry;
 using SmartX.Application.Commands.Users;
 using SmartX.Application.Mapping;
@@ -10,9 +11,10 @@ using SmartX.Application.Queries.Gateway;
 using SmartX.Application.Queries.Sensors;
 using SmartX.Application.Queries.Telemetry;
 using SmartX.Application.Queries.Users;
+using SmartX.Application.Services;
 using SmartX.Application.Services.CRUD;
 using SmartX.Application.Validators;
-using SmartX.Application.Commands.Sensors;
+using SmartX.Domain.Interfaces;
 
 namespace SmartX.Application;
 
@@ -35,6 +37,7 @@ public static class DependencyInjection
         services.AddScoped<GetSensorByIdHandler>();
         services.AddScoped<UpdateSensorHandler>();
         services.AddScoped<DeleteSensorHandler>();
+
 
         //Telemetry handlers
         services.AddScoped<CreateTelemetryHandler>();
@@ -67,6 +70,9 @@ public static class DependencyInjection
         services.AddScoped<UpdateGatewayHandler>();
         services.AddScoped<DeleteGatewayHandler>();
 
+        //Services
+        services.AddScoped<SensorLogFileService>();
+        services.AddScoped<AuditLogService>();
 
         //Auto Mapper
         services.AddAutoMapper(cfg =>

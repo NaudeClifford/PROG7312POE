@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SmartX.Application.Services;
 using SmartX.Domain.Interfaces;
+using SmartX.Infrastructure.Authentication.Firebase;
 using SmartX.Infrastructure.Persistence.Mongo;
 using SmartX.Infrastructure.Repositories;
-using SmartX.Infrastructure.Authentication.Firebase;
 
 namespace SmartX.Infrastructure;
 
@@ -23,6 +24,8 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, JsonUserRepository>();
         services.AddScoped<ICompanyRepository, JsonCompanyRepository>();
         services.AddScoped<IGatewayRepository, JsonGatewayRepository>();
+        services.AddScoped<ISensorLogFileRepository, JsonSensorLogFileRepository>();
+        services.AddScoped<IAuditLogRepository, JsonAuditLogRepository>();
 
         return services;
     }

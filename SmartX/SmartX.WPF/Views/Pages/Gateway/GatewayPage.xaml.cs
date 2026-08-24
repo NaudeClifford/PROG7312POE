@@ -12,6 +12,7 @@ public partial class GatewayPage : Page
     public GatewayPage(
         GatewayViewModel viewModel)
     {
+
         InitializeComponent();
 
         _viewModel = viewModel;
@@ -24,6 +25,9 @@ public partial class GatewayPage : Page
         object sender,
         RoutedEventArgs e)
     {
+        Loaded -= GatewayPage_Loaded;
+
         await _viewModel.LoadAsync();
+
     }
 }

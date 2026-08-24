@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+  </Folder>
   <Project Path="SmartX.API/SmartX.API.csproj" />
   <Project Path="SmartX.Application/SmartX.Application.csproj" Id="1f8ab15a-c9ad-4292-acc9-fc2eb629f8d1" />
   <Project Path="SmartX.Domain/SmartX.Domain.csproj" Id="f4451769-2f9e-41ff-84f6-94f59c20d8ff" />

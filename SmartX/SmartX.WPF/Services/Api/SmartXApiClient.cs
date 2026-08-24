@@ -3,11 +3,14 @@ using SmartX.Application.Commands.Gateway;
 using SmartX.Application.Commands.Sensors;
 using SmartX.Application.Commands.Users;
 using SmartX.Shared.DTOs;
+using SmartX.Shared.DTOs.SensorLog;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
 using SmartX.Shared.Models;
+using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace SmartX.WPF.Services.Api;
@@ -17,6 +20,23 @@ public class SmartXApiClient(
 {
     private readonly HttpClient _httpClient = httpClient;
 
+    public async Task<bool> IsAvailableAsync(
+    CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            using var response =
+                await _httpClient.GetAsync(
+                    "api/health",
+                    cancellationToken);
+
+            return response.IsSuccessStatusCode;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 
     // ============================================================
     // SENSORS
@@ -151,6 +171,88 @@ public class SmartXApiClient(
                 result.Error ?? "Failed to delete sensor.");
 
         return result.Data;
+    }
+
+    public async Task<SensorLogFileUploadResultDto>
+    UploadSensorLogFileAsync(
+        Guid sensorId,
+        string fileName,
+        Stream fileStream,
+        string contentType,
+        Guid userId,
+        CancellationToken cancellationToken = default)
+    {
+        using var content =
+            new MultipartFormDataContent();
+
+        var fileContent =
+            new StreamContent(fileStream);
+
+        fileContent.Headers.ContentType =
+            new MediaTypeHeaderValue(contentType);
+
+        content.Add(
+            fileContent,
+            "file",
+            fileName);
+
+        content.Add(
+            new StringContent(userId.ToString()),
+            "userId");
+
+        var response =
+            await _httpClient.PostAsync(
+                $"api/Sensors/{sensorId}/logs",
+                content,
+                cancellationToken);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var error =
+                await response.Content.ReadAsStringAsync(
+                    cancellationToken);
+
+            return new SensorLogFileUploadResultDto
+            {
+                Success = false,
+                Error = string.IsNullOrWhiteSpace(error)
+                    ? $"API returned {(int)response.StatusCode}."
+                    : error
+            };
+        }
+
+        var result =
+            await response.Content.ReadFromJsonAsync<
+                SensorLogFileUploadResultDto>(
+                    cancellationToken);
+
+        return result ??
+            new SensorLogFileUploadResultDto
+            {
+                Success = false,
+                Error = "The API returned an empty response."
+            };
+    }
+
+    public async Task<IReadOnlyList<SensorLogFileDto>>
+    GetSensorLogFilesAsync(
+        Guid sensorId,
+        CancellationToken cancellationToken = default)
+    {
+        var response =
+            await _httpClient.GetAsync(
+                $"api/Sensors/{sensorId}/logs",
+                cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+
+        var result =
+            await response.Content
+                .ReadFromJsonAsync<
+                    IReadOnlyList<SensorLogFileDto>>(
+                    cancellationToken);
+
+        return result ?? [];
     }
 
 

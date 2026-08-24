@@ -9,23 +9,36 @@ public static class UserMapper
     public static User Map(SqliteDataReader reader)
     {
         var id = reader.GetOrdinal("Id");
+        var companyId = reader.GetOrdinal("CompanyId");
         var firebaseUid = reader.GetOrdinal("FirebaseUid");
         var email = reader.GetOrdinal("Email");
         var displayName = reader.GetOrdinal("DisplayName");
         var role = reader.GetOrdinal("Role");
+        var isActive = reader.GetOrdinal("IsActive");
         var createdAt = reader.GetOrdinal("CreatedAt");
 
         return new User
         {
-            Id = Guid.Parse(reader.GetString(id)),
+            Id = Guid.Parse(
+                reader.GetString(id)),
 
-            FirebaseUid = reader.GetString(firebaseUid),
+            CompanyId = Guid.Parse(
+                reader.GetString(companyId)),
 
-            Email = reader.GetString(email),
+            FirebaseUid = reader.GetString(
+                firebaseUid),
 
-            DisplayName = reader.GetString(displayName),
+            Email = reader.GetString(
+                email),
 
-            Role = (UserRole)reader.GetInt32(role),
+            DisplayName = reader.GetString(
+                displayName),
+
+            Role = (UserRole)reader.GetInt32(
+                role),
+
+            IsActive = reader.GetInt32(
+                isActive) != 0,
 
             CreatedAt = DateTime.Parse(
                 reader.GetString(createdAt))

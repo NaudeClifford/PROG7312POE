@@ -22,5 +22,9 @@ namespace SmartX.WPF.Repositories.Local
         Task<IReadOnlyList<Sensor>> GetByCompanyIdAsync(
             Guid companyId,
             CancellationToken cancellationToken = default);
+
+        Task<IReadOnlyList<Sensor>> GetByGatewayIdAsync(
+    Guid gatewayId,
+    CancellationToken cancellationToken = default);
     }
 }

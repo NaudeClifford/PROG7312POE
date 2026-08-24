@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET10_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NET10_0_OR_GREATER;NETCOREAPP1_0_OR_GREATER;NETCOREAPP1_1_OR_GREATER;NETCOREAPP2_0_OR_GREATER;NETCOREAPP2_1_OR_GREATER;NETCOREAPP2_2_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\App.xaml
-132011775521
+16-1022464161
 11413424753
-60916246000
+65-129408779
 23913197280
-Resources\Styles\ButtonStyles.xaml;Resources\Styles\CardStyles.xaml;Resources\Styles\Colors.xaml;Views\Pages\Gateway\GatewayPage.xaml;Views\Pages\Gateway\GatewaySetupPage.xaml;Views\Pages\History\HistoryPage.xaml;Views\Pages\Home\HomePage.xaml;Views\Pages\Network\NetworkPage.xaml;Views\Pages\Sensor\SensorsPage.xaml;Views\Pages\Signin\SigninPage.xaml;Views\Pages\SignUp\SignUpPage.xaml;Views\Pages\Telemetry\TelemetryPage.xaml;Views\Windows\MainWindow.xaml;
+Resources\Styles\ButtonStyles.xaml;Resources\Styles\CardStyles.xaml;Resources\Styles\Colors.xaml;Views\Pages\Gateway\GatewayEditPage.xaml;Views\Pages\Gateway\GatewayPage.xaml;Views\Pages\Gateway\GatewaySetupPage.xaml;Views\Pages\History\HistoryPage.xaml;Views\Pages\Home\HomePage.xaml;Views\Pages\Network\NetworkPage.xaml;Views\Pages\Sensor\SensorEditPage.xaml;Views\Pages\Sensor\SensorSetupPage.xaml;Views\Pages\Sensor\SensorsPage.xaml;Views\Pages\Signin\SigninPage.xaml;Views\Pages\SignUp\SignUpPage.xaml;Views\Pages\Telemetry\TelemetryPage.xaml;Views\Windows\MainWindow.xaml;
 
 False
 

@@ -108,6 +108,8 @@ public partial class App
         services.AddTransient<TelemetryViewModel>();
         services.AddTransient<GatewaySetupViewModel>();
         services.AddTransient<GatewayViewModel>();
+        services.AddTransient<SensorSetupViewModel>();
+
 
         // Pages
         services.AddTransient<HomePage>();
@@ -118,6 +120,10 @@ public partial class App
         services.AddTransient<HistoryPage>();
         services.AddTransient<GatewaySetupPage>();
         services.AddTransient<GatewayPage>();
+        services.AddTransient<SensorEditPage>();
+        services.AddTransient<SensorSetupPage>();
+        services.AddTransient<GatewayEditPage>();    
+
         //Main window
         services.AddSingleton<MainWindow>();
 

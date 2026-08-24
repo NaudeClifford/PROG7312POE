@@ -1,28 +1,39 @@
 ﻿using SmartX.Domain.Entities;
 using SmartX.Domain.Enums;
-using SmartX.Shared;
 using SmartX.WPF.Repositories.Local;
 using SmartX.WPF.Services.Api;
-using Sensor = SmartX.Domain.Entities.Sensor;
 
 namespace SmartX.WPF.Services.Sync;
 
 public class CacheSyncService(
     ISmartXApiClient apiClient,
-    ILocalSensorCache sensorCache, 
+    ILocalSensorCache sensorCache,
     ILocalTelemetryCache telemetryCache,
     ILocalUserCache userCache,
     ILocalCompanyCache companyCache,
     ILocalGatewayCache gatewayCache) : ICacheSyncService
 {
     private readonly ISmartXApiClient _apiClient = apiClient;
-    private readonly ILocalSensorCache _sensorCache = sensorCache;
 
-    private readonly ILocalTelemetryCache _telemetryCache = telemetryCache;
-    private readonly ILocalUserCache _userCache = userCache;
-    private readonly ILocalCompanyCache _companyCache = companyCache;
+    private readonly ILocalSensorCache _sensorCache =
+        sensorCache;
 
-    private readonly ILocalGatewayCache _gatewayCache = gatewayCache;
+    private readonly ILocalTelemetryCache _telemetryCache =
+        telemetryCache;
+
+    private readonly ILocalUserCache _userCache =
+        userCache;
+
+    private readonly ILocalCompanyCache _companyCache =
+        companyCache;
+
+    private readonly ILocalGatewayCache _gatewayCache =
+        gatewayCache;
+
+
+    // =========================================================
+    // SENSORS
+    // =========================================================
 
     public async Task SyncSensorsAsync(
     CancellationToken cancellationToken = default)
@@ -64,30 +75,35 @@ public class CacheSyncService(
         }
     }
 
+    // =========================================================
+    // TELEMETRY
+    // =========================================================
+
     public async Task SyncTelemetryAsync(
-    Guid sensorId,
-    CancellationToken cancellationToken = default)
+        Guid sensorId,
+        CancellationToken cancellationToken = default)
     {
-        var telemetrys =
+        var telemetry =
             await _apiClient.GetTelemetryBySensorIdAsync(
                 sensorId,
                 cancellationToken);
 
-        foreach (var dto in telemetrys)
+        foreach (var dto in telemetry)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var cachedTelemetry =
+            var cached =
                 await _telemetryCache.GetByIdAsync(
-                        dto.Id,
-                        cancellationToken);
+                    dto.Id,
+                    cancellationToken);
 
-            if (cachedTelemetry is not null)
+            if (cached is not null &&
+                dto.UpdatedAt <= cached.UpdatedAt)
             {
                 continue;
             }
 
-            var telemetry = new Telemetry
+            var entity = new Telemetry
             {
                 Id = dto.Id,
                 SensorId = dto.SensorId,
@@ -96,35 +112,42 @@ public class CacheSyncService(
                 Current = dto.Current,
                 Power = dto.Power,
                 Temperature = dto.Temperature,
-                CreatedAt = dto.CreatedAt
+                CreatedAt = dto.CreatedAt,
+                UpdatedAt = dto.UpdatedAt
             };
 
             await _telemetryCache.UpdateAsync(
-                telemetry,
+                entity,
                 cancellationToken);
-
         }
     }
 
+
+    // =========================================================
+    // USER
+    // =========================================================
+
     public async Task SyncUserAsync(
-    Guid userId,
-    CancellationToken cancellationToken = default)
+        Guid userId,
+        CancellationToken cancellationToken = default)
     {
-        var dto = await _apiClient.GetUserByIdAsync(
-            userId,
-            cancellationToken);
+        var dto =
+            await _apiClient.GetUserByIdAsync(
+                userId,
+                cancellationToken);
 
         if (dto is null)
             return;
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        var cachedUser = await _userCache.GetByIdAsync(
-            dto.Id,
-            cancellationToken);
+        var cached =
+            await _userCache.GetByIdAsync(
+                dto.Id,
+                cancellationToken);
 
-        if (cachedUser is not null &&
-            dto.UpdatedAt <= cachedUser.UpdatedAt)
+        if (cached is not null &&
+            dto.UpdatedAt <= cached.UpdatedAt)
         {
             return;
         }
@@ -147,22 +170,29 @@ public class CacheSyncService(
             cancellationToken);
     }
 
+
+    // =========================================================
+    // COMPANIES
+    // =========================================================
+
     public async Task SyncCompaniesAsync(
         CancellationToken cancellationToken = default)
     {
-        var companies = await _apiClient.GetCompaniesAsync(
-            cancellationToken);
+        var companies =
+            await _apiClient.GetCompaniesAsync(
+                cancellationToken);
 
         foreach (var dto in companies)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var cachedCompany = await _companyCache.GetByIdAsync(
-                dto.Id,
-                cancellationToken);
+            var cached =
+                await _companyCache.GetByIdAsync(
+                    dto.Id,
+                    cancellationToken);
 
-            if (cachedCompany is not null &&
-                dto.UpdatedAt <= cachedCompany.UpdatedAt)
+            if (cached is not null &&
+                dto.UpdatedAt <= cached.UpdatedAt)
             {
                 continue;
             }
@@ -183,23 +213,29 @@ public class CacheSyncService(
         }
     }
 
+
+    // =========================================================
+    // GATEWAYS
+    // =========================================================
+
     public async Task SyncGatewaysAsync(
         CancellationToken cancellationToken = default)
     {
-        var gateways = await _apiClient.GetGatewaysAsync(
-            cancellationToken);
+        var gateways =
+            await _apiClient.GetGatewaysAsync(
+                cancellationToken);
 
         foreach (var dto in gateways)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            var cachedGateway =
+            var cached =
                 await _gatewayCache.GetByIdAsync(
                     dto.Id,
                     cancellationToken);
 
-            if (cachedGateway is not null &&
-                dto.UpdatedAt <= cachedGateway.UpdatedAt)
+            if (cached is not null &&
+                dto.UpdatedAt <= cached.UpdatedAt)
             {
                 continue;
             }

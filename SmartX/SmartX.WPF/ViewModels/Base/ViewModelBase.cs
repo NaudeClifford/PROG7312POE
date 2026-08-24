@@ -1,10 +1,34 @@
-﻿using System.ComponentModel;
+﻿using SmartX.WPF.Services;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace SmartX.WPF.ViewModels.Base;
 
 public abstract class ViewModelBase : INotifyPropertyChanged
 {
+    protected SmartXSession? Session { get; private set; }
+
+    public string CurrentGatewayName =>
+        Session?.GatewayName ?? "No gateway selected";
+
+    public bool HasCurrentGateway =>
+        Session?.GatewayId.HasValue == true;
+
+    protected void InitializeSession(
+        SmartXSession session)
+    {
+        Session = session;
+
+        OnPropertyChanged(nameof(CurrentGatewayName));
+        OnPropertyChanged(nameof(HasCurrentGateway));
+    }
+
+    protected void RefreshGatewayDisplay()
+    {
+        OnPropertyChanged(nameof(CurrentGatewayName));
+        OnPropertyChanged(nameof(HasCurrentGateway));
+    }
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     protected void OnPropertyChanged(

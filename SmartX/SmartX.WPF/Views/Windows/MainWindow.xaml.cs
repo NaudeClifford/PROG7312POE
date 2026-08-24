@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SmartX.Domain.Enums;
+using SmartX.WPF.Navigation;
 using SmartX.WPF.Services;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.History;
@@ -19,11 +20,9 @@ public partial class MainWindow : Window
 
     private NavigationStage _navigationStage =
         NavigationStage.Home;
+    private readonly INavigationService _navigationService;
 
-
-    // =========================================================
     // NAVIGATION STAGE
-    // =========================================================
 
     private enum NavigationStage
     {
@@ -48,20 +47,28 @@ public partial class MainWindow : Window
     // =========================================================
 
     public MainWindow(
+        INavigationService navigationService,
         HomePage homePage,
         SmartXSession session)
     {
         InitializeComponent();
 
+        _navigationService = navigationService;
         _homePage = homePage;
         _session = session;
 
-        MainFrame.Navigate(_homePage);
-
-        UpdateNavigation();
+        _navigationService.SetFrame(MainFrame);
+        // Continue into the application
+        _navigationService.NavigateTo<HomePage>();
+        Loaded += MainWindow_Loaded;
     }
 
-
+    private void MainWindow_Loaded(
+    object sender,
+    RoutedEventArgs e)
+    {
+        NavigateHome();
+    }
     // =========================================================
     // PUBLIC NAVIGATION REFRESH
     // =========================================================
@@ -78,7 +85,7 @@ public partial class MainWindow : Window
 
     private void UpdateNavigation()
     {
-        if (!_session.IsAuthenticated)
+        if (!_session.IsAuthenticated && !_session.IsGuest)
         {
             HideNavigation();
             return;
@@ -139,45 +146,60 @@ public partial class MainWindow : Window
     {
         HideAllNavigationButtons();
 
-        // Logout is available to every authenticated user.
         LogOutButton.Visibility =
             Visibility.Visible;
+
+        if (_session.IsGuest)
+        {
+            ApplyGuestNavigation();
+            return;
+        }
 
         switch (_session.Role)
         {
             case UserRole.Administrator:
-
                 ApplyAdministratorNavigation();
-
                 break;
 
             case UserRole.Technician:
-
                 ApplyTechnicianNavigation();
-
                 break;
 
             case UserRole.SuperAdmin:
-
                 ApplySuperAdminNavigation();
-
                 break;
 
             case UserRole.Viewer:
-
                 ApplyViewerNavigation();
-
                 break;
 
             default:
-
                 HideAllNavigationButtons();
-
                 break;
         }
     }
 
+    //Guest
+    private void ApplyGuestNavigation()
+    {
+        HomeButton.Visibility =
+            Visibility.Visible;
 
+        GatewayButton.Visibility =
+            Visibility.Visible;
+
+        SensorsButton.Visibility =
+            Visibility.Visible;
+
+        TelemetryButton.Visibility =
+            Visibility.Visible;
+
+        HistoryButton.Visibility =
+            Visibility.Visible;
+
+        LogOutButton.Visibility =
+            Visibility.Visible;
+    }
     // =========================================================
     // ADMINISTRATOR
     // =========================================================

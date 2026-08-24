@@ -7,6 +7,12 @@
     <UserSecretsId>2c8955d8-c8bb-4375-95cb-837d87680abb</UserSecretsId>
   </PropertyGroup>
 
+	<ItemGroup>
+		<None Update="firebase-service-account.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	
   <ItemGroup>
     <PackageReference Include="FirebaseAdmin" Version="3.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />

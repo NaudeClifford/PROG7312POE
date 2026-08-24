@@ -20,9 +20,7 @@ public class FirebaseAuthService
     private void InitializeFirebase()
     {
         if (FirebaseApp.DefaultInstance != null)
-        {
             return;
-        }
 
         if (string.IsNullOrWhiteSpace(_options.ServiceAccountPath))
         {
@@ -30,9 +28,22 @@ public class FirebaseAuthService
                 "Firebase ServiceAccountPath is not configured.");
         }
 
+        var serviceAccountPath = Path.Combine(
+            AppContext.BaseDirectory,
+            _options.ServiceAccountPath);
+
+        if (!File.Exists(serviceAccountPath))
+        {
+            throw new FileNotFoundException(
+                "Firebase service account file was not found.",
+                serviceAccountPath);
+        }
+
         FirebaseApp.Create(new AppOptions
         {
-            Credential = GoogleCredential.FromStream(File.OpenRead(_options.ServiceAccountPath)),
+            Credential = GoogleCredential.FromFile(
+                serviceAccountPath),
+
             ProjectId = _options.ProjectId
         });
     }

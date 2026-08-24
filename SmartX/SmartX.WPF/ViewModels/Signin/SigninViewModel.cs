@@ -5,7 +5,7 @@ using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Gateway;
-using SmartX.WPF.Views.Pages.Sensor;
+using SmartX.WPF.Views.Pages.Home;
 using System.Net.Http;
 using System.Windows.Input;
 
@@ -24,17 +24,36 @@ public class SigninViewModel : ViewModelBase
     private string _errorMessage = string.Empty;
     private bool _isBusy;
 
+    private bool _rememberMe;
+
+    public bool RememberMe
+    {
+        get => _rememberMe;
+        set => SetProperty(ref _rememberMe, value);
+    }
 
     public string Email
     {
         get => _email;
-        set => SetProperty(ref _email, value);
+        set
+        {
+            if (!SetProperty(ref _email, value))
+                return;
+
+            SignInCommand.RaiseCanExecuteChanged();
+        }
     }
 
     public string Password
     {
         get => _password;
-        set => SetProperty(ref _password, value);
+        set
+        {
+            if (!SetProperty(ref _password, value))
+                return;
+
+            SignInCommand.RaiseCanExecuteChanged();
+        }
     }
 
     public string ErrorMessage
@@ -52,10 +71,12 @@ public class SigninViewModel : ViewModelBase
         get => _isBusy;
         private set
         {
-            if (SetProperty(ref _isBusy, value))
-            {
-                OnPropertyChanged(nameof(SignInButtonText));
-            }
+            if (!SetProperty(ref _isBusy, value))
+                return;
+
+            OnPropertyChanged(nameof(SignInButtonText));
+
+            SignInCommand.RaiseCanExecuteChanged();
         }
     }
 
@@ -66,7 +87,7 @@ public class SigninViewModel : ViewModelBase
         _navigationService.NavigateTo<GatewayPage>();
     }
 
-    public ICommand SignInCommand { get; }
+    public AsyncRelayCommand SignInCommand { get; }
     public ICommand GuestCommand { get; }
 
     public SigninViewModel(

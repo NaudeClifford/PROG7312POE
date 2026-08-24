@@ -7,6 +7,9 @@
     <ActiveDebugProfile>SmartX.WPF</ActiveDebugProfile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Update="Views\Pages\Gateway\GatewayEditPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Pages\Gateway\GatewayPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -20,6 +23,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Pages\Network\NetworkPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Pages\Sensor\SensorEditPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Pages\Sensor\SensorSetupPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Pages\Sensor\SensorsPage.xaml.cs">

@@ -75,6 +75,14 @@
                         Style="{StaticResource BaseButtonStyle}" 
                         Command="{Binding SignUpCommand}"/>
 
+                <Button Content="Guest Mode"
+        Height="52"
+        Margin="40,0,40,10"
+        FontSize="15"
+        Cursor="Hand"
+        Style="{StaticResource BaseButtonStyle}"
+        Command="{Binding GuestCommand}"/>
+                
                 <TextBlock Text="Secure authentication"
                            Foreground="{StaticResource LightTextBrush}"
                            Opacity="0.45"

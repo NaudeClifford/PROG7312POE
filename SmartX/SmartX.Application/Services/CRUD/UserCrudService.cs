@@ -17,6 +17,7 @@ public class UserCrudService :
     private readonly UpdateUserHandler _updateUser;
     private readonly DeleteUserHandler _deleteUser;
     private readonly GetUserByFirebaseUidHandler _getUserByFirebaseUid;
+    private readonly AuditLogService _auditLog;
 
     public UserCrudService(
         GetUsersHandler getUsers,
@@ -24,7 +25,8 @@ public class UserCrudService :
         GetUserByFirebaseUidHandler getUserByFirebaseUid,
         CreateUserHandler createUser,
         UpdateUserHandler updateUser,
-        DeleteUserHandler deleteUser)
+        DeleteUserHandler deleteUser,
+        AuditLogService auditLog)
     {
         _getUsers = getUsers;
         _getUserById = getUserById;
@@ -32,6 +34,7 @@ public class UserCrudService :
         _createUser = createUser;
         _updateUser = updateUser;
         _deleteUser = deleteUser;
+        _auditLog = auditLog;
     }
 
     public Task<Result<UserDto>> GetByFirebaseUidAsync(
@@ -66,33 +69,83 @@ public class UserCrudService :
             cancellationToken);
     }
 
-    public Task<Result<Guid>> CreateAsync(
+    public async Task<Result<Guid>> CreateAsync(
         CreateUserCommand command,
         CancellationToken cancellationToken = default)
     {
-        return _createUser.HandleAsync(
+        var result = await _createUser.HandleAsync(
             command,
             cancellationToken);
+
+        if (!result.Success)
+            return result;
+
+        await _auditLog.LogAsync(
+            entityType: "User",
+            entityId: result.Data,
+            action: "Created",
+            companyId: command.CompanyId,
+            details: "User created.",
+            cancellationToken: cancellationToken);
+
+        return result;
     }
 
-    public Task<Result<bool>> UpdateAsync(
+    public async Task<Result<bool>> UpdateAsync(
         UpdateUserCommand command,
         CancellationToken cancellationToken = default)
     {
-        return _updateUser.HandleAsync(
+        var result = await _updateUser.HandleAsync(
             command,
             cancellationToken);
+
+        if (!result.Success)
+            return result;
+
+        await _auditLog.LogAsync(
+            entityType: "User",
+            entityId: command.Id,
+            action: "Updated",
+            companyId: command.CompanyId,
+            details: "User updated.",
+            cancellationToken: cancellationToken);
+
+        return result;
     }
 
-    public Task<Result<bool>> DeleteAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
+    public async Task<Result<bool>> DeleteAsync(
+    Guid id,
+    CancellationToken cancellationToken = default)
     {
-        return _deleteUser.HandleAsync(
+        var userResult = await _getUserById.HandleAsync(
+            new GetUserByIdQuery
+            {
+                UserId = id
+            },
+            cancellationToken);
+
+        if (!userResult.Success)
+            return Result<bool>.Fail(
+                userResult.Error ?? "Unable to retrieve user.");
+
+        var result = await _deleteUser.HandleAsync(
             new DeleteUserCommand
             {
                 UserId = id
             },
             cancellationToken);
+
+        if (!result.Success)
+            return result;
+
+        await _auditLog.LogAsync(
+            entityType: "User",
+            entityId: id,
+            action: "Deleted",
+            companyId: userResult.Data!.CompanyId,
+            details: "User deleted.",
+            cancellationToken: cancellationToken);
+
+        return result;
     }
 }

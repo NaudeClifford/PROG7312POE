@@ -23,5 +23,23 @@ namespace SmartX.WPF.Views.Pages.Signin
                 viewModel.Password = passwordBox.Password;
             }
         }
+
+        private void Page_PreviewKeyDown(
+            object sender,
+            System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key != System.Windows.Input.Key.Enter)
+                return;
+
+            if (DataContext is not SigninViewModel viewModel)
+                return;
+
+            if (!viewModel.SignInCommand.CanExecute(null))
+                return;
+
+            viewModel.SignInCommand.Execute(null);
+
+            e.Handled = true;
+        }
     }
 }

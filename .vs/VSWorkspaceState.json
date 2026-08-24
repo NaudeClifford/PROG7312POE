@@ -2,14 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\SmartX",
-    "\\SmartX\\SmartX.API",
-    "\\SmartX\\SmartX.API\\bin",
-    "\\SmartX\\SmartX.API\\bin\\Debug",
-    "\\SmartX\\SmartX.API\\bin\\Debug\\net10.0",
-    "\\SmartX\\SmartX.API\\Controllers",
+    "\\SmartX\\SmartX.Infrastructure\\Data",
+    "\\SmartX\\SmartX.Infrastructure\\Data\\Local",
     "\\SmartX\\SmartX.WPF",
-    "\\SmartX\\SmartX.WPF\\bin",
-    "\\SmartX\\SmartX.WPF\\bin\\Debug"
+    "\\SmartX\\SmartX.WPF\\Data"
   ],
   "PreviewInSolutionExplorer": true
 }

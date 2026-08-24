@@ -27,5 +27,8 @@ public class MappingProfile : Profile
 
         //Gateway
         CreateMap<Gateway, GatewayDto>();
+
+        //SensorLogFile
+        CreateMap<SensorLogFile, SensorLogFileDto>();
     }
 }

@@ -52,7 +52,7 @@ namespace SmartX.WPF.Views.Pages.Telemetry {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;component/views/pages/telemetry/telemetrypage.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;V1.0.0.0;component/views/pages/telemetry/telemetrypage.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Views\Pages\Telemetry\TelemetryPage.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

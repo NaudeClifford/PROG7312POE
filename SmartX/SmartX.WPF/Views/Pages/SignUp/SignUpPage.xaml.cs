@@ -1,4 +1,5 @@
-﻿using SmartX.WPF.ViewModels.SignUp;
+﻿using SmartX.WPF.ViewModels;
+using SmartX.WPF.ViewModels.SignUp;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -32,5 +33,23 @@ public partial class SignUpPage : Page
     {
         _viewModel.ConfirmPassword =
             ConfirmPasswordBox.Password;
+    }
+
+    private void Page_PreviewKeyDown(
+    object sender,
+    System.Windows.Input.KeyEventArgs e)
+    {
+        if (e.Key != System.Windows.Input.Key.Enter)
+            return;
+
+        if (DataContext is not SigninViewModel viewModel)
+            return;
+
+        if (!viewModel.SignInCommand.CanExecute(null))
+            return;
+
+        viewModel.SignInCommand.Execute(null);
+
+        e.Handled = true;
     }
 }

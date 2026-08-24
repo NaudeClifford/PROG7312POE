@@ -46,6 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\Local\SensorLogs\" />
     <Folder Include="Persistence\Json\" />
     <Folder Include="Persistence\LiteDb\" />
   </ItemGroup>

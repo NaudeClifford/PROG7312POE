@@ -8,5 +8,6 @@ namespace SmartX.Application.Commands.Users
     {
         public Guid UserId { get; set; }
 
+        public Guid CompanyId { get; set; }
     }
 }
