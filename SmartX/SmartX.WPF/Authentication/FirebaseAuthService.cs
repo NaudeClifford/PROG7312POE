@@ -71,6 +71,54 @@ public class FirebaseAuthService : IAuthenticationService
         };
     }
 
+    public async Task<AuthenticationResult> RefreshTokenAsync(
+    string refreshToken)
+    {
+        var url =
+            $"https://securetoken.googleapis.com/v1/token?key={_apiKey}";
+
+        var request = new FirebaseRefreshRequest
+        {
+            GrantType = "refresh_token",
+            RefreshToken = refreshToken
+        };
+
+        var response = await _httpClient.PostAsJsonAsync(
+            url,
+            request);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return new AuthenticationResult
+            {
+                Success = false,
+                ErrorMessage = "The saved login session has expired."
+            };
+        }
+
+        var firebaseResult =
+            await response.Content
+                .ReadFromJsonAsync<FirebaseRefreshResponse>();
+
+        if (firebaseResult is null)
+        {
+            return new AuthenticationResult
+            {
+                Success = false,
+                ErrorMessage =
+                    "Firebase returned an empty refresh response."
+            };
+        }
+
+        return new AuthenticationResult
+        {
+            Success = true,
+            UserId = firebaseResult.UserId,
+            IdToken = firebaseResult.IdToken,
+            RefreshToken = firebaseResult.RefreshToken
+        };
+    }
+
     public async Task<AuthenticationResult> SignUpAsync(
         string email,
         string password)
@@ -162,6 +210,34 @@ public class FirebaseAuthService : IAuthenticationService
 
         [JsonPropertyName("returnSecureToken")]
         public bool ReturnSecureToken { get; set; }
+    }
+
+    public class FirebaseRefreshRequest
+    {
+        [JsonPropertyName("grant_type")]
+        public string GrantType { get; set; } = string.Empty;
+
+        [JsonPropertyName("refresh_token")]
+        public string RefreshToken { get; set; } = string.Empty;
+    }
+
+
+    public class FirebaseRefreshResponse
+    {
+        [JsonPropertyName("access_token")]
+        public string IdToken { get; set; } = string.Empty;
+
+        [JsonPropertyName("refresh_token")]
+        public string RefreshToken { get; set; } = string.Empty;
+
+        [JsonPropertyName("expires_in")]
+        public string ExpiresIn { get; set; } = string.Empty;
+
+        [JsonPropertyName("user_id")]
+        public string UserId { get; set; } = string.Empty;
+
+        [JsonPropertyName("project_id")]
+        public string ProjectId { get; set; } = string.Empty;
     }
 
 } 

@@ -110,25 +110,14 @@ C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\Smart
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Data\Local\gateways.json
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Data\Local\telemetry.json
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Data\Local\users.json
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.csproj.AssemblyReference.cache
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\rpswa.dswa.cache.json
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.GeneratedMSBuildEditorConfig.editorconfig
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.AssemblyInfoInputs.cache
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.AssemblyInfo.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.csproj.CoreCompileInputs.cache
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.MvcApplicationPartsAssemblyInfo.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.MvcApplicationPartsAssemblyInfo.cache
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.sourcelink.json
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.dll
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\refint\SmartX.API.dll
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.pdb
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\appsettings.Development.json
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\appsettings.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Data\Local\sensors.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Data\Local\company.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Data\Local\gateways.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Data\Local\telemetry.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Data\Local\users.json
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\appsettings.Development.json
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\appsettings.json
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\firebase-service-account.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\SmartX.API.staticwebassets.endpoints.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\SmartX.API.exe
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\SmartX.API.deps.json
@@ -172,6 +161,15 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\SmartX.App
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\SmartX.Infrastructure.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\SmartX.Shared.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\SmartX.Domain.pdb
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.csproj.AssemblyReference.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\rpswa.dswa.cache.json
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.GeneratedMSBuildEditorConfig.editorconfig
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.AssemblyInfoInputs.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.AssemblyInfo.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.csproj.CoreCompileInputs.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.MvcApplicationPartsAssemblyInfo.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.MvcApplicationPartsAssemblyInfo.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.sourcelink.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\rjimswa.dswa.cache.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
@@ -183,6 +181,8 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\staticweba
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\swae.build.ex.cache
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.csproj.Up2Date
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\refint\SmartX.API.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.genruntimeconfig.cache
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\ref\SmartX.API.dll
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\firebase-service-account.json

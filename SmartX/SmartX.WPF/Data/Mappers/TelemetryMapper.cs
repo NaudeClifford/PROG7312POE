@@ -15,6 +15,7 @@ namespace SmartX.WPF.Data.Mappers
             var power = reader.GetOrdinal("Power");
             var temperature = reader.GetOrdinal("Temperature");
             var CreatedAt = reader.GetOrdinal("UpdatedAt");
+            var updatedAt = reader.GetOrdinal("UpdatedAt");
 
             return new Telemetry
             {
@@ -38,7 +39,10 @@ namespace SmartX.WPF.Data.Mappers
                     ? null
                     : reader.GetDouble(temperature),
 
-                    CreatedAt = DateTime.Parse(reader.GetString(CreatedAt))
+                    CreatedAt = DateTime.Parse(reader.GetString(CreatedAt)),
+
+                                UpdatedAt = DateTime.Parse(
+                reader.GetString(updatedAt))
             };
         }
     }

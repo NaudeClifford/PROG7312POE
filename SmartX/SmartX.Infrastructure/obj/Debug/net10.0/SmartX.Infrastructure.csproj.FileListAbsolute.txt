@@ -22,20 +22,11 @@ C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\Smart
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\Data\Local\gateways.json
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\Data\Local\telemetry.json
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\Data\Local\users.json
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.csproj.AssemblyReference.cache
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.AssemblyInfoInputs.cache
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.AssemblyInfo.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.csproj.CoreCompileInputs.cache
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.sourcelink.json
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.dll
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\refint\SmartX.Infrastructure.dll
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\Data\Local\sensors.json
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\Data\Local\company.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\Data\Local\gateways.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\Data\Local\telemetry.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\Data\Local\users.json
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\Data\Local\company.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\SmartX.Infrastructure.deps.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\SmartX.Infrastructure.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\SmartX.Infrastructure.pdb
@@ -45,5 +36,14 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\SmartX.Application.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\SmartX.Domain.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\bin\Debug\net10.0\SmartX.Shared.pdb
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.csproj.AssemblyReference.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.AssemblyInfoInputs.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.AssemblyInfo.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.csproj.CoreCompileInputs.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.sourcelink.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.I.04C24C1D.Up2Date
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\refint\SmartX.Infrastructure.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\SmartX.Infrastructure.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Infrastructure\obj\Debug\net10.0\ref\SmartX.Infrastructure.dll

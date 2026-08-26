@@ -91,6 +91,28 @@
 
     </Style>
 
+    <!-- Primary -->
+    <Style x:Key="SecondaryButtonStyle"
+        TargetType="Button"
+        BasedOn="{StaticResource BaseButtonStyle}">
+
+        <Setter Property="Background"
+             Value="{StaticResource PrimaryBrush}"/>
+
+        <Setter Property="Margin"
+             Value="1"/>
+
+        <Setter Property="Height"
+            Value="30"/>
+
+        <Setter Property="FontSize"
+            Value="10"/>
+
+        <Setter Property="Padding"
+            Value="1"/>
+
+    </Style>
+
     <!-- Success -->
     <Style x:Key="SuccessButtonStyle"
         TargetType="Button"

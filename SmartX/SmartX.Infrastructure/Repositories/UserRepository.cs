@@ -21,7 +21,14 @@ public class UserRepository : IUserRepository
             .Find(_ => true)
             .ToListAsync(cancellationToken);
     }
-
+    public async Task<IReadOnlyList<User>> GetByCompanyIdAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default)
+    {
+        return await _collection
+            .Find(user => user.CompanyId == companyId)
+            .ToListAsync(cancellationToken);
+    }
     public async Task<User?> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken = default)

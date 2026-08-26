@@ -11,6 +11,10 @@ public interface IUserRepository
     Task<IReadOnlyList<User>> GetAllAsync(
         CancellationToken cancellationToken = default);
 
+    Task<IReadOnlyList<User>> GetByCompanyIdAsync(
+        Guid companyId,
+        CancellationToken cancellationToken = default);
+
     Task<User?> GetByFirebaseUidAsync(
         string firebaseUid,
         CancellationToken cancellationToken = default);

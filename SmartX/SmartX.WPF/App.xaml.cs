@@ -11,9 +11,12 @@ using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels;
 using SmartX.WPF.ViewModels.Gateway;
 using SmartX.WPF.ViewModels.History;
+using SmartX.WPF.ViewModels.Pages.Company;
 using SmartX.WPF.ViewModels.Pages.Sensor;
+using SmartX.WPF.ViewModels.Pages.Users;
 using SmartX.WPF.ViewModels.SignUp;
 using SmartX.WPF.ViewModels.Telemetry;
+using SmartX.WPF.Views.Pages.Company;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.History;
 using SmartX.WPF.Views.Pages.Home;
@@ -21,6 +24,7 @@ using SmartX.WPF.Views.Pages.Sensor;
 using SmartX.WPF.Views.Pages.Signin;
 using SmartX.WPF.Views.Pages.SignUp;
 using SmartX.WPF.Views.Pages.Telemetry;
+using SmartX.WPF.Views.Pages.Users;
 using System.Windows;
 
 namespace SmartX.WPF;
@@ -106,10 +110,9 @@ public partial class App
         services.AddTransient<HistoryViewModel>();
         services.AddTransient<SensorViewModel>();
         services.AddTransient<TelemetryViewModel>();
-        services.AddTransient<GatewaySetupViewModel>();
         services.AddTransient<GatewayViewModel>();
-        services.AddTransient<SensorSetupViewModel>();
-
+        services.AddTransient<CompanyViewModel>();
+        services.AddTransient<UsersViewModel>();
 
         // Pages
         services.AddTransient<HomePage>();
@@ -122,7 +125,10 @@ public partial class App
         services.AddTransient<GatewayPage>();
         services.AddTransient<SensorEditPage>();
         services.AddTransient<SensorSetupPage>();
-        services.AddTransient<GatewayEditPage>();    
+        services.AddTransient<GatewayEditPage>();
+        services.AddTransient<CurrentCompanyPage>();
+        services.AddTransient<UsersPage>();
+        services.AddTransient<CompaniesPage>();
 
         //Main window
         services.AddSingleton<MainWindow>();
@@ -132,21 +138,41 @@ public partial class App
 
         //Authentication
         services.AddHttpClient<IAuthenticationService,FirebaseAuthService>();
+
+        // Session
+        services.AddSingleton<SmartXSession>();
+
+        // Remembered login
+        services.AddSingleton<SmartXCredentialStore>();
+        services.AddSingleton<SmartXAuthenticationService>();
+
     }
 
-    protected override async void OnStartup(StartupEventArgs e)
+    protected override async void OnStartup(
+    StartupEventArgs e)
     {
         base.OnStartup(e);
 
         try
         {
             var database =
-                ServiceProvider.GetRequiredService<SmartXCacheDatabase>();
+                ServiceProvider
+                    .GetRequiredService<SmartXCacheDatabase>();
 
             await database.InitializeAsync();
 
+            var authenticationService =
+                ServiceProvider
+                    .GetRequiredService<
+                        SmartXAuthenticationService>();
+
+            var restored =
+                await authenticationService
+                    .TryRestoreSessionAsync();
+
             var mainWindow =
-                ServiceProvider.GetRequiredService<MainWindow>();
+                ServiceProvider
+                    .GetRequiredService<MainWindow>();
 
             mainWindow.Show();
         }

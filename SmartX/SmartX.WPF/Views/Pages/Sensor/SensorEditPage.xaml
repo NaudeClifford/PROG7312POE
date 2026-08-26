@@ -6,8 +6,7 @@
       mc:Ignorable="d"
       Title="Edit Sensor"
       Background="{StaticResource BackgroundBrush}"
-                PreviewKeyDown="Page_PreviewKeyDown">
-
+      PreviewKeyDown="Page_PreviewKeyDown">
 
     <ScrollViewer
         VerticalScrollBarVisibility="Auto">
@@ -33,59 +32,23 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-
-                <!-- TITLE -->
-
                 <StackPanel
-                    Grid.Column="0">
+                    Grid.Column="0"
+                    HorizontalAlignment="Center">
 
                     <TextBlock
                         Text="Edit Sensor"
                         FontSize="30"
                         FontWeight="Bold"
-                        Foreground="{StaticResource DarkBrush}"/>
+                        Foreground="{StaticResource TitleBrush}"/>
 
                     <TextBlock
                         Text="Update the configuration of this sensor."
                         FontSize="14"
-                        Foreground="#707780"
+                        Foreground="{StaticResource SubTitleBrush}"
                         Margin="0,8,0,0"/>
 
                 </StackPanel>
-
-
-                <!-- CURRENT GATEWAY -->
-
-                <Border
-                    Grid.Column="1"
-                    Background="#EAF2FF"
-                    BorderBrush="#D5E3FA"
-                    BorderThickness="1"
-                    CornerRadius="10"
-                    Padding="16,9"
-                    VerticalAlignment="Top">
-
-                    <StackPanel
-                        Orientation="Horizontal">
-
-                        <TextBlock
-                            Text="Gateway:"
-                            FontSize="12"
-                            FontWeight="SemiBold"
-                            Foreground="#657080"
-                            VerticalAlignment="Center"/>
-
-                        <TextBlock
-                            Text="{Binding CurrentGatewayName}"
-                            FontSize="12"
-                            FontWeight="Bold"
-                            Foreground="{StaticResource DarkBrush}"
-                            Margin="6,0,0,0"
-                            VerticalAlignment="Center"/>
-
-                    </StackPanel>
-
-                </Border>
 
             </Grid>
 
@@ -108,6 +71,8 @@
                     </Grid.ColumnDefinitions>
 
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -252,8 +217,8 @@
                             Background="#FAFBFC">
 
                             <ComboBox
-                                ItemsSource="{Binding SensorCategories}"
-                                SelectedItem="{Binding Category}"
+                                ItemsSource="{Binding Categories}"
+                                SelectedItem="{Binding Category, Mode=TwoWay}"
                                 Margin="6,0"
                                 BorderThickness="0"
                                 Background="Transparent"
@@ -324,11 +289,107 @@
 
 
                     <!-- ========================================= -->
+                    <!-- SENSOR LOG FILES -->
+                    <!-- ========================================= -->
+
+                    <StackPanel
+    Grid.Row="4"
+    Grid.ColumnSpan="2"
+    Margin="0,5,0,20">
+
+                        <Grid Margin="0,0,0,10">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel
+            Grid.Column="0">
+
+                                <TextBlock
+                Text="Sensor Log Files"
+                FontSize="16"
+                FontWeight="SemiBold"
+                Foreground="#30343A"/>
+
+                                <TextBlock
+                Text="Log files uploaded for this sensor."
+                FontSize="12"
+                Foreground="{StaticResource SubTitleBrush}"
+                Margin="0,4,0,0"/>
+
+                            </StackPanel>
+
+                            <Button
+            Grid.Column="1"
+            Content="Upload Log File"
+            Height="42"
+            Padding="20,0"
+            Command="{Binding AddLogFileCommand}"
+            FontSize="13"
+            FontWeight="SemiBold"
+            Style="{StaticResource SecondaryButtonStyle}"/>
+
+                        </Grid>
+
+                        <Border
+        Background="#FAFBFC"
+        BorderBrush="#D8DDE2"
+        BorderThickness="1"
+        CornerRadius="8"
+        Padding="12">
+
+                            <ItemsControl
+            ItemsSource="{Binding LogFiles}">
+
+                                <ItemsControl.ItemTemplate>
+
+                                    <DataTemplate>
+
+                                        <Border
+                        Background="White"
+                        BorderBrush="#E2E6EA"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="12"
+                        Margin="0,0,0,8">
+
+                                            <StackPanel>
+
+                                                <TextBlock
+                                Text="{Binding FileName}"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Foreground="#30343A"/>
+
+                                                <TextBlock
+                                Text="{Binding CreatedAt, StringFormat='Uploaded: {0:g}'}"
+                                FontSize="11"
+                                Foreground="#777777"
+                                Margin="0,4,0,0"/>
+
+                                            </StackPanel>
+
+                                        </Border>
+
+                                    </DataTemplate>
+
+                                </ItemsControl.ItemTemplate>
+
+                            </ItemsControl>
+
+                        </Border>
+
+                    </StackPanel>
+
+
+                    <!-- ========================================= -->
                     <!-- ERROR -->
                     <!-- ========================================= -->
 
                     <TextBlock
-                        Grid.Row="4"
+                        Grid.Row="5"
                         Grid.ColumnSpan="2"
                         Text="{Binding ErrorMessage}"
                         Foreground="#C62828"
@@ -342,7 +403,7 @@
                     <!-- ========================================= -->
 
                     <Button
-                        Grid.Row="5"
+                        Grid.Row="6"
                         Grid.ColumnSpan="2"
                         Content="Save Changes"
                         Height="50"

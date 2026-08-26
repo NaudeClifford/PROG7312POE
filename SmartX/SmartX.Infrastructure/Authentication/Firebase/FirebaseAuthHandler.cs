@@ -23,7 +23,8 @@ public class FirebaseAuthHandler
         _firebaseAuthService = firebaseAuthService;
     }
 
-    protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
+    protected override async Task<AuthenticateResult>
+        HandleAuthenticateAsync()
     {
         if (!Request.Headers.TryGetValue(
                 "Authorization",
@@ -41,7 +42,8 @@ public class FirebaseAuthHandler
             return AuthenticateResult.NoResult();
         }
 
-        var idToken = header["Bearer ".Length..].Trim();
+        var idToken =
+            header["Bearer ".Length..].Trim();
 
         if (string.IsNullOrWhiteSpace(idToken))
         {
@@ -52,7 +54,8 @@ public class FirebaseAuthHandler
         try
         {
             var decodedToken =
-                await _firebaseAuthService.VerifyTokenAsync(idToken);
+                await _firebaseAuthService
+                    .VerifyTokenAsync(idToken);
 
             var claims = new List<Claim>
             {
@@ -61,15 +64,18 @@ public class FirebaseAuthHandler
                     decodedToken.Uid)
             };
 
-            var identity = new ClaimsIdentity(
-                claims,
-                Scheme.Name);
+            var identity =
+                new ClaimsIdentity(
+                    claims,
+                    Scheme.Name);
 
-            var principal = new ClaimsPrincipal(identity);
+            var principal =
+                new ClaimsPrincipal(identity);
 
-            var ticket = new AuthenticationTicket(
-                principal,
-                Scheme.Name);
+            var ticket =
+                new AuthenticationTicket(
+                    principal,
+                    Scheme.Name);
 
             return AuthenticateResult.Success(ticket);
         }

@@ -1,5 +1,7 @@
 ﻿using SmartX.Domain.Enums;
 using SmartX.Shared.DTOs;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -7,6 +9,10 @@ namespace SmartX.WPF.Services;
 
 public class SmartXSession : INotifyPropertyChanged
 {
+    // =========================================================
+    // PRIVATE FIELDS
+    // =========================================================
+
     private Guid _userId;
     private Guid _companyId;
     private Guid? _gatewayId;
@@ -20,9 +26,16 @@ public class SmartXSession : INotifyPropertyChanged
     private string? _refreshToken;
 
     private bool _isAuthenticated;
+    private bool _isOnline = true;
+    private string? _gatewayName;
     private bool _isGuest;
 
-    private string? _gatewayName;
+    private Guid _selectedCompanyId;
+    private string? _selectedCompanyName;
+
+    // =========================================================
+    // PROPERTIES
+    // =========================================================
 
     public Guid UserId
     {
@@ -84,10 +97,10 @@ public class SmartXSession : INotifyPropertyChanged
         private set => SetField(ref _isAuthenticated, value);
     }
 
-    public bool IsGuest
+    public bool IsOnline
     {
-        get => _isGuest;
-        private set => SetField(ref _isGuest, value);
+        get => _isOnline;
+        set => SetField(ref _isOnline, value);
     }
 
     public string? GatewayName
@@ -96,7 +109,41 @@ public class SmartXSession : INotifyPropertyChanged
         private set => SetField(ref _gatewayName, value);
     }
 
+    public bool IsGuest
+    {
+        get => _isGuest;
+        private set => SetField(ref _isGuest, value);
+    }
+
+    // =========================================================
+    // PROPERTY CHANGED
+    // =========================================================
+
     public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged(
+        [CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(
+            this,
+            new PropertyChangedEventArgs(propertyName));
+    }
+
+    private bool SetField<T>(
+        ref T field,
+        T value,
+        [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value))
+        {
+            return false;
+        }
+
+        field = value;
+        OnPropertyChanged(propertyName);
+
+        return true;
+    }
 
     // =========================================================
     // SIGN IN
@@ -107,6 +154,11 @@ public class SmartXSession : INotifyPropertyChanged
         string idToken,
         string refreshToken)
     {
+        if (user == null)
+        {
+            throw new ArgumentNullException(nameof(user));
+        }
+
         UserId = user.Id;
         CompanyId = user.CompanyId;
 
@@ -127,7 +179,7 @@ public class SmartXSession : INotifyPropertyChanged
     }
 
     // =========================================================
-    // GUEST
+    // GUEST SESSION
     // =========================================================
 
     public void StartGuestSession(string name)
@@ -175,6 +227,40 @@ public class SmartXSession : INotifyPropertyChanged
     }
 
     // =========================================================
+    // COMPANY
+    // =========================================================
+
+    public void SelectCompany(
+        Guid companyId,
+        string companyName)
+    {
+        SelectedCompanyId = companyId;
+        SelectedCompanyName = companyName;
+    }
+
+    public void ClearSelectedCompany()
+    {
+        SelectedCompanyId = Guid.Empty;
+        SelectedCompanyName = null;
+    }
+
+    public Guid SelectedCompanyId
+    {
+        get => _selectedCompanyId;
+        private set => SetField(
+            ref _selectedCompanyId,
+            value);
+    }
+
+    public string? SelectedCompanyName
+    {
+        get => _selectedCompanyName;
+        private set => SetField(
+            ref _selectedCompanyName,
+            value);
+    }
+
+    // =========================================================
     // GATEWAY
     // =========================================================
 
@@ -182,38 +268,14 @@ public class SmartXSession : INotifyPropertyChanged
         Guid gatewayId,
         string gatewayName)
     {
-        if (gatewayId == Guid.Empty)
-        {
-            ClearGateway();
-            return;
-        }
-
         GatewayId = gatewayId;
         GatewayName = gatewayName;
     }
+
 
     public void ClearGateway()
     {
         GatewayId = null;
         GatewayName = null;
-    }
-
-    // =========================================================
-    // PROPERTY CHANGED
-    // =========================================================
-
-    private void SetField<T>(
-        ref T field,
-        T value,
-        [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value))
-            return;
-
-        field = value;
-
-        PropertyChanged?.Invoke(
-            this,
-            new PropertyChangedEventArgs(propertyName));
     }
 }

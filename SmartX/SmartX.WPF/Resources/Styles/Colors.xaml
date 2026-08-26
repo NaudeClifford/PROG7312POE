@@ -8,6 +8,9 @@
     <!-- Page Titles -->
     <Color x:Key="TitleColor">#FFF9FAFB</Color>
 
+    <!-- SubTitle Titles -->
+    <Color x:Key="SubTitleColor">#FFD1D5DB</Color>
+
     <!-- Navigation / footer background -->
     <Color x:Key="DarkColor">#FF111827</Color>
 
@@ -44,6 +47,9 @@
     <!-- BRUSHES -->
     <SolidColorBrush x:Key="TitleBrush"
              Color="{StaticResource TitleColor}"/>
+
+    <SolidColorBrush x:Key="SubTitleBrush"
+             Color="{StaticResource SubTitleColor}"/>
 
     <SolidColorBrush x:Key="BackgroundBrush"
                  Color="{StaticResource BackgroundColor}"/>

@@ -18,15 +18,18 @@ public class UserCrudService :
     private readonly DeleteUserHandler _deleteUser;
     private readonly GetUserByFirebaseUidHandler _getUserByFirebaseUid;
     private readonly AuditLogService _auditLog;
-
+    private readonly GetUsersByCompanyIdHandler
+    _getUsersByCompanyIdHandler;
     public UserCrudService(
+
         GetUsersHandler getUsers,
         GetUserByIdHandler getUserById,
         GetUserByFirebaseUidHandler getUserByFirebaseUid,
         CreateUserHandler createUser,
         UpdateUserHandler updateUser,
         DeleteUserHandler deleteUser,
-        AuditLogService auditLog)
+        AuditLogService auditLog,
+        GetUsersByCompanyIdHandler getUsersByCompanyIdHandler)
     {
         _getUsers = getUsers;
         _getUserById = getUserById;
@@ -35,6 +38,7 @@ public class UserCrudService :
         _updateUser = updateUser;
         _deleteUser = deleteUser;
         _auditLog = auditLog;
+        _getUsersByCompanyIdHandler = getUsersByCompanyIdHandler;
     }
 
     public Task<Result<UserDto>> GetByFirebaseUidAsync(
@@ -47,6 +51,24 @@ public class UserCrudService :
                 FirebaseUid = firebaseUid
             },
             cancellationToken);
+    }
+
+    public async Task<Result<IReadOnlyList<UserDto>>> GetByCompanyIdAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default)
+    {
+        if (companyId == Guid.Empty)
+        {
+            return Result<IReadOnlyList<UserDto>>.Fail(
+                "Company ID is required.");
+        }
+
+        var result =
+            await _getUsersByCompanyIdHandler.HandleAsync(
+                new GetUsersByCompanyIdQuery(companyId),
+                cancellationToken);
+
+        return result;
     }
 
     public Task<Result<IReadOnlyList<UserDto>>> GetAllAsync(

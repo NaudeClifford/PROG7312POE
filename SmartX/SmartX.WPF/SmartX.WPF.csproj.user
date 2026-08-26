@@ -7,6 +7,12 @@
     <ActiveDebugProfile>SmartX.WPF</ActiveDebugProfile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Update="Views\Pages\Company\CompaniesPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Pages\Company\CurrentCompanyPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Pages\Gateway\GatewayEditPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -41,6 +47,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Pages\Telemetry\TelemetryPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Pages\Users\UsersPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

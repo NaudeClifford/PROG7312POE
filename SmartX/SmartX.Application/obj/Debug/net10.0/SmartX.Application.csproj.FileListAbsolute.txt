@@ -16,15 +16,6 @@ C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\Smart
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\refint\SmartX.Application.dll
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.pdb
 C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\ref\SmartX.Application.dll
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.csproj.AssemblyReference.cache
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.GeneratedMSBuildEditorConfig.editorconfig
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.AssemblyInfoInputs.cache
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.AssemblyInfo.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.csproj.CoreCompileInputs.cache
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.sourcelink.json
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.dll
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\refint\SmartX.Application.dll
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\bin\Debug\net10.0\SmartX.Application.deps.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\bin\Debug\net10.0\SmartX.Application.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\bin\Debug\net10.0\SmartX.Application.pdb
@@ -32,5 +23,14 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\bin\Debug\net10.0\Sm
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\bin\Debug\net10.0\SmartX.Shared.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\bin\Debug\net10.0\SmartX.Domain.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\bin\Debug\net10.0\SmartX.Shared.pdb
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.csproj.AssemblyReference.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.AssemblyInfoInputs.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.AssemblyInfo.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.csproj.CoreCompileInputs.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.sourcelink.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.A.4213D96D.Up2Date
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\refint\SmartX.Application.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\SmartX.Application.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Application\obj\Debug\net10.0\ref\SmartX.Application.dll

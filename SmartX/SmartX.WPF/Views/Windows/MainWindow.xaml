@@ -44,6 +44,7 @@
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
@@ -76,23 +77,40 @@
 
                 </Button>
 
+                <!-- USER -->
+                <StackPanel
+                Grid.Column="1"
+                Orientation="Horizontal"
+                VerticalAlignment="Center">
 
+                    <TextBlock
+                    Text="Logged in:"
+                    Foreground="#AAB7C4"
+                    Margin="0,0,6,0"/>
+
+                    <TextBlock
+                    Text="{Binding UserDisplayText}"
+                    Foreground="White"
+                    FontWeight="SemiBold"/>
+
+                </StackPanel>
+                
                 <!-- Window Controls -->
 
-                <StackPanel Grid.Column="1"
+                <StackPanel Grid.Column="2"
                             Orientation="Horizontal">
 
                     <Button Content="—"
                             Width="40"
-                            Click="Minimize_Click"/>
+                            Click="Minimize_Click" Background="LightBlue"/>
 
                     <Button Content="□"
                             Width="40"
-                            Click="Maximize_Click"/>
+                            Click="Maximize_Click" Background="LightBlue"/>
 
                     <Button Content="X"
                             Width="40"
-                            Click="Close_Click"/>
+                            Click="Close_Click" Background="Red"/>
 
                 </StackPanel>
 
@@ -119,6 +137,10 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
 
@@ -129,6 +151,14 @@
                         Content="Home"
                         Click="Home_Click"
                         Style="{StaticResource BaseButtonStyle}"/>
+
+
+                <Button
+    x:Name="CompaniesButton"
+    Content="Companies"
+    Click="Companies_Click"
+    Visibility="Collapsed"
+                                            Style="{StaticResource BaseButtonStyle}"/>
 
 
                 <!-- GATEWAY -->
@@ -166,13 +196,22 @@
                         Click="History_Click"
                         Style="{StaticResource BaseButtonStyle}"/>
 
-                <!-- BackButton -->
+                <Button
+    x:Name="UsersButton"
+    Content="Users"
+    Click="Users_Click"
+    Visibility="Collapsed"
+                                            Style="{StaticResource BaseButtonStyle}"/>
 
-                <Button x:Name="BackButton"
-        Grid.Column="5"
-        Content="Back"
-        Click="Back_Click"
-        Style="{StaticResource BaseButtonStyle}"/>
+
+                <Button
+    x:Name="CurrentCompanyButton"
+    Content="Current Company"
+    Click="CurrentCompany_Click"
+    Visibility="Collapsed"
+                                            Style="{StaticResource BaseButtonStyle}"/>
+
+
                 
                 <!-- LOG OUT -->
 

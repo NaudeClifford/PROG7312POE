@@ -7,7 +7,7 @@ namespace SmartX.WPF.Views.Pages.Gateway;
 
 public partial class GatewaySetupPage : Page
 {
-    public GatewaySetupPage(GatewaySetupViewModel viewModel)
+    public GatewaySetupPage(GatewayViewModel viewModel)
     {
         InitializeComponent();
 
@@ -22,7 +22,7 @@ public partial class GatewaySetupPage : Page
     {
         Loaded -= GatewaySetupPage_Loaded;
 
-        if (DataContext is GatewaySetupViewModel viewModel)
+        if (DataContext is GatewayViewModel viewModel)
         {
             await viewModel.LoadAsync();
         }

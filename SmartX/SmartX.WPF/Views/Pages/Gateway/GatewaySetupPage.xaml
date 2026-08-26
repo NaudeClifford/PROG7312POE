@@ -219,8 +219,7 @@
                         Grid.ColumnSpan="2"
                         Content="Create Gateway"
                         Height="50"
-                        Command="{Binding CreateGatewayCommand}"
-                        FontSize="15"
+Command="{Binding SaveGatewayCommand}"                        FontSize="15"
                         FontWeight="SemiBold"
                         Style="{StaticResource BaseButtonStyle}"/>
 

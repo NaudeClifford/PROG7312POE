@@ -18,7 +18,7 @@ public class SigninViewModel : ViewModelBase
     private readonly SmartXSession _session;
     private readonly ICacheSyncService _cacheSyncService;
     private readonly INavigationService _navigationService;
-
+    private readonly SmartXCredentialStore _credentialStore;
     private string _email = string.Empty;
     private string _password = string.Empty;
     private string _errorMessage = string.Empty;
@@ -29,7 +29,14 @@ public class SigninViewModel : ViewModelBase
     public bool RememberMe
     {
         get => _rememberMe;
-        set => SetProperty(ref _rememberMe, value);
+        set
+        {
+            if (_rememberMe == value)
+                return;
+
+            _rememberMe = value;
+            OnPropertyChanged();
+        }
     }
 
     public string Email
@@ -95,19 +102,22 @@ public class SigninViewModel : ViewModelBase
         ISmartXApiClient apiClient,
         SmartXSession session,
         ICacheSyncService cacheSyncService,
-        INavigationService navigationService)
+        INavigationService navigationService,
+        SmartXCredentialStore credentialStore)
     {
         _authenticationService = authenticationService;
         _apiClient = apiClient;
         _session = session;
         _cacheSyncService = cacheSyncService;
         _navigationService = navigationService;
+        _credentialStore = credentialStore;
 
         SignInCommand = new AsyncRelayCommand(
             SignInAsync,
             CanSignIn);
 
-        GuestCommand = new RelayCommand(_ => EnterGuestMode());
+        GuestCommand = new RelayCommand(
+            _ => EnterGuestMode());
     }
 
     private bool CanSignIn()
@@ -172,13 +182,29 @@ public class SigninViewModel : ViewModelBase
                 result.IdToken ?? string.Empty,
                 result.RefreshToken ?? string.Empty);
 
+            if (RememberMe &&
+                !string.IsNullOrWhiteSpace(result.RefreshToken))
+            {
+                await _credentialStore.SaveAsync(
+                    result.RefreshToken);
+            }
+            else
+            {
+                await _credentialStore.DeleteAsync();
+            }
+
             // Synchronize local cache
             await _cacheSyncService.SyncUserAsync(
                 user.Id);
 
-            await _cacheSyncService.SyncCompaniesAsync();
+            if (user.CompanyId != Guid.Empty)
+            {
+                await _cacheSyncService.SyncCompanyAsync(
+                    user.CompanyId);
 
-            await _cacheSyncService.SyncGatewaysAsync();
+                await _cacheSyncService.SyncGatewaysAsync(
+                    user.CompanyId);
+            }
 
             await _cacheSyncService.SyncSensorsAsync();
 

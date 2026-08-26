@@ -11,10 +11,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-
-        <!-- ===================================================== -->
         <!-- HEADER -->
-        <!-- ===================================================== -->
 
         <Grid Grid.Row="0"
               Margin="0,0,0,25">
@@ -24,96 +21,56 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-
-            <!-- PAGE TITLE -->
-
             <StackPanel Grid.Column="0">
 
                 <TextBlock
                     Text="Sensors"
                     FontSize="32"
                     FontWeight="Bold"
-                    Foreground="{StaticResource DarkBrush}"/>
+                    Foreground="{StaticResource TitleBrush}"/>
 
                 <TextBlock
                     Text="Manage connected sensors and view telemetry."
                     FontSize="14"
-                    Foreground="#737A82"
-                    Margin="0,6,0,0"/>
+                    Margin="0,4,0,0"
+                    Foreground="{StaticResource SubTitleBrush}"/>
 
             </StackPanel>
 
-
-            <!-- RIGHT SIDE -->
-
-            <StackPanel
+            <Border
                 Grid.Column="1"
-                HorizontalAlignment="Right">
-
-
-                <!-- CURRENT GATEWAY -->
-
-                <Border
-                    Background="#EAF2FF"
-                    BorderBrush="#D5E3FA"
-                    BorderThickness="1"
-                    CornerRadius="10"
-                    Padding="14,8"
-                    HorizontalAlignment="Right"
-                    Margin="0,0,0,12">
-
-                    <StackPanel
-                        Orientation="Horizontal">
-
-                        <TextBlock
-                            Text="Gateway:"
-                            FontSize="12"
-                            FontWeight="SemiBold"
-                            Foreground="#657080"
-                            VerticalAlignment="Center"/>
-
-                        <TextBlock
-                            Text="{Binding CurrentGatewayName}"
-                            FontSize="12"
-                            FontWeight="Bold"
-                            Foreground="{StaticResource DarkBrush}"
-                            Margin="6,0,0,0"
-                            VerticalAlignment="Center"/>
-
-                    </StackPanel>
-
-                </Border>
-
-
-                <!-- ACTION BUTTONS -->
+                Background="#EAF2FF"
+                BorderBrush="#D5E3FA"
+                BorderThickness="1"
+                CornerRadius="10"
+                Padding="14,8">
 
                 <StackPanel
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right">
+                    Orientation="Horizontal">
 
-                    <Button
-                        Content="+ Add Sensor"
-                        Command="{Binding AddSensorCommand}"
-                        Padding="18,8"
-                        Margin="0,0,10,0"
-                        Style="{StaticResource BaseButtonStyle}"/>
+                    <TextBlock
+                        Text="Gateway:"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Foreground="#657080"
+                        VerticalAlignment="Center"/>
 
-                    <Button
-                        Content="Add Log File"
-                        Command="{Binding AddLogFileCommand}"
-                        Padding="18,8"
-                        Style="{StaticResource BaseButtonStyle}"/>
+                    <TextBlock
+                        Text="{Binding CurrentGatewayName}"
+                        FontSize="12"
+                        FontWeight="Bold"
+                        Foreground="{StaticResource DarkBrush}"
+                        Margin="6,0,0,0"
+                        VerticalAlignment="Center"/>
 
                 </StackPanel>
 
-            </StackPanel>
+            </Border>
 
         </Grid>
 
 
-        <!-- ===================================================== -->
         <!-- SENSOR LIST -->
-        <!-- ===================================================== -->
 
         <Border
             Grid.Row="1"
@@ -133,29 +90,44 @@
 
                 <Grid Grid.Row="0">
 
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+
                     <TextBlock
+                        Grid.Column="0"
                         Text="Connected Sensors"
                         FontSize="19"
                         FontWeight="SemiBold"
-                        Foreground="{StaticResource DarkBrush}"/>
+                        Foreground="{StaticResource DarkBrush}"
+                        VerticalAlignment="Center"/>
 
-
-                    <!-- EDIT / DELETE -->
 
                     <StackPanel
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Right">
+                        Grid.Column="1"
+                        Orientation="Horizontal">
+
+                        <Button
+                            Content="+ Add Sensor"
+                            Command="{Binding AddSensorCommand}"
+                            Padding="18,8"
+                            Margin="0,0,10,0"
+                            Style="{StaticResource SecondaryButtonStyle}"/>
 
                         <Button
                             Content="Edit"
                             Command="{Binding EditSensorCommand}"
                             Padding="12,6"
-                            Margin="0,0,8,0"/>
+                            Margin="0,0,8,0"
+                            Style="{StaticResource SecondaryButtonStyle}"/>
 
                         <Button
                             Content="Delete"
                             Command="{Binding DeleteSensorCommand}"
-                            Padding="12,6"/>
+                            Padding="12,6"
+                            Style="{StaticResource SecondaryButtonStyle}"/>
 
                     </StackPanel>
 
@@ -173,56 +145,45 @@
                     HeadersVisibility="Column"
                     BorderThickness="0"
                     GridLinesVisibility="Horizontal"
-                    ItemsSource="{Binding Sensors}">
+                    ItemsSource="{Binding Sensors}"
+                    HorizontalAlignment="Stretch">
 
                     <DataGrid.Columns>
-
-
-                        <!-- SENSOR -->
 
                         <DataGridTextColumn
                             Header="Sensor"
                             Binding="{Binding Name}"
-                            Width="2*"/>
-
-
-                        <!-- TYPE -->
+                            Width="2*"
+                            MinWidth="100"/>
 
                         <DataGridTextColumn
                             Header="Type"
                             Binding="{Binding Category}"
-                            Width="*"/>
-
-
-                        <!-- LOCATION -->
+                            Width="*"
+                            MinWidth="80"/>
 
                         <DataGridTextColumn
                             Header="Location"
                             Binding="{Binding Location}"
-                            Width="1.5*"/>
-
-
-                        <!-- DEVICE -->
+                            Width="1.5*"
+                            MinWidth="100"/>
 
                         <DataGridTextColumn
                             Header="Device"
                             Binding="{Binding DeviceIdentifier}"
-                            Width="1.5*"/>
-
-
-                        <!-- STATUS -->
+                            Width="1.5*"
+                            MinWidth="100"/>
 
                         <DataGridTextColumn
                             Header="Status"
                             Binding="{Binding IsActive}"
-                            Width="*"/>
-
-
-                        <!-- TELEMETRY -->
+                            Width="*"
+                            MinWidth="80"/>
 
                         <DataGridTemplateColumn
                             Header="Telemetry"
-                            Width="Auto">
+                            Width="Auto"
+                            MinWidth="80">
 
                             <DataGridTemplateColumn.CellTemplate>
 

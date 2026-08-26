@@ -9,5 +9,8 @@
         Task<AuthenticationResult> SignUpAsync(
             string email,
             string password);
+
+        Task<AuthenticationResult> RefreshTokenAsync(
+    string refreshToken);
     }
 }

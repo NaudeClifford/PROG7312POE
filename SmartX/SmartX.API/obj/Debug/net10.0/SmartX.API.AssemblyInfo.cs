@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartX.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8556ad747d5006ba13961650e33c6e89a6f0755d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+74a58a2fe0fa5d8997daf1c544ca9b6ca418a8ed")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartX.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartX.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

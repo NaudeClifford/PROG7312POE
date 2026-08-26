@@ -54,7 +54,7 @@ public static class DependencyInjection
         services.AddScoped<GetUsersHandler>();
         services.AddScoped<GetUserByIdHandler>();
         services.AddScoped<GetUserByFirebaseUidHandler>();
-
+        services.AddScoped<GetUsersByCompanyIdHandler>();
 
         //Company
         services.AddScoped<CreateCompanyHandler>();

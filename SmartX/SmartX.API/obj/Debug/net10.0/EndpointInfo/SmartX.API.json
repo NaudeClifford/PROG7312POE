@@ -443,14 +443,6 @@
         ],
         "parameters": [
           {
-            "name": "userId",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
             "name": "sensorId",
             "in": "path",
             "required": true,
@@ -789,7 +781,7 @@
         }
       }
     },
-    "/api/Users/{firebaseUid}": {
+    "/api/Users/firebase/{firebaseUid}": {
       "get": {
         "tags": [
           "Users"

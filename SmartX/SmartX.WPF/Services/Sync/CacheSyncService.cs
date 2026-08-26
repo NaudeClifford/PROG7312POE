@@ -175,42 +175,45 @@ public class CacheSyncService(
     // COMPANIES
     // =========================================================
 
-    public async Task SyncCompaniesAsync(
-        CancellationToken cancellationToken = default)
+    public async Task SyncCompanyAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default)
     {
-        var companies =
-            await _apiClient.GetCompaniesAsync(
+        if (companyId == Guid.Empty)
+            return;
+
+        var dto =
+            await _apiClient.GetCompanyByIdAsync(
+                companyId,
                 cancellationToken);
 
-        foreach (var dto in companies)
+        if (dto is null)
+            return;
+
+        var cached =
+            await _companyCache.GetByIdAsync(
+                dto.Id,
+                cancellationToken);
+
+        if (cached is not null &&
+            dto.UpdatedAt <= cached.UpdatedAt)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            var cached =
-                await _companyCache.GetByIdAsync(
-                    dto.Id,
-                    cancellationToken);
-
-            if (cached is not null &&
-                dto.UpdatedAt <= cached.UpdatedAt)
-            {
-                continue;
-            }
-
-            var company = new Company
-            {
-                Id = dto.Id,
-                Name = dto.Name,
-                Description = dto.Description,
-                IsActive = dto.IsActive,
-                CreatedAt = dto.CreatedAt,
-                UpdatedAt = dto.UpdatedAt
-            };
-
-            await _companyCache.UpdateAsync(
-                company,
-                cancellationToken);
+            return;
         }
+
+        var company = new Company
+        {
+            Id = dto.Id,
+            Name = dto.Name,
+            Description = dto.Description,
+            IsActive = dto.IsActive,
+            CreatedAt = dto.CreatedAt,
+            UpdatedAt = dto.UpdatedAt
+        };
+
+        await _companyCache.UpdateAsync(
+            company,
+            cancellationToken);
     }
 
 
@@ -219,10 +222,15 @@ public class CacheSyncService(
     // =========================================================
 
     public async Task SyncGatewaysAsync(
-        CancellationToken cancellationToken = default)
+    Guid companyId,
+    CancellationToken cancellationToken = default)
     {
+        if (companyId == Guid.Empty)
+            return;
+
         var gateways =
-            await _apiClient.GetGatewaysAsync(
+            await _apiClient.GetGatewaysByCompanyIdAsync(
+                companyId,
                 cancellationToken);
 
         foreach (var dto in gateways)
@@ -255,6 +263,52 @@ public class CacheSyncService(
 
             await _gatewayCache.UpdateAsync(
                 gateway,
+                cancellationToken);
+        }
+    }
+
+    public async Task SyncUsersAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default)
+    {
+        if (companyId == Guid.Empty)
+            return;
+
+        var users =
+            await _apiClient.GetUsersByCompanyIdAsync(
+                companyId,
+                cancellationToken);
+
+        foreach (var dto in users)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var cached =
+                await _userCache.GetByIdAsync(
+                    dto.Id,
+                    cancellationToken);
+
+            if (cached is not null &&
+                dto.UpdatedAt <= cached.UpdatedAt)
+            {
+                continue;
+            }
+
+            var user = new User
+            {
+                Id = dto.Id,
+                FirebaseUid = dto.FirebaseUid,
+                Email = dto.Email,
+                CompanyId = dto.CompanyId,
+                DisplayName = dto.DisplayName,
+                Role = dto.Role,
+                IsActive = dto.IsActive,
+                CreatedAt = dto.CreatedAt,
+                UpdatedAt = dto.UpdatedAt
+            };
+
+            await _userCache.UpdateAsync(
+                user,
                 cancellationToken);
         }
     }

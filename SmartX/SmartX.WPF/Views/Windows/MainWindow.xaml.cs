@@ -2,11 +2,13 @@
 using SmartX.Domain.Enums;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Services;
+using SmartX.WPF.Views.Pages.Company;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.History;
 using SmartX.WPF.Views.Pages.Home;
 using SmartX.WPF.Views.Pages.Sensor;
 using SmartX.WPF.Views.Pages.Telemetry;
+using SmartX.WPF.Views.Pages.Users;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,26 +19,33 @@ public partial class MainWindow : Window
 {
     private readonly HomePage _homePage;
     private readonly SmartXSession _session;
+    private readonly SmartXAuthenticationService _authenticationService;
+    private readonly INavigationService _navigationService;
 
     private NavigationStage _navigationStage =
         NavigationStage.Home;
-    private readonly INavigationService _navigationService;
 
+
+    // =========================================================
     // NAVIGATION STAGE
+    // =========================================================
 
     private enum NavigationStage
     {
         Home,
 
+        // Administrator / SuperAdmin
+        Users,
+        CurrentCompany,
+        Companies,
+
+        // Normal gateway area
         Gateway,
-
         Sensors,
-
         Telemetry,
 
+        NetworkMesh,  
         History,
-
-        NetworkMesh,
 
         CommandHistory
     }
@@ -49,26 +58,82 @@ public partial class MainWindow : Window
     public MainWindow(
         INavigationService navigationService,
         HomePage homePage,
-        SmartXSession session)
+        SmartXSession session,
+        SmartXAuthenticationService authenticationService)
     {
         InitializeComponent();
 
         _navigationService = navigationService;
         _homePage = homePage;
         _session = session;
+        _authenticationService = authenticationService;
 
         _navigationService.SetFrame(MainFrame);
-        // Continue into the application
-        _navigationService.NavigateTo<HomePage>();
+
+        MainFrame.Navigated += MainFrame_Navigated;
+
         Loaded += MainWindow_Loaded;
     }
 
+
+    // =========================================================
+    // STARTUP
+    // =========================================================
+
     private void MainWindow_Loaded(
-    object sender,
-    RoutedEventArgs e)
+        object sender,
+        RoutedEventArgs e)
     {
-        NavigateHome();
+        if (_session.IsAuthenticated)
+        {
+            switch (_session.Role)
+            {
+                case UserRole.SuperAdmin:
+
+                    NavigateHome();
+
+                    break;
+
+                case UserRole.Administrator:
+
+                    NavigateTo<GatewayPage>(
+                        NavigationStage.Gateway);
+
+                    break;
+
+                case UserRole.Technician:
+
+                    NavigateTo<SensorsPage>(
+                        NavigationStage.Gateway);
+
+                    break;
+
+                case UserRole.Viewer:
+
+                    NavigateHome();
+
+                    break;
+
+                default:
+
+                    NavigateHome();
+
+                    break;
+            }
+
+            return;
+        }
+
+        if (_session.IsGuest)
+        {
+            NavigateHome();
+            return;
+        }
+
+        NavigatePublicHome();
     }
+
+
     // =========================================================
     // PUBLIC NAVIGATION REFRESH
     // =========================================================
@@ -85,7 +150,8 @@ public partial class MainWindow : Window
 
     private void UpdateNavigation()
     {
-        if (!_session.IsAuthenticated && !_session.IsGuest)
+        if (!_session.IsAuthenticated &&
+            !_session.IsGuest)
         {
             HideNavigation();
             return;
@@ -118,6 +184,15 @@ public partial class MainWindow : Window
         HomeButton.Visibility =
             Visibility.Collapsed;
 
+        UsersButton.Visibility =
+            Visibility.Collapsed;
+
+        CurrentCompanyButton.Visibility =
+            Visibility.Collapsed;
+
+        CompaniesButton.Visibility =
+            Visibility.Collapsed;
+
         GatewayButton.Visibility =
             Visibility.Collapsed;
 
@@ -128,9 +203,6 @@ public partial class MainWindow : Window
             Visibility.Collapsed;
 
         HistoryButton.Visibility =
-            Visibility.Collapsed;
-
-        BackButton.Visibility =
             Visibility.Collapsed;
 
         LogOutButton.Visibility =
@@ -149,37 +221,156 @@ public partial class MainWindow : Window
         LogOutButton.Visibility =
             Visibility.Visible;
 
+
+        // =====================================================
+        // GUEST
+        // =====================================================
+
         if (_session.IsGuest)
         {
             ApplyGuestNavigation();
             return;
         }
 
+
+        // =====================================================
+        // AUTHENTICATED ROLE
+        // =====================================================
+
         switch (_session.Role)
         {
             case UserRole.Administrator:
+
                 ApplyAdministratorNavigation();
+
                 break;
 
             case UserRole.Technician:
+
                 ApplyTechnicianNavigation();
+
                 break;
 
             case UserRole.SuperAdmin:
+
                 ApplySuperAdminNavigation();
+
                 break;
 
             case UserRole.Viewer:
+
                 ApplyViewerNavigation();
+
                 break;
 
             default:
+
                 HideAllNavigationButtons();
+
                 break;
         }
     }
 
-    //Guest
+
+    // =========================================================
+    // FRAME NAVIGATION
+    // =========================================================
+
+    private void MainFrame_Navigated(
+        object sender,
+        System.Windows.Navigation.NavigationEventArgs e)
+    {
+        if (e.Content is not Page page)
+            return;
+
+        switch (page)
+        {
+            // =================================================
+            // HOME
+            // =================================================
+
+            case HomePage:
+
+                _navigationStage =
+                    NavigationStage.Home;
+
+                break;
+
+
+            // =================================================
+            // USERS
+            // =================================================
+
+            case UsersPage:
+
+                _navigationStage =
+                    NavigationStage.Users;
+
+                break;
+
+
+            // =================================================
+            // COMPANY
+            // =================================================
+
+            case CurrentCompanyPage:
+
+                _navigationStage =
+                    NavigationStage.CurrentCompany;
+
+                break;
+
+            case CompaniesPage:
+
+                _navigationStage =
+                    NavigationStage.Companies;
+
+                break;
+
+
+            // =================================================
+            // GATEWAY AREA
+            // =================================================
+
+            case GatewayPage:
+
+                _navigationStage =
+                    NavigationStage.Gateway;
+
+                break;
+
+            case SensorsPage:
+            case SensorEditPage:
+            case SensorSetupPage:
+
+                _navigationStage =
+                    NavigationStage.Sensors;
+
+                break;
+
+            case TelemetryPage:
+
+                _navigationStage =
+                    NavigationStage.Telemetry;
+
+                break;
+
+            case HistoryPage:
+
+                _navigationStage =
+                    NavigationStage.History;
+
+                break;
+        }
+
+        UpdateNavigation();
+    }
+
+
+    // =========================================================
+    // GUEST
+    // =========================================================
+
     private void ApplyGuestNavigation()
     {
         HomeButton.Visibility =
@@ -194,12 +385,12 @@ public partial class MainWindow : Window
         TelemetryButton.Visibility =
             Visibility.Visible;
 
-        HistoryButton.Visibility =
-            Visibility.Visible;
 
         LogOutButton.Visibility =
             Visibility.Visible;
     }
+
+
     // =========================================================
     // ADMINISTRATOR
     // =========================================================
@@ -210,7 +401,32 @@ public partial class MainWindow : Window
         {
             case NavigationStage.Home:
 
-                HomeButton.Visibility =
+                UsersButton.Visibility =
+                    Visibility.Visible;
+
+                CurrentCompanyButton.Visibility =
+                    Visibility.Visible;
+
+                GatewayButton.Visibility =
+                    Visibility.Visible;
+
+                break;
+
+
+            case NavigationStage.Users:
+                
+
+                CurrentCompanyButton.Visibility =
+                    Visibility.Visible;
+
+                GatewayButton.Visibility =
+                    Visibility.Visible;
+
+                break;
+
+            case NavigationStage.CurrentCompany:
+
+                UsersButton.Visibility =
                     Visibility.Visible;
 
                 GatewayButton.Visibility =
@@ -221,35 +437,55 @@ public partial class MainWindow : Window
 
             case NavigationStage.Gateway:
 
-                HomeButton.Visibility =
+                UsersButton.Visibility =
                     Visibility.Visible;
 
-                GatewayButton.Visibility =
+                CurrentCompanyButton.Visibility =
                     Visibility.Visible;
+
 
                 break;
 
 
             case NavigationStage.Sensors:
+                
+                GatewayButton.Visibility =
+                Visibility.Visible;
+
+                TelemetryButton.Visibility =
+                    Visibility.Visible;
+
+                UsersButton.Visibility =
+                      Visibility.Visible;
+
+                CurrentCompanyButton.Visibility =
+                    Visibility.Visible;
+
+                break;
 
             case NavigationStage.Telemetry:
+                GatewayButton.Visibility =
+                Visibility.Visible;
 
-            case NavigationStage.History:
+                SensorsButton.Visibility =
+                    Visibility.Visible;
+
+                UsersButton.Visibility =
+                      Visibility.Visible;
+
+                CurrentCompanyButton.Visibility =
+                    Visibility.Visible;
+
+                break;
 
             case NavigationStage.NetworkMesh:
 
             case NavigationStage.CommandHistory:
 
-                SensorsButton.Visibility =
-                    Visibility.Visible;
-
-                TelemetryButton.Visibility =
+                GatewayButton.Visibility =
                     Visibility.Visible;
 
                 HistoryButton.Visibility =
-                    Visibility.Visible;
-
-                BackButton.Visibility =
                     Visibility.Visible;
 
                 break;
@@ -267,42 +503,56 @@ public partial class MainWindow : Window
         {
             case NavigationStage.Home:
 
-                HomeButton.Visibility =
+                GatewayButton.Visibility =
                     Visibility.Visible;
-
                 break;
 
 
             case NavigationStage.Sensors:
 
-            case NavigationStage.Telemetry:
+                GatewayButton.Visibility =
+                Visibility.Visible;
 
-            case NavigationStage.History:
+                TelemetryButton.Visibility =
+                    Visibility.Visible;
+
+                UsersButton.Visibility =
+                      Visibility.Visible;
+
+                CurrentCompanyButton.Visibility =
+                    Visibility.Visible;
+
+                break;
+
+            case NavigationStage.Telemetry:
+                GatewayButton.Visibility =
+                Visibility.Visible;
+
+                SensorsButton.Visibility =
+                    Visibility.Visible;
+
+                UsersButton.Visibility =
+                      Visibility.Visible;
+
+                CurrentCompanyButton.Visibility =
+                    Visibility.Visible;
+
+                break;
+
 
             case NavigationStage.NetworkMesh:
 
             case NavigationStage.CommandHistory:
 
-                SensorsButton.Visibility =
-                    Visibility.Visible;
-
-                TelemetryButton.Visibility =
+                GatewayButton.Visibility =
                     Visibility.Visible;
 
                 HistoryButton.Visibility =
                     Visibility.Visible;
 
-                BackButton.Visibility =
-                    Visibility.Visible;
-
                 break;
 
             case NavigationStage.Gateway:
-
-                // Technician cannot access Gateway.
-
-                HomeButton.Visibility =
-                    Visibility.Visible;
 
                 break;
         }
@@ -316,27 +566,48 @@ public partial class MainWindow : Window
     private void ApplySuperAdminNavigation()
     {
         /*
-         * SuperAdmin does NOT access:
+         * SUPER ADMIN:
          *
-         * Gateway
-         * Sensors
-         * Telemetry
-         * History
-         *
-         * SuperAdmin navigation will eventually contain:
-         *
+         * Home
          * Users
          * Companies
-         * Admin accounts
-         * API monitoring
-         * Analytics
-         * System management
          *
-         * Those buttons can be added here.
+         * No Gateway/Sensors/Telemetry/History.
          */
 
-        HomeButton.Visibility =
-            Visibility.Visible;
+        switch (_navigationStage)
+        {
+            case NavigationStage.Home:
+
+
+                UsersButton.Visibility =
+                    Visibility.Visible;
+
+                CompaniesButton.Visibility =
+                    Visibility.Visible;
+
+                break;
+
+
+            case NavigationStage.Users:
+
+                CompaniesButton.Visibility =
+                    Visibility.Visible;
+
+                break;
+
+            case NavigationStage.Companies:
+
+                UsersButton.Visibility =
+                    Visibility.Visible;
+
+                break;
+
+
+            default:
+
+                break;
+        }
     }
 
 
@@ -384,6 +655,74 @@ public partial class MainWindow : Window
     }
 
 
+    private void NavigatePublicHome()
+    {
+        _navigationStage =
+            NavigationStage.Home;
+
+        HideNavigation();
+
+        MainFrame.Navigate(_homePage);
+    }
+
+
+    // =========================================================
+    // USERS
+    // =========================================================
+
+    private void Users_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (_session.Role != UserRole.Administrator &&
+            _session.Role != UserRole.SuperAdmin)
+        {
+            return;
+        }
+
+        NavigateTo<UsersPage>(
+            NavigationStage.Users);
+    }
+
+
+    // =========================================================
+    // CURRENT COMPANY
+    // =========================================================
+
+    private void CurrentCompany_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (_session.Role !=
+            UserRole.Administrator)
+        {
+            return;
+        }
+
+        NavigateTo<CurrentCompanyPage>(
+            NavigationStage.CurrentCompany);
+    }
+
+
+    // =========================================================
+    // SUPER ADMIN - COMPANIES
+    // =========================================================
+
+    private void Companies_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (_session.Role !=
+            UserRole.SuperAdmin)
+        {
+            return;
+        }
+
+        NavigateTo<CompaniesPage>(
+            NavigationStage.Companies);
+    }
+
+
     // =========================================================
     // GATEWAY
     // =========================================================
@@ -392,20 +731,14 @@ public partial class MainWindow : Window
         object sender,
         RoutedEventArgs e)
     {
-        // Gateway is Administrator only.
-        if (_session.Role != UserRole.Administrator)
+        if (_session.Role is not
+            (UserRole.Administrator or UserRole.Technician))
+        {
             return;
+        }
 
-        var page =
-            App.ServiceProvider
-                .GetRequiredService<GatewayPage>();
-
-        _navigationStage =
-            NavigationStage.Gateway;
-
-        MainFrame.Navigate(page);
-
-        UpdateNavigation();
+        NavigateTo<GatewayPage>(
+            NavigationStage.Gateway);
     }
 
 
@@ -456,19 +789,6 @@ public partial class MainWindow : Window
             NavigationStage.History);
     }
 
-
-    // =========================================================
-    // BACK
-    // =========================================================
-
-    private void Back_Click(
-        object sender,
-        RoutedEventArgs e)
-    {
-        NavigateHome();
-    }
-
-
     // =========================================================
     // GATEWAY AREA ACCESS
     // =========================================================
@@ -506,18 +826,29 @@ public partial class MainWindow : Window
     // LOGOUT
     // =========================================================
 
-    private void LogOut_Click(
+    private async void LogOut_Click(
         object sender,
         RoutedEventArgs e)
     {
-        _session.SignOut();
+        try
+        {
+            await _authenticationService.LogoutAsync();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                ex.Message,
+                "Logout Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+
+            return;
+        }
 
         _navigationStage =
             NavigationStage.Home;
 
-        HideNavigation();
-
-        MainFrame.Navigate(_homePage);
+        NavigatePublicHome();
     }
 
 
@@ -563,4 +894,5 @@ public partial class MainWindow : Window
     {
         Close();
     }
+
 }

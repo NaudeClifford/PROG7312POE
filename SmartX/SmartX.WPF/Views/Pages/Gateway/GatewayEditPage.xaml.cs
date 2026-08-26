@@ -20,7 +20,7 @@ namespace SmartX.WPF.Views.Pages.Gateway
     /// </summary>
     public partial class GatewayEditPage : Page
     {
-        public GatewayEditPage(GatewayEditViewModel viewModel)
+        public GatewayEditPage(GatewayViewModel viewModel)
         {
             InitializeComponent();
 

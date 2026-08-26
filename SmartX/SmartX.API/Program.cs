@@ -20,7 +20,9 @@ namespace SmartX.API
 
             builder.Services
                 .AddAuthentication("Firebase")
-                .AddScheme<AuthenticationSchemeOptions, FirebaseAuthHandler>(
+                .AddScheme<
+                    AuthenticationSchemeOptions,
+                    FirebaseAuthHandler>(
                     "Firebase",
                     options => { });
 
@@ -51,10 +53,7 @@ namespace SmartX.API
 
             app.MapControllers();
 
-
             app.Run();
         }
-
-
     }
 }

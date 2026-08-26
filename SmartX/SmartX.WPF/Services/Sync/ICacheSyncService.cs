@@ -2,10 +2,12 @@
 
 public interface ICacheSyncService
 {
-    Task SyncCompaniesAsync(
-       CancellationToken cancellationToken = default);
+    Task SyncCompanyAsync(
+        Guid companyId,
+        CancellationToken cancellationToken = default);
 
     Task SyncGatewaysAsync(
+        Guid companyId,
         CancellationToken cancellationToken = default);
 
     Task SyncSensorsAsync(
@@ -18,4 +20,8 @@ public interface ICacheSyncService
     Task SyncUserAsync(
         Guid userId,
         CancellationToken cancellationToken = default);
+
+    Task SyncUsersAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default);
 }

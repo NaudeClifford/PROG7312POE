@@ -305,11 +305,6 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
-        "Type": "System.Guid",
-        "IsRequired": false
-      },
-      {
         "Name": "sensorId",
         "Type": "System.Guid",
         "IsRequired": true
@@ -440,22 +435,6 @@
   },
   {
     "ContainingType": "SmartX.API.Controllers.UsersController",
-    "Method": "GetByFirebaseUid",
-    "RelativePath": "api/Users/{firebaseUid}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "firebaseUid",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SmartX.API.Controllers.UsersController",
     "Method": "GetById",
     "RelativePath": "api/Users/{id}",
     "HttpMethod": "GET",
@@ -502,6 +481,22 @@
       {
         "Name": "id",
         "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.UsersController",
+    "Method": "GetByFirebaseUid",
+    "RelativePath": "api/Users/firebase/{firebaseUid}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "firebaseUid",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],

@@ -10,6 +10,10 @@ public class SQLiteUserCache(
 {
     private readonly SmartXCacheDatabase _database = database;
 
+    // =========================================================
+    // GET BY ID
+    // =========================================================
+
     public async Task<User?> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken = default)
@@ -23,11 +27,14 @@ public class SQLiteUserCache(
         command.CommandText = """
             SELECT
                 Id,
+                CompanyId,
                 FirebaseUid,
                 Email,
                 DisplayName,
                 Role,
-                CreatedAt
+                IsActive,
+                CreatedAt,
+                UpdatedAt
             FROM Users
             WHERE Id = $id;
             """;
@@ -37,13 +44,69 @@ public class SQLiteUserCache(
             id.ToString());
 
         using var reader =
-            await command.ExecuteReaderAsync(cancellationToken);
+            await command.ExecuteReaderAsync(
+                cancellationToken);
 
         if (!await reader.ReadAsync(cancellationToken))
             return null;
 
         return UserMapper.Map(reader);
     }
+
+    // =========================================================
+    // GET BY COMPANY
+    // =========================================================
+
+    public async Task<IReadOnlyList<User>> GetByCompanyIdAsync(
+        Guid companyId,
+        CancellationToken cancellationToken = default)
+    {
+        var users = new List<User>();
+
+        using var connection = _database.CreateConnection();
+
+        await connection.OpenAsync(cancellationToken);
+
+        using var command = connection.CreateCommand();
+
+        command.CommandText = """
+            SELECT
+                Id,
+                CompanyId,
+                FirebaseUid,
+                Email,
+                DisplayName,
+                Role,
+                IsActive,
+                CreatedAt,
+                UpdatedAt
+            FROM Users
+            WHERE CompanyId = $companyId
+            ORDER BY DisplayName;
+            """;
+
+        command.Parameters.AddWithValue(
+            "$companyId",
+            companyId.ToString());
+
+        using var reader =
+            await command.ExecuteReaderAsync(
+                cancellationToken);
+
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            users.Add(
+                UserMapper.Map(reader));
+        }
+
+        return users;
+    }
+
+    // =========================================================
+    // GET BY FIREBASE UID
+    // =========================================================
 
     public async Task<User?> GetByFirebaseUidAsync(
         string firebaseUid,
@@ -75,13 +138,18 @@ public class SQLiteUserCache(
             firebaseUid);
 
         using var reader =
-            await command.ExecuteReaderAsync(cancellationToken);
+            await command.ExecuteReaderAsync(
+                cancellationToken);
 
         if (!await reader.ReadAsync(cancellationToken))
             return null;
 
         return UserMapper.Map(reader);
     }
+
+    // =========================================================
+    // GET BY EMAIL
+    // =========================================================
 
     public async Task<User?> GetByEmailAsync(
         string email,
@@ -113,13 +181,18 @@ public class SQLiteUserCache(
             email);
 
         using var reader =
-            await command.ExecuteReaderAsync(cancellationToken);
+            await command.ExecuteReaderAsync(
+                cancellationToken);
 
         if (!await reader.ReadAsync(cancellationToken))
             return null;
 
         return UserMapper.Map(reader);
     }
+
+    // =========================================================
+    // SYNC UPDATE
+    // =========================================================
 
     public async Task UpdateAsync(
         User user,
@@ -132,18 +205,18 @@ public class SQLiteUserCache(
         using var command = connection.CreateCommand();
 
         command.CommandText = """
-    UPDATE Users
-    SET
-        CompanyId = $companyId,
-        FirebaseUid = $firebaseUid,
-        Email = $email,
-        DisplayName = $displayName,
-        Role = $role,
-        IsActive = $isActive,
-        CreatedAt = $createdAt,
-        UpdatedAt = $updatedAt
-    WHERE Id = $id;
-    """;
+            UPDATE Users
+            SET
+                CompanyId = $companyId,
+                FirebaseUid = $firebaseUid,
+                Email = $email,
+                DisplayName = $displayName,
+                Role = $role,
+                IsActive = $isActive,
+                CreatedAt = $createdAt,
+                UpdatedAt = $updatedAt
+            WHERE Id = $id;
+            """;
 
         command.Parameters.AddWithValue(
             "$id",
@@ -182,38 +255,67 @@ public class SQLiteUserCache(
             user.UpdatedAt.ToString("O"));
 
         var rowsAffected =
-            await command.ExecuteNonQueryAsync(cancellationToken);
+            await command.ExecuteNonQueryAsync(
+                cancellationToken);
 
-        if (rowsAffected == 0)
-        {
-            command.CommandText = """
-    INSERT INTO Users
-    (
-        Id,
-        CompanyId,
-        FirebaseUid,
-        Email,
-        DisplayName,
-        Role,
-        IsActive,
-        CreatedAt,
-        UpdatedAt
-    )
-    VALUES
-    (
-        $id,
-        $companyId,
-        $firebaseUid,
-        $email,
-        $displayName,
-        $role,
-        $isActive,
-        $createdAt,
-        $updatedAt
-    );
-    """;
+        if (rowsAffected > 0)
+            return;
 
-            await command.ExecuteNonQueryAsync(cancellationToken);
-        }
+        // =====================================================
+        // INSERT IF NOT CACHED
+        // =====================================================
+
+        command.CommandText = """
+            INSERT INTO Users
+            (
+                Id,
+                CompanyId,
+                FirebaseUid,
+                Email,
+                DisplayName,
+                Role,
+                IsActive,
+                CreatedAt,
+                UpdatedAt
+            )
+            VALUES
+            (
+                $id,
+                $companyId,
+                $firebaseUid,
+                $email,
+                $displayName,
+                $role,
+                $isActive,
+                $createdAt,
+                $updatedAt
+            );
+            """;
+
+        await command.ExecuteNonQueryAsync(
+            cancellationToken);
+    }
+
+    public async Task DeleteAsync(
+    Guid id,
+    CancellationToken cancellationToken = default)
+    {
+        using var connection = _database.CreateConnection();
+
+        await connection.OpenAsync(cancellationToken);
+
+        using var command = connection.CreateCommand();
+
+        command.CommandText = """
+        DELETE FROM Users
+        WHERE Id = $id;
+        """;
+
+        command.Parameters.AddWithValue(
+            "$id",
+            id.ToString());
+
+        await command.ExecuteNonQueryAsync(
+            cancellationToken);
     }
 }

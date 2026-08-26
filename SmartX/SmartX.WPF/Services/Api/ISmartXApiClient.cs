@@ -42,13 +42,13 @@ public interface ISmartXApiClient
             CancellationToken cancellationToken = default);
 
     Task<SensorLogFileUploadResultDto>
-        UploadSensorLogFileAsync(
-            Guid sensorId,
-            string fileName,
-            Stream fileStream,
-            string contentType,
-            Guid userId,
-            CancellationToken cancellationToken = default);
+UploadSensorLogFileAsync(
+    Guid sensorId,
+    string fileName,
+    Stream fileStream,
+    string contentType,
+    Guid userId,
+    CancellationToken cancellationToken = default);
 
     // Telemetry
     Task<IReadOnlyList<TelemetryDto>> GetTelemetryBySensorIdAsync(
@@ -64,6 +64,10 @@ public interface ISmartXApiClient
     Task<UserDto?> GetUserByIdAsync(
         Guid id,
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<UserDto>> GetUsersByCompanyIdAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default);
 
     Task<UserDto?> GetUserByFirebaseUidAsync(
         string firebaseUid,

@@ -30,5 +30,10 @@ namespace SmartX.WPF.Repositories.Local
 
         Task UpdateAsync(
             Telemetry telemetry, CancellationToken cancellationToken = default);
+
+        Task<IReadOnlyList<Telemetry>> GetByGatewayIdAsync(
+    Guid gatewayId,
+    CancellationToken cancellationToken = default);
     }
+
 }

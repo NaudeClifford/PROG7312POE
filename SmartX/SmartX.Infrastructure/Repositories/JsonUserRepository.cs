@@ -30,10 +30,17 @@ public class JsonUserRepository : IUserRepository
         string firebaseUid,
         CancellationToken cancellationToken = default)
     {
-        var users = await GetAllAsync(cancellationToken);
+        if (string.IsNullOrWhiteSpace(firebaseUid))
+            return null;
+
+        var users =
+            await GetAllAsync(cancellationToken);
 
         return users.FirstOrDefault(
-            x => x.FirebaseUid == firebaseUid);
+            x => string.Equals(
+                x.FirebaseUid,
+                firebaseUid,
+                StringComparison.Ordinal));
     }
 
     public async Task<User?> GetByEmailAsync(
@@ -146,5 +153,17 @@ public class JsonUserRepository : IUserRepository
             _filePath,
             json,
             cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<User>> GetByCompanyIdAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default)
+    {
+        var users =
+            await GetAllAsync(cancellationToken);
+
+        return users
+            .Where(x => x.CompanyId == companyId)
+            .ToList();
     }
 }

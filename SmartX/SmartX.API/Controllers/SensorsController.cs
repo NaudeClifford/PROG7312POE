@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmartX.Application.Commands.Sensors;
 using SmartX.Application.Services;
 using SmartX.Application.Services.CRUD;
+using System.Security.Claims;
 
 namespace SmartX.API.Controllers;
 
@@ -117,14 +119,49 @@ public class SensorsController : ControllerBase
         return Ok(result);
     }
 
+
     [HttpPost("{sensorId:guid}/logs")]
     [RequestSizeLimit(10_000_000)]
     public async Task<IActionResult> UploadLog(
-        Guid userId,
         Guid sensorId,
         IFormFile file,
         CancellationToken cancellationToken)
     {
+        // ---------------------------------------------------------
+        // AUTHENTICATION
+        // ---------------------------------------------------------
+
+        if (User.Identity?.IsAuthenticated != true)
+        {
+            return Unauthorized();
+        }
+
+        // ---------------------------------------------------------
+        // GET AUTHENTICATED SMARTX USER ID
+        // ---------------------------------------------------------
+
+        var userIdClaim =
+            User.FindFirst("smartx_user_id")?.Value
+            ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (!Guid.TryParse(
+                userIdClaim,
+                out var uploadedByUserId) ||
+            uploadedByUserId == Guid.Empty)
+        {
+            return Unauthorized(
+                new
+                {
+                    Success = false,
+                    Error =
+                        "Authenticated SmartX user ID could not be determined."
+                });
+        }
+
+        // ---------------------------------------------------------
+        // FILE VALIDATION
+        // ---------------------------------------------------------
+
         if (file is null || file.Length == 0)
         {
             return BadRequest(
@@ -161,14 +198,9 @@ public class SensorsController : ControllerBase
                 });
         }
 
-        if (User.Identity?.IsAuthenticated != true)
-        {
-            return Unauthorized();
-        }
-
-        // Replace this with your actual authenticated
-        // SmartX user ID retrieval.
-        var uploadedByUserId = userId;
+        // ---------------------------------------------------------
+        // UPLOAD
+        // ---------------------------------------------------------
 
         await using var stream =
             file.OpenReadStream();
@@ -182,11 +214,8 @@ public class SensorsController : ControllerBase
                 uploadedByUserId,
                 cancellationToken);
 
-        return Ok(new
-        {
-            Success = true,
-            Data = result
-        });
+        // UploadAsync returns SensorLogFileDto.
+        return Ok(result);
     }
 
 }

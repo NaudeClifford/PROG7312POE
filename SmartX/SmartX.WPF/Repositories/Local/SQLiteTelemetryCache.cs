@@ -28,7 +28,8 @@ public class SQLiteTelemetryCache(
                 Current,
                 Power,
                 Temperature,
-                CreatedAt
+                CreatedAt,
+                UpdatedAt 
             FROM Telemetry;
             """;
 
@@ -64,7 +65,8 @@ public class SQLiteTelemetryCache(
                 Current,
                 Power,
                 Temperature,
-                CreatedAt
+                CreatedAt,
+                UpdatedAt 
             FROM Telemetry
             WHERE Id = $id;
             """;
@@ -103,7 +105,8 @@ public class SQLiteTelemetryCache(
                 Current,
                 Power,
                 Temperature,
-                CreatedAt
+                CreatedAt,
+                UpdatedAt   
             FROM Telemetry
             WHERE SensorId = $sensorId
               AND Timestamp >= $from
@@ -155,7 +158,8 @@ public class SQLiteTelemetryCache(
                 Current,
                 Power,
                 Temperature,
-                CreatedAt
+                CreatedAt,
+                UpdatedAt
             FROM Telemetry
             WHERE SensorId = $sensorId
             ORDER BY Timestamp ASC;
@@ -197,7 +201,8 @@ public class SQLiteTelemetryCache(
                 Current,
                 Power,
                 Temperature,
-                CreatedAt
+                CreatedAt,
+                UpdatedAt
             FROM Telemetry
             WHERE SensorId = $sensorId
             ORDER BY Timestamp DESC
@@ -240,7 +245,8 @@ public class SQLiteTelemetryCache(
                 Current = $current,
                 Power = $power,
                 Temperature = $temperature,
-                CreatedAt = $createdAt
+                CreatedAt = $createdAt,
+                UpdatedAt = $updatedAt
             WHERE Id = $id;
             """;
 
@@ -276,6 +282,10 @@ public class SQLiteTelemetryCache(
             "$createdAt",
             telemetry.CreatedAt.ToString("O"));
 
+        command.Parameters.AddWithValue(
+            "$updatedAt",
+            telemetry.UpdatedAt.ToString("O"));
+
         var rowsAffected =
             await command.ExecuteNonQueryAsync(cancellationToken);
 
@@ -291,7 +301,8 @@ public class SQLiteTelemetryCache(
                     Current,
                     Power,
                     Temperature,
-                    CreatedAt
+                    CreatedAt,
+                    UpdatedAt
                 )
                 VALUES
                 (
@@ -302,11 +313,60 @@ public class SQLiteTelemetryCache(
                     $current,
                     $power,
                     $temperature,
-                    $createdAt
+                    $createdAt,
+                    $updatedAt
                 );
                 """;
 
             await command.ExecuteNonQueryAsync(cancellationToken);
         }
+    }
+
+        public async Task<IReadOnlyList<Telemetry>> GetByGatewayIdAsync(
+    Guid gatewayId,
+    CancellationToken cancellationToken = default)
+    {
+        using var connection = _database.CreateConnection();
+
+        await connection.OpenAsync(cancellationToken);
+
+        using var command = connection.CreateCommand();
+
+        command.CommandText = """
+        SELECT
+            t.Id,
+            t.SensorId,
+            t.Timestamp,
+            t.Voltage,
+            t.Current,
+            t.Power,
+            t.Temperature,
+            t.CreatedAt,
+            t.UpdatedAt
+        FROM Telemetry t
+        INNER JOIN Sensors s
+            ON t.SensorId = s.Id
+        WHERE s.GatewayId = $gatewayId
+        ORDER BY t.Timestamp DESC;
+        """;
+
+        command.Parameters.AddWithValue(
+            "$gatewayId",
+            gatewayId.ToString());
+
+        using var reader =
+            await command.ExecuteReaderAsync(
+                cancellationToken);
+
+        var telemetry = new List<Telemetry>();
+
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            telemetry.Add(
+                TelemetryMapper.Map(reader));
+        }
+
+        return telemetry;
+    
     }
 }

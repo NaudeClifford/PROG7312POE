@@ -6,8 +6,7 @@
       mc:Ignorable="d"
       Title="Sensor Setup"
       Background="{StaticResource BackgroundBrush}"
-                PreviewKeyDown="Page_PreviewKeyDown">
-
+      PreviewKeyDown="Page_PreviewKeyDown">
 
     <ScrollViewer
         VerticalScrollBarVisibility="Auto">
@@ -18,7 +17,6 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-
 
             <!-- ================================================= -->
             <!-- HEADER -->
@@ -33,9 +31,6 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-
-                <!-- TITLE -->
-
                 <StackPanel
                     Grid.Column="0">
 
@@ -43,52 +38,17 @@
                         Text="Sensor Setup"
                         FontSize="30"
                         FontWeight="Bold"
-                        Foreground="{StaticResource DarkBrush}"/>
+                        Foreground="{StaticResource TitleBrush}"/>
 
                     <TextBlock
                         Text="Add a sensor to the current gateway."
                         FontSize="14"
-                        Foreground="#707780"
+                        Foreground="{StaticResource SubTitleBrush}"
                         Margin="0,8,0,0"/>
 
                 </StackPanel>
 
-
-                <!-- CURRENT GATEWAY -->
-
-                <Border
-                    Grid.Column="1"
-                    Background="#EAF2FF"
-                    BorderBrush="#D5E3FA"
-                    BorderThickness="1"
-                    CornerRadius="10"
-                    Padding="16,9"
-                    VerticalAlignment="Top">
-
-                    <StackPanel
-                        Orientation="Horizontal">
-
-                        <TextBlock
-                            Text="Gateway:"
-                            FontSize="12"
-                            FontWeight="SemiBold"
-                            Foreground="#657080"
-                            VerticalAlignment="Center"/>
-
-                        <TextBlock
-                            Text="{Binding CurrentGatewayName}"
-                            FontSize="12"
-                            FontWeight="Bold"
-                            Foreground="{StaticResource DarkBrush}"
-                            Margin="6,0,0,0"
-                            VerticalAlignment="Center"/>
-
-                    </StackPanel>
-
-                </Border>
-
             </Grid>
-
 
             <!-- ================================================= -->
             <!-- FORM -->
@@ -114,7 +74,6 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-
 
                     <!-- ========================================= -->
                     <!-- SENSOR NAME -->
@@ -152,7 +111,6 @@
 
                     </StackPanel>
 
-
                     <!-- ========================================= -->
                     <!-- DEVICE IDENTIFIER -->
                     <!-- ========================================= -->
@@ -188,7 +146,6 @@
                         </Border>
 
                     </StackPanel>
-
 
                     <!-- ========================================= -->
                     <!-- LOCATION -->
@@ -226,7 +183,6 @@
 
                     </StackPanel>
 
-
                     <!-- ========================================= -->
                     <!-- CATEGORY -->
                     <!-- ========================================= -->
@@ -251,17 +207,17 @@
                             Background="#FAFBFC">
 
                             <ComboBox
-    ItemsSource="{Binding SensorCategories}"
-    SelectedItem="{Binding Category}"
-    Margin="6,0"
-    BorderThickness="0"
-    Background="Transparent"
-    FontSize="14"
-    VerticalContentAlignment="Center"/>
+                                ItemsSource="{Binding SensorCategories}"
+                                SelectedItem="{Binding Category}"
+                                Margin="6,0"
+                                BorderThickness="0"
+                                Background="Transparent"
+                                FontSize="14"
+                                VerticalContentAlignment="Center"/>
+
                         </Border>
 
                     </StackPanel>
-
 
                     <!-- ========================================= -->
                     <!-- DESCRIPTION -->
@@ -301,7 +257,6 @@
 
                     </StackPanel>
 
-
                     <!-- ========================================= -->
                     <!-- ERROR -->
                     <!-- ========================================= -->
@@ -315,7 +270,6 @@
                         TextWrapping="Wrap"
                         Margin="0,5,0,15"/>
 
-
                     <!-- ========================================= -->
                     <!-- CREATE BUTTON -->
                     <!-- ========================================= -->
@@ -325,6 +279,8 @@
                         Grid.ColumnSpan="2"
                         Content="Create Sensor"
                         Height="50"
+                        HorizontalAlignment="Right"
+                        Padding="30,0"
                         Command="{Binding CreateSensorCommand}"
                         FontSize="15"
                         FontWeight="SemiBold"

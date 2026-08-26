@@ -11,6 +11,10 @@ namespace SmartX.WPF.Repositories.Local
             Guid id,
             CancellationToken cancellationToken = default);
 
+        Task<IReadOnlyList<User>> GetByCompanyIdAsync(
+        Guid companyId,
+        CancellationToken cancellationToken = default);
+
         Task<User?> GetByFirebaseUidAsync(
             string firebaseUid,
             CancellationToken cancellationToken = default);
@@ -22,5 +26,9 @@ namespace SmartX.WPF.Repositories.Local
         Task UpdateAsync(
             User user,
             CancellationToken cancellationToken = default);
+
+        Task DeleteAsync(
+    Guid id,
+    CancellationToken cancellationToken = default);
     }
 }
