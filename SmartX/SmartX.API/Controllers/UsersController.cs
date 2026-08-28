@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SmartX.Application.Commands.Users;
+using SmartX.Application.Requests.User;
 using SmartX.Application.Services.CRUD;
 
 namespace SmartX.API.Controllers;
@@ -16,66 +16,42 @@ public class UsersController : ControllerBase
         _crud = crud;
     }
 
-    // =========================================================
-    // GET ALL
-    // =========================================================
-
     [HttpGet]
     public async Task<IActionResult> GetAll(
         CancellationToken cancellationToken)
     {
-        var result =
-            await _crud.GetAllAsync(
-                cancellationToken);
+        var result = await _crud.GetAllAsync(
+            cancellationToken);
 
         if (!result.Success)
             return BadRequest(result);
 
         return Ok(result);
     }
-
-    // =========================================================
-    // GET BY SMARTX USER ID
-    // =========================================================
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(
         Guid id,
         CancellationToken cancellationToken)
     {
-        var result =
-            await _crud.GetByIdAsync(
-                id,
-                cancellationToken);
+        var result = await _crud.GetByIdAsync(
+            id,
+            cancellationToken);
 
         if (!result.Success)
             return NotFound(result);
 
         return Ok(result);
     }
-
-    // =========================================================
-    // GET BY FIREBASE UID
-    // =========================================================
 
     [HttpGet("firebase/{firebaseUid}")]
     public async Task<IActionResult> GetByFirebaseUid(
         string firebaseUid,
         CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(firebaseUid))
-        {
-            return BadRequest(new
-            {
-                Success = false,
-                Error = "Firebase UID is required."
-            });
-        }
-
-        var result =
-            await _crud.GetByFirebaseUidAsync(
-                firebaseUid,
-                cancellationToken);
+        var result = await _crud.GetByFirebaseUidAsync(
+            firebaseUid,
+            cancellationToken);
 
         if (!result.Success)
             return NotFound(result);
@@ -83,19 +59,14 @@ public class UsersController : ControllerBase
         return Ok(result);
     }
 
-    // =========================================================
-    // CREATE
-    // =========================================================
-
-    [HttpPost]
-    public async Task<IActionResult> Create(
-        CreateUserCommand command,
+    [HttpGet("company/{companyId:guid}")]
+    public async Task<IActionResult> GetByCompanyId(
+        Guid companyId,
         CancellationToken cancellationToken)
     {
-        var result =
-            await _crud.CreateAsync(
-                command,
-                cancellationToken);
+        var result = await _crud.GetByCompanyIdAsync(
+            companyId,
+            cancellationToken);
 
         if (!result.Success)
             return BadRequest(result);
@@ -103,22 +74,32 @@ public class UsersController : ControllerBase
         return Ok(result);
     }
 
-    // =========================================================
-    // UPDATE
-    // =========================================================
+    [HttpPost]
+    public async Task<IActionResult> Create(
+        CreateUserRequest request,
+        CancellationToken cancellationToken)
+    {
+        var result = await _crud.CreateAsync(
+            request,
+            cancellationToken);
+
+        if (!result.Success)
+            return BadRequest(result);
+
+        return Ok(result);
+    }
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(
         Guid id,
-        UpdateUserCommand command,
+        UpdateUserRequest request,
         CancellationToken cancellationToken)
     {
-        command.Id = id;
+        request.Id = id;
 
-        var result =
-            await _crud.UpdateAsync(
-                command,
-                cancellationToken);
+        var result = await _crud.UpdateAsync(
+            request,
+            cancellationToken);
 
         if (!result.Success)
         {
@@ -130,20 +111,15 @@ public class UsersController : ControllerBase
 
         return Ok(result);
     }
-
-    // =========================================================
-    // DELETE
-    // =========================================================
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(
         Guid id,
         CancellationToken cancellationToken)
     {
-        var result =
-            await _crud.DeleteAsync(
-                id,
-                cancellationToken);
+        var result = await _crud.DeleteAsync(
+            id,
+            cancellationToken);
 
         if (!result.Success)
         {
@@ -155,4 +131,5 @@ public class UsersController : ControllerBase
 
         return Ok(result);
     }
+
 }

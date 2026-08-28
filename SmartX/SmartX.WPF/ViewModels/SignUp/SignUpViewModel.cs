@@ -1,6 +1,6 @@
 ﻿using SmartX.Application.Authentication;
-using SmartX.Application.Commands.Company;
-using SmartX.Application.Commands.Users;
+using SmartX.Application.Requests.Company;
+using SmartX.Application.Requests.User;
 using SmartX.Domain.Enums;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Services;
@@ -206,7 +206,7 @@ public class SignUpViewModel : INotifyPropertyChanged
         {
             IsBusy = true;
 
-            var command = new CreateCompanyCommand
+            var command = new CreateCompanyRequest
             {
                 Name = CompanyName.Trim(),
                 Description = CompanyDescription.Trim()
@@ -303,7 +303,7 @@ public class SignUpViewModel : INotifyPropertyChanged
             }
 
             // Create SmartX user
-            var userCommand = new CreateUserCommand
+            var userCommand = new CreateUserRequest
             {
                 CompanyId = _companyId,
 

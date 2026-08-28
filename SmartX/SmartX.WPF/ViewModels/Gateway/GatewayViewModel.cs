@@ -1,5 +1,5 @@
 ﻿using Microsoft.Win32;
-using SmartX.Application.Commands.Gateway;
+using SmartX.Application.Requests.Gateway;
 using SmartX.Domain.Enums;
 using SmartX.Shared.DTOs;
 using SmartX.WPF.Navigation;
@@ -14,26 +14,19 @@ using SmartX.WPF.Views.Pages.Sensor;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Windows;
 
 namespace SmartX.WPF.ViewModels.Gateway;
 
 public class GatewayViewModel : ViewModelBase
 {
-    // =========================================================
-    // DEPENDENCIES
-    // =========================================================
 
     private readonly ISmartXApiClient _apiClient;
     private readonly SmartXSession _session;
     private readonly INavigationService _navigationService;
     private readonly ICacheSyncService _cacheSyncService;
 
-    // =========================================================
     // MODE
-    // =========================================================
-
     public enum GatewayMode
     {
         List,
@@ -71,10 +64,7 @@ public class GatewayViewModel : ViewModelBase
     public bool IsEditMode =>
         Mode == GatewayMode.Edit;
 
-    // =========================================================
     // GATEWAYS
-    // =========================================================
-
     public ObservableCollection<GatewayDto> Gateways { get; } = [];
 
     private GatewayDto? _gateway;
@@ -104,10 +94,7 @@ public class GatewayViewModel : ViewModelBase
     public bool HasNoGateway =>
         Gateway is null;
 
-    // =========================================================
     // SELECTED GATEWAY
-    // =========================================================
-
     private GatewayDto? _selectedGateway;
 
     public GatewayDto? SelectedGateway
@@ -151,10 +138,7 @@ public class GatewayViewModel : ViewModelBase
     public bool HasSelectedGateway =>
         _session.GatewayId.HasValue;
 
-    // =========================================================
     // EDIT / CREATE FIELDS
-    // =========================================================
-
     private Guid? _editingGatewayId;
 
     public Guid? EditingGatewayId
@@ -219,10 +203,7 @@ public class GatewayViewModel : ViewModelBase
             value);
     }
 
-    // =========================================================
     // STATE
-    // =========================================================
-
     private bool _isBusy;
     private bool _isOnline;
 
@@ -273,10 +254,7 @@ public class GatewayViewModel : ViewModelBase
             value);
     }
 
-    // =========================================================
     // VISIBILITY
-    // =========================================================
-
     public Visibility GatewayCrudVisibility =>
         IsAdministrator
             ? Visibility.Visible
@@ -292,10 +270,7 @@ public class GatewayViewModel : ViewModelBase
             ? Visibility.Visible
             : Visibility.Collapsed;
 
-    // =========================================================
     // PERMISSIONS
-    // =========================================================
-
     public bool IsAdministrator =>
         _session.Role == UserRole.Administrator;
 
@@ -337,10 +312,7 @@ public class GatewayViewModel : ViewModelBase
         _session.CompanyId != Guid.Empty &&
         (IsCreateMode || EditingGatewayId.HasValue);
 
-    // =========================================================
     // COMMANDS
-    // =========================================================
-
     public AsyncRelayCommand AddGatewayCommand { get; }
 
     public AsyncRelayCommand EditGatewayCommand { get; }
@@ -357,10 +329,7 @@ public class GatewayViewModel : ViewModelBase
 
     public AsyncRelayCommand ViewNetworkCommand { get; }
 
-    // =========================================================
     // CONSTRUCTOR
-    // =========================================================
-
     public GatewayViewModel(
         ISmartXApiClient apiClient,
         SmartXSession session,
@@ -416,9 +385,7 @@ public class GatewayViewModel : ViewModelBase
             OnSessionChanged;
     }
 
-    // =========================================================
     // LOAD LIST
-    // =========================================================
 
     public async Task LoadAsync(
         CancellationToken cancellationToken = default)
@@ -526,10 +493,7 @@ public class GatewayViewModel : ViewModelBase
         }
     }
 
-    // =========================================================
     // CREATE MODE
-    // =========================================================
-
     private async Task AddGatewayAsync()
     {
         if (!CanAddGateway)
@@ -545,10 +509,7 @@ public class GatewayViewModel : ViewModelBase
         await Task.CompletedTask;
     }
 
-    // =========================================================
     // EDIT MODE
-    // =========================================================
-
     private async Task EditGatewayAsync()
     {
         if (!CanEditGateway ||
@@ -604,10 +565,7 @@ public class GatewayViewModel : ViewModelBase
         }
     }
 
-    // =========================================================
     // SAVE CREATE / UPDATE
-    // =========================================================
-
     private async Task SaveGatewayAsync()
     {
         if (!CanSaveGateway)
@@ -630,14 +588,12 @@ public class GatewayViewModel : ViewModelBase
                 return;
             }
 
-            // =================================================
             // CREATE
-            // =================================================
 
             if (IsCreateMode)
             {
                 var command =
-                    new CreateGatewayCommand
+                    new CreateGatewayRequest
                     {
                         CompanyId = companyId,
 
@@ -656,7 +612,6 @@ public class GatewayViewModel : ViewModelBase
                                 ? null
                                 : IpAddress.Trim(),
 
-                        IsActive = true
                     };
 
                 var gatewayId =
@@ -682,9 +637,7 @@ public class GatewayViewModel : ViewModelBase
                     "Gateway created successfully.";
             }
 
-            // =================================================
             // UPDATE
-            // =================================================
 
             else if (IsEditMode)
             {
@@ -697,7 +650,7 @@ public class GatewayViewModel : ViewModelBase
                 }
 
                 var command =
-                    new UpdateGatewayCommand
+                    new UpdateGatewayRequest
                     {
                         Id = EditingGatewayId.Value,
 
@@ -744,9 +697,7 @@ public class GatewayViewModel : ViewModelBase
                     "Gateway updated successfully.";
             }
 
-            // =================================================
             // RETURN TO LIST
-            // =================================================
 
             Mode = GatewayMode.List;
 
@@ -779,9 +730,7 @@ public class GatewayViewModel : ViewModelBase
         }
     }
 
-    // =========================================================
     // DELETE
-    // =========================================================
 
     private async Task DeleteGatewayAsync()
     {
@@ -828,8 +777,6 @@ public class GatewayViewModel : ViewModelBase
             if (_session.GatewayId == gatewayId)
                 _session.ClearGateway();
 
-            // IMPORTANT:
-            // Reload the complete gateway list.
             await LoadAsync();
 
             StatusMessage =
@@ -853,10 +800,7 @@ public class GatewayViewModel : ViewModelBase
         }
     }
 
-    // =========================================================
     // CANCEL
-    // =========================================================
-
     private async Task CancelGatewayAsync()
     {
         if (IsBusy)
@@ -872,10 +816,7 @@ public class GatewayViewModel : ViewModelBase
         await LoadAsync();
     }
 
-    // =========================================================
     // CLEAR EDITOR
-    // =========================================================
-
     private void ClearEditor()
     {
         EditingGatewayId = null;
@@ -890,10 +831,7 @@ public class GatewayViewModel : ViewModelBase
         StatusMessage = null;
     }
 
-    // =========================================================
     // SENSOR
-    // =========================================================
-
     private async Task OpenSensorsAsync()
     {
         if (!CanOpenGatewayArea)
@@ -905,10 +843,7 @@ public class GatewayViewModel : ViewModelBase
         await Task.CompletedTask;
     }
 
-    // =========================================================
     // HISTORY
-    // =========================================================
-
     private async Task OpenCommandHistoryAsync()
     {
         if (!CanOpenGatewayArea)
@@ -920,10 +855,7 @@ public class GatewayViewModel : ViewModelBase
         await Task.CompletedTask;
     }
 
-    // =========================================================
     // NETWORK
-    // =========================================================
-
     private async Task OpenNetworkAsync()
     {
         if (!CanOpenGatewayArea)
@@ -935,10 +867,7 @@ public class GatewayViewModel : ViewModelBase
         await Task.CompletedTask;
     }
 
-    // =========================================================
     // CLEAR SELECTION
-    // =========================================================
-
     private void ClearGatewaySelection()
     {
         _selectedGateway = null;
@@ -955,10 +884,7 @@ public class GatewayViewModel : ViewModelBase
         RaiseCommandStates();
     }
 
-    // =========================================================
     // SESSION
-    // =========================================================
-
     private void OnSessionChanged(
         object? sender,
         PropertyChangedEventArgs e)
@@ -983,10 +909,7 @@ public class GatewayViewModel : ViewModelBase
         }
     }
 
-    // =========================================================
     // COMMAND STATES
-    // =========================================================
-
     private void RaiseCommandStates()
     {
         AddGatewayCommand?.RaiseCanExecuteChanged();

@@ -1,9 +1,9 @@
-﻿using SmartX.Application.Commands.Company;
-using SmartX.Application.Commands.Gateway;
-using SmartX.Application.Commands.Sensors;
-using SmartX.Application.Commands.Users;
+﻿using SmartX.Application.Requests.Company;
+using SmartX.Application.Requests.Gateway;
+using SmartX.Application.Requests.Sensor;
+using SmartX.Application.Requests.User;
+
 using SmartX.Shared.DTOs;
-using SmartX.Shared.DTOs.SensorLog;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
 using SmartX.Shared.Models;
@@ -22,7 +22,6 @@ public class SmartXApiClient(
     private readonly HttpClient _httpClient = httpClient;
     private readonly SmartXSession _session = session;
 
-    // ============================================================
     // AUTHENTICATION
     // ============================================================
 
@@ -38,6 +37,7 @@ public class SmartXApiClient(
                 "Bearer",
                 _session.IdToken);
     }
+
 
     // ============================================================
     // HEALTH
@@ -63,18 +63,21 @@ public class SmartXApiClient(
         }
     }
 
+
     // ============================================================
-    // SENSORS
+    // SENSORS - CRUD
     // ============================================================
 
-    public async Task<IReadOnlyList<SensorDto>> GetSensorsAsync(
-        CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<SensorDto>>
+        GetSensorsAsync(
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.GetAsync(
-            "api/Sensors",
-            cancellationToken);
+        var response =
+            await _httpClient.GetAsync(
+                "api/Sensors",
+                cancellationToken);
 
         response.EnsureSuccessStatusCode();
 
@@ -89,23 +92,30 @@ public class SmartXApiClient(
 
         if (!result.Success)
             throw new InvalidOperationException(
-                result.Error ?? "Failed to retrieve sensors.");
+                result.Error ??
+                "Failed to retrieve sensors.");
 
         return result.Data ?? [];
     }
 
-    public async Task<SensorDto?> GetSensorByIdAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
+
+    public async Task<SensorDto?>
+        GetSensorByIdAsync(
+            Guid id,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.GetAsync(
-            $"api/Sensors/{id}",
-            cancellationToken);
+        var response =
+            await _httpClient.GetAsync(
+                $"api/Sensors/{id}",
+                cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
             return null;
+        }
 
         response.EnsureSuccessStatusCode();
 
@@ -120,105 +130,173 @@ public class SmartXApiClient(
 
         if (!result.Success)
             throw new InvalidOperationException(
-                result.Error ?? "Failed to retrieve sensor.");
+                result.Error ??
+                "Failed to retrieve sensor.");
 
         return result.Data;
     }
 
-    public async Task<Guid> CreateSensorAsync(
-        CreateSensorCommand command,
-        CancellationToken cancellationToken = default)
+
+    public async Task<Guid>
+        CreateSensorAsync(
+            CreateSensorRequest request,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.PostAsJsonAsync(
-            "api/Sensors",
-            command,
-            cancellationToken);
+        var response =
+            await _httpClient.PostAsJsonAsync(
+                "api/Sensors",
+                request,
+                cancellationToken);
 
         var result =
-            await response.Content.ReadFromJsonAsync<Result<Guid>>(
+            await response.Content.ReadFromJsonAsync<
+                Result<Guid>>(
                 cancellationToken);
 
         if (result is null)
             throw new InvalidOperationException(
                 "The API returned an empty response.");
 
-        if (!response.IsSuccessStatusCode || !result.Success)
+        if (!response.IsSuccessStatusCode ||
+            !result.Success)
+        {
             throw new InvalidOperationException(
-                result.Error ?? "Failed to create sensor.");
+                result.Error ??
+                "Failed to create sensor.");
+        }
 
         return result.Data;
     }
 
-    public async Task<bool> UpdateSensorAsync(
-        UpdateSensorCommand command,
-        CancellationToken cancellationToken = default)
+
+    public async Task<bool>
+        UpdateSensorAsync(
+            UpdateSensorRequest request,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.PutAsJsonAsync(
-            $"api/Sensors/{command.Id}",
-            command,
-            cancellationToken);
+        var response =
+            await _httpClient.PutAsJsonAsync(
+                $"api/Sensors/{request.Id}",
+                request,
+                cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
             return false;
+        }
 
         var result =
-            await response.Content.ReadFromJsonAsync<Result<bool>>(
+            await response.Content.ReadFromJsonAsync<
+                Result<bool>>(
                 cancellationToken);
 
         if (result is null)
             throw new InvalidOperationException(
                 "The API returned an empty response.");
 
-        if (!response.IsSuccessStatusCode || !result.Success)
+        if (!response.IsSuccessStatusCode ||
+            !result.Success)
+        {
             throw new InvalidOperationException(
-                result.Error ?? "Failed to update sensor.");
+                result.Error ??
+                "Failed to update sensor.");
+        }
 
         return result.Data;
     }
 
-    public async Task<bool> DeleteSensorAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
+
+    public async Task<bool>
+        DeleteSensorAsync(
+            Guid id,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.DeleteAsync(
-            $"api/Sensors/{id}",
-            cancellationToken);
+        var response =
+            await _httpClient.DeleteAsync(
+                $"api/Sensors/{id}",
+                cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
             return false;
+        }
 
         var result =
-            await response.Content.ReadFromJsonAsync<Result<bool>>(
+            await response.Content.ReadFromJsonAsync<
+                Result<bool>>(
                 cancellationToken);
 
         if (result is null)
             throw new InvalidOperationException(
                 "The API returned an empty response.");
 
-        if (!response.IsSuccessStatusCode || !result.Success)
+        if (!response.IsSuccessStatusCode ||
+            !result.Success)
+        {
             throw new InvalidOperationException(
-                result.Error ?? "Failed to delete sensor.");
+                result.Error ??
+                "Failed to delete sensor.");
+        }
 
         return result.Data;
     }
 
-    // ============================================================
+
     // SENSOR LOG FILES
-    // ============================================================
+    public async Task<IReadOnlyList<SensorLogFileDto>>
+        GetSensorLogFilesAsync(
+            Guid sensorId,
+            CancellationToken cancellationToken = default)
+    {
+        AddAuthenticationHeader();
+
+        var response =
+            await _httpClient.GetAsync(
+                $"api/SensorLogFiles/sensor/{sensorId}",
+                cancellationToken);
+
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
+            return [];
+        }
+
+        response.EnsureSuccessStatusCode();
+
+        var result =
+            await response.Content.ReadFromJsonAsync<
+                Result<IReadOnlyList<SensorLogFileDto>>>(
+                cancellationToken);
+
+        if (result is null)
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+
+        if (!result.Success)
+            throw new InvalidOperationException(
+                result.Error ??
+                "Failed to retrieve sensor log files.");
+
+        return result.Data ?? [];
+    }
+
 
     public async Task<SensorLogFileUploadResultDto>
-    UploadSensorLogFileAsync(
-        Guid sensorId,
-        string fileName,
-        Stream fileStream,
-        string contentType,
-        CancellationToken cancellationToken = default)
+        UploadSensorLogFileAsync(
+            Guid sensorId,
+            string fileName,
+            Stream fileStream,
+            string contentType,
+            Guid userId,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -236,9 +314,13 @@ public class SmartXApiClient(
             "file",
             fileName);
 
+        content.Add(
+            new StringContent(sensorId.ToString()),
+            "sensorId");
+
         var response =
             await _httpClient.PostAsync(
-                $"api/Sensors/{sensorId}/logs",
+                "api/SensorLogFiles",
                 content,
                 cancellationToken);
 
@@ -275,32 +357,45 @@ public class SmartXApiClient(
             };
     }
 
-    public async Task<IReadOnlyList<SensorLogFileDto>>
-        GetSensorLogFilesAsync(
-            Guid sensorId,
+
+    // TELEMETRY - CQRS
+    public async Task<TelemetryDto?>
+        GetTelemetryByIdAsync(
+            Guid id,
             CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
         var response =
             await _httpClient.GetAsync(
-                $"api/Sensors/{sensorId}/logs",
+                $"api/Telemetry/{id}",
                 cancellationToken);
+
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
+            return null;
+        }
 
         response.EnsureSuccessStatusCode();
 
         var result =
-            await response.Content
-                .ReadFromJsonAsync<
-                    IReadOnlyList<SensorLogFileDto>>(
-                    cancellationToken);
+            await response.Content.ReadFromJsonAsync<
+                Result<TelemetryDto?>>(
+                cancellationToken);
 
-        return result ?? [];
+        if (result is null)
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+
+        if (!result.Success)
+            throw new InvalidOperationException(
+                result.Error ??
+                "Failed to retrieve telemetry.");
+
+        return result.Data;
     }
 
-    // ============================================================
-    // TELEMETRY
-    // ============================================================
 
     public async Task<IReadOnlyList<TelemetryDto>>
         GetTelemetryBySensorIdAsync(
@@ -309,12 +404,10 @@ public class SmartXApiClient(
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.GetAsync(
-            $"api/Telemetry/sensor/{sensorId}",
-            cancellationToken);
-
-        if (response.StatusCode == HttpStatusCode.NotFound)
-            return [];
+        var response =
+            await _httpClient.GetAsync(
+                $"api/Telemetry/sensor/{sensorId}",
+                cancellationToken);
 
         response.EnsureSuccessStatusCode();
 
@@ -335,6 +428,7 @@ public class SmartXApiClient(
         return result.Data ?? [];
     }
 
+
     public async Task<TelemetryDto?>
         GetLatestTelemetryBySensorIdAsync(
             Guid sensorId,
@@ -342,18 +436,22 @@ public class SmartXApiClient(
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.GetAsync(
-            $"api/Telemetry/sensor/{sensorId}/latest",
-            cancellationToken);
+        var response =
+            await _httpClient.GetAsync(
+                $"api/Telemetry/sensor/{sensorId}/latest",
+                cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
             return null;
+        }
 
         response.EnsureSuccessStatusCode();
 
         var result =
             await response.Content.ReadFromJsonAsync<
-                Result<TelemetryDto>>(
+                Result<TelemetryDto?>>(
                 cancellationToken);
 
         if (result is null)
@@ -368,18 +466,56 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-    // ============================================================
-    // USERS
-    // ============================================================
 
-    public async Task<IReadOnlyList<UserDto>> GetUsersAsync(
-        CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<TelemetryDto>>
+        GetTelemetryByDateRangeAsync(
+            Guid sensorId,
+            DateTime from,
+            DateTime to,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.GetAsync(
-            "api/Users",
-            cancellationToken);
+        var url =
+            $"api/Telemetry/sensor/{sensorId}/history" +
+            $"?from={Uri.EscapeDataString(from.ToString("O"))}" +
+            $"&to={Uri.EscapeDataString(to.ToString("O"))}";
+
+        var response =
+            await _httpClient.GetAsync(
+                url,
+                cancellationToken);
+
+        response.EnsureSuccessStatusCode();
+
+        var result =
+            await response.Content.ReadFromJsonAsync<
+                Result<IReadOnlyList<TelemetryDto>>>(
+                cancellationToken);
+
+        if (result is null)
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+
+        if (!result.Success)
+            throw new InvalidOperationException(
+                result.Error ??
+                "Failed to retrieve telemetry history.");
+
+        return result.Data ?? [];
+    }
+
+    // USERS - CRUD
+    public async Task<IReadOnlyList<UserDto>>
+        GetUsersAsync(
+            CancellationToken cancellationToken = default)
+    {
+        AddAuthenticationHeader();
+
+        var response =
+            await _httpClient.GetAsync(
+                "api/Users",
+                cancellationToken);
 
         response.EnsureSuccessStatusCode();
 
@@ -394,10 +530,12 @@ public class SmartXApiClient(
 
         if (!result.Success)
             throw new InvalidOperationException(
-                result.Error ?? "Failed to retrieve users.");
+                result.Error ??
+                "Failed to retrieve users.");
 
         return result.Data ?? [];
     }
+
 
     public async Task<IReadOnlyList<UserDto>>
         GetUsersByCompanyIdAsync(
@@ -408,7 +546,7 @@ public class SmartXApiClient(
 
         var response =
             await _httpClient.GetAsync(
-                $"api/users/company/{companyId}",
+                $"api/Users/company/{companyId}",
                 cancellationToken);
 
         response.EnsureSuccessStatusCode();
@@ -418,21 +556,36 @@ public class SmartXApiClient(
                 Result<IReadOnlyList<UserDto>>>(
                 cancellationToken);
 
-        return result?.Data ?? [];
+        if (result is null)
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+
+        if (!result.Success)
+            throw new InvalidOperationException(
+                result.Error ??
+                "Failed to retrieve company users.");
+
+        return result.Data ?? [];
     }
 
-    public async Task<UserDto?> GetUserByIdAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
+
+    public async Task<UserDto?>
+        GetUserByIdAsync(
+            Guid id,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.GetAsync(
-            $"api/Users/{id}",
-            cancellationToken);
+        var response =
+            await _httpClient.GetAsync(
+                $"api/Users/{id}",
+                cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
             return null;
+        }
 
         response.EnsureSuccessStatusCode();
 
@@ -447,31 +600,40 @@ public class SmartXApiClient(
 
         if (!result.Success)
             throw new InvalidOperationException(
-                result.Error ?? "Failed to retrieve user.");
+                result.Error ??
+                "Failed to retrieve user.");
 
         return result.Data;
     }
 
-    public async Task<UserDto?> GetUserByFirebaseUidAsync(
-    string firebaseUid,
-    CancellationToken cancellationToken = default)
+
+    public async Task<UserDto?>
+        GetUserByFirebaseUidAsync(
+            string firebaseUid,
+            CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(firebaseUid))
             return null;
 
         AddAuthenticationHeader();
 
-        var response = await _httpClient.GetAsync(
-            $"api/Users/firebase/{Uri.EscapeDataString(firebaseUid)}",
-            cancellationToken);
+        var response =
+            await _httpClient.GetAsync(
+                $"api/Users/firebase/" +
+                $"{Uri.EscapeDataString(firebaseUid)}",
+                cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
             return null;
+        }
 
         response.EnsureSuccessStatusCode();
 
         var result =
-            await response.Content.ReadFromJsonAsync<Result<UserDto>>(
+            await response.Content.ReadFromJsonAsync<
+                Result<UserDto>>(
                 cancellationToken);
 
         if (result is null)
@@ -480,107 +642,137 @@ public class SmartXApiClient(
 
         if (!result.Success)
             throw new InvalidOperationException(
-                result.Error ?? "Failed to retrieve user.");
+                result.Error ??
+                "Failed to retrieve user.");
 
         return result.Data;
     }
 
-    public async Task<Guid> CreateUserAsync(
-        CreateUserCommand command,
-        CancellationToken cancellationToken = default)
+
+    public async Task<Guid>
+        CreateUserAsync(
+            CreateUserRequest request,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.PostAsJsonAsync(
-            "api/Users",
-            command,
-            cancellationToken);
+        var response =
+            await _httpClient.PostAsJsonAsync(
+                "api/Users",
+                request,
+                cancellationToken);
 
         var result =
-            await response.Content.ReadFromJsonAsync<Result<Guid>>(
+            await response.Content.ReadFromJsonAsync<
+                Result<Guid>>(
                 cancellationToken);
 
         if (result is null)
             throw new InvalidOperationException(
                 "The API returned an empty response.");
 
-        if (!response.IsSuccessStatusCode || !result.Success)
+        if (!response.IsSuccessStatusCode ||
+            !result.Success)
+        {
             throw new InvalidOperationException(
-                result.Error ?? "Failed to create user.");
+                result.Error ??
+                "Failed to create user.");
+        }
 
         return result.Data;
     }
 
-    public async Task<bool> UpdateUserAsync(
-        UpdateUserCommand command,
-        CancellationToken cancellationToken = default)
+
+    public async Task<bool>
+        UpdateUserAsync(
+            UpdateUserRequest request,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.PutAsJsonAsync(
-            $"api/Users/{command.Id}",
-            command,
-            cancellationToken);
+        var response =
+            await _httpClient.PutAsJsonAsync(
+                $"api/Users/{request.Id}",
+                request,
+                cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
             return false;
+        }
 
         var result =
-            await response.Content.ReadFromJsonAsync<Result<bool>>(
+            await response.Content.ReadFromJsonAsync<
+                Result<bool>>(
                 cancellationToken);
 
         if (result is null)
             throw new InvalidOperationException(
                 "The API returned an empty response.");
 
-        if (!response.IsSuccessStatusCode || !result.Success)
+        if (!response.IsSuccessStatusCode ||
+            !result.Success)
+        {
             throw new InvalidOperationException(
-                result.Error ?? "Failed to update user.");
+                result.Error ??
+                "Failed to update user.");
+        }
 
         return result.Data;
     }
 
-    public async Task<bool> DeleteUserAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
+
+    public async Task<bool>
+        DeleteUserAsync(
+            Guid id,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.DeleteAsync(
-            $"api/Users/{id}",
-            cancellationToken);
+        var response =
+            await _httpClient.DeleteAsync(
+                $"api/Users/{id}",
+                cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
             return false;
+        }
 
         var result =
-            await response.Content.ReadFromJsonAsync<Result<bool>>(
+            await response.Content.ReadFromJsonAsync<
+                Result<bool>>(
                 cancellationToken);
 
         if (result is null)
             throw new InvalidOperationException(
                 "The API returned an empty response.");
 
-        if (!response.IsSuccessStatusCode || !result.Success)
+        if (!response.IsSuccessStatusCode ||
+            !result.Success)
+        {
             throw new InvalidOperationException(
-                result.Error ?? "Failed to delete user.");
+                result.Error ??
+                "Failed to delete user.");
+        }
 
         return result.Data;
     }
 
-    // ============================================================
-    // COMPANIES
-    // ============================================================
 
+    // COMPANIES - CRUD
     public async Task<IReadOnlyList<CompanyDto>>
         GetCompaniesAsync(
             CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.GetAsync(
-            "api/Companies",
-            cancellationToken);
+        var response =
+            await _httpClient.GetAsync(
+                "api/Companies",
+                cancellationToken);
 
         response.EnsureSuccessStatusCode();
 
@@ -601,18 +793,24 @@ public class SmartXApiClient(
         return result.Data ?? [];
     }
 
-    public async Task<CompanyDto?> GetCompanyByIdAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
+
+    public async Task<CompanyDto?>
+        GetCompanyByIdAsync(
+            Guid id,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.GetAsync(
-            $"api/Companies/{id}",
-            cancellationToken);
+        var response =
+            await _httpClient.GetAsync(
+                $"api/Companies/{id}",
+                cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
             return null;
+        }
 
         response.EnsureSuccessStatusCode();
 
@@ -633,105 +831,131 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-    public async Task<Guid> CreateCompanyAsync(
-        CreateCompanyCommand command,
-        CancellationToken cancellationToken = default)
+
+    public async Task<Guid>
+        CreateCompanyAsync(
+            CreateCompanyRequest request,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.PostAsJsonAsync(
-            "api/Companies",
-            command,
-            cancellationToken);
+        var response =
+            await _httpClient.PostAsJsonAsync(
+                "api/Companies",
+                request,
+                cancellationToken);
 
         var result =
-            await response.Content.ReadFromJsonAsync<Result<Guid>>(
+            await response.Content.ReadFromJsonAsync<
+                Result<Guid>>(
                 cancellationToken);
 
         if (result is null)
             throw new InvalidOperationException(
                 "The API returned an empty response.");
 
-        if (!response.IsSuccessStatusCode || !result.Success)
+        if (!response.IsSuccessStatusCode ||
+            !result.Success)
+        {
             throw new InvalidOperationException(
                 result.Error ??
                 "Failed to create company.");
+        }
 
         return result.Data;
     }
 
-    public async Task<bool> UpdateCompanyAsync(
-        UpdateCompanyCommand command,
-        CancellationToken cancellationToken = default)
+
+    public async Task<bool>
+        UpdateCompanyAsync(
+            UpdateCompanyRequest request,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.PutAsJsonAsync(
-            $"api/Companies/{command.Id}",
-            command,
-            cancellationToken);
+        var response =
+            await _httpClient.PutAsJsonAsync(
+                $"api/Companies/{request.Id}",
+                request,
+                cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
             return false;
+        }
 
         var result =
-            await response.Content.ReadFromJsonAsync<Result<bool>>(
+            await response.Content.ReadFromJsonAsync<
+                Result<bool>>(
                 cancellationToken);
 
         if (result is null)
             throw new InvalidOperationException(
                 "The API returned an empty response.");
 
-        if (!response.IsSuccessStatusCode || !result.Success)
+        if (!response.IsSuccessStatusCode ||
+            !result.Success)
+        {
             throw new InvalidOperationException(
                 result.Error ??
                 "Failed to update company.");
+        }
 
         return result.Data;
     }
 
-    public async Task<bool> DeleteCompanyAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
+
+    public async Task<bool>
+        DeleteCompanyAsync(
+            Guid id,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.DeleteAsync(
-            $"api/Companies/{id}",
-            cancellationToken);
+        var response =
+            await _httpClient.DeleteAsync(
+                $"api/Companies/{id}",
+                cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
             return false;
+        }
 
         var result =
-            await response.Content.ReadFromJsonAsync<Result<bool>>(
+            await response.Content.ReadFromJsonAsync<
+                Result<bool>>(
                 cancellationToken);
 
         if (result is null)
             throw new InvalidOperationException(
                 "The API returned an empty response.");
 
-        if (!response.IsSuccessStatusCode || !result.Success)
+        if (!response.IsSuccessStatusCode ||
+            !result.Success)
+        {
             throw new InvalidOperationException(
                 result.Error ??
                 "Failed to delete company.");
+        }
 
         return result.Data;
     }
 
-    // ============================================================
-    // GATEWAYS
-    // ============================================================
 
+    // GATEWAYS - CRUD
     public async Task<IReadOnlyList<GatewayDto>>
         GetGatewaysAsync(
             CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.GetAsync(
-            "api/Gateways",
-            cancellationToken);
+        var response =
+            await _httpClient.GetAsync(
+                "api/Gateways",
+                cancellationToken);
 
         response.EnsureSuccessStatusCode();
 
@@ -752,18 +976,56 @@ public class SmartXApiClient(
         return result.Data ?? [];
     }
 
-    public async Task<GatewayDto?> GetGatewayByIdAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
+
+    public async Task<IReadOnlyList<GatewayDto>>
+        GetGatewaysByCompanyIdAsync(
+            Guid companyId,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.GetAsync(
-            $"api/Gateways/{id}",
-            cancellationToken);
+        var response =
+            await _httpClient.GetAsync(
+                $"api/Gateways/company/{companyId}",
+                cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        response.EnsureSuccessStatusCode();
+
+        var result =
+            await response.Content.ReadFromJsonAsync<
+                Result<IReadOnlyList<GatewayDto>>>(
+                cancellationToken);
+
+        if (result is null)
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+
+        if (!result.Success)
+            throw new InvalidOperationException(
+                result.Error ??
+                "Failed to retrieve gateways.");
+
+        return result.Data ?? [];
+    }
+
+
+    public async Task<GatewayDto?>
+        GetGatewayByIdAsync(
+            Guid id,
+            CancellationToken cancellationToken = default)
+    {
+        AddAuthenticationHeader();
+
+        var response =
+            await _httpClient.GetAsync(
+                $"api/Gateways/{id}",
+                cancellationToken);
+
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
             return null;
+        }
 
         response.EnsureSuccessStatusCode();
 
@@ -784,124 +1046,116 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-    public async Task<IReadOnlyList<GatewayDto>>
-        GetGatewaysByCompanyIdAsync(
-            Guid companyId,
+
+    public async Task<Guid>
+        CreateGatewayAsync(
+            CreateGatewayRequest request,
             CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.GetAsync(
-            $"api/Gateways/company/{companyId}",
-            cancellationToken);
-
-        response.EnsureSuccessStatusCode();
+        var response =
+            await _httpClient.PostAsJsonAsync(
+                "api/Gateways",
+                request,
+                cancellationToken);
 
         var result =
             await response.Content.ReadFromJsonAsync<
-                Result<IReadOnlyList<GatewayDto>>>(
+                Result<Guid>>(
                 cancellationToken);
 
         if (result is null)
             throw new InvalidOperationException(
                 "The API returned an empty response.");
 
-        if (!result.Success)
-            throw new InvalidOperationException(
-                result.Error ??
-                "Failed to retrieve gateways.");
-
-        return result.Data ?? [];
-    }
-
-    public async Task<Guid> CreateGatewayAsync(
-        CreateGatewayCommand command,
-        CancellationToken cancellationToken = default)
-    {
-        AddAuthenticationHeader();
-
-        var response = await _httpClient.PostAsJsonAsync(
-            "api/Gateways",
-            command,
-            cancellationToken);
-
-        var result =
-            await response.Content.ReadFromJsonAsync<Result<Guid>>(
-                cancellationToken);
-
-        if (result is null)
-            throw new InvalidOperationException(
-                "The API returned an empty response.");
-
-        if (!response.IsSuccessStatusCode || !result.Success)
+        if (!response.IsSuccessStatusCode ||
+            !result.Success)
+        {
             throw new InvalidOperationException(
                 result.Error ??
                 "Failed to create gateway.");
+        }
 
         return result.Data;
     }
 
-    public async Task<bool> UpdateGatewayAsync(
-        UpdateGatewayCommand command,
-        CancellationToken cancellationToken = default)
+
+    public async Task<bool>
+        UpdateGatewayAsync(
+            UpdateGatewayRequest request,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.PutAsJsonAsync(
-            $"api/Gateways/{command.Id}",
-            command,
-            cancellationToken);
+        var response =
+            await _httpClient.PutAsJsonAsync(
+                $"api/Gateways/{request.Id}",
+                request,
+                cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
             return false;
+        }
 
         var result =
-            await response.Content.ReadFromJsonAsync<Result<bool>>(
+            await response.Content.ReadFromJsonAsync<
+                Result<bool>>(
                 cancellationToken);
 
         if (result is null)
             throw new InvalidOperationException(
                 "The API returned an empty response.");
 
-        if (!response.IsSuccessStatusCode || !result.Success)
+        if (!response.IsSuccessStatusCode ||
+            !result.Success)
+        {
             throw new InvalidOperationException(
                 result.Error ??
                 "Failed to update gateway.");
+        }
 
         return result.Data;
     }
 
-    public async Task<bool> DeleteGatewayAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
+
+    public async Task<bool>
+        DeleteGatewayAsync(
+            Guid id,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
-        var response = await _httpClient.DeleteAsync(
-            $"api/Gateways/{id}",
-            cancellationToken);
+        var response =
+            await _httpClient.DeleteAsync(
+                $"api/Gateways/{id}",
+                cancellationToken);
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
             return false;
+        }
 
         var result =
-            await response.Content.ReadFromJsonAsync<Result<bool>>(
+            await response.Content.ReadFromJsonAsync<
+                Result<bool>>(
                 cancellationToken);
 
         if (result is null)
             throw new InvalidOperationException(
                 "The API returned an empty response.");
 
-        if (!response.IsSuccessStatusCode || !result.Success)
+        if (!response.IsSuccessStatusCode ||
+            !result.Success)
+        {
             throw new InvalidOperationException(
                 result.Error ??
                 "Failed to delete gateway.");
+        }
 
         return result.Data;
-    }
-
-    public Task<SensorLogFileUploadResultDto> UploadSensorLogFileAsync(Guid sensorId, string fileName, Stream fileStream, string contentType, Guid userId, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
     }
 }

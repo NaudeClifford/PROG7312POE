@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using SmartX.Application.Commands.Users;
+using SmartX.Application.Requests.User;
 using SmartX.Domain.Entities;
 using SmartX.Domain.Enums;
 using SmartX.WPF.Navigation;
@@ -35,24 +35,18 @@ public class UsersViewModel : ViewModelBase
 
     private User? _selectedUser;
 
-    // =========================================================
     // FORM STATE
-    // =========================================================
 
     private string _formEmail = string.Empty;
     private string _formDisplayName = string.Empty;
     private UserRole _formRole = UserRole.Viewer;
     private bool _formIsActive = true;
 
-    // =========================================================
     // COLLECTION
-    // =========================================================
 
     public ObservableCollection<User> Users { get; } = [];
 
-    // =========================================================
     // COMPANY
-    // =========================================================
 
     public Guid EffectiveCompanyId =>
         _session.Role == UserRole.SuperAdmin
@@ -74,9 +68,7 @@ public class UsersViewModel : ViewModelBase
             value);
     }
 
-    // =========================================================
     // SELECTED USER
-    // =========================================================
 
     public User? SelectedUser
     {
@@ -95,9 +87,7 @@ public class UsersViewModel : ViewModelBase
         }
     }
 
-    // =========================================================
     // STATE
-    // =========================================================
 
     public bool IsBusy
     {
@@ -142,9 +132,7 @@ public class UsersViewModel : ViewModelBase
             value);
     }
 
-    // =========================================================
     // FORM
-    // =========================================================
 
     public bool IsEditing
     {
@@ -224,10 +212,7 @@ public class UsersViewModel : ViewModelBase
     public Array UserRoles =>
         Enum.GetValues<UserRole>();
 
-    // =========================================================
     // COUNTS
-    // =========================================================
-
     public int TotalUsers =>
         Users.Count;
 
@@ -253,9 +238,7 @@ public class UsersViewModel : ViewModelBase
         Users.Count(x =>
             x.Role == UserRole.SuperAdmin);
 
-    // =========================================================
     // COMMANDS
-    // =========================================================
 
     public AsyncRelayCommand BackCommand { get; }
 
@@ -271,10 +254,7 @@ public class UsersViewModel : ViewModelBase
 
     public AsyncRelayCommand DeleteUserCommand { get; }
 
-    // =========================================================
     // CONSTRUCTOR
-    // =========================================================
-
     public UsersViewModel(
         ISmartXApiClient apiClient,
         INavigationService navigationService,
@@ -290,79 +270,61 @@ public class UsersViewModel : ViewModelBase
         _userCache = userCache;
         _cacheSyncService = cacheSyncService;
 
-        // -----------------------------------------------------
         // BACK
-        // -----------------------------------------------------
 
         BackCommand =
             new AsyncRelayCommand(
                 BackAsync);
 
-        // -----------------------------------------------------
         // REFRESH
-        // -----------------------------------------------------
 
         RefreshCommand =
             new AsyncRelayCommand(
                 () => LoadAsync(),
                 CanRefresh);
 
-        // -----------------------------------------------------
         // ADD
-        // -----------------------------------------------------
 
         AddUserCommand =
             new AsyncRelayCommand(
                 AddUserAsync,
                 CanModifyUsers);
 
-        // -----------------------------------------------------
         // EDIT
-        // -----------------------------------------------------
 
         EditUserCommand =
             new AsyncRelayCommand(
                 EditUserAsync,
                 CanEditUser);
 
-        // -----------------------------------------------------
         // SAVE
-        // -----------------------------------------------------
 
         SaveUserCommand =
             new AsyncRelayCommand(
                 SaveUserAsync,
                 CanSaveUser);
 
-        // -----------------------------------------------------
         // CANCEL
-        // -----------------------------------------------------
 
         CancelEditCommand =
             new AsyncRelayCommand(
                 CancelEditAsync,
                 CanCancelEdit);
 
-        // -----------------------------------------------------
         // DELETE
-        // -----------------------------------------------------
 
         DeleteUserCommand =
             new AsyncRelayCommand(
                 DeleteUserAsync,
                 CanEditUser);
 
-        // -----------------------------------------------------
         // SESSION
-        // -----------------------------------------------------
 
         _session.PropertyChanged +=
             Session_PropertyChanged;
     }
 
-    // =========================================================
     // LOAD
-    // =========================================================
 
     public async Task LoadAsync(
         CancellationToken cancellationToken = default)
@@ -391,9 +353,7 @@ public class UsersViewModel : ViewModelBase
             var companyId =
                 EffectiveCompanyId;
 
-            // =================================================
             // NO COMPANY
-            // =================================================
 
             if (companyId == Guid.Empty)
             {
@@ -408,9 +368,7 @@ public class UsersViewModel : ViewModelBase
                 return;
             }
 
-            // =================================================
             // CHECK API
-            // =================================================
 
             try
             {
@@ -423,26 +381,19 @@ public class UsersViewModel : ViewModelBase
                 IsOnline = false;
             }
 
-            // =================================================
+            
             // ONLINE
-            // =================================================
-
             if (IsOnline)
             {
                 try
                 {
-                    // -----------------------------------------
                     // SYNC COMPANY
-                    // -----------------------------------------
 
                     await _cacheSyncService.SyncCompanyAsync(
                         companyId,
                         cancellationToken);
 
-                    // -----------------------------------------
                     // SYNC USERS
-                    // -----------------------------------------
-
                     await _cacheSyncService.SyncUsersAsync(
                         companyId,
                         cancellationToken);
@@ -456,9 +407,7 @@ public class UsersViewModel : ViewModelBase
                 }
             }
 
-            // =================================================
             // COMPANY NAME FROM CACHE/API
-            // =================================================
 
             if (IsOnline)
             {
@@ -471,10 +420,8 @@ public class UsersViewModel : ViewModelBase
                     company?.Name ??
                     "Current Company";
             }
-
-            // =================================================
+            
             // READ USERS FROM LOCAL CACHE
-            // =================================================
 
             var cachedUsers =
                 await _userCache.GetByCompanyIdAsync(
@@ -490,10 +437,7 @@ public class UsersViewModel : ViewModelBase
 
             RaiseCounts();
 
-            // =================================================
             // OFFLINE WITH NO CACHE
-            // =================================================
-
             if (!IsOnline &&
                 Users.Count == 0)
             {
@@ -512,10 +456,7 @@ public class UsersViewModel : ViewModelBase
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
 
-            // -----------------------------------------------
             // FALLBACK TO CACHE
-            // -----------------------------------------------
-
             try
             {
                 var companyId =
@@ -540,7 +481,6 @@ public class UsersViewModel : ViewModelBase
             }
             catch
             {
-                // Keep original connection error.
             }
         }
         catch (Exception ex)
@@ -556,10 +496,7 @@ public class UsersViewModel : ViewModelBase
         }
     }
 
-    // =========================================================
     // SESSION CHANGE
-    // =========================================================
-
     private async void Session_PropertyChanged(
         object? sender,
         PropertyChangedEventArgs e)
@@ -587,10 +524,7 @@ public class UsersViewModel : ViewModelBase
         await LoadAsync();
     }
 
-    // =========================================================
     // PERMISSIONS
-    // =========================================================
-
     private bool HasUserWritePermission()
     {
         return _session.Role ==
@@ -640,10 +574,7 @@ public class UsersViewModel : ViewModelBase
                IsEditing;
     }
 
-    // =========================================================
     // ADD USER
-    // =========================================================
-
     private async Task AddUserAsync()
     {
         if (!CanModifyUsers())
@@ -673,10 +604,7 @@ public class UsersViewModel : ViewModelBase
         RaiseCommandStates();
     }
 
-    // =========================================================
     // EDIT USER
-    // =========================================================
-
     private async Task EditUserAsync()
     {
         if (!CanEditUser())
@@ -707,10 +635,7 @@ public class UsersViewModel : ViewModelBase
         RaiseCommandStates();
     }
 
-    // =========================================================
     // SAVE USER
-    // =========================================================
-
     private async Task SaveUserAsync()
     {
         if (!CanSaveUser())
@@ -732,17 +657,14 @@ public class UsersViewModel : ViewModelBase
                 return;
             }
 
-            // =================================================
             // UPDATE
-            // =================================================
-
             if (IsEditing)
             {
                 if (SelectedUser is null)
                     return;
 
                 var command =
-                    new UpdateUserCommand
+                    new UpdateUserRequest
                     {
                         Id =
                             SelectedUser.Id,
@@ -775,16 +697,12 @@ public class UsersViewModel : ViewModelBase
                     return;
                 }
 
-                // ---------------------------------------------
                 // API SUCCESS
-                // ---------------------------------------------
 
                 await _cacheSyncService.SyncUserAsync(
                     SelectedUser.Id);
 
-                // ---------------------------------------------
                 // RELOAD FROM CACHE
-                // ---------------------------------------------
 
                 await ReloadUsersFromCacheAsync(
                     companyId);
@@ -794,12 +712,10 @@ public class UsersViewModel : ViewModelBase
                 return;
             }
 
-            // =================================================
             // CREATE
-            // =================================================
 
             var createCommand =
-                new CreateUserCommand
+                new CreateUserRequest
                 {
                     CompanyId =
                         companyId,
@@ -821,16 +737,12 @@ public class UsersViewModel : ViewModelBase
                 await _apiClient.CreateUserAsync(
                     createCommand);
 
-            // ---------------------------------------------
             // SYNC CREATED USER INTO LOCAL CACHE
-            // ---------------------------------------------
 
             await _cacheSyncService.SyncUserAsync(
                 userId);
 
-            // ---------------------------------------------
             // RELOAD FROM CACHE
-            // ---------------------------------------------
 
             await ReloadUsersFromCacheAsync(
                 companyId);
@@ -861,9 +773,7 @@ public class UsersViewModel : ViewModelBase
         }
     }
 
-    // =========================================================
     // DELETE USER
-    // =========================================================
 
     private async Task DeleteUserAsync()
     {
@@ -873,9 +783,7 @@ public class UsersViewModel : ViewModelBase
         if (SelectedUser is null)
             return;
 
-        // =====================================================
         // PREVENT SELF DELETE
-        // =====================================================
 
         if (SelectedUser.Id ==
             _session.UserId)
@@ -886,9 +794,7 @@ public class UsersViewModel : ViewModelBase
             return;
         }
 
-        // =====================================================
         // SUPER ADMIN PROTECTION
-        // =====================================================
 
         if (SelectedUser.Role ==
                 UserRole.SuperAdmin &&
@@ -921,16 +827,12 @@ public class UsersViewModel : ViewModelBase
                 return;
             }
 
-            // =================================================
             // REMOVE FROM LOCAL CACHE
-            // =================================================
 
             await _userCache.DeleteAsync(
                 userId);
 
-            // =================================================
             // RELOAD FROM CACHE
-            // =================================================
 
             await ReloadUsersFromCacheAsync(
                 EffectiveCompanyId);
@@ -959,9 +861,7 @@ public class UsersViewModel : ViewModelBase
         }
     }
 
-    // =========================================================
     // CACHE RELOAD
-    // =========================================================
 
     private async Task ReloadUsersFromCacheAsync(
         Guid companyId,
@@ -984,9 +884,7 @@ public class UsersViewModel : ViewModelBase
         RaiseCounts();
     }
 
-    // =========================================================
     // CANCEL
-    // =========================================================
 
     private async Task CancelEditAsync()
     {
@@ -1017,9 +915,7 @@ public class UsersViewModel : ViewModelBase
             true;
     }
 
-    // =========================================================
     // BACK
-    // =========================================================
 
     private async Task BackAsync()
     {
@@ -1038,9 +934,7 @@ public class UsersViewModel : ViewModelBase
         await Task.CompletedTask;
     }
 
-    // =========================================================
     // COUNTS
-    // =========================================================
 
     private void RaiseCounts()
     {
@@ -1066,9 +960,7 @@ public class UsersViewModel : ViewModelBase
             nameof(SuperAdminCount));
     }
 
-    // =========================================================
     // COMMAND STATES
-    // =========================================================
 
     private void RaiseCommandStates()
     {

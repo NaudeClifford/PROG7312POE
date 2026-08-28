@@ -24,17 +24,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateCompanyCommand"
+                "$ref": "#/components/schemas/CreateCompanyRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateCompanyCommand"
+                "$ref": "#/components/schemas/CreateCompanyRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateCompanyCommand"
+                "$ref": "#/components/schemas/CreateCompanyRequest"
               }
             }
           }
@@ -87,17 +87,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateCompanyCommand"
+                "$ref": "#/components/schemas/UpdateCompanyRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateCompanyCommand"
+                "$ref": "#/components/schemas/UpdateCompanyRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateCompanyCommand"
+                "$ref": "#/components/schemas/UpdateCompanyRequest"
               }
             }
           }
@@ -149,17 +149,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateGatewayCommand"
+                "$ref": "#/components/schemas/CreateGatewayRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateGatewayCommand"
+                "$ref": "#/components/schemas/CreateGatewayRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateGatewayCommand"
+                "$ref": "#/components/schemas/CreateGatewayRequest"
               }
             }
           }
@@ -212,17 +212,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateGatewayCommand"
+                "$ref": "#/components/schemas/UpdateGatewayRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateGatewayCommand"
+                "$ref": "#/components/schemas/UpdateGatewayRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateGatewayCommand"
+                "$ref": "#/components/schemas/UpdateGatewayRequest"
               }
             }
           }
@@ -290,6 +290,122 @@
         }
       }
     },
+    "/api/SensorLogFiles": {
+      "get": {
+        "tags": [
+          "SensorLogFiles"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "SensorLogFiles"
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "SensorId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "File": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "SensorId": {
+                  "style": "form"
+                },
+                "File": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/SensorLogFiles/{id}": {
+      "get": {
+        "tags": [
+          "SensorLogFiles"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "SensorLogFiles"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/SensorLogFiles/sensor/{sensorId}": {
+      "get": {
+        "tags": [
+          "SensorLogFiles"
+        ],
+        "parameters": [
+          {
+            "name": "sensorId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Sensors": {
       "get": {
         "tags": [
@@ -309,17 +425,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateSensorCommand"
+                "$ref": "#/components/schemas/CreateSensorRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateSensorCommand"
+                "$ref": "#/components/schemas/CreateSensorRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateSensorCommand"
+                "$ref": "#/components/schemas/CreateSensorRequest"
               }
             }
           }
@@ -372,17 +488,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateSensorCommand"
+                "$ref": "#/components/schemas/UpdateSensorRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateSensorCommand"
+                "$ref": "#/components/schemas/UpdateSensorRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateSensorCommand"
+                "$ref": "#/components/schemas/UpdateSensorRequest"
               }
             }
           }
@@ -408,70 +524,6 @@
             }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/Sensors/{sensorId}/logs": {
-      "get": {
-        "tags": [
-          "Sensors"
-        ],
-        "parameters": [
-          {
-            "name": "sensorId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Sensors"
-        ],
-        "parameters": [
-          {
-            "name": "sensorId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "file": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              },
-              "encoding": {
-                "file": {
-                  "style": "form"
-                }
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "OK"
@@ -675,17 +727,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateUserCommand"
+                "$ref": "#/components/schemas/CreateUserRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateUserCommand"
+                "$ref": "#/components/schemas/CreateUserRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateUserCommand"
+                "$ref": "#/components/schemas/CreateUserRequest"
               }
             }
           }
@@ -738,17 +790,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateUserCommand"
+                "$ref": "#/components/schemas/UpdateUserRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateUserCommand"
+                "$ref": "#/components/schemas/UpdateUserRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateUserCommand"
+                "$ref": "#/components/schemas/UpdateUserRequest"
               }
             }
           }
@@ -802,11 +854,34 @@
           }
         }
       }
+    },
+    "/api/Users/company/{companyId}": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
-      "CreateCompanyCommand": {
+      "CreateCompanyRequest": {
         "type": "object",
         "properties": {
           "name": {
@@ -816,22 +891,11 @@
           "description": {
             "type": "string",
             "nullable": true
-          },
-          "isActive": {
-            "type": "boolean"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "additionalProperties": false
       },
-      "CreateGatewayCommand": {
+      "CreateGatewayRequest": {
         "type": "object",
         "properties": {
           "companyId": {
@@ -853,22 +917,11 @@
           "ipAddress": {
             "type": "string",
             "nullable": true
-          },
-          "isActive": {
-            "type": "boolean"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "additionalProperties": false
       },
-      "CreateSensorCommand": {
+      "CreateSensorRequest": {
         "type": "object",
         "properties": {
           "name": {
@@ -879,12 +932,12 @@
             "type": "string",
             "nullable": true
           },
+          "category": {
+            "$ref": "#/components/schemas/SensorCategory"
+          },
           "location": {
             "type": "string",
             "nullable": true
-          },
-          "category": {
-            "$ref": "#/components/schemas/SensorCategory"
           },
           "description": {
             "type": "string",
@@ -894,6 +947,9 @@
             "type": "string",
             "format": "uuid",
             "nullable": true
+          },
+          "isActive": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -932,7 +988,7 @@
         },
         "additionalProperties": false
       },
-      "CreateUserCommand": {
+      "CreateUserRequest": {
         "type": "object",
         "properties": {
           "companyId": {
@@ -956,10 +1012,6 @@
           },
           "isActive": {
             "type": "boolean"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "additionalProperties": false
@@ -973,7 +1025,7 @@
         "type": "integer",
         "format": "int32"
       },
-      "UpdateCompanyCommand": {
+      "UpdateCompanyRequest": {
         "type": "object",
         "properties": {
           "id": {
@@ -990,19 +1042,11 @@
           },
           "isActive": {
             "type": "boolean"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "additionalProperties": false
       },
-      "UpdateGatewayCommand": {
+      "UpdateGatewayRequest": {
         "type": "object",
         "properties": {
           "id": {
@@ -1031,19 +1075,11 @@
           },
           "isActive": {
             "type": "boolean"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "additionalProperties": false
       },
-      "UpdateSensorCommand": {
+      "UpdateSensorRequest": {
         "type": "object",
         "properties": {
           "id": {
@@ -1080,7 +1116,7 @@
         },
         "additionalProperties": false
       },
-      "UpdateUserCommand": {
+      "UpdateUserRequest": {
         "type": "object",
         "properties": {
           "id": {
@@ -1133,6 +1169,9 @@
     },
     {
       "name": "Health"
+    },
+    {
+      "name": "SensorLogFiles"
     },
     {
       "name": "Sensors"

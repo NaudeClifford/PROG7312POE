@@ -33,8 +33,7 @@ public class JsonUserRepository : IUserRepository
         if (string.IsNullOrWhiteSpace(firebaseUid))
             return null;
 
-        var users =
-            await GetAllAsync(cancellationToken);
+        var users = await GetAllAsync(cancellationToken);
 
         return users.FirstOrDefault(
             x => string.Equals(
@@ -47,10 +46,14 @@ public class JsonUserRepository : IUserRepository
         string email,
         CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrWhiteSpace(email))
+            return null;
+
         var users = await GetAllAsync(cancellationToken);
 
         return users.FirstOrDefault(
-            x => x.Email.Equals(
+            x => string.Equals(
+                x.Email,
                 email,
                 StringComparison.OrdinalIgnoreCase));
     }
@@ -131,6 +134,17 @@ public class JsonUserRepository : IUserRepository
             cancellationToken);
     }
 
+    public async Task<IReadOnlyList<User>> GetByCompanyIdAsync(
+        Guid companyId,
+        CancellationToken cancellationToken = default)
+    {
+        var users = await GetAllAsync(cancellationToken);
+
+        return users
+            .Where(x => x.CompanyId == companyId)
+            .ToList();
+    }
+
     private async Task SaveAsync(
         List<User> users,
         CancellationToken cancellationToken)
@@ -153,17 +167,5 @@ public class JsonUserRepository : IUserRepository
             _filePath,
             json,
             cancellationToken);
-    }
-
-    public async Task<IReadOnlyList<User>> GetByCompanyIdAsync(
-    Guid companyId,
-    CancellationToken cancellationToken = default)
-    {
-        var users =
-            await GetAllAsync(cancellationToken);
-
-        return users
-            .Where(x => x.CompanyId == companyId)
-            .ToList();
     }
 }

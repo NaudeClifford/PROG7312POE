@@ -10,12 +10,20 @@
     <PackageReference Include="AutoMapper" Version="16.2.0" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.11" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SmartX.Domain\SmartX.Domain.csproj" />
     <ProjectReference Include="..\SmartX.Shared\SmartX.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Commands\Sensors\" />
+    <Folder Include="Queries\Company\" />
+    <Folder Include="Queries\Gateway\" />
+    <Folder Include="Queries\Sensors\" />
   </ItemGroup>
 
 </Project>

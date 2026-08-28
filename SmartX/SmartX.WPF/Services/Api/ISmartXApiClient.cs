@@ -1,22 +1,27 @@
-﻿using SmartX.Application.Commands.Company;
-using SmartX.Application.Commands.Gateway;
-using SmartX.Application.Commands.Sensors;
-using SmartX.Application.Commands.Users;
+﻿using SmartX.Application.Requests.Company;
+using SmartX.Application.Requests.Gateway;
+using SmartX.Application.Requests.Sensor;
+using SmartX.Application.Requests.User;
 using SmartX.Shared.DTOs;
-using SmartX.Shared.DTOs.SensorLog;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SmartX.WPF.Services.Api;
 
 public interface ISmartXApiClient
 {
 
+    // AVAILABILITY
     Task<bool> IsAvailableAsync(
-    CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default);
 
-    // Sensors
+
+    // SENSORS - CRUD
     Task<IReadOnlyList<SensorDto>> GetSensorsAsync(
         CancellationToken cancellationToken = default);
 
@@ -25,32 +30,37 @@ public interface ISmartXApiClient
         CancellationToken cancellationToken = default);
 
     Task<Guid> CreateSensorAsync(
-        CreateSensorCommand command,
+        CreateSensorRequest request,
         CancellationToken cancellationToken = default);
 
     Task<bool> UpdateSensorAsync(
-        UpdateSensorCommand command,
+        UpdateSensorRequest request,
         CancellationToken cancellationToken = default);
 
     Task<bool> DeleteSensorAsync(
         Guid id,
         CancellationToken cancellationToken = default);
 
-    Task<IReadOnlyList<SensorLogFileDto>>
-        GetSensorLogFilesAsync(
-            Guid sensorId,
-            CancellationToken cancellationToken = default);
 
-    Task<SensorLogFileUploadResultDto>
-UploadSensorLogFileAsync(
-    Guid sensorId,
-    string fileName,
-    Stream fileStream,
-    string contentType,
-    Guid userId,
-    CancellationToken cancellationToken = default);
+    // SENSOR LOG FILES
+    Task<IReadOnlyList<SensorLogFileDto>> GetSensorLogFilesAsync(
+        Guid sensorId,
+        CancellationToken cancellationToken = default);
 
-    // Telemetry
+    Task<SensorLogFileUploadResultDto> UploadSensorLogFileAsync(
+        Guid sensorId,
+        string fileName,
+        Stream fileStream,
+        string contentType,
+        Guid userId,
+        CancellationToken cancellationToken = default);
+
+
+    // TELEMETRY - CQRS
+    Task<TelemetryDto?> GetTelemetryByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default);
+
     Task<IReadOnlyList<TelemetryDto>> GetTelemetryBySensorIdAsync(
         Guid sensorId,
         CancellationToken cancellationToken = default);
@@ -59,15 +69,21 @@ UploadSensorLogFileAsync(
         Guid sensorId,
         CancellationToken cancellationToken = default);
 
+    Task<IReadOnlyList<TelemetryDto>> GetTelemetryByDateRangeAsync(
+        Guid sensorId,
+        DateTime from,
+        DateTime to,
+        CancellationToken cancellationToken = default);
 
-    // Users
+
+    // USERS - CRUD
     Task<UserDto?> GetUserByIdAsync(
         Guid id,
         CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<UserDto>> GetUsersByCompanyIdAsync(
-    Guid companyId,
-    CancellationToken cancellationToken = default);
+        Guid companyId,
+        CancellationToken cancellationToken = default);
 
     Task<UserDto?> GetUserByFirebaseUidAsync(
         string firebaseUid,
@@ -77,18 +93,19 @@ UploadSensorLogFileAsync(
         CancellationToken cancellationToken = default);
 
     Task<Guid> CreateUserAsync(
-        CreateUserCommand command,
+        CreateUserRequest request,
         CancellationToken cancellationToken = default);
 
     Task<bool> UpdateUserAsync(
-        UpdateUserCommand command,
+        UpdateUserRequest request,
         CancellationToken cancellationToken = default);
 
     Task<bool> DeleteUserAsync(
         Guid id,
         CancellationToken cancellationToken = default);
 
-    // Companies
+
+    // COMPANIES - CRUD
     Task<IReadOnlyList<CompanyDto>> GetCompaniesAsync(
         CancellationToken cancellationToken = default);
 
@@ -97,19 +114,19 @@ UploadSensorLogFileAsync(
         CancellationToken cancellationToken = default);
 
     Task<Guid> CreateCompanyAsync(
-        CreateCompanyCommand command,
+        CreateCompanyRequest request,
         CancellationToken cancellationToken = default);
 
     Task<bool> UpdateCompanyAsync(
-        UpdateCompanyCommand command,
+        UpdateCompanyRequest request,
         CancellationToken cancellationToken = default);
 
     Task<bool> DeleteCompanyAsync(
         Guid id,
         CancellationToken cancellationToken = default);
 
-    // Gateways
 
+    // GATEWAYS - CRUD
     Task<IReadOnlyList<GatewayDto>> GetGatewaysAsync(
         CancellationToken cancellationToken = default);
 
@@ -122,11 +139,11 @@ UploadSensorLogFileAsync(
         CancellationToken cancellationToken = default);
 
     Task<Guid> CreateGatewayAsync(
-        CreateGatewayCommand command,
+        CreateGatewayRequest request,
         CancellationToken cancellationToken = default);
 
     Task<bool> UpdateGatewayAsync(
-        UpdateGatewayCommand command,
+        UpdateGatewayRequest request,
         CancellationToken cancellationToken = default);
 
     Task<bool> DeleteGatewayAsync(

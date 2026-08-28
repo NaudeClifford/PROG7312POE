@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SmartX.Application.Commands.Company;
+using SmartX.Application.Requests.Company;
 using SmartX.Application.Services.CRUD;
 
 namespace SmartX.API.Controllers;
@@ -46,11 +46,11 @@ public class CompaniesController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> Create(
-        CreateCompanyCommand command,
+        CreateCompanyRequest request,
         CancellationToken cancellationToken)
     {
         var result = await _crud.CreateAsync(
-            command,
+            request,
             cancellationToken);
 
         if (!result.Success)
@@ -62,13 +62,13 @@ public class CompaniesController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(
         Guid id,
-        UpdateCompanyCommand command,
+        UpdateCompanyRequest request,
         CancellationToken cancellationToken)
     {
-        command.Id = id;
+        request.Id = id;
 
         var result = await _crud.UpdateAsync(
-            command,
+            request,
             cancellationToken);
 
         if (!result.Success)

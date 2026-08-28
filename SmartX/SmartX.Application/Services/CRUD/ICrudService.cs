@@ -2,7 +2,7 @@
 
 namespace SmartX.Application.Services.CRUD;
 
-public interface ICrudService<TDto, TCreateCommand, TUpdateCommand>
+public interface ICrudService<TDto, TCreateRequest, TUpdateRequest>
 {
     Task<Result<IReadOnlyList<TDto>>> GetAllAsync(
         CancellationToken cancellationToken = default);
@@ -12,11 +12,11 @@ public interface ICrudService<TDto, TCreateCommand, TUpdateCommand>
         CancellationToken cancellationToken = default);
 
     Task<Result<Guid>> CreateAsync(
-        TCreateCommand command,
+        TCreateRequest request,
         CancellationToken cancellationToken = default);
 
     Task<Result<bool>> UpdateAsync(
-        TUpdateCommand command,
+        TUpdateRequest request,
         CancellationToken cancellationToken = default);
 
     Task<Result<bool>> DeleteAsync(

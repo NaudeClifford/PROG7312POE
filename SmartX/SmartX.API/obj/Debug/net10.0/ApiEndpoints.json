@@ -36,8 +36,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "command",
-        "Type": "SmartX.Application.Commands.Company.CreateCompanyCommand",
+        "Name": "request",
+        "Type": "SmartX.Application.Requests.Company.CreateCompanyRequest",
         "IsRequired": true
       }
     ],
@@ -73,8 +73,8 @@
         "IsRequired": true
       },
       {
-        "Name": "command",
-        "Type": "SmartX.Application.Commands.Company.UpdateCompanyCommand",
+        "Name": "request",
+        "Type": "SmartX.Application.Requests.Company.UpdateCompanyRequest",
         "IsRequired": true
       }
     ],
@@ -115,8 +115,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "command",
-        "Type": "SmartX.Application.Commands.Gateway.CreateGatewayCommand",
+        "Name": "request",
+        "Type": "SmartX.Application.Requests.Gateway.CreateGatewayRequest",
         "IsRequired": true
       }
     ],
@@ -152,8 +152,8 @@
         "IsRequired": true
       },
       {
-        "Name": "command",
-        "Type": "SmartX.Application.Commands.Gateway.UpdateGatewayCommand",
+        "Name": "request",
+        "Type": "SmartX.Application.Requests.Gateway.UpdateGatewayRequest",
         "IsRequired": true
       }
     ],
@@ -202,6 +202,85 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SmartX.API.Controllers.SensorLogFilesController",
+    "Method": "GetAll",
+    "RelativePath": "api/SensorLogFiles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.SensorLogFilesController",
+    "Method": "Create",
+    "RelativePath": "api/SensorLogFiles",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "SensorId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.SensorLogFilesController",
+    "Method": "GetById",
+    "RelativePath": "api/SensorLogFiles/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.SensorLogFilesController",
+    "Method": "Delete",
+    "RelativePath": "api/SensorLogFiles/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.SensorLogFilesController",
+    "Method": "GetBySensorId",
+    "RelativePath": "api/SensorLogFiles/sensor/{sensorId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sensorId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SmartX.API.Controllers.SensorsController",
     "Method": "GetAll",
     "RelativePath": "api/Sensors",
@@ -220,8 +299,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "command",
-        "Type": "SmartX.Application.Commands.Sensors.CreateSensorCommand",
+        "Name": "request",
+        "Type": "SmartX.Application.Requests.Sensor.CreateSensorRequest",
         "IsRequired": true
       }
     ],
@@ -257,8 +336,8 @@
         "IsRequired": true
       },
       {
-        "Name": "command",
-        "Type": "SmartX.Application.Commands.Sensors.UpdateSensorCommand",
+        "Name": "request",
+        "Type": "SmartX.Application.Requests.Sensor.UpdateSensorRequest",
         "IsRequired": true
       }
     ],
@@ -276,43 +355,6 @@
         "Name": "id",
         "Type": "System.Guid",
         "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SmartX.API.Controllers.SensorsController",
-    "Method": "GetLogs",
-    "RelativePath": "api/Sensors/{sensorId}/logs",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "sensorId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "SmartX.API.Controllers.SensorsController",
-    "Method": "UploadLog",
-    "RelativePath": "api/Sensors/{sensorId}/logs",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "sensorId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "file",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
-        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -426,8 +468,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "command",
-        "Type": "SmartX.Application.Commands.Users.CreateUserCommand",
+        "Name": "request",
+        "Type": "SmartX.Application.Requests.User.CreateUserRequest",
         "IsRequired": true
       }
     ],
@@ -463,8 +505,8 @@
         "IsRequired": true
       },
       {
-        "Name": "command",
-        "Type": "SmartX.Application.Commands.Users.UpdateUserCommand",
+        "Name": "request",
+        "Type": "SmartX.Application.Requests.User.UpdateUserRequest",
         "IsRequired": true
       }
     ],
@@ -480,6 +522,22 @@
     "Parameters": [
       {
         "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.UsersController",
+    "Method": "GetByCompanyId",
+    "RelativePath": "api/Users/company/{companyId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyId",
         "Type": "System.Guid",
         "IsRequired": true
       }

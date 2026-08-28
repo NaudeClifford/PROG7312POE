@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "3xlGIde3qmo=",
+  "dgSpecHash": "BKqO6cfBI2Q=",
   "success": true,
   "projectFilePath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
   "expectedPackageFiles": [
@@ -25,7 +25,7 @@
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.aspnetcore.http\\2.3.11\\microsoft.aspnetcore.http.2.3.11.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.3.10\\microsoft.aspnetcore.http.abstractions.2.3.10.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.aspnetcore.http.extensions\\2.3.11\\microsoft.aspnetcore.http.extensions.2.3.11.nupkg.sha512",
-    "C:\\Users\\cliff\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.3.9\\microsoft.aspnetcore.http.features.2.3.9.nupkg.sha512",
+    "C:\\Users\\cliff\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.17\\microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.aspnetcore.webutilities\\2.3.10\\microsoft.aspnetcore.webutilities.2.3.10.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.extensions.configuration\\10.0.11\\microsoft.extensions.configuration.10.0.11.nupkg.sha512",

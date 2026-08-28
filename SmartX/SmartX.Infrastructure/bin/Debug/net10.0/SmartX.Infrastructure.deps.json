@@ -227,7 +227,7 @@
       },
       "Microsoft.AspNetCore.Hosting.Server.Abstractions/2.3.9": {
         "dependencies": {
-          "Microsoft.AspNetCore.Http.Features": "2.3.9",
+          "Microsoft.AspNetCore.Http.Features": "5.0.17",
           "Microsoft.Extensions.Configuration.Abstractions": "10.0.11"
         },
         "runtime": {
@@ -254,7 +254,7 @@
       },
       "Microsoft.AspNetCore.Http.Abstractions/2.3.10": {
         "dependencies": {
-          "Microsoft.AspNetCore.Http.Features": "2.3.9"
+          "Microsoft.AspNetCore.Http.Features": "5.0.17"
         },
         "runtime": {
           "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.dll": {
@@ -276,14 +276,14 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Http.Features/2.3.9": {
+      "Microsoft.AspNetCore.Http.Features/5.0.17": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "10.0.11"
         },
         "runtime": {
-          "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.dll": {
-            "assemblyVersion": "2.3.9.0",
-            "fileVersion": "2.3.9.26007"
+          "lib/net5.0/Microsoft.AspNetCore.Http.Features.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.1722.21507"
           }
         }
       },
@@ -621,6 +621,7 @@
           "AutoMapper": "16.2.0",
           "FluentValidation": "12.1.1",
           "FluentValidation.DependencyInjectionExtensions": "12.1.1",
+          "Microsoft.AspNetCore.Http.Features": "5.0.17",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.11",
           "SmartX.Domain": "1.0.0",
           "SmartX.Shared": "1.0.0"
@@ -807,12 +808,12 @@
       "path": "microsoft.aspnetcore.http.extensions/2.3.11",
       "hashPath": "microsoft.aspnetcore.http.extensions.2.3.11.nupkg.sha512"
     },
-    "Microsoft.AspNetCore.Http.Features/2.3.9": {
+    "Microsoft.AspNetCore.Http.Features/5.0.17": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-nDWDF0YBgElg6f0omqJ8DupmITQg5p4lklBxFpVR83tQQhOG2tw9Fa5ul8b+KywsYBsyfn9DschUmfzOV6RvGw==",
-      "path": "microsoft.aspnetcore.http.features/2.3.9",
-      "hashPath": "microsoft.aspnetcore.http.features.2.3.9.nupkg.sha512"
+      "sha512": "sha512-3jG2xS+dx8DDCGV/F+STdPTg89lX3ao3dF/VEPvJaz3wzBIjuadipTtYNEXDIVuOPZwb6jdmhrX9jkzOIBm5cw==",
+      "path": "microsoft.aspnetcore.http.features/5.0.17",
+      "hashPath": "microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512"
     },
     "Microsoft.AspNetCore.WebUtilities/2.3.10": {
       "type": "package",

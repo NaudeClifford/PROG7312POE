@@ -8,6 +8,11 @@ namespace SmartX.Infrastructure.Repositories
     {
         private readonly string _filePath;
 
+        private static readonly JsonSerializerOptions JsonOptions = new()
+        {
+            WriteIndented = true
+        };
+
         public JsonCompanyRepository()
         {
             _filePath = Path.Combine(
@@ -34,30 +39,22 @@ namespace SmartX.Infrastructure.Repositories
 
             if (string.IsNullOrWhiteSpace(json)) return [];
 
-            var company = JsonSerializer.Deserialize<List<Company>>(json);
-
-            return company ?? [];
+            return JsonSerializer.Deserialize<List<Company>>(
+                       json,
+                       JsonOptions)
+                   ?? [];
         }
 
         public async Task AddAsync(
             Company company,
             CancellationToken cancellationToken = default)
         {
-            var companys = await GetAllAsync(cancellationToken);
+            var companies = (await GetAllAsync(cancellationToken)).ToList();
 
-            var companyList = companys.ToList();
+            companies.Add(company);
 
-            companyList.Add(company);
-
-            string json = JsonSerializer.Serialize(companyList,
-                new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                });
-
-            await File.WriteAllTextAsync(
-                _filePath,
-                json,
+            await SaveAsync(
+                companies,
                 cancellationToken);
         }
 
@@ -65,28 +62,18 @@ namespace SmartX.Infrastructure.Repositories
             Company company,
             CancellationToken cancellationToken = default)
         {
-            var companys = await GetAllAsync(cancellationToken);
+            var companies = (await GetAllAsync(cancellationToken)).ToList();
 
-            var companyList = companys.ToList();
-
-            var existingCompany = companyList.FirstOrDefault(
+            var index = companies.FindIndex(
                 x => x.Id == company.Id);
 
-            if (existingCompany is null) return;
+            if (index == -1)
+                return;
 
-            var index = companyList.IndexOf(existingCompany);
+            companies[index] = company;
 
-            companyList[index] = company;
-
-            string json = JsonSerializer.Serialize(companyList,
-            new JsonSerializerOptions
-            {
-                WriteIndented = true,
-            });
-
-            await File.WriteAllTextAsync(
-                _filePath,
-                json,
+            await SaveAsync(
+                companies,
                 cancellationToken);
         }
 
@@ -94,27 +81,36 @@ namespace SmartX.Infrastructure.Repositories
             Guid id,
             CancellationToken cancellationToken = default)
         {
-            var companys = await GetAllAsync(cancellationToken);
+            var companies = (await GetAllAsync(cancellationToken)).ToList();
 
-            var companysList = companys.ToList();
+            var removed = companies.RemoveAll(
+                x => x.Id == id);
 
-            var company = companysList.FirstOrDefault(x => x.Id == id);
+            if (removed == 0)
+                return;
 
-            if (company is null) return;
+            await SaveAsync(
+                companies,
+                cancellationToken);
+        }
 
-            companysList.Remove(company);
+        private async Task SaveAsync(
+        IReadOnlyList<Company> companies,
+        CancellationToken cancellationToken)
+        {
+            var directory = Path.GetDirectoryName(_filePath);
 
-            string json = JsonSerializer.Serialize(companysList,
-                new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                });
+            if (!string.IsNullOrEmpty(directory))
+                Directory.CreateDirectory(directory);
+
+            var json = JsonSerializer.Serialize(
+                companies,
+                JsonOptions);
 
             await File.WriteAllTextAsync(
                 _filePath,
                 json,
                 cancellationToken);
         }
-
     }
 }

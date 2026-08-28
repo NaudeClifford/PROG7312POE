@@ -1,4 +1,8 @@
-﻿namespace SmartX.WPF.Services.Sync;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace SmartX.WPF.Services.Sync;
 
 public interface ICacheSyncService
 {
@@ -22,6 +26,6 @@ public interface ICacheSyncService
         CancellationToken cancellationToken = default);
 
     Task SyncUsersAsync(
-    Guid companyId,
-    CancellationToken cancellationToken = default);
+        Guid companyId,
+        CancellationToken cancellationToken = default);
 }

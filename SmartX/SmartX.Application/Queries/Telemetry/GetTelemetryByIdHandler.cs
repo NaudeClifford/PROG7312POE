@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using SmartX.Shared.Models;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.DTOs.Telemetry;
+using SmartX.Shared.Models;
 
 namespace SmartX.Application.Queries.Telemetry;
 
@@ -14,25 +14,33 @@ public class GetTelemetryByIdHandler
         ITelemetryRepository telemetryRepository,
         IMapper mapper)
     {
-        _mapper = mapper;
         _telemetryRepository = telemetryRepository;
+        _mapper = mapper;
     }
 
     public async Task<Result<TelemetryDto?>> HandleAsync(
         GetTelemetryByIdQuery query,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
-        var telemetry = await _telemetryRepository.GetByIdAsync(
-            query.TelemetryId,
-            cancellationToken);
+        if (query.TelemetryId == Guid.Empty)
+        {
+            return Result<TelemetryDto?>.Fail(
+                "Telemetry ID is required.");
+        }
+
+        var telemetry =
+            await _telemetryRepository.GetByIdAsync(
+                query.TelemetryId,
+                cancellationToken);
 
         if (telemetry is null)
         {
             return Result<TelemetryDto?>.Fail(
-                "Telemetry not found");
+                "Telemetry not found.");
         }
-        
-        var dto = _mapper.Map<TelemetryDto>(telemetry);
+
+        var dto = _mapper.Map<TelemetryDto>(
+            telemetry);
 
         return Result<TelemetryDto?>.Ok(dto);
     }

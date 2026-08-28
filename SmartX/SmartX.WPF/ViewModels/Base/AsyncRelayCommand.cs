@@ -13,7 +13,9 @@ public class AsyncRelayCommand : ICommand
         Func<Task> execute,
         Func<bool>? canExecute = null)
     {
-        _execute = execute;
+        _execute = execute
+            ?? throw new ArgumentNullException(nameof(execute));
+
         _canExecute = canExecute;
     }
 
@@ -28,18 +30,26 @@ public class AsyncRelayCommand : ICommand
     public async void Execute(object? parameter)
     {
         if (!CanExecute(parameter))
+        {
             return;
+        }
 
         try
         {
             _isExecuting = true;
+
             RaiseCanExecuteChanged();
 
             await _execute();
         }
+        catch (Exception)
+        {
+
+        }
         finally
         {
             _isExecuting = false;
+
             RaiseCanExecuteChanged();
         }
     }

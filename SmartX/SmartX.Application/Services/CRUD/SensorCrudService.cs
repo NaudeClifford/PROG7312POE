@@ -1,222 +1,354 @@
-﻿using SmartX.Application.Commands.Sensors;
-using SmartX.Application.Queries.Gateway;
-using SmartX.Application.Queries.Sensors;
+﻿using AutoMapper;
+using FluentValidation;
+using SmartX.Application.Requests.Sensor;
 using SmartX.Domain.Entities;
+using SmartX.Domain.Interfaces;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.Models;
-using System.Threading.Channels;
 
 namespace SmartX.Application.Services.CRUD;
 
 public class SensorCrudService :
     ICrudService<
         SensorDto,
-        CreateSensorCommand,
-        UpdateSensorCommand>
+        CreateSensorRequest,
+        UpdateSensorRequest>
 {
-    private readonly GetSensorsHandler _getSensors;
-    private readonly GetSensorByIdHandler _getSensorById;
-    private readonly CreateSensorHandler _createSensor;
-    private readonly UpdateSensorHandler _updateSensor;
-    private readonly DeleteSensorHandler _deleteSensor;
-    private readonly GetGatewayByIdHandler _getGatewayById;
+    private readonly ISensorRepository _sensorRepository;
+    private readonly IGatewayRepository _gatewayRepository;
+
+    private readonly IValidator<CreateSensorRequest>
+        _createValidator;
+
+    private readonly IValidator<UpdateSensorRequest>
+        _updateValidator;
+
+    private readonly IMapper _mapper;
     private readonly AuditLogService _auditLog;
 
     public SensorCrudService(
-        GetSensorsHandler getSensors,
-        GetSensorByIdHandler getSensorById,
-        CreateSensorHandler createSensor,
-        UpdateSensorHandler updateSensor,
-        DeleteSensorHandler deleteSensor,
-        GetGatewayByIdHandler getGatewayById,
+        ISensorRepository sensorRepository,
+        IGatewayRepository gatewayRepository,
+        IValidator<CreateSensorRequest> createValidator,
+        IValidator<UpdateSensorRequest> updateValidator,
+        IMapper mapper,
         AuditLogService auditLog)
     {
-        _getSensors = getSensors;
-        _getSensorById = getSensorById;
-        _createSensor = createSensor;
-        _updateSensor = updateSensor;
-        _deleteSensor = deleteSensor;
-        _getGatewayById = getGatewayById;
+        _sensorRepository = sensorRepository;
+        _gatewayRepository = gatewayRepository;
+
+        _createValidator = createValidator;
+        _updateValidator = updateValidator;
+
+        _mapper = mapper;
         _auditLog = auditLog;
     }
 
-    public Task<Result<IReadOnlyList<SensorDto>>> GetAllAsync(
+    // =========================================================
+    // GET ALL
+    // =========================================================
+
+    public async Task<Result<IReadOnlyList<SensorDto>>> GetAllAsync(
         CancellationToken cancellationToken = default)
     {
-        return _getSensors.HandleAsync(
-            new GetSensorsQuery(),
-            cancellationToken);
+        var sensors =
+            await _sensorRepository.GetAllAsync(
+                cancellationToken);
+
+        var dtos =
+            _mapper.Map<List<SensorDto>>(sensors);
+
+        return Result<IReadOnlyList<SensorDto>>.Ok(dtos);
     }
 
-    public Task<Result<SensorDto>> GetByIdAsync(
+    // =========================================================
+    // GET BY ID
+    // =========================================================
+
+    public async Task<Result<SensorDto>> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken = default)
     {
-        return _getSensorById.HandleAsync(
-            new GetSensorByIdQuery
-            {
-                SensorId = id
-            },
-            cancellationToken);
+        if (id == Guid.Empty)
+        {
+            return Result<SensorDto>.Fail(
+                "Sensor ID is required.");
+        }
+
+        var sensor =
+            await _sensorRepository.GetByIdAsync(
+                id,
+                cancellationToken);
+
+        if (sensor is null)
+        {
+            return Result<SensorDto>.Fail(
+                "Sensor not found.");
+        }
+
+        var dto =
+            _mapper.Map<SensorDto>(sensor);
+
+        return Result<SensorDto>.Ok(dto);
     }
 
+    // =========================================================
+    // CREATE
+    // =========================================================
+
     public async Task<Result<Guid>> CreateAsync(
-        CreateSensorCommand command,
+        CreateSensorRequest request,
         CancellationToken cancellationToken = default)
     {
-        // A sensor must have a gateway so that we can determine
-        // the CompanyId for the audit record.
-        if (!command.GatewayId.HasValue)
+        var validationResult =
+            await _createValidator.ValidateAsync(
+                request,
+                cancellationToken);
+
+        if (!validationResult.IsValid)
+        {
+            var errors = string.Join(
+                "; ",
+                validationResult.Errors
+                    .Select(x => x.ErrorMessage));
+
+            return Result<Guid>.Fail(errors);
+        }
+
+        // -----------------------------------------------------
+        // GATEWAY VALIDATION
+        // -----------------------------------------------------
+
+        if (!request.GatewayId.HasValue)
         {
             return Result<Guid>.Fail(
                 "Sensor must be associated with a gateway.");
         }
 
-        var gatewayId = command.GatewayId.Value;
+        var gateway =
+            await _gatewayRepository.GetByIdAsync(
+                request.GatewayId.Value,
+                cancellationToken);
 
-        var gatewayResult = await _getGatewayById.HandleAsync(
-            new GetGatewayByIdQuery
-            {
-                Id = gatewayId
-            },
-            cancellationToken);
-
-        if (!gatewayResult.Success)
+        if (gateway is null)
         {
             return Result<Guid>.Fail(
-                gatewayResult.Error ?? "Unable to retrieve gateway.");
+                "Gateway not found.");
         }
 
-        var result = await _createSensor.HandleAsync(
-            command,
+        // -----------------------------------------------------
+        // CREATE SENSOR
+        // -----------------------------------------------------
+
+        var now = DateTime.UtcNow;
+
+        var sensor = new Sensor
+        {
+            Id = Guid.NewGuid(),
+
+            Name = request.Name,
+            DeviceIdentifier = request.DeviceIdentifier,
+            Category = request.Category,
+            Location = request.Location,
+            Description = request.Description,
+
+            GatewayId = request.GatewayId,
+
+            IsActive = request.IsActive,
+
+            CreatedAt = now,
+            UpdatedAt = now
+        };
+
+        await _sensorRepository.AddAsync(
+            sensor,
             cancellationToken);
 
-        if (!result.Success)
-            return result;
+        // -----------------------------------------------------
+        // AUDIT
+        // -----------------------------------------------------
 
         await _auditLog.LogAsync(
             entityType: "Sensor",
-            entityId: result.Data,
+            entityId: sensor.Id,
             action: "Created",
-            companyId: gatewayResult.Data!.CompanyId,
+            companyId: gateway.CompanyId,
             details: "Sensor created.",
             cancellationToken: cancellationToken);
 
-        return result;
+        return Result<Guid>.Ok(sensor.Id);
     }
 
+    // =========================================================
+    // UPDATE
+    // =========================================================
+
     public async Task<Result<bool>> UpdateAsync(
-        UpdateSensorCommand command,
+        UpdateSensorRequest request,
         CancellationToken cancellationToken = default)
     {
-        var sensorResult = await _getSensorById.HandleAsync(
-            new GetSensorByIdQuery
-            {
-                SensorId = command.Id
-            },
-            cancellationToken);
+        var validationResult =
+            await _updateValidator.ValidateAsync(
+                request,
+                cancellationToken);
 
-        if (!sensorResult.Success)
+        if (!validationResult.IsValid)
         {
-            return Result<bool>.Fail(
-                sensorResult.Error ?? "Unable to retrieve sensor.");
+            var errors = string.Join(
+                "; ",
+                validationResult.Errors
+                    .Select(x => x.ErrorMessage));
+
+            return Result<bool>.Fail(errors);
         }
 
-        var gatewayId = sensorResult.Data!.GatewayId;
+        var sensor =
+            await _sensorRepository.GetByIdAsync(
+                request.Id,
+                cancellationToken);
 
-        if (!gatewayId.HasValue)
+        if (sensor is null)
         {
             return Result<bool>.Fail(
-                "Sensor is not associated with a gateway.");
+                "Sensor not found.");
         }
 
-        var gatewayResult = await _getGatewayById.HandleAsync(
-            new GetGatewayByIdQuery
-            {
-                Id = gatewayId.Value
-            },
-            cancellationToken);
+        // -----------------------------------------------------
+        // GATEWAY VALIDATION
+        // -----------------------------------------------------
 
-        if (!gatewayResult.Success)
+        if (!request.GatewayId.HasValue)
         {
             return Result<bool>.Fail(
-                gatewayResult.Error ?? "Unable to retrieve gateway.");
+                "Sensor must be associated with a gateway.");
         }
 
-        var result = await _updateSensor.HandleAsync(
-            command,
+        var gateway =
+            await _gatewayRepository.GetByIdAsync(
+                request.GatewayId.Value,
+                cancellationToken);
+
+        if (gateway is null)
+        {
+            return Result<bool>.Fail(
+                "Gateway not found.");
+        }
+
+        // -----------------------------------------------------
+        // UPDATE SENSOR
+        // -----------------------------------------------------
+
+        sensor.Name =
+            request.Name;
+
+        sensor.DeviceIdentifier =
+            request.DeviceIdentifier;
+
+        sensor.Category =
+            request.Category;
+
+        sensor.Location =
+            request.Location;
+
+        sensor.Description =
+            request.Description;
+
+        sensor.GatewayId =
+            request.GatewayId;
+
+        sensor.IsActive =
+            request.IsActive;
+
+        // Preserve CreatedAt.
+        // Update UpdatedAt for synchronization.
+        sensor.UpdatedAt =
+            DateTime.UtcNow;
+
+        await _sensorRepository.UpdateAsync(
+            sensor,
             cancellationToken);
 
-        if (!result.Success)
-            return result;
+        // -----------------------------------------------------
+        // AUDIT
+        // -----------------------------------------------------
 
         await _auditLog.LogAsync(
             entityType: "Sensor",
-            entityId: command.Id,
+            entityId: sensor.Id,
             action: "Updated",
-            companyId: gatewayResult.Data!.CompanyId,
+            companyId: gateway.CompanyId,
             details: "Sensor updated.",
             cancellationToken: cancellationToken);
 
-        return result;
+        return Result<bool>.Ok(true);
     }
+
+    // =========================================================
+    // DELETE
+    // =========================================================
 
     public async Task<Result<bool>> DeleteAsync(
         Guid id,
         CancellationToken cancellationToken = default)
     {
-        var sensorResult = await _getSensorById.HandleAsync(
-            new GetSensorByIdQuery
-            {
-                SensorId = id
-            },
-            cancellationToken);
-
-        if (!sensorResult.Success)
+        if (id == Guid.Empty)
         {
             return Result<bool>.Fail(
-                sensorResult.Error ?? "Unable to retrieve sensor.");
+                "Sensor ID is required.");
         }
 
-        var gatewayId = sensorResult.Data!.GatewayId;
+        var sensor =
+            await _sensorRepository.GetByIdAsync(
+                id,
+                cancellationToken);
 
-        if (!gatewayId.HasValue)
+        if (sensor is null)
+        {
+            return Result<bool>.Fail(
+                "Sensor not found.");
+        }
+
+        // -----------------------------------------------------
+        // GATEWAY / COMPANY FOR AUDIT
+        // -----------------------------------------------------
+
+        if (!sensor.GatewayId.HasValue)
         {
             return Result<bool>.Fail(
                 "Sensor is not associated with a gateway.");
         }
 
-        var gatewayResult = await _getGatewayById.HandleAsync(
-            new GetGatewayByIdQuery
-            {
-                Id = gatewayId.Value
-            },
-            cancellationToken);
+        var gateway =
+            await _gatewayRepository.GetByIdAsync(
+                sensor.GatewayId.Value,
+                cancellationToken);
 
-        if (!gatewayResult.Success)
+        if (gateway is null)
         {
             return Result<bool>.Fail(
-                gatewayResult.Error ?? "Unable to retrieve gateway.");
+                "Gateway not found.");
         }
 
-        var result = await _deleteSensor.HandleAsync(
-            new DeleteSensorCommand
-            {
-                Id = id
-            },
+        // -----------------------------------------------------
+        // DELETE
+        // -----------------------------------------------------
+
+        await _sensorRepository.DeleteAsync(
+            id,
             cancellationToken);
 
-        if (!result.Success)
-            return result;
+        // -----------------------------------------------------
+        // AUDIT
+        // -----------------------------------------------------
 
         await _auditLog.LogAsync(
             entityType: "Sensor",
             entityId: id,
             action: "Deleted",
-            companyId: gatewayResult.Data!.CompanyId,
+            companyId: gateway.CompanyId,
             details: "Sensor deleted.",
             cancellationToken: cancellationToken);
 
-        return result;
+        return Result<bool>.Ok(true);
     }
 }

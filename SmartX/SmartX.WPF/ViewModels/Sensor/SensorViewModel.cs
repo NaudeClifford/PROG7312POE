@@ -1,8 +1,7 @@
 ﻿using Microsoft.Win32;
-using SmartX.Application.Commands.Sensors;
+using SmartX.Application.Requests.Sensor;
 using SmartX.Domain.Enums;
 using SmartX.Shared.DTOs;
-using SmartX.Shared.DTOs.SensorLog;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Repositories.Local;
 using SmartX.WPF.Services;
@@ -27,20 +26,14 @@ public class SensorViewModel :
     ViewModelBase,
     INavigationAware
 {
-    // =========================================================
     // DEPENDENCIES
-    // =========================================================
-
     private readonly ILocalSensorCache _sensorCache;
     private readonly ISmartXApiClient _apiClient;
     private readonly INavigationService _navigationService;
     private readonly ICacheSyncService _cacheSyncService;
     private readonly SmartXSession _session;
 
-    // =========================================================
     // MODE
-    // =========================================================
-
     public enum SensorMode
     {
         List,
@@ -76,10 +69,7 @@ public class SensorViewModel :
     public bool IsEditMode =>
         Mode == SensorMode.Edit;
 
-    // =========================================================
     // STATE
-    // =========================================================
-
     private bool _isLoaded;
     private bool _isBusy;
     private bool _isOnline;
@@ -90,9 +80,7 @@ public class SensorViewModel :
 
     private DomainSensor? _selectedSensor;
 
-    // =========================================================
     // FORM
-    // =========================================================
 
     private string _name = string.Empty;
     private string _deviceIdentifier = string.Empty;
@@ -101,10 +89,7 @@ public class SensorViewModel :
     private string? _description;
     private bool _isActive = true;
 
-    // =========================================================
     // CONSTRUCTOR
-    // =========================================================
-
     public SensorViewModel(
         ILocalSensorCache sensorCache,
         ISmartXApiClient apiClient,
@@ -118,10 +103,7 @@ public class SensorViewModel :
         _session = session;
         _cacheSyncService = cacheSyncService;
 
-        // -----------------------------------------------------
         // LIST / CRUD
-        // -----------------------------------------------------
-
         AddSensorCommand =
             new AsyncRelayCommand(
                 AddSensorAsync,
@@ -137,10 +119,7 @@ public class SensorViewModel :
                 DeleteSensorAsync,
                 CanDeleteSensor);
 
-        // -----------------------------------------------------
         // CREATE / EDIT
-        // -----------------------------------------------------
-
         SaveSensorCommand =
             new AsyncRelayCommand(
                 SaveSensorAsync,
@@ -151,10 +130,7 @@ public class SensorViewModel :
                 CancelAsync,
                 CanCancel);
 
-        // -----------------------------------------------------
         // OTHER
-        // -----------------------------------------------------
-
         BackToGatewaysCommand =
             new AsyncRelayCommand(
                 BackToGatewaysAsync);
@@ -172,10 +148,7 @@ public class SensorViewModel :
             Session_PropertyChanged;
     }
 
-    // =========================================================
     // SENSOR PROPERTIES
-    // =========================================================
-
     public string Name
     {
         get => _name;
@@ -229,25 +202,17 @@ public class SensorViewModel :
     public ObservableCollection<SensorCategory> Categories { get; } =
         new(Enum.GetValues<SensorCategory>());
 
-    // =========================================================
     // COLLECTION
-    // =========================================================
 
     public ObservableCollection<DomainSensor> Sensors { get; } = [];
 
-    // =========================================================
     // LOG FILES
-    // =========================================================
-
     public ObservableCollection<SensorLogFileDto> LogFiles { get; } = [];
 
     public bool HasLogFiles =>
         LogFiles.Count > 0;
 
-    // =========================================================
     // GATEWAY
-    // =========================================================
-
     public string CurrentGatewayName =>
         _session.GatewayName ??
         "No Gateway Selected";
@@ -261,9 +226,7 @@ public class SensorViewModel :
     public bool HasSelectedGateway =>
         _session.GatewayId.HasValue;
 
-    // =========================================================
     // SELECTED SENSOR
-    // =========================================================
 
     public DomainSensor? SelectedSensor
     {
@@ -288,10 +251,7 @@ public class SensorViewModel :
         }
     }
 
-    // =========================================================
     // EDITING
-    // =========================================================
-
     public Guid? EditingSensorId
     {
         get => _editingSensorId;
@@ -305,10 +265,7 @@ public class SensorViewModel :
         }
     }
 
-    // =========================================================
     // STATE
-    // =========================================================
-
     public bool IsBusy
     {
         get => _isBusy;
@@ -344,10 +301,7 @@ public class SensorViewModel :
             value);
     }
 
-    // =========================================================
     // COMMANDS
-    // =========================================================
-
     public AsyncRelayCommand AddSensorCommand { get; }
 
     public AsyncRelayCommand EditSensorCommand { get; }
@@ -364,15 +318,11 @@ public class SensorViewModel :
 
     public ICommand OpenTelemetryCommand { get; }
 
-    // =========================================================
     // NAVIGATION
-    // =========================================================
-
     public void OnNavigatedTo(object parameter)
     {
-        // -----------------------------------------------------
+       
         // EDIT
-        // -----------------------------------------------------
 
         if (parameter is Guid sensorId)
         {
@@ -385,9 +335,7 @@ public class SensorViewModel :
             return;
         }
 
-        // -----------------------------------------------------
         // CREATE
-        // -----------------------------------------------------
 
         if (parameter is string mode &&
             mode.Equals(
@@ -403,10 +351,7 @@ public class SensorViewModel :
             return;
         }
 
-        // -----------------------------------------------------
         // LIST
-        // -----------------------------------------------------
-
         Mode = SensorMode.List;
 
         EditingSensorId = null;
@@ -414,10 +359,7 @@ public class SensorViewModel :
         _ = LoadAsync();
     }
 
-    // =========================================================
     // CREATE MODE LOAD
-    // =========================================================
-
     private async Task LoadCreateModeAsync()
     {
         try
@@ -471,10 +413,7 @@ public class SensorViewModel :
         }
     }
 
-    // =========================================================
     // LOAD SENSOR LIST
-    // =========================================================
-
     public async Task LoadAsync(
         CancellationToken cancellationToken = default)
     {
@@ -517,10 +456,7 @@ public class SensorViewModel :
                 return;
             }
 
-            // -------------------------------------------------
-            // IMPORTANT:
             // Synchronise API -> local cache first.
-            // -------------------------------------------------
 
             await _cacheSyncService.SyncSensorsAsync();
 
@@ -560,10 +496,7 @@ public class SensorViewModel :
         }
     }
 
-    // =========================================================
     // CREATE
-    // =========================================================
-
     private bool CanAddSensor()
     {
         return IsListMode &&
@@ -596,10 +529,7 @@ public class SensorViewModel :
                HasSensorWritePermission();
     }
 
-    // =========================================================
     // SAVE / CREATE
-    // =========================================================
-
     private bool CanSaveSensor()
     {
         if (IsCreateMode)
@@ -625,9 +555,7 @@ public class SensorViewModel :
             IsBusy = true;
             ErrorMessage = string.Empty;
 
-            // =================================================
             // CREATE
-            // =================================================
 
             if (IsCreateMode)
             {
@@ -640,7 +568,7 @@ public class SensorViewModel :
                 }
 
                 var command =
-                    new CreateSensorCommand
+                    new CreateSensorRequest
                     {
                         Name = Name.Trim(),
 
@@ -675,9 +603,7 @@ public class SensorViewModel :
                     return;
                 }
 
-                // -------------------------------------------------
                 // REFRESH CACHE
-                // -------------------------------------------------
 
                 await _cacheSyncService.SyncSensorsAsync();
 
@@ -687,25 +613,20 @@ public class SensorViewModel :
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
-                // -------------------------------------------------
-                // RETURN TO LIST
                 // LoadAsync() will sync again and display it.
-                // -------------------------------------------------
 
                 _navigationService.NavigateTo<SensorsPage>();
 
                 return;
             }
 
-            // =================================================
             // UPDATE
-            // =================================================
 
             if (SelectedSensor is null)
                 return;
 
             var updateCommand =
-                new UpdateSensorCommand
+                new UpdateSensorRequest
                 {
                     Id = SelectedSensor.Id,
 
@@ -741,15 +662,11 @@ public class SensorViewModel :
                 return;
             }
 
-            // -------------------------------------------------
             // REFRESH CACHE
-            // -------------------------------------------------
 
             await _cacheSyncService.SyncSensorsAsync();
 
-            // -------------------------------------------------
             // RETURN TO LIST
-            // -------------------------------------------------
 
             _navigationService.NavigateTo<SensorsPage>();
         }
@@ -775,10 +692,7 @@ public class SensorViewModel :
         }
     }
 
-    // =========================================================
     // EDIT
-    // =========================================================
-
     private bool CanEditSensor()
     {
         return IsListMode &&
@@ -803,10 +717,7 @@ public class SensorViewModel :
         await Task.CompletedTask;
     }
 
-    // =========================================================
     // LOAD EDIT
-    // =========================================================
-
     private async Task LoadSensorForEditAsync(
         Guid sensorId)
     {
@@ -874,9 +785,7 @@ public class SensorViewModel :
         }
     }
 
-    // =========================================================
     // DELETE
-    // =========================================================
 
     private bool CanDeleteSensor()
     {
@@ -926,15 +835,11 @@ public class SensorViewModel :
                 return;
             }
 
-            // -------------------------------------------------
+            
             // REFRESH CACHE
-            // -------------------------------------------------
-
             await _cacheSyncService.SyncSensorsAsync();
 
-            // -------------------------------------------------
             // RELOAD LIST
-            // -------------------------------------------------
 
             await LoadAsync();
         }
@@ -956,9 +861,7 @@ public class SensorViewModel :
         }
     }
 
-    // =========================================================
     // CANCEL
-    // =========================================================
 
     private bool CanCancel()
     {
@@ -978,10 +881,7 @@ public class SensorViewModel :
         await Task.CompletedTask;
     }
 
-    // =========================================================
     // RESET FORM
-    // =========================================================
-
     private void ResetForm()
     {
         EditingSensorId = null;
@@ -999,10 +899,7 @@ public class SensorViewModel :
         OnPropertyChanged(nameof(HasLogFiles));
     }
 
-    // =========================================================
     // LOG FILES
-    // =========================================================
-
     private async Task LoadLogFilesAsync(
         Guid sensorId,
         CancellationToken cancellationToken = default)
@@ -1120,10 +1017,7 @@ public class SensorViewModel :
                HasSensorWritePermission();
     }
 
-    // =========================================================
     // TELEMETRY
-    // =========================================================
-
     private void OpenTelemetry(object? parameter)
     {
         if (parameter is not DomainSensor sensor)
@@ -1133,10 +1027,7 @@ public class SensorViewModel :
             sensor.Id);
     }
 
-    // =========================================================
     // BACK
-    // =========================================================
-
     private async Task BackToGatewaysAsync()
     {
         _navigationService.NavigateTo<GatewayPage>();
@@ -1144,10 +1035,7 @@ public class SensorViewModel :
         await Task.CompletedTask;
     }
 
-    // =========================================================
     // PERMISSIONS
-    // =========================================================
-
     private bool HasSensorWritePermission()
     {
         return _session.Role is
@@ -1155,10 +1043,7 @@ public class SensorViewModel :
             UserRole.Administrator;
     }
 
-    // =========================================================
     // SESSION
-    // =========================================================
-
     private async void Session_PropertyChanged(
         object? sender,
         PropertyChangedEventArgs e)
@@ -1201,10 +1086,7 @@ public class SensorViewModel :
         }
     }
 
-    // =========================================================
     // COUNTS
-    // =========================================================
-
     private void RaiseSensorCounts()
     {
         OnPropertyChanged(nameof(TotalSensors));
@@ -1225,10 +1107,7 @@ public class SensorViewModel :
     public int ActiveAlerts =>
         0;
 
-    // =========================================================
     // COMMAND STATE
-    // =========================================================
-
     private void RaiseCommandStates()
     {
         AddSensorCommand?.RaiseCanExecuteChanged();

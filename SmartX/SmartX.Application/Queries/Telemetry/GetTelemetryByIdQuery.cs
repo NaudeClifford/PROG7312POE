@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace SmartX.Application.Queries.Telemetry;
 
-namespace SmartX.Application.Queries.Telemetry
+public class GetTelemetryByIdQuery
 {
-    public class GetTelemetryByIdQuery
-    {
-        public Guid TelemetryId { get; set; }
-    }
+    public Guid TelemetryId { get; set; }
 }

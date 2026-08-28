@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SmartX.Application.Commands.Gateway;
+using SmartX.Application.Requests.Gateway;
 using SmartX.Application.Services.CRUD;
 
 namespace SmartX.API.Controllers;
@@ -46,11 +46,11 @@ public class GatewaysController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> Create(
-        CreateGatewayCommand command,
+        CreateGatewayRequest request,
         CancellationToken cancellationToken)
     {
         var result = await _crud.CreateAsync(
-            command,
+            request,
             cancellationToken);
 
         if (!result.Success)
@@ -62,13 +62,13 @@ public class GatewaysController : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(
         Guid id,
-        UpdateGatewayCommand command,
+        UpdateGatewayRequest request,
         CancellationToken cancellationToken)
     {
-        command.Id = id;
+        request.Id = id;
 
         var result = await _crud.UpdateAsync(
-            command,
+            request,
             cancellationToken);
 
         if (!result.Success)

@@ -9,9 +9,7 @@ namespace SmartX.WPF.Services;
 
 public class SmartXSession : INotifyPropertyChanged
 {
-    // =========================================================
     // PRIVATE FIELDS
-    // =========================================================
 
     private Guid _userId;
     private Guid _companyId;
@@ -33,10 +31,8 @@ public class SmartXSession : INotifyPropertyChanged
     private Guid _selectedCompanyId;
     private string? _selectedCompanyName;
 
-    // =========================================================
-    // PROPERTIES
-    // =========================================================
 
+    // PROPERTIES
     public Guid UserId
     {
         get => _userId;
@@ -115,10 +111,20 @@ public class SmartXSession : INotifyPropertyChanged
         private set => SetField(ref _isGuest, value);
     }
 
-    // =========================================================
-    // PROPERTY CHANGED
-    // =========================================================
+    public Guid SelectedCompanyId
+    {
+        get => _selectedCompanyId;
+        private set => SetField(ref _selectedCompanyId, value);
+    }
 
+    public string? SelectedCompanyName
+    {
+        get => _selectedCompanyName;
+        private set => SetField(ref _selectedCompanyName, value);
+    }
+
+
+    // PROPERTY CHANGED
     public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged(
@@ -140,24 +146,19 @@ public class SmartXSession : INotifyPropertyChanged
         }
 
         field = value;
+
         OnPropertyChanged(propertyName);
 
         return true;
     }
 
-    // =========================================================
     // SIGN IN
-    // =========================================================
-
     public void SignIn(
         UserDto user,
         string idToken,
         string refreshToken)
     {
-        if (user == null)
-        {
-            throw new ArgumentNullException(nameof(user));
-        }
+        ArgumentNullException.ThrowIfNull(user);
 
         UserId = user.Id;
         CompanyId = user.CompanyId;
@@ -170,18 +171,18 @@ public class SmartXSession : INotifyPropertyChanged
         IdToken = idToken;
         RefreshToken = refreshToken;
 
-        // A new login starts without a selected gateway.
         GatewayId = null;
         GatewayName = null;
+
+        SelectedCompanyId = user.CompanyId;
+
+        SelectedCompanyName = null;
 
         IsAuthenticated = true;
         IsGuest = false;
     }
 
-    // =========================================================
     // GUEST SESSION
-    // =========================================================
-
     public void StartGuestSession(string name)
     {
         UserId = Guid.Empty;
@@ -198,14 +199,14 @@ public class SmartXSession : INotifyPropertyChanged
         GatewayId = null;
         GatewayName = null;
 
+        SelectedCompanyId = Guid.Empty;
+        SelectedCompanyName = null;
+
         IsAuthenticated = false;
         IsGuest = true;
     }
 
-    // =========================================================
     // SIGN OUT
-    // =========================================================
-
     public void SignOut()
     {
         UserId = Guid.Empty;
@@ -222,48 +223,35 @@ public class SmartXSession : INotifyPropertyChanged
         GatewayId = null;
         GatewayName = null;
 
+        SelectedCompanyId = Guid.Empty;
+        SelectedCompanyName = null;
+
         IsAuthenticated = false;
         IsGuest = false;
     }
 
-    // =========================================================
-    // COMPANY
-    // =========================================================
 
+    // COMPANY
     public void SelectCompany(
         Guid companyId,
         string companyName)
     {
         SelectedCompanyId = companyId;
         SelectedCompanyName = companyName;
+
+        ClearGateway();
     }
 
     public void ClearSelectedCompany()
     {
         SelectedCompanyId = Guid.Empty;
         SelectedCompanyName = null;
+
+        ClearGateway();
     }
 
-    public Guid SelectedCompanyId
-    {
-        get => _selectedCompanyId;
-        private set => SetField(
-            ref _selectedCompanyId,
-            value);
-    }
 
-    public string? SelectedCompanyName
-    {
-        get => _selectedCompanyName;
-        private set => SetField(
-            ref _selectedCompanyName,
-            value);
-    }
-
-    // =========================================================
     // GATEWAY
-    // =========================================================
-
     public void SelectGateway(
         Guid gatewayId,
         string gatewayName)
@@ -271,7 +259,6 @@ public class SmartXSession : INotifyPropertyChanged
         GatewayId = gatewayId;
         GatewayName = gatewayName;
     }
-
 
     public void ClearGateway()
     {
