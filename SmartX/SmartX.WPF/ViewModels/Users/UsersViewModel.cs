@@ -4,8 +4,9 @@ using SmartX.Domain.Entities;
 using SmartX.Domain.Enums;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Repositories.Local;
-using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
+using SmartX.WPF.Services.Connectivity;
+using SmartX.WPF.Services.Session;
 using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Company;
@@ -20,14 +21,9 @@ public class UsersViewModel : ViewModelBase
 {
     private readonly ISmartXApiClient _apiClient;
     private readonly INavigationService _navigationService;
-    private readonly SmartXSession _session;
     private readonly IMapper _mapper;
     private readonly ILocalUserCache _userCache;
     private readonly ICacheSyncService _cacheSyncService;
-
-    private bool _isLoaded;
-    private bool _isBusy;
-    private bool _isOnline;
     private bool _isEditing;
 
     private string _errorMessage = string.Empty;
@@ -49,9 +45,9 @@ public class UsersViewModel : ViewModelBase
     // COMPANY
 
     public Guid EffectiveCompanyId =>
-        _session.Role == UserRole.SuperAdmin
-            ? _session.SelectedCompanyId
-            : _session.CompanyId;
+        Session.Role == UserRole.SuperAdmin
+            ? Session.SelectedCompanyId
+            : Session.CompanyId;
 
     public Guid CompanyId =>
         EffectiveCompanyId;
@@ -59,7 +55,7 @@ public class UsersViewModel : ViewModelBase
     public bool HasCompany =>
         EffectiveCompanyId != Guid.Empty;
 
-    public string CurrentCompanyName
+    public string CurrentCompanyName1
     {
         get => _currentCompanyName;
 
@@ -85,51 +81,6 @@ public class UsersViewModel : ViewModelBase
 
             RaiseCommandStates();
         }
-    }
-
-    // STATE
-
-    public bool IsBusy
-    {
-        get => _isBusy;
-
-        private set
-        {
-            if (!SetProperty(
-                    ref _isBusy,
-                    value))
-            {
-                return;
-            }
-
-            RaiseCommandStates();
-        }
-    }
-
-    public bool IsOnline
-    {
-        get => _isOnline;
-
-        private set
-        {
-            if (!SetProperty(
-                    ref _isOnline,
-                    value))
-            {
-                return;
-            }
-
-            RaiseCommandStates();
-        }
-    }
-
-    public string ErrorMessage
-    {
-        get => _errorMessage;
-
-        private set => SetProperty(
-            ref _errorMessage,
-            value);
     }
 
     // FORM
@@ -261,11 +212,11 @@ public class UsersViewModel : ViewModelBase
         SmartXSession session,
         IMapper mapper,
         ILocalUserCache userCache,
-        ICacheSyncService cacheSyncService)
+        ICacheSyncService cacheSyncService,
+        IConnectivityService connectivityService) : base(connectivityService, session)
     {
         _apiClient = apiClient;
         _navigationService = navigationService;
-        _session = session;
         _mapper = mapper;
         _userCache = userCache;
         _cacheSyncService = cacheSyncService;
@@ -317,11 +268,6 @@ public class UsersViewModel : ViewModelBase
             new AsyncRelayCommand(
                 DeleteUserAsync,
                 CanEditUser);
-
-        // SESSION
-
-        _session.PropertyChanged +=
-            Session_PropertyChanged;
     }
 
     // LOAD
@@ -331,8 +277,6 @@ public class UsersViewModel : ViewModelBase
     {
         try
         {
-            _isLoaded = true;
-
             IsBusy = true;
             ErrorMessage = string.Empty;
 
@@ -357,7 +301,7 @@ public class UsersViewModel : ViewModelBase
 
             if (companyId == Guid.Empty)
             {
-                CurrentCompanyName =
+                CurrentCompanyName1 =
                     "No Company Selected";
 
                 ErrorMessage =
@@ -416,7 +360,7 @@ public class UsersViewModel : ViewModelBase
                         companyId,
                         cancellationToken);
 
-                CurrentCompanyName =
+                CurrentCompanyName1 =
                     company?.Name ??
                     "Current Company";
             }
@@ -518,18 +462,15 @@ public class UsersViewModel : ViewModelBase
         OnPropertyChanged(
             nameof(HasCompany));
 
-        if (!_isLoaded)
-            return;
-
         await LoadAsync();
     }
 
     // PERMISSIONS
     private bool HasUserWritePermission()
     {
-        return _session.Role ==
+        return Session.Role ==
                    UserRole.Administrator ||
-               _session.Role ==
+               Session.Role ==
                    UserRole.SuperAdmin;
     }
 
@@ -755,7 +696,6 @@ public class UsersViewModel : ViewModelBase
         }
         catch (HttpRequestException)
         {
-            IsOnline = false;
 
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
@@ -786,7 +726,7 @@ public class UsersViewModel : ViewModelBase
         // PREVENT SELF DELETE
 
         if (SelectedUser.Id ==
-            _session.UserId)
+            Session.UserId)
         {
             ErrorMessage =
                 "You cannot delete your own account.";
@@ -798,7 +738,7 @@ public class UsersViewModel : ViewModelBase
 
         if (SelectedUser.Role ==
                 UserRole.SuperAdmin &&
-            _session.Role !=
+            Session.Role !=
                 UserRole.SuperAdmin)
         {
             ErrorMessage =
@@ -843,7 +783,6 @@ public class UsersViewModel : ViewModelBase
         }
         catch (HttpRequestException)
         {
-            IsOnline = false;
 
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
@@ -919,7 +858,7 @@ public class UsersViewModel : ViewModelBase
 
     private async Task BackAsync()
     {
-        if (_session.Role ==
+        if (Session.Role ==
             UserRole.SuperAdmin)
         {
             _navigationService
@@ -958,31 +897,5 @@ public class UsersViewModel : ViewModelBase
 
         OnPropertyChanged(
             nameof(SuperAdminCount));
-    }
-
-    // COMMAND STATES
-
-    private void RaiseCommandStates()
-    {
-        BackCommand?
-            .RaiseCanExecuteChanged();
-
-        RefreshCommand?
-            .RaiseCanExecuteChanged();
-
-        AddUserCommand?
-            .RaiseCanExecuteChanged();
-
-        EditUserCommand?
-            .RaiseCanExecuteChanged();
-
-        SaveUserCommand?
-            .RaiseCanExecuteChanged();
-
-        CancelEditCommand?
-            .RaiseCanExecuteChanged();
-
-        DeleteUserCommand?
-            .RaiseCanExecuteChanged();
     }
 }

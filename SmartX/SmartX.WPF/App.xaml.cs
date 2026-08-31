@@ -1,12 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartX.Application.Authentication;
+using SmartX.Application.Mapping;
 using SmartX.WPF.Authentication;
 using SmartX.WPF.Data;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Repositories.Local;
 using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
+using SmartX.WPF.Services.Connectivity;
+using SmartX.WPF.Services.Session;
 using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels;
 using SmartX.WPF.ViewModels.Gateway;
@@ -85,14 +88,33 @@ public partial class App
         services.AddHttpClient<ISmartXApiClient, SmartXApiClient>(
             client =>
             {
-                client.BaseAddress = new Uri(apiOptions.BaseUrl);
+
+                client.BaseAddress = new Uri(apiOptions.BaseUrl);                
+                Console.WriteLine($"REGISTERED HTTP CLIENT: {client.BaseAddress}");
+
+
             });
+
+        services.AddHttpClient<IConnectivityService, ConnectivityService>(
+    client =>
+    {
+        client.BaseAddress = new Uri(apiOptions.BaseUrl);
+    });
+
+
 
         //Session
         services.AddSingleton<SmartXSession>();
 
         // SQLite Cache
         services.AddSingleton<SmartXCacheDatabase>();
+
+        //AutoMapper
+        services.AddAutoMapper(cfg =>
+        {
+            cfg.AddProfile<MappingProfile>();
+        });
+
 
         services.AddSingleton<ILocalSensorCache, SQLiteSensorCache>();
         services.AddSingleton<ILocalTelemetryCache, SQLiteTelemetryCache>();
@@ -138,9 +160,6 @@ public partial class App
 
         //Authentication
         services.AddHttpClient<IAuthenticationService,FirebaseAuthService>();
-
-        // Session
-        services.AddSingleton<SmartXSession>();
 
         // Remembered login
         services.AddSingleton<SmartXCredentialStore>();

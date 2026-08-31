@@ -1,11 +1,11 @@
 ﻿using SmartX.Application.Authentication;
 using SmartX.WPF.Navigation;
-using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
+using SmartX.WPF.Services.Connectivity;
+using SmartX.WPF.Services.Session;
 using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Gateway;
-using SmartX.WPF.Views.Pages.Home;
 using System.Net.Http;
 using System.Windows.Input;
 
@@ -15,14 +15,11 @@ public class SigninViewModel : ViewModelBase
 {
     private readonly IAuthenticationService _authenticationService;
     private readonly ISmartXApiClient _apiClient;
-    private readonly SmartXSession _session;
     private readonly ICacheSyncService _cacheSyncService;
     private readonly INavigationService _navigationService;
     private readonly SmartXCredentialStore _credentialStore;
     private string _email = string.Empty;
     private string _password = string.Empty;
-    private string _errorMessage = string.Empty;
-    private bool _isBusy;
 
     private bool _rememberMe;
 
@@ -63,33 +60,9 @@ public class SigninViewModel : ViewModelBase
         }
     }
 
-    public string ErrorMessage
-    {
-        get => _errorMessage;
-        private set
-        {
-            if (SetProperty(ref _errorMessage, value))
-                OnPropertyChanged(nameof(HasError));
-        }
-    }
-
-    public bool IsBusy
-    {
-        get => _isBusy;
-        private set
-        {
-            if (!SetProperty(ref _isBusy, value))
-                return;
-
-            OnPropertyChanged(nameof(SignInButtonText));
-
-            SignInCommand.RaiseCanExecuteChanged();
-        }
-    }
-
     private void EnterGuestMode()
     {
-        _session.StartGuestSession("Guest");
+        Session.StartGuestSession("Guest");
 
         _navigationService.NavigateTo<GatewayPage>();
     }
@@ -103,11 +76,11 @@ public class SigninViewModel : ViewModelBase
         SmartXSession session,
         ICacheSyncService cacheSyncService,
         INavigationService navigationService,
-        SmartXCredentialStore credentialStore)
+        IConnectivityService connectivityService,
+        SmartXCredentialStore credentialStore) : base(connectivityService, session)
     {
         _authenticationService = authenticationService;
         _apiClient = apiClient;
-        _session = session;
         _cacheSyncService = cacheSyncService;
         _navigationService = navigationService;
         _credentialStore = credentialStore;
@@ -156,9 +129,18 @@ public class SigninViewModel : ViewModelBase
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(result.IdToken))
+            {
+                ErrorMessage =
+                    "Firebase did not return an ID token.";
+
+                return;
+            }
+
             var user =
                 await _apiClient.GetUserByFirebaseUidAsync(
-                    result.UserId);
+                    result.UserId, result.IdToken);
+
 
             if (user is null)
             {
@@ -177,7 +159,7 @@ public class SigninViewModel : ViewModelBase
             }
 
             // Store authenticated user/session
-            _session.SignIn(
+            Session.SignIn(
                 user,
                 result.IdToken ?? string.Empty,
                 result.RefreshToken ?? string.Empty);
@@ -216,10 +198,14 @@ public class SigninViewModel : ViewModelBase
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
         }
+
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
+
             ErrorMessage = ex.Message;
         }
+
         finally
         {
             IsBusy = false;

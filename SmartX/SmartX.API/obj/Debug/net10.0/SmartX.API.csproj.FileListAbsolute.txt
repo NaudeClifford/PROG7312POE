@@ -185,3 +185,9 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\refint\Sma
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.genruntimeconfig.cache
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\ref\SmartX.API.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.MvcApplicationPartsAssemblyInfo.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Microsoft.Bcl.Cryptography.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Microsoft.IdentityModel.Protocols.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\System.IdentityModel.Tokens.Jwt.dll

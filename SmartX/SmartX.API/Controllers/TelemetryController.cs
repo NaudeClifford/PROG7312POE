@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmartX.Application.Commands.Telemetry;
 using SmartX.Application.Queries.Telemetry;
 
@@ -6,6 +7,8 @@ namespace SmartX.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Administrator, Technician")]
+
 public class TelemetryController : ControllerBase
 {
     private readonly CreateTelemetryHandler _createTelemetryHandler;

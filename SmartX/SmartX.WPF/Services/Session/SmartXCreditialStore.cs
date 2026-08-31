@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace SmartX.WPF.Services;
+namespace SmartX.WPF.Services.Session;
 
 public class SmartXCredentialStore
 {

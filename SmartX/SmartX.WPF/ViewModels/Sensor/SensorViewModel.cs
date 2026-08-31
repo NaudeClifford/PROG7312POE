@@ -6,6 +6,8 @@ using SmartX.WPF.Navigation;
 using SmartX.WPF.Repositories.Local;
 using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
+using SmartX.WPF.Services.Connectivity;
+using SmartX.WPF.Services.Session;
 using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Gateway;
@@ -31,7 +33,6 @@ public class SensorViewModel :
     private readonly ISmartXApiClient _apiClient;
     private readonly INavigationService _navigationService;
     private readonly ICacheSyncService _cacheSyncService;
-    private readonly SmartXSession _session;
 
     // MODE
     public enum SensorMode
@@ -69,13 +70,6 @@ public class SensorViewModel :
     public bool IsEditMode =>
         Mode == SensorMode.Edit;
 
-    // STATE
-    private bool _isLoaded;
-    private bool _isBusy;
-    private bool _isOnline;
-
-    private string _errorMessage = string.Empty;
-
     private Guid? _editingSensorId;
 
     private DomainSensor? _selectedSensor;
@@ -95,12 +89,12 @@ public class SensorViewModel :
         ISmartXApiClient apiClient,
         INavigationService navigationService,
         SmartXSession session,
-        ICacheSyncService cacheSyncService)
+        ICacheSyncService cacheSyncService,
+        IConnectivityService connectivityService) : base(connectivityService, session)
     {
         _sensorCache = sensorCache;
         _apiClient = apiClient;
         _navigationService = navigationService;
-        _session = session;
         _cacheSyncService = cacheSyncService;
 
         // LIST / CRUD
@@ -143,9 +137,6 @@ public class SensorViewModel :
         OpenTelemetryCommand =
             new RelayCommand(
                 OpenTelemetry);
-
-        _session.PropertyChanged +=
-            Session_PropertyChanged;
     }
 
     // SENSOR PROPERTIES
@@ -213,18 +204,14 @@ public class SensorViewModel :
         LogFiles.Count > 0;
 
     // GATEWAY
-    public string CurrentGatewayName =>
-        _session.GatewayName ??
-        "No Gateway Selected";
-
     public Guid? SelectedGatewayId =>
-        _session.GatewayId;
+        Session.GatewayId;
 
     public string? SelectedGatewayName =>
-        _session.GatewayName;
+        Session.GatewayName;
 
     public bool HasSelectedGateway =>
-        _session.GatewayId.HasValue;
+        Session.GatewayId.HasValue;
 
     // SELECTED SENSOR
 
@@ -263,42 +250,6 @@ public class SensorViewModel :
 
             RaiseCommandStates();
         }
-    }
-
-    // STATE
-    public bool IsBusy
-    {
-        get => _isBusy;
-
-        private set
-        {
-            if (!SetProperty(ref _isBusy, value))
-                return;
-
-            RaiseCommandStates();
-        }
-    }
-
-    public bool IsOnline
-    {
-        get => _isOnline;
-
-        private set
-        {
-            if (!SetProperty(ref _isOnline, value))
-                return;
-
-            RaiseCommandStates();
-        }
-    }
-
-    public string ErrorMessage
-    {
-        get => _errorMessage;
-
-        private set => SetProperty(
-            ref _errorMessage,
-            value);
     }
 
     // COMMANDS
@@ -367,7 +318,7 @@ public class SensorViewModel :
             IsBusy = true;
             ErrorMessage = string.Empty;
 
-            if (_session.CompanyId == Guid.Empty)
+            if (Session.CompanyId == Guid.Empty)
             {
                 ErrorMessage =
                     "No company is associated with this session.";
@@ -375,8 +326,8 @@ public class SensorViewModel :
                 return;
             }
 
-            if (!_session.GatewayId.HasValue ||
-                _session.GatewayId.Value == Guid.Empty)
+            if (!Session.GatewayId.HasValue ||
+                Session.GatewayId.Value == Guid.Empty)
             {
                 ErrorMessage =
                     "No gateway is currently selected.";
@@ -384,23 +335,14 @@ public class SensorViewModel :
                 return;
             }
 
-            IsOnline =
-                await _apiClient.IsAvailableAsync();
-
-            if (!IsOnline)
+            if (!await CheckOnlineAsync())
             {
                 ErrorMessage =
-                    "Unable to connect to the SmartX API.";
+                    "You are offline. Creating sensors is unavailable.";
 
                 return;
             }
-        }
-        catch (HttpRequestException)
-        {
-            IsOnline = false;
 
-            ErrorMessage =
-                "Unable to connect to the SmartX API.";
         }
         catch (Exception ex)
         {
@@ -419,15 +361,11 @@ public class SensorViewModel :
     {
         try
         {
-            _isLoaded = true;
-
-            IsBusy = true;
-            ErrorMessage = string.Empty;
 
             Sensors.Clear();
             SelectedSensor = null;
 
-            if (_session.CompanyId == Guid.Empty)
+            if (Session.CompanyId == Guid.Empty)
             {
                 ErrorMessage =
                     "No company is associated with this session.";
@@ -435,8 +373,9 @@ public class SensorViewModel :
                 return;
             }
 
-            if (!_session.GatewayId.HasValue ||
-                _session.GatewayId.Value == Guid.Empty)
+
+            if (!Session.GatewayId.HasValue ||
+                Session.GatewayId.Value == Guid.Empty)
             {
                 ErrorMessage =
                     "No gateway selected.";
@@ -444,25 +383,26 @@ public class SensorViewModel :
                 return;
             }
 
-            IsOnline =
-                await _apiClient.IsAvailableAsync(
-                    cancellationToken);
+            await CheckOnlineAsync(cancellationToken);
 
-            if (!IsOnline)
+            if (IsOnline)
             {
-                ErrorMessage =
-                    "Unable to connect to the SmartX API.";
-
-                return;
+                try
+                {
+                    await _cacheSyncService.SyncSensorsAsync(
+                        cancellationToken);
+                }
+                catch (HttpRequestException)
+                {
+                    ErrorMessage =
+                        "Unable to connect to the SmartX API.";
+                }
             }
 
-            // Synchronise API -> local cache first.
-
-            await _cacheSyncService.SyncSensorsAsync();
 
             var sensors =
                 await _sensorCache.GetByGatewayIdAsync(
-                    _session.GatewayId.Value,
+                    Session.GatewayId.Value,
                     cancellationToken);
 
             foreach (var sensor in sensors)
@@ -477,13 +417,6 @@ public class SensorViewModel :
         catch (OperationCanceledException)
         {
             throw;
-        }
-        catch (HttpRequestException)
-        {
-            IsOnline = false;
-
-            ErrorMessage =
-                "Unable to connect to the SmartX API.";
         }
         catch (Exception ex)
         {
@@ -512,8 +445,7 @@ public class SensorViewModel :
             return;
 
         // Same VM, different page.
-        _navigationService.NavigateTo<SensorSetupPage>(
-            "Create");
+        _navigationService.NavigateTo<SensorSetupPage>("Create");
 
         await Task.CompletedTask;
     }
@@ -555,11 +487,14 @@ public class SensorViewModel :
             IsBusy = true;
             ErrorMessage = string.Empty;
 
+            if (!await RequireOnlineAsync())
+                return;
+
             // CREATE
 
             if (IsCreateMode)
             {
-                if (!_session.GatewayId.HasValue)
+                if (!Session.GatewayId.HasValue)
                 {
                     ErrorMessage =
                         "No gateway is currently selected.";
@@ -587,8 +522,7 @@ public class SensorViewModel :
                                 ? string.Empty
                                 : Description.Trim(),
 
-                        GatewayId =
-                            _session.GatewayId.Value
+                        GatewayId = Session.GatewayId.Value
                     };
 
                 var sensorId =
@@ -672,7 +606,6 @@ public class SensorViewModel :
         }
         catch (HttpRequestException)
         {
-            IsOnline = false;
 
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
@@ -726,19 +659,21 @@ public class SensorViewModel :
             IsBusy = true;
             ErrorMessage = string.Empty;
 
-            IsOnline =
-                await _apiClient.IsAvailableAsync();
+            await CheckOnlineAsync();
 
-            if (!IsOnline)
+            if (IsOnline)
             {
-                ErrorMessage =
-                    "Unable to connect to the SmartX API.";
+                try
+                {
+                    await _cacheSyncService.SyncSensorsAsync();
+                }
+                catch (HttpRequestException)
+                {
 
-                return;
+                    ErrorMessage =
+                        "Unable to connect to the SmartX API. Showing cached data.";
+                }
             }
-
-            // Refresh first so edit uses current data.
-            await _cacheSyncService.SyncSensorsAsync();
 
             var sensor =
                 await _sensorCache.GetByIdAsync(
@@ -761,11 +696,19 @@ public class SensorViewModel :
             Description = sensor.Description;
             IsActive = sensor.IsActive;
 
-            await LoadLogFilesAsync(sensorId);
+            // Log files require the API.
+            if (IsOnline)
+            {
+                await LoadLogFilesAsync(sensorId);
+            }
+            else
+            {
+                LogFiles.Clear();
+                OnPropertyChanged(nameof(HasLogFiles));
+            }
         }
         catch (HttpRequestException)
         {
-            IsOnline = false;
 
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
@@ -820,6 +763,9 @@ public class SensorViewModel :
             IsBusy = true;
             ErrorMessage = string.Empty;
 
+            if (!await RequireOnlineAsync())
+                return;
+
             var sensorId =
                 SelectedSensor.Id;
 
@@ -845,7 +791,6 @@ public class SensorViewModel :
         }
         catch (HttpRequestException)
         {
-            IsOnline = false;
 
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
@@ -920,8 +865,6 @@ public class SensorViewModel :
         }
         catch (HttpRequestException)
         {
-            IsOnline = false;
-
             ErrorMessage =
                 "Unable to load the sensor log files.";
         }
@@ -959,6 +902,10 @@ public class SensorViewModel :
             var fileInfo =
                 new FileInfo(dialog.FileName);
 
+
+            if (!await RequireOnlineAsync())
+                return;
+
             if (!fileInfo.Exists)
             {
                 ErrorMessage =
@@ -976,7 +923,7 @@ public class SensorViewModel :
                     fileInfo.Name,
                     stream,
                     "text/plain",
-                    _session.UserId);
+                    Session.UserId);
 
             if (!result.Success)
             {
@@ -992,7 +939,6 @@ public class SensorViewModel :
         }
         catch (HttpRequestException)
         {
-            IsOnline = false;
 
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
@@ -1038,53 +984,47 @@ public class SensorViewModel :
     // PERMISSIONS
     private bool HasSensorWritePermission()
     {
-        return _session.Role is
+        return Session.Role is
             UserRole.Technician or
             UserRole.Administrator;
     }
 
     // SESSION
-    private async void Session_PropertyChanged(
-        object? sender,
-        PropertyChangedEventArgs e)
+    protected override async void OnSessionPropertyChanged(
+    PropertyChangedEventArgs e)
     {
-        if (e.PropertyName !=
-                nameof(SmartXSession.GatewayId) &&
-            e.PropertyName !=
-                nameof(SmartXSession.GatewayName))
+        base.OnSessionPropertyChanged(e);
+
+        if (e.PropertyName != nameof(SmartXSession.GatewayId) &&
+            e.PropertyName != nameof(SmartXSession.GatewayName))
         {
             return;
         }
 
         OnPropertyChanged(nameof(SelectedGatewayId));
         OnPropertyChanged(nameof(SelectedGatewayName));
-        OnPropertyChanged(nameof(CurrentGatewayName));
         OnPropertyChanged(nameof(HasSelectedGateway));
 
         RaiseCommandStates();
 
-        if (!_isLoaded)
-            return;
-
-        if (!_session.GatewayId.HasValue)
+        if (!Session.GatewayId.HasValue)
         {
             Sensors.Clear();
             SelectedSensor = null;
 
             RaiseSensorCounts();
 
-            ErrorMessage =
-                "No gateway selected.";
+            ErrorMessage = "No gateway selected.";
 
             return;
         }
 
-        if (e.PropertyName ==
-            nameof(SmartXSession.GatewayId))
+        if (e.PropertyName == nameof(SmartXSession.GatewayId))
         {
             await LoadAsync();
         }
     }
+
 
     // COUNTS
     private void RaiseSensorCounts()
@@ -1107,8 +1047,15 @@ public class SensorViewModel :
     public int ActiveAlerts =>
         0;
 
+    // CONNECTIVITY
+
+    protected override void RaiseConnectivityState()
+    {
+        RaiseCommandStates();
+    }
+
     // COMMAND STATE
-    private void RaiseCommandStates()
+    protected override void RaiseCommandStates()
     {
         AddSensorCommand?.RaiseCanExecuteChanged();
         EditSensorCommand?.RaiseCanExecuteChanged();

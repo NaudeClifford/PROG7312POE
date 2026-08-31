@@ -9,8 +9,6 @@ public partial class TelemetryPage : Page, INavigationAware
 {
     private readonly TelemetryViewModel _viewModel;
 
-    private readonly Guid _sensorId;
-
     public TelemetryPage(
         TelemetryViewModel viewModel)
     {
@@ -27,7 +25,7 @@ public partial class TelemetryPage : Page, INavigationAware
         object sender,
         RoutedEventArgs e)
     {
-        await _viewModel.LoadAsync(_sensorId);
+        await _viewModel.LoadAsync();
     }
 
     public async void OnNavigatedTo(object parameter)

@@ -4,6 +4,7 @@ using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SmartX.Domain.Interfaces;
 
 namespace SmartX.Infrastructure.Authentication.Firebase;
 
@@ -11,21 +12,25 @@ public class FirebaseAuthHandler
     : AuthenticationHandler<AuthenticationSchemeOptions>
 {
     private readonly FirebaseAuthService _firebaseAuthService;
+    private readonly IUserRepository _userRepository;
 
     public FirebaseAuthHandler(
         IOptionsMonitor<AuthenticationSchemeOptions> options,
         ILoggerFactory logger,
         UrlEncoder encoder,
         ISystemClock clock,
-        FirebaseAuthService firebaseAuthService)
+        FirebaseAuthService firebaseAuthService,
+        IUserRepository userRepository)
         : base(options, logger, encoder, clock)
     {
         _firebaseAuthService = firebaseAuthService;
+        _userRepository = userRepository;
     }
 
     protected override async Task<AuthenticateResult>
         HandleAuthenticateAsync()
     {
+
         if (!Request.Headers.TryGetValue(
                 "Authorization",
                 out var authorizationHeader))
@@ -54,40 +59,57 @@ public class FirebaseAuthHandler
         try
         {
             var decodedToken =
-                await _firebaseAuthService
-                    .VerifyTokenAsync(idToken);
+                await _firebaseAuthService.VerifyTokenAsync(idToken);
+
+            var user =
+                await _userRepository.GetByFirebaseUidAsync(
+                    decodedToken.Uid);
+
+            if (user is null)
+            {
+                return AuthenticateResult.Fail(
+                    "SmartX user was not found.");
+            }
+
+            if (!user.IsActive)
+            {
+                return AuthenticateResult.Fail(
+                    "SmartX user is inactive.");
+            }
 
             var claims = new List<Claim>
-            {
-                new Claim(
-                    ClaimTypes.NameIdentifier,
-                    decodedToken.Uid)
-            };
+    {
+        new(
+            ClaimTypes.NameIdentifier,
+            decodedToken.Uid),
 
-            var identity =
-                new ClaimsIdentity(
-                    claims,
-                    Scheme.Name);
+        new(
+            ClaimTypes.Role,
+            user.Role.ToString())
+    };
 
-            var principal =
-                new ClaimsPrincipal(identity);
+            var identity = new ClaimsIdentity(
+                claims,
+                Scheme.Name);
 
-            var ticket =
-                new AuthenticationTicket(
-                    principal,
-                    Scheme.Name);
+            var principal = new ClaimsPrincipal(identity);
+
+            var ticket = new AuthenticationTicket(
+                principal,
+                Scheme.Name);
 
             return AuthenticateResult.Success(ticket);
         }
-        catch (FirebaseAuthException)
+        catch (FirebaseAuthException ex)
         {
             return AuthenticateResult.Fail(
-                "Invalid Firebase authentication token.");
+                $"Firebase authentication failed: {ex.Message}");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             return AuthenticateResult.Fail(
-                "Firebase authentication failed.");
+                $"Authentication handler failed: {ex.Message}");
         }
+
     }
 }

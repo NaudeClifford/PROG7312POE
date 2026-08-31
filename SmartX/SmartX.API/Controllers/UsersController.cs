@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmartX.Application.Requests.User;
 using SmartX.Application.Services.CRUD;
 
@@ -6,6 +7,8 @@ namespace SmartX.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "SuperAdmin, Administrator")]
+
 public class UsersController : ControllerBase
 {
     private readonly UserCrudService _crud;
@@ -16,7 +19,9 @@ public class UsersController : ControllerBase
         _crud = crud;
     }
 
-    [HttpGet]
+    [HttpGet]    
+    [Authorize]
+
     public async Task<IActionResult> GetAll(
         CancellationToken cancellationToken)
     {
@@ -29,7 +34,9 @@ public class UsersController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id:guid}")]   
+    [Authorize]
+
     public async Task<IActionResult> GetById(
         Guid id,
         CancellationToken cancellationToken)
@@ -44,7 +51,9 @@ public class UsersController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("firebase/{firebaseUid}")]
+    [HttpGet("firebase/{firebaseUid}")]  
+    [Authorize]
+
     public async Task<IActionResult> GetByFirebaseUid(
         string firebaseUid,
         CancellationToken cancellationToken)

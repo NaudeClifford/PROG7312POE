@@ -1,7 +1,7 @@
 [
   {
     "ContainingType": "SmartX.API.Program\u002B\u003C\u003Ec",
-    "Method": "\u003CMain\u003Eb__0_1",
+    "Method": "\u003CMain\u003Eb__0_3",
     "RelativePath": "",
     "HttpMethod": "GET",
     "IsController": false,
@@ -562,7 +562,7 @@
   },
   {
     "ContainingType": "SmartX.API.Program\u002B\u003C\u003Ec",
-    "Method": "\u003CMain\u003Eb__0_2",
+    "Method": "\u003CMain\u003Eb__0_4",
     "RelativePath": "test",
     "HttpMethod": "GET",
     "IsController": false,

@@ -7,11 +7,14 @@ using SmartX.Shared.DTOs;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
 using SmartX.Shared.Models;
+using SmartX.WPF.Services.Session;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace SmartX.WPF.Services.Api;
 
@@ -21,16 +24,20 @@ public class SmartXApiClient(
 {
     private readonly HttpClient _httpClient = httpClient;
     private readonly SmartXSession _session = session;
+        
+
 
     // AUTHENTICATION
-    // ============================================================
 
     private void AddAuthenticationHeader()
     {
         _httpClient.DefaultRequestHeaders.Authorization = null;
 
         if (string.IsNullOrWhiteSpace(_session.IdToken))
-            return;
+        {
+            throw new InvalidOperationException(
+                "Session IdToken is empty.");
+        }
 
         _httpClient.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue(
@@ -39,9 +46,8 @@ public class SmartXApiClient(
     }
 
 
-    // ============================================================
+
     // HEALTH
-    // ============================================================
 
     public async Task<bool> IsAvailableAsync(
         CancellationToken cancellationToken = default)
@@ -64,9 +70,7 @@ public class SmartXApiClient(
     }
 
 
-    // ============================================================
     // SENSORS - CRUD
-    // ============================================================
 
     public async Task<IReadOnlyList<SensorDto>>
         GetSensorsAsync(
@@ -609,13 +613,20 @@ public class SmartXApiClient(
 
     public async Task<UserDto?>
         GetUserByFirebaseUidAsync(
-            string firebaseUid,
+            string firebaseUid, string idToken,
             CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(firebaseUid))
             return null;
 
-        AddAuthenticationHeader();
+        if (string.IsNullOrWhiteSpace(idToken))
+            throw new InvalidOperationException(
+                "Firebase ID token is empty.");
+
+        _httpClient.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue(
+                "Bearer",
+                idToken);
 
         var response =
             await _httpClient.GetAsync(
@@ -629,7 +640,16 @@ public class SmartXApiClient(
             return null;
         }
 
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var body =
+                await response.Content.ReadAsStringAsync(
+                    cancellationToken);
+
+            throw new InvalidOperationException(
+                $"API returned {(int)response.StatusCode} " +
+                $"{response.StatusCode}: {body}");
+        }
 
         var result =
             await response.Content.ReadFromJsonAsync<
@@ -774,12 +794,16 @@ public class SmartXApiClient(
                 "api/Companies",
                 cancellationToken);
 
+        var body =
+            await response.Content.ReadAsStringAsync(
+                cancellationToken);
+
         response.EnsureSuccessStatusCode();
 
         var result =
-            await response.Content.ReadFromJsonAsync<
+            JsonSerializer.Deserialize<
                 Result<IReadOnlyList<CompanyDto>>>(
-                cancellationToken);
+                    body);
 
         if (result is null)
             throw new InvalidOperationException(
@@ -794,6 +818,7 @@ public class SmartXApiClient(
     }
 
 
+
     public async Task<CompanyDto?>
         GetCompanyByIdAsync(
             Guid id,
@@ -804,6 +829,10 @@ public class SmartXApiClient(
         var response =
             await _httpClient.GetAsync(
                 $"api/Companies/{id}",
+                cancellationToken);
+
+        var body =
+            await response.Content.ReadAsStringAsync(
                 cancellationToken);
 
         if (response.StatusCode ==

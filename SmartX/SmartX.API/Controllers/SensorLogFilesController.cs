@@ -8,6 +8,7 @@ namespace SmartX.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Administrator, Technician")]
 public class SensorLogFilesController : ControllerBase
 {
     private readonly SensorLogFileCrudService _crud;
@@ -18,10 +19,7 @@ public class SensorLogFilesController : ControllerBase
         _crud = crud;
     }
 
-    // =========================================================
     // GET ALL
-    // =========================================================
-
     [HttpGet]
     public async Task<IActionResult> GetAll(
         CancellationToken cancellationToken)
@@ -36,10 +34,7 @@ public class SensorLogFilesController : ControllerBase
         return Ok(result);
     }
 
-    // =========================================================
     // GET BY ID
-    // =========================================================
-
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(
         Guid id,
@@ -56,9 +51,7 @@ public class SensorLogFilesController : ControllerBase
         return Ok(result);
     }
 
-    // =========================================================
     // GET BY SENSOR
-    // =========================================================
 
     [HttpGet("sensor/{sensorId:guid}")]
     public async Task<IActionResult> GetBySensorId(
@@ -76,9 +69,7 @@ public class SensorLogFilesController : ControllerBase
         return Ok(result);
     }
 
-    // =========================================================
     // UPLOAD
-    // =========================================================
 
     [HttpPost]
     [RequestSizeLimit(10_000_000)]
@@ -120,11 +111,11 @@ public class SensorLogFilesController : ControllerBase
         return Ok(result);
     }
 
-    // =========================================================
     // DELETE
-    // =========================================================
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Roles = "Administrator")]
+
     public async Task<IActionResult> Delete(
         Guid id,
         CancellationToken cancellationToken)

@@ -16,12 +16,18 @@ public partial class CurrentCompanyPage : Page
     }
 
     private async void CurrentCompanyPage_Loaded(
-        object sender,
-        System.Windows.RoutedEventArgs e)
+    object sender,
+    System.Windows.RoutedEventArgs e)
     {
-        if (DataContext is CompanyViewModel viewModel)
-        {
-            await viewModel.LoadAsync();
-        }
+        if (DataContext is not CompanyViewModel viewModel)
+            return;
+
+        var companyId = viewModel.CurrentCompanyId;
+
+        if (companyId == Guid.Empty)
+            return;
+
+        await viewModel.LoadCompanyAsync(companyId);
     }
+
 }

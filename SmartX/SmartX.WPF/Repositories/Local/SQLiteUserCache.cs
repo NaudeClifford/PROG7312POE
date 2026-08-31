@@ -10,9 +10,7 @@ public class SQLiteUserCache(
 {
     private readonly SmartXCacheDatabase _database = database;
 
-    // =========================================================
     // GET BY ID
-    // =========================================================
 
     public async Task<User?> GetByIdAsync(
         Guid id,
@@ -53,9 +51,7 @@ public class SQLiteUserCache(
         return UserMapper.Map(reader);
     }
 
-    // =========================================================
     // GET BY COMPANY
-    // =========================================================
 
     public async Task<IReadOnlyList<User>> GetByCompanyIdAsync(
         Guid companyId,
@@ -104,9 +100,7 @@ public class SQLiteUserCache(
         return users;
     }
 
-    // =========================================================
     // GET BY FIREBASE UID
-    // =========================================================
 
     public async Task<User?> GetByFirebaseUidAsync(
         string firebaseUid,
@@ -147,9 +141,7 @@ public class SQLiteUserCache(
         return UserMapper.Map(reader);
     }
 
-    // =========================================================
     // GET BY EMAIL
-    // =========================================================
 
     public async Task<User?> GetByEmailAsync(
         string email,
@@ -190,9 +182,7 @@ public class SQLiteUserCache(
         return UserMapper.Map(reader);
     }
 
-    // =========================================================
     // SYNC UPDATE
-    // =========================================================
 
     public async Task UpdateAsync(
         User user,
@@ -261,9 +251,7 @@ public class SQLiteUserCache(
         if (rowsAffected > 0)
             return;
 
-        // =====================================================
         // INSERT IF NOT CACHED
-        // =====================================================
 
         command.CommandText = """
             INSERT INTO Users

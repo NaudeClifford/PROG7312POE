@@ -30,5 +30,9 @@ public class MappingProfile : Profile
 
         //SensorLogFile
         CreateMap<SensorLogFile, SensorLogFileDto>();
+
+
+        CreateMap<CompanyDto, Company>();
+
     }
 }

@@ -1,13 +1,1 @@
-[
-  {
-    "id": "33333333-3333-3333-3333-333333333333",
-    "companyId": "11111111-1111-1111-1111-111111111111",
-    "firebaseUid": "firebase-user-001",
-    "email": "admin@acme.com",
-    "displayName": "Acme Admin",
-    "role": 1,
-    "isActive": true,
-    "createdAt": "2026-08-18T10:10:00Z",
-    "updatedAt": "2026-08-18T10:10:00Z"
-  }
-]
+[]

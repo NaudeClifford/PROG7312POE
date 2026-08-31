@@ -1,14 +1,12 @@
-﻿using SmartX.Domain.Entities;
-using SmartX.Domain.Enums;
-using SmartX.WPF.Navigation;
+﻿using SmartX.WPF.Navigation;
 using SmartX.WPF.Repositories.Local;
-using SmartX.WPF.Services;
+using SmartX.WPF.Services.Connectivity;
+using SmartX.WPF.Services.Session;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.Sensor;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Windows.Input;
 
 using DomainSensor = SmartX.Domain.Entities.Sensor;
 using DomainTelemetry = SmartX.Domain.Entities.Telemetry;
@@ -19,30 +17,20 @@ public class TelemetryViewModel : ViewModelBase
 {
     private readonly ILocalTelemetryCache _telemetryCache;
     private readonly ILocalSensorCache _sensorCache;
-    private readonly SmartXSession _session;
     private readonly INavigationService _navigationService;
-
-    private bool _isBusy;
-    private bool _isOnline;
-
-    private string _errorMessage = string.Empty;
 
     private Guid? _selectedSensorId;
 
     private DateTime? _fromDate;
     private DateTime? _toDate;
 
-    // =========================================================
     // COLLECTIONS
-    // =========================================================
 
     public ObservableCollection<DomainTelemetry> Telemetry { get; } = [];
 
     public ObservableCollection<DomainSensor> Sensors { get; } = [];
 
-    // =========================================================
     // SELECTED SENSOR
-    // =========================================================
 
     public Guid? SelectedSensorId
     {
@@ -74,22 +62,16 @@ public class TelemetryViewModel : ViewModelBase
     public string SelectedSensorName =>
         SelectedSensor?.Name ?? "All Sensors";
 
-    // =========================================================
     // GATEWAY
-    // =========================================================
 
     public Guid? SelectedGatewayId =>
-        _session.GatewayId;
+       Session.GatewayId;
 
-    public string CurrentGatewayName =>
-        _session.GatewayName ?? "No Gateway Selected";
 
     public bool HasGateway =>
-        _session.GatewayId.HasValue;
+        Session.GatewayId.HasValue == true;
 
-    // =========================================================
     // DATE FILTERS
-    // =========================================================
 
     public DateTime? FromDate
     {
@@ -125,56 +107,7 @@ public class TelemetryViewModel : ViewModelBase
         }
     }
 
-    // =========================================================
-    // STATE
-    // =========================================================
-
-    public bool IsBusy
-    {
-        get => _isBusy;
-
-        private set
-        {
-            if (!SetProperty(
-                    ref _isBusy,
-                    value))
-            {
-                return;
-            }
-
-            RaiseCommandStates();
-        }
-    }
-
-    public bool IsOnline
-    {
-        get => _isOnline;
-
-        private set
-        {
-            if (!SetProperty(
-                    ref _isOnline,
-                    value))
-            {
-                return;
-            }
-
-            RaiseCommandStates();
-        }
-    }
-
-    public string ErrorMessage
-    {
-        get => _errorMessage;
-
-        private set => SetProperty(
-            ref _errorMessage,
-            value);
-    }
-
-    // =========================================================
     // TELEMETRY VALUES
-    // =========================================================
 
     public DomainTelemetry? LatestTelemetry =>
         Telemetry
@@ -193,9 +126,7 @@ public class TelemetryViewModel : ViewModelBase
     public double? Power =>
         LatestTelemetry?.Power;
 
-    // =========================================================
     // COMMANDS
-    // =========================================================
 
     public AsyncRelayCommand BackToSensorsCommand { get; }
 
@@ -203,19 +134,17 @@ public class TelemetryViewModel : ViewModelBase
 
     public AsyncRelayCommand ClearFiltersCommand { get; }
 
-    // =========================================================
     // CONSTRUCTOR
-    // =========================================================
 
     public TelemetryViewModel(
         ILocalTelemetryCache telemetryCache,
         ILocalSensorCache sensorCache,
-        SmartXSession session,
-        INavigationService navigationService)
+        INavigationService navigationService,
+        IConnectivityService connectivityService,
+        SmartXSession session) : base(connectivityService, session)
     {
         _telemetryCache = telemetryCache;
         _sensorCache = sensorCache;
-        _session = session;
         _navigationService = navigationService;
 
         BackToSensorsCommand =
@@ -229,14 +158,9 @@ public class TelemetryViewModel : ViewModelBase
         ClearFiltersCommand =
             new AsyncRelayCommand(
                 ClearFiltersAsync);
-
-        _session.PropertyChanged +=
-            Session_PropertyChanged;
     }
 
-    // =========================================================
     // LOAD PAGE
-    // =========================================================
 
     public async Task LoadAsync(
     Guid? sensorId = null,
@@ -247,15 +171,15 @@ public class TelemetryViewModel : ViewModelBase
             IsBusy = true;
             ErrorMessage = string.Empty;
 
+            await CheckOnlineAsync(cancellationToken);
+
             Telemetry.Clear();
             Sensors.Clear();
 
-            // -------------------------------------------------
             // GATEWAY REQUIRED
-            // -------------------------------------------------
 
-            if (!_session.GatewayId.HasValue ||
-                _session.GatewayId.Value == Guid.Empty)
+            if (Session.GatewayId is not Guid gatewayId ||
+                gatewayId == Guid.Empty)
             {
                 _selectedSensorId = null;
 
@@ -270,11 +194,7 @@ public class TelemetryViewModel : ViewModelBase
                 return;
             }
 
-            var gatewayId = _session.GatewayId.Value;
-
-            // -------------------------------------------------
             // LOAD SENSORS FOR CURRENT GATEWAY
-            // -------------------------------------------------
 
             var sensors =
                 await _sensorCache.GetByGatewayIdAsync(
@@ -288,31 +208,20 @@ public class TelemetryViewModel : ViewModelBase
                 Sensors.Add(sensor);
             }
 
-            // -------------------------------------------------
             // SENSOR SELECTION
-            // -------------------------------------------------
 
             if (sensorId.HasValue &&
                 Sensors.Any(x => x.Id == sensorId.Value))
-            {
-                // Came from Sensors page.
-                _selectedSensorId = sensorId.Value;
-            }
-            else
-            {
-                // Came from header/navigation.
-                //
-                // Default = ALL SENSORS.
-                _selectedSensorId = null;
-            }
+                    _selectedSensorId = sensorId.Value;
+            
+            else _selectedSensorId = null;
+            
 
             OnPropertyChanged(nameof(SelectedSensorId));
             OnPropertyChanged(nameof(SelectedSensor));
             OnPropertyChanged(nameof(SelectedSensorName));
 
-            // -------------------------------------------------
             // LOAD TELEMETRY
-            // -------------------------------------------------
 
             await LoadTelemetryAsync(
                 cancellationToken);
@@ -333,39 +242,19 @@ public class TelemetryViewModel : ViewModelBase
         }
     }
 
-    public async Task LoadSensorAsync(Guid sensorId)
+    public Task LoadSensorAsync(Guid sensorId)
     {
         SelectedSensorId = sensorId;
 
-        await LoadTelemetryAsync();
-    }
-    // =========================================================
-    // ONLINE
-    // =========================================================
-
-    private async Task<bool> CheckOnlineAsync(
-        CancellationToken cancellationToken)
-    {
-        try
-        {
-            return await Task.Run(
-                () => true,
-                cancellationToken);
-        }
-        catch
-        {
-            return false;
-        }
+        return Task.CompletedTask;
     }
 
-    // =========================================================
     // LOAD TELEMETRY
-    // =========================================================
 
     private async Task LoadTelemetryAsync(
     CancellationToken cancellationToken = default)
     {
-        if (!_session.GatewayId.HasValue)
+        if (!Session.GatewayId.HasValue)
         {
             Telemetry.Clear();
 
@@ -376,9 +265,7 @@ public class TelemetryViewModel : ViewModelBase
 
         IReadOnlyList<DomainTelemetry> telemetry;
 
-        // -------------------------------------------------
         // SENSOR FILTER
-        // -------------------------------------------------
 
         if (_selectedSensorId.HasValue)
         {
@@ -392,21 +279,17 @@ public class TelemetryViewModel : ViewModelBase
             // ALL SENSORS FOR CURRENT GATEWAY
             telemetry =
                 await _telemetryCache.GetByGatewayIdAsync(
-                    _session.GatewayId.Value,
+                    Session.GatewayId.Value,
                     cancellationToken);
         }
 
-        // -------------------------------------------------
         // SORT
-        // -------------------------------------------------
 
         IEnumerable<DomainTelemetry> filtered =
             telemetry.OrderByDescending(
                 x => x.Timestamp);
 
-        // -------------------------------------------------
         // DATE FILTER
-        // -------------------------------------------------
 
         if (_fromDate.HasValue)
         {
@@ -428,9 +311,7 @@ public class TelemetryViewModel : ViewModelBase
             filtered.OrderByDescending(
                 x => x.Timestamp);
 
-        // -------------------------------------------------
         // UPDATE COLLECTION
-        // -------------------------------------------------
 
         Telemetry.Clear();
 
@@ -444,9 +325,7 @@ public class TelemetryViewModel : ViewModelBase
         RaiseTelemetryProperties();
     }
 
-    // =========================================================
     // RELOAD
-    // =========================================================
 
     private async Task ReloadTelemetryAsync()
     {
@@ -470,56 +349,7 @@ public class TelemetryViewModel : ViewModelBase
         }
     }
 
-    // =========================================================
-    // SESSION CHANGE
-    // =========================================================
-
-    private async void Session_PropertyChanged(
-        object? sender,
-        PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName !=
-                nameof(SmartXSession.GatewayId) &&
-            e.PropertyName !=
-                nameof(SmartXSession.GatewayName))
-        {
-            return;
-        }
-
-        OnPropertyChanged(
-            nameof(SelectedGatewayId));
-
-        OnPropertyChanged(
-            nameof(CurrentGatewayName));
-
-        OnPropertyChanged(
-            nameof(HasGateway));
-
-        // Gateway changed.
-        //
-        // The previously selected sensor belongs to the
-        // previous gateway, so clear it.
-        if (e.PropertyName ==
-            nameof(SmartXSession.GatewayId))
-        {
-            _selectedSensorId = null;
-
-            OnPropertyChanged(
-                nameof(SelectedSensorId));
-
-            OnPropertyChanged(
-                nameof(SelectedSensor));
-
-            OnPropertyChanged(
-                nameof(SelectedSensorName));
-
-            await LoadAsync();
-        }
-    }
-
-    // =========================================================
     // BACK TO SENSORS
-    // =========================================================
 
     private async Task BackToSensorsAsync()
     {
@@ -529,9 +359,7 @@ public class TelemetryViewModel : ViewModelBase
         await Task.CompletedTask;
     }
 
-    // =========================================================
     // BACK TO GATEWAYS
-    // =========================================================
 
     private async Task BackToGatewaysAsync()
     {
@@ -541,9 +369,7 @@ public class TelemetryViewModel : ViewModelBase
         await Task.CompletedTask;
     }
 
-    // =========================================================
     // CLEAR FILTERS
-    // =========================================================
 
     private async Task ClearFiltersAsync()
     {
@@ -572,31 +398,15 @@ public class TelemetryViewModel : ViewModelBase
         }
     }
 
-    // =========================================================
     // FILTER STATE
-    // =========================================================
 
     private void RaiseFilterState()
     {
-        OnPropertyChanged(
-            nameof(SelectedSensor));
-
-        OnPropertyChanged(
-            nameof(SelectedSensorName));
-
-        OnPropertyChanged(
-            nameof(SelectedGatewayId));
-
-        OnPropertyChanged(
-            nameof(CurrentGatewayName));
-
-        OnPropertyChanged(
-            nameof(HasGateway));
+        OnPropertyChanged(nameof(SelectedSensor));
+        OnPropertyChanged(nameof(SelectedSensorName));
     }
 
-    // =========================================================
     // TELEMETRY PROPERTIES
-    // =========================================================
 
     private void RaiseTelemetryProperties()
     {
@@ -616,19 +426,21 @@ public class TelemetryViewModel : ViewModelBase
             nameof(Power));
     }
 
-    // =========================================================
-    // COMMAND STATE
-    // =========================================================
-
-    private void RaiseCommandStates()
+    protected override async void OnSessionPropertyChanged(
+    PropertyChangedEventArgs e)
     {
-        BackToSensorsCommand?
-            .RaiseCanExecuteChanged();
+        base.OnSessionPropertyChanged(e);
 
-        BackToGatewaysCommand?
-            .RaiseCanExecuteChanged();
+        if (e.PropertyName != nameof(SmartXSession.GatewayId))
+            return;
 
-        ClearFiltersCommand?
-            .RaiseCanExecuteChanged();
+        _selectedSensorId = null;
+
+        OnPropertyChanged(nameof(SelectedSensorId));
+        OnPropertyChanged(nameof(SelectedSensor));
+        OnPropertyChanged(nameof(SelectedSensorName));
+
+        await LoadAsync();
     }
+
 }

@@ -1,11 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\SmartX",
-    "\\SmartX\\SmartX.Infrastructure\\Data",
-    "\\SmartX\\SmartX.Infrastructure\\Data\\Local",
-    "\\SmartX\\SmartX.WPF",
-    "\\SmartX\\SmartX.WPF\\Data"
+    "\\SmartX"
   ],
+  "SelectedNode": "\\SmartX",
   "PreviewInSolutionExplorer": true
 }

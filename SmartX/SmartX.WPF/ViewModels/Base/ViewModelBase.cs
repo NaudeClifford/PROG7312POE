@@ -1,26 +1,99 @@
-﻿using SmartX.WPF.Services;
+﻿using SmartX.WPF.Services.Connectivity;
+using SmartX.WPF.Services.Session;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace SmartX.WPF.ViewModels.Base;
 
 public abstract class ViewModelBase : INotifyPropertyChanged
 {
-    protected SmartXSession? Session { get; private set; }
+    // DEPENDENCIES
+    protected IConnectivityService ConnectivityService { get; }
 
+    protected SmartXSession Session { get; }
 
-    // CURRENT GATEWAY
-    public string CurrentGatewayName =>
-        Session?.GatewayName ?? "No gateway selected";
+    // STATE
+    private bool _isLoaded;
+    private bool _isBusy;
+    private bool _isOnline;
+    private string _errorMessage = string.Empty;
 
-    public bool HasCurrentGateway =>
-        Session?.GatewayId.HasValue == true;
+    public bool IsLoaded
+    {
+        get => _isLoaded;
 
-    // SESSION INITIALIZATION
-    protected void InitializeSession(
+        protected set => SetProperty(
+            ref _isLoaded,
+            value);
+    }
+
+    public bool IsBusy
+    {
+        get => _isBusy;
+
+        protected set
+        {
+            if (!SetProperty(
+                    ref _isBusy,
+                    value))
+            {
+                return;
+            }
+
+            OnBusyStateChanged();
+
+            RaiseCommandStates();
+        }
+    }
+
+    public Visibility IsBusyVisibility =>
+        IsBusy
+            ? Visibility.Visible
+            : Visibility.Collapsed;
+
+    public bool IsOnline
+    {
+        get => _isOnline;
+
+        protected set
+        {
+            if (!SetProperty(
+                    ref _isOnline,
+                    value))
+            {
+                return;
+            }
+
+            OnPropertyChanged(nameof(CanModify));
+
+            RaiseConnectivityState();
+
+            _ = OnConnectivityChangedAsync(value);
+        }
+    }
+
+    public string ErrorMessage
+    {
+        get => _errorMessage;
+
+        protected set => SetProperty(
+            ref _errorMessage,
+            value);
+    }
+
+    public bool CanModify => IsOnline;
+
+    protected ViewModelBase(
+        IConnectivityService connectivityService,
         SmartXSession session)
     {
-        Session = session
+        ConnectivityService =
+            connectivityService
+            ?? throw new ArgumentNullException(nameof(connectivityService));
+
+        Session =
+            session
             ?? throw new ArgumentNullException(nameof(session));
 
         Session.PropertyChanged += Session_PropertyChanged;
@@ -28,7 +101,57 @@ public abstract class ViewModelBase : INotifyPropertyChanged
         RefreshSessionDisplay();
     }
 
-    // SESSION PROPERTY CHANGED
+    // CONNECTIVITY
+
+    protected async Task<bool> CheckOnlineAsync(
+        CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var result =
+                await ConnectivityService
+                    .CheckConnectivityAsync(
+                        cancellationToken);
+
+            IsOnline = result;
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+
+            Console.WriteLine(
+                $"Connectivity error: {ex}");
+
+            IsOnline = false;
+
+            return false;
+        }
+    }
+
+
+    protected async Task<bool> RequireOnlineAsync(
+        CancellationToken cancellationToken = default)
+    {
+        return await CheckOnlineAsync(
+            cancellationToken);
+    }
+
+    protected virtual void RaiseConnectivityState()
+    {
+    }
+
+    protected virtual void OnBusyStateChanged()
+    {
+    }
+
+    protected virtual Task OnConnectivityChangedAsync(
+        bool isOnline)
+    {
+        return Task.CompletedTask;
+    }
+
     private void Session_PropertyChanged(
         object? sender,
         PropertyChangedEventArgs e)
@@ -45,16 +168,32 @@ public abstract class ViewModelBase : INotifyPropertyChanged
             OnPropertyChanged(nameof(CurrentCompanyId));
             OnPropertyChanged(nameof(CurrentCompanyName));
         }
+
+        OnSessionPropertyChanged(e);
     }
 
+    protected virtual void OnSessionPropertyChanged(
+        PropertyChangedEventArgs e)
+    {
+    }
+
+    // CURRENT GATEWAY
+
+    public string CurrentGatewayName =>
+        Session?.GatewayName ??
+        "No gateway selected";
+
+    public bool HasCurrentGateway =>
+        Session?.GatewayId.HasValue == true;
 
     // CURRENT COMPANY
+
     public Guid CurrentCompanyId =>
         Session?.SelectedCompanyId ?? Guid.Empty;
 
     public string CurrentCompanyName =>
-        Session?.SelectedCompanyName ?? "No company selected";
-
+        Session?.SelectedCompanyName ??
+        "No company selected";
 
     // DISPLAY REFRESH
     protected void RefreshGatewayDisplay()
@@ -65,10 +204,15 @@ public abstract class ViewModelBase : INotifyPropertyChanged
 
     protected void RefreshSessionDisplay()
     {
-        OnPropertyChanged(nameof(CurrentGatewayName));
-        OnPropertyChanged(nameof(HasCurrentGateway));
+        RefreshGatewayDisplay();
+
         OnPropertyChanged(nameof(CurrentCompanyId));
         OnPropertyChanged(nameof(CurrentCompanyName));
+    }
+
+    // COMMAND STATES
+    protected virtual void RaiseCommandStates()
+    {
     }
 
     // PROPERTY CHANGED
@@ -88,7 +232,9 @@ public abstract class ViewModelBase : INotifyPropertyChanged
         T value,
         [CallerMemberName] string? propertyName = null)
     {
-        if (EqualityComparer<T>.Default.Equals(field, value))
+        if (EqualityComparer<T>.Default.Equals(
+                field,
+                value))
         {
             return false;
         }
@@ -98,5 +244,16 @@ public abstract class ViewModelBase : INotifyPropertyChanged
         OnPropertyChanged(propertyName);
 
         return true;
+    }
+
+    // DISPOSE
+
+    protected virtual void DisposeSession()
+    {
+        if (Session is null)
+            return;
+
+        Session.PropertyChanged -=
+            Session_PropertyChanged;
     }
 }

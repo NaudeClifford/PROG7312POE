@@ -2,22 +2,22 @@
 using SmartX.Application.Requests.Company;
 using SmartX.Application.Requests.User;
 using SmartX.Domain.Enums;
+using SmartX.Shared.Models;
 using SmartX.WPF.Navigation;
-using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
+using SmartX.WPF.Services.Connectivity;
+using SmartX.WPF.Services.Session;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Gateway;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
 namespace SmartX.WPF.ViewModels.SignUp;
 
-public class SignUpViewModel : INotifyPropertyChanged
+public class SignUpViewModel : ViewModelBase
 {
     private readonly IAuthenticationService _authenticationService;
     private readonly ISmartXApiClient _apiClient;
-    private readonly SmartXSession _session;
+
     private Guid _companyId;
     private int _currentStep = 1;
     private string _companyName = string.Empty;
@@ -30,19 +30,17 @@ public class SignUpViewModel : INotifyPropertyChanged
 
     private string _errorMessage = string.Empty;
     private bool _hasError;
-    private bool _isBusy;
 
-    public event PropertyChangedEventHandler? PropertyChanged;
     private readonly INavigationService _navigationService;
     public SignUpViewModel(
         IAuthenticationService authenticationService,
         ISmartXApiClient apiClient,
         SmartXSession session,
-        INavigationService navigationService)
+        INavigationService navigationService,
+        IConnectivityService connectivityService) : base(connectivityService, session)
     {
         _authenticationService = authenticationService;
         _apiClient = apiClient;
-        _session = session;
         _navigationService = navigationService;
 
         ContinueCommand = new AsyncRelayCommand(
@@ -120,38 +118,12 @@ public class SignUpViewModel : INotifyPropertyChanged
             value);
     }
 
-    public string ErrorMessage
-    {
-        get => _errorMessage;
-        private set => SetProperty(
-            ref _errorMessage,
-            value);
-    }
-
     public bool HasError
     {
         get => _hasError;
         private set => SetProperty(
             ref _hasError,
             value);
-    }
-
-    public bool IsBusy
-    {
-        get => _isBusy;
-        private set
-        {
-            if (!SetProperty(
-                    ref _isBusy,
-                    value))
-                return;
-
-            ((AsyncRelayCommand)ContinueCommand)
-                .RaiseCanExecuteChanged();
-
-            ((AsyncRelayCommand)CancelCommand)
-                .RaiseCanExecuteChanged();
-        }
     }
 
     public bool IsCompanyStep =>
@@ -301,6 +273,10 @@ public class SignUpViewModel : INotifyPropertyChanged
 
                 return;
             }
+            if (string.IsNullOrWhiteSpace(firebaseResult.UserId))
+            {
+                throw new InvalidOperationException(" UserId is missing.");
+            }
 
             // Create SmartX user
             var userCommand = new CreateUserRequest
@@ -335,9 +311,25 @@ public class SignUpViewModel : INotifyPropertyChanged
 
             // Load created SmartX user
 
+            if (string.IsNullOrWhiteSpace(firebaseResult.UserId))
+            {
+                ErrorMessage =
+                    "Firebase did not return a user ID.";
+
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(firebaseResult.IdToken))
+            {
+                ErrorMessage =
+                    "Firebase did not return an ID token.";
+
+                return;
+            }
+
             var user =
                 await _apiClient.GetUserByFirebaseUidAsync(
-                    firebaseResult.UserId);
+                    firebaseResult.UserId, firebaseResult.IdToken);
 
             if (user is null)
             {
@@ -349,13 +341,28 @@ public class SignUpViewModel : INotifyPropertyChanged
 
             // Sign into SmartX session
 
-            _session.SignIn(
-                user,
-                firebaseResult.IdToken,
-                firebaseResult.RefreshToken);
+                if (string.IsNullOrWhiteSpace(firebaseResult.RefreshToken))
+                {
+                    throw new InvalidOperationException("Refresh token is missing.");
+                }
+
+                if (string.IsNullOrWhiteSpace(firebaseResult.IdToken))
+                {
+                    throw new InvalidOperationException("IdToken is missing.");
+                }
+
+                Session.SignIn(
+                    user,
+                    firebaseResult.IdToken,
+                    firebaseResult.RefreshToken);
 
             // Continue directly to Gateway Setup
             _navigationService.NavigateTo<GatewaySetupPage>();
+        }
+        catch (InvalidOperationException ex)
+        {
+            ShowError(
+                $"Unable to sign in: {ex.Message}");
         }
         catch (Exception ex)
         {
@@ -410,34 +417,5 @@ public class SignUpViewModel : INotifyPropertyChanged
     {
         ErrorMessage = message;
         HasError = true;
-    }
-
-
-    // PROPERTY HELPERS
-    protected void OnPropertyChanged(
-        [CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(
-            this,
-            new PropertyChangedEventArgs(propertyName));
-    }
-
-    private bool SetProperty<T>(
-        ref T field,
-        T value,
-        [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(
-                field,
-                value))
-        {
-            return false;
-        }
-
-        field = value;
-
-        OnPropertyChanged(propertyName);
-
-        return true;
     }
 }

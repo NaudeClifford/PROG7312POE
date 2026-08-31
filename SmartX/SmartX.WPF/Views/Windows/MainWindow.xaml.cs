@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SmartX.Domain.Enums;
 using SmartX.WPF.Navigation;
-using SmartX.WPF.Services;
+using SmartX.WPF.Services.Session;
 using SmartX.WPF.Views.Pages.Company;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.History;
@@ -26,10 +26,7 @@ public partial class MainWindow : Window
         NavigationStage.Home;
 
 
-    // =========================================================
     // NAVIGATION STAGE
-    // =========================================================
-
     private enum NavigationStage
     {
         Home,
@@ -50,10 +47,7 @@ public partial class MainWindow : Window
         CommandHistory
     }
 
-
-    // =========================================================
     // CONSTRUCTOR
-    // =========================================================
 
     public MainWindow(
         INavigationService navigationService,
@@ -75,11 +69,7 @@ public partial class MainWindow : Window
         Loaded += MainWindow_Loaded;
     }
 
-
-    // =========================================================
     // STARTUP
-    // =========================================================
-
     private void MainWindow_Loaded(
         object sender,
         RoutedEventArgs e)
@@ -103,7 +93,7 @@ public partial class MainWindow : Window
 
                 case UserRole.Technician:
 
-                    NavigateTo<SensorsPage>(
+                    NavigateTo<GatewayPage>(
                         NavigationStage.Gateway);
 
                     break;
@@ -133,20 +123,14 @@ public partial class MainWindow : Window
         NavigatePublicHome();
     }
 
-
-    // =========================================================
     // PUBLIC NAVIGATION REFRESH
-    // =========================================================
 
     public void RefreshNavigation()
     {
         UpdateNavigation();
     }
 
-
-    // =========================================================
     // NAVIGATION VISIBILITY
-    // =========================================================
 
     private void UpdateNavigation()
     {
@@ -209,10 +193,7 @@ public partial class MainWindow : Window
             Visibility.Collapsed;
     }
 
-
-    // =========================================================
     // ROLE NAVIGATION
-    // =========================================================
 
     private void ApplyNavigationPermissions()
     {
@@ -222,9 +203,7 @@ public partial class MainWindow : Window
             Visibility.Visible;
 
 
-        // =====================================================
         // GUEST
-        // =====================================================
 
         if (_session.IsGuest)
         {
@@ -233,9 +212,7 @@ public partial class MainWindow : Window
         }
 
 
-        // =====================================================
         // AUTHENTICATED ROLE
-        // =====================================================
 
         switch (_session.Role)
         {
@@ -271,10 +248,7 @@ public partial class MainWindow : Window
         }
     }
 
-
-    // =========================================================
     // FRAME NAVIGATION
-    // =========================================================
 
     private void MainFrame_Navigated(
         object sender,
@@ -285,9 +259,7 @@ public partial class MainWindow : Window
 
         switch (page)
         {
-            // =================================================
             // HOME
-            // =================================================
 
             case HomePage:
 
@@ -297,9 +269,7 @@ public partial class MainWindow : Window
                 break;
 
 
-            // =================================================
             // USERS
-            // =================================================
 
             case UsersPage:
 
@@ -309,9 +279,7 @@ public partial class MainWindow : Window
                 break;
 
 
-            // =================================================
             // COMPANY
-            // =================================================
 
             case CurrentCompanyPage:
 
@@ -328,10 +296,7 @@ public partial class MainWindow : Window
                 break;
 
 
-            // =================================================
             // GATEWAY AREA
-            // =================================================
-
             case GatewayPage:
 
                 _navigationStage =
@@ -366,10 +331,7 @@ public partial class MainWindow : Window
         UpdateNavigation();
     }
 
-
-    // =========================================================
     // GUEST
-    // =========================================================
 
     private void ApplyGuestNavigation()
     {
@@ -390,13 +352,12 @@ public partial class MainWindow : Window
             Visibility.Visible;
     }
 
-
-    // =========================================================
     // ADMINISTRATOR
-    // =========================================================
 
     private void ApplyAdministratorNavigation()
     {
+
+
         switch (_navigationStage)
         {
             case NavigationStage.Home:
@@ -448,7 +409,13 @@ public partial class MainWindow : Window
 
 
             case NavigationStage.Sensors:
-                
+
+                UsersButton.Visibility =
+                    Visibility.Visible;
+
+                CurrentCompanyButton.Visibility =
+                    Visibility.Visible;
+
                 GatewayButton.Visibility =
                 Visibility.Visible;
 
@@ -492,11 +459,7 @@ public partial class MainWindow : Window
         }
     }
 
-
-    // =========================================================
     // TECHNICIAN
-    // =========================================================
-
     private void ApplyTechnicianNavigation()
     {
         switch (_navigationStage)
@@ -558,22 +521,11 @@ public partial class MainWindow : Window
         }
     }
 
-
-    // =========================================================
     // SUPER ADMINISTRATOR
-    // =========================================================
 
     private void ApplySuperAdminNavigation()
     {
-        /*
-         * SUPER ADMIN:
-         *
-         * Home
-         * Users
-         * Companies
-         *
-         * No Gateway/Sensors/Telemetry/History.
-         */
+
 
         switch (_navigationStage)
         {
@@ -611,20 +563,14 @@ public partial class MainWindow : Window
     }
 
 
-    // =========================================================
     // VIEWER
-    // =========================================================
-
     private void ApplyViewerNavigation()
     {
         HomeButton.Visibility =
             Visibility.Visible;
     }
 
-
-    // =========================================================
     // HOME
-    // =========================================================
 
     private void Home_Click(
         object sender,
@@ -665,11 +611,7 @@ public partial class MainWindow : Window
         MainFrame.Navigate(_homePage);
     }
 
-
-    // =========================================================
     // USERS
-    // =========================================================
-
     private void Users_Click(
         object sender,
         RoutedEventArgs e)
@@ -684,10 +626,7 @@ public partial class MainWindow : Window
             NavigationStage.Users);
     }
 
-
-    // =========================================================
     // CURRENT COMPANY
-    // =========================================================
 
     private void CurrentCompany_Click(
         object sender,
@@ -703,11 +642,7 @@ public partial class MainWindow : Window
             NavigationStage.CurrentCompany);
     }
 
-
-    // =========================================================
     // SUPER ADMIN - COMPANIES
-    // =========================================================
-
     private void Companies_Click(
         object sender,
         RoutedEventArgs e)
@@ -722,11 +657,7 @@ public partial class MainWindow : Window
             NavigationStage.Companies);
     }
 
-
-    // =========================================================
     // GATEWAY
-    // =========================================================
-
     private void Gateway_Click(
         object sender,
         RoutedEventArgs e)
@@ -741,10 +672,7 @@ public partial class MainWindow : Window
             NavigationStage.Gateway);
     }
 
-
-    // =========================================================
     // SENSORS
-    // =========================================================
 
     private void Sensors_Click(
         object sender,
@@ -757,10 +685,7 @@ public partial class MainWindow : Window
             NavigationStage.Sensors);
     }
 
-
-    // =========================================================
     // TELEMETRY
-    // =========================================================
 
     private void Telemetry_Click(
         object sender,
@@ -774,9 +699,7 @@ public partial class MainWindow : Window
     }
 
 
-    // =========================================================
     // HISTORY
-    // =========================================================
 
     private void History_Click(
         object sender,
@@ -789,10 +712,7 @@ public partial class MainWindow : Window
             NavigationStage.History);
     }
 
-    // =========================================================
     // GATEWAY AREA ACCESS
-    // =========================================================
-
     private bool CanAccessGatewayArea()
     {
         return _session.Role is
@@ -800,11 +720,7 @@ public partial class MainWindow : Window
             UserRole.Administrator;
     }
 
-
-    // =========================================================
     // GENERIC PAGE NAVIGATION
-    // =========================================================
-
     private void NavigateTo<T>(
         NavigationStage stage)
         where T : Page
@@ -822,10 +738,7 @@ public partial class MainWindow : Window
     }
 
 
-    // =========================================================
     // LOGOUT
-    // =========================================================
-
     private async void LogOut_Click(
         object sender,
         RoutedEventArgs e)
@@ -851,11 +764,7 @@ public partial class MainWindow : Window
         NavigatePublicHome();
     }
 
-
-    // =========================================================
     // WINDOW CONTROLS
-    // =========================================================
-
     private void TitleBar_MouseLeftButtonDown(
         object sender,
         MouseButtonEventArgs e)

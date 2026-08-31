@@ -1,10 +1,10 @@
-﻿using Microsoft.Win32;
-using SmartX.Application.Requests.Gateway;
+﻿using SmartX.Application.Requests.Gateway;
 using SmartX.Domain.Enums;
 using SmartX.Shared.DTOs;
 using SmartX.WPF.Navigation;
-using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
+using SmartX.WPF.Services.Connectivity;
+using SmartX.WPF.Services.Session;
 using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Gateway;
@@ -22,7 +22,6 @@ public class GatewayViewModel : ViewModelBase
 {
 
     private readonly ISmartXApiClient _apiClient;
-    private readonly SmartXSession _session;
     private readonly INavigationService _navigationService;
     private readonly ICacheSyncService _cacheSyncService;
 
@@ -114,7 +113,7 @@ public class GatewayViewModel : ViewModelBase
             {
                 Gateway = _selectedGateway;
 
-                _session.SelectGateway(
+                Session.SelectGateway(
                     _selectedGateway.Id,
                     _selectedGateway.Name);
             }
@@ -122,7 +121,7 @@ public class GatewayViewModel : ViewModelBase
             {
                 Gateway = null;
 
-                _session.ClearGateway();
+                Session.ClearGateway();
             }
 
             OnPropertyChanged(nameof(SelectedGatewayName));
@@ -133,10 +132,10 @@ public class GatewayViewModel : ViewModelBase
     }
 
     public string? SelectedGatewayName =>
-        _session.GatewayName;
+        Session.GatewayName;
 
     public bool HasSelectedGateway =>
-        _session.GatewayId.HasValue;
+        Session.GatewayId.HasValue == true;
 
     // EDIT / CREATE FIELDS
     private Guid? _editingGatewayId;
@@ -204,46 +203,7 @@ public class GatewayViewModel : ViewModelBase
     }
 
     // STATE
-    private bool _isBusy;
-    private bool _isOnline;
-
-    private string _errorMessage = string.Empty;
     private string? _statusMessage;
-
-    public bool IsBusy
-    {
-        get => _isBusy;
-
-        private set
-        {
-            if (!SetProperty(ref _isBusy, value))
-                return;
-
-            RaiseCommandStates();
-        }
-    }
-
-    public bool IsOnline
-    {
-        get => _isOnline;
-
-        private set
-        {
-            if (!SetProperty(ref _isOnline, value))
-                return;
-
-            RaiseCommandStates();
-        }
-    }
-
-    public string ErrorMessage
-    {
-        get => _errorMessage;
-
-        private set => SetProperty(
-            ref _errorMessage,
-            value);
-    }
 
     public string? StatusMessage
     {
@@ -272,44 +232,51 @@ public class GatewayViewModel : ViewModelBase
 
     // PERMISSIONS
     public bool IsAdministrator =>
-        _session.Role == UserRole.Administrator;
+        Session.Role == UserRole.Administrator;
 
     public bool IsTechnician =>
-        _session.Role == UserRole.Technician;
+        Session.Role == UserRole.Technician;
 
     public bool IsSuperAdmin =>
-        _session.Role == UserRole.SuperAdmin;
+        Session.Role == UserRole.SuperAdmin;
 
-    public bool CanAddGateway =>
-        IsOnline &&
-        !IsBusy &&
-        _session.CompanyId != Guid.Empty &&
-        IsAdministrator &&
-        IsListMode;
+    public bool CanAddGateway
+    {
+        get
+        {
+
+            return
+                   !IsBusy &&
+                   Session.CompanyId != Guid.Empty &&
+                   Session.Role == UserRole.Administrator &&
+                   IsListMode;
+        }
+    }
+
 
     public bool CanEditGateway =>
         IsOnline &&
         !IsBusy &&
         Gateway is not null &&
-        IsAdministrator;
+        Session.Role == UserRole.Administrator;
 
     public bool CanDeleteGateway =>
         IsOnline &&
         !IsBusy &&
         Gateway is not null &&
-        IsAdministrator;
+        Session.Role == UserRole.Administrator;
 
     public bool CanOpenGatewayArea =>
         IsOnline &&
         !IsBusy &&
         Gateway is not null &&
-        (IsAdministrator || IsTechnician);
+        Session.Role is UserRole.Administrator or UserRole.Technician;
 
     public bool CanSaveGateway =>
         IsOnline &&
         !IsBusy &&
         !string.IsNullOrWhiteSpace(Name) &&
-        _session.CompanyId != Guid.Empty &&
+        Session.CompanyId != Guid.Empty &&
         (IsCreateMode || EditingGatewayId.HasValue);
 
     // COMMANDS
@@ -332,12 +299,12 @@ public class GatewayViewModel : ViewModelBase
     // CONSTRUCTOR
     public GatewayViewModel(
         ISmartXApiClient apiClient,
-        SmartXSession session,
         INavigationService navigationService,
-        ICacheSyncService cacheSyncService)
+        ICacheSyncService cacheSyncService,
+        IConnectivityService connectivityService,
+        SmartXSession session): base(connectivityService, session)
     {
         _apiClient = apiClient;
-        _session = session;
         _navigationService = navigationService;
         _cacheSyncService = cacheSyncService;
 
@@ -380,9 +347,6 @@ public class GatewayViewModel : ViewModelBase
             new AsyncRelayCommand(
                 OpenNetworkAsync,
                 () => CanOpenGatewayArea);
-
-        _session.PropertyChanged +=
-            OnSessionChanged;
     }
 
     // LOAD LIST
@@ -393,9 +357,8 @@ public class GatewayViewModel : ViewModelBase
         if (IsBusy)
             return;
 
-        if (_session.CompanyId == Guid.Empty)
+        if (Session.CompanyId == Guid.Empty)
         {
-            IsOnline = false;
 
             ErrorMessage =
                 "No company is associated with this session.";
@@ -405,7 +368,7 @@ public class GatewayViewModel : ViewModelBase
             return;
         }
 
-        if (_session.Role == UserRole.SuperAdmin)
+        if (Session.Role == UserRole.SuperAdmin)
         {
             ErrorMessage =
                 "SuperAdmin accounts cannot access gateways.";
@@ -422,11 +385,7 @@ public class GatewayViewModel : ViewModelBase
             ErrorMessage = string.Empty;
             StatusMessage = null;
 
-            IsOnline =
-                await _apiClient.IsAvailableAsync(
-                    cancellationToken);
-
-            if (!IsOnline)
+            if (!await CheckOnlineAsync(cancellationToken))
             {
                 ErrorMessage =
                     "SmartX API is currently unavailable.";
@@ -436,9 +395,10 @@ public class GatewayViewModel : ViewModelBase
                 return;
             }
 
+
             var gateways =
                 await _apiClient.GetGatewaysByCompanyIdAsync(
-                    _session.CompanyId,
+                    Session.CompanyId,
                     cancellationToken);
 
             Gateways.Clear();
@@ -452,11 +412,11 @@ public class GatewayViewModel : ViewModelBase
                 return;
             }
 
-            if (_session.GatewayId.HasValue)
+            if (Session.GatewayId.HasValue)
             {
                 var existing =
                     Gateways.FirstOrDefault(
-                        x => x.Id == _session.GatewayId.Value);
+                        x => x.Id == Session.GatewayId.Value);
 
                 if (existing is not null)
                 {
@@ -473,8 +433,6 @@ public class GatewayViewModel : ViewModelBase
         }
         catch (HttpRequestException)
         {
-            IsOnline = false;
-
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
 
@@ -523,6 +481,9 @@ public class GatewayViewModel : ViewModelBase
             ErrorMessage = string.Empty;
             StatusMessage = null;
 
+            if (!await RequireOnlineAsync())
+                return;
+
             var gateway =
                 await _apiClient.GetGatewayByIdAsync(
                     Gateway.Id);
@@ -550,7 +511,6 @@ public class GatewayViewModel : ViewModelBase
         }
         catch (HttpRequestException)
         {
-            IsOnline = false;
 
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
@@ -578,7 +538,10 @@ public class GatewayViewModel : ViewModelBase
             ErrorMessage = string.Empty;
             StatusMessage = null;
 
-            var companyId = _session.CompanyId;
+            if (!await RequireOnlineAsync())
+                return;
+
+            var companyId = Session.CompanyId;
 
             if (companyId == Guid.Empty)
             {
@@ -629,7 +592,7 @@ public class GatewayViewModel : ViewModelBase
                 await _cacheSyncService
                     .SyncGatewaysAsync(companyId);
 
-                _session.SelectGateway(
+                Session.SelectGateway(
                     gatewayId,
                     Name.Trim());
 
@@ -689,7 +652,7 @@ public class GatewayViewModel : ViewModelBase
                 await _cacheSyncService
                     .SyncGatewaysAsync(companyId);
 
-                _session.SelectGateway(
+                Session.SelectGateway(
                     EditingGatewayId.Value,
                     Name.Trim());
 
@@ -714,7 +677,6 @@ public class GatewayViewModel : ViewModelBase
         }
         catch (HttpRequestException)
         {
-            IsOnline = false;
 
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
@@ -755,6 +717,9 @@ public class GatewayViewModel : ViewModelBase
             ErrorMessage = string.Empty;
             StatusMessage = null;
 
+            if (!await RequireOnlineAsync())
+                return;
+
             var gatewayId =
                 Gateway.Id;
 
@@ -772,10 +737,10 @@ public class GatewayViewModel : ViewModelBase
 
             await _cacheSyncService
                 .SyncGatewaysAsync(
-                    _session.CompanyId);
+                    Session.CompanyId);
 
-            if (_session.GatewayId == gatewayId)
-                _session.ClearGateway();
+            if (Session.GatewayId == gatewayId)
+                Session.ClearGateway();
 
             await LoadAsync();
 
@@ -784,7 +749,6 @@ public class GatewayViewModel : ViewModelBase
         }
         catch (HttpRequestException)
         {
-            IsOnline = false;
 
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
@@ -876,49 +840,21 @@ public class GatewayViewModel : ViewModelBase
 
         Gateway = null;
 
-        _session.ClearGateway();
+            Session.ClearGateway();
 
         OnPropertyChanged(nameof(SelectedGatewayName));
         OnPropertyChanged(nameof(HasSelectedGateway));
 
         RaiseCommandStates();
     }
-
-    // SESSION
-    private void OnSessionChanged(
-        object? sender,
-        PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(SmartXSession.Role) ||
-            e.PropertyName == nameof(SmartXSession.CompanyId) ||
-            e.PropertyName == nameof(SmartXSession.GatewayId) ||
-            e.PropertyName == nameof(SmartXSession.GatewayName))
-        {
-            OnPropertyChanged(nameof(IsAdministrator));
-            OnPropertyChanged(nameof(IsTechnician));
-            OnPropertyChanged(nameof(IsSuperAdmin));
-
-            OnPropertyChanged(nameof(SelectedGatewayName));
-            OnPropertyChanged(nameof(HasSelectedGateway));
-
-            OnPropertyChanged(nameof(GatewayCrudVisibility));
-            OnPropertyChanged(nameof(GatewayFeaturesVisibility));
-            OnPropertyChanged(nameof(NoGatewayVisibility));
-
-            RaiseCommandStates();
-        }
-    }
-
     // COMMAND STATES
-    private void RaiseCommandStates()
+    protected override void RaiseCommandStates()
     {
         AddGatewayCommand?.RaiseCanExecuteChanged();
         EditGatewayCommand?.RaiseCanExecuteChanged();
         DeleteGatewayCommand?.RaiseCanExecuteChanged();
-
         SaveGatewayCommand?.RaiseCanExecuteChanged();
         CancelGatewayCommand?.RaiseCanExecuteChanged();
-
         ViewSensorsCommand?.RaiseCanExecuteChanged();
         ViewCommandHistoryCommand?.RaiseCanExecuteChanged();
         ViewNetworkCommand?.RaiseCanExecuteChanged();
@@ -937,4 +873,25 @@ public class GatewayViewModel : ViewModelBase
         OnPropertyChanged(nameof(GatewayFeaturesVisibility));
         OnPropertyChanged(nameof(NoGatewayVisibility));
     }
+
+
+    // CONNECTIVITY
+    protected override void RaiseConnectivityState()
+    {
+        RaiseCommandStates();
+    }
+
+    protected override void OnSessionPropertyChanged(
+    PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(SmartXSession.Role) ||
+            e.PropertyName == nameof(SmartXSession.SelectedCompanyId) ||
+            e.PropertyName == nameof(SmartXSession.GatewayId) ||
+            e.PropertyName == nameof(SmartXSession.GatewayName))
+        {
+            RaiseCommandStates();
+        }
+    }
+
+
 }

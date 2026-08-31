@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace SmartX.WPF.Services;
+namespace SmartX.WPF.Services.Session;
 
 public class SmartXSession : INotifyPropertyChanged
 {

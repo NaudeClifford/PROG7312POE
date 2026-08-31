@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmartX.Application.Requests.Gateway;
 using SmartX.Application.Services.CRUD;
 
@@ -6,6 +7,7 @@ namespace SmartX.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Administrator, Technician")]
 public class GatewaysController : ControllerBase
 {
     private readonly GatewayCrudService _crud;
@@ -16,7 +18,9 @@ public class GatewaysController : ControllerBase
         _crud = crud;
     }
 
-    [HttpGet]
+    [HttpGet]  
+    [Authorize(Roles = "Administrator")]
+
     public async Task<IActionResult> GetAll(
         CancellationToken cancellationToken)
     {
@@ -44,7 +48,9 @@ public class GatewaysController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost]
+    [HttpPost]  
+    [Authorize(Roles = "Administrator")]
+
     public async Task<IActionResult> Create(
         CreateGatewayRequest request,
         CancellationToken cancellationToken)
@@ -60,6 +66,8 @@ public class GatewaysController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = "Administrator")]
+
     public async Task<IActionResult> Update(
         Guid id,
         UpdateGatewayRequest request,
@@ -83,6 +91,8 @@ public class GatewaysController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Roles = "Administrator")]
+
     public async Task<IActionResult> Delete(
         Guid id,
         CancellationToken cancellationToken)
@@ -101,6 +111,7 @@ public class GatewaysController : ControllerBase
 
         return Ok(result);
     }
+
     [HttpGet("company/{companyId:guid}")]
     public async Task<IActionResult> GetByCompanyId(
     Guid companyId,

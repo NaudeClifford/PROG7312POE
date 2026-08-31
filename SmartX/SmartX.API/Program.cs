@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using SmartX.Application;
 using SmartX.Infrastructure;
 using SmartX.Infrastructure.Authentication.Firebase;
@@ -19,12 +21,45 @@ namespace SmartX.API
                             .AddControllers();
 
             builder.Services
-                .AddAuthentication("Firebase")
-                .AddScheme<
-                    AuthenticationSchemeOptions,
-                    FirebaseAuthHandler>(
+                .AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = "Firebase";
+                    options.DefaultChallengeScheme = "Firebase";
+                })
+                .AddScheme<AuthenticationSchemeOptions, FirebaseAuthHandler>(
                     "Firebase",
                     options => { });
+
+            builder.Services.AddAuthorization();
+
+
+            var firebaseProjectId =
+                builder.Configuration["Firebase:ProjectId"]
+                ?? throw new InvalidOperationException(
+                    "Firebase ProjectId is not configured.");
+
+
+            builder.Services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                options.Authority =
+                $"https://securetoken.google.com/{firebaseProjectId}";
+
+                options.TokenValidationParameters =
+                    new TokenValidationParameters
+                {
+                ValidateIssuer = true,
+                ValidIssuer =
+                    $"https://securetoken.google.com/{firebaseProjectId}",
+
+                ValidateAudience = true,
+                ValidAudience = firebaseProjectId,
+
+                ValidateLifetime = true
+                };
+            });
+
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();

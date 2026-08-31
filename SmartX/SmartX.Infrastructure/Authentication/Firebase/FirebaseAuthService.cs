@@ -41,12 +41,13 @@ public class FirebaseAuthService
 
         FirebaseApp.Create(new AppOptions
         {
-            Credential = GoogleCredential.FromFile(
-                serviceAccountPath),
+            Credential = GoogleCredential.FromFile(serviceAccountPath),
 
             ProjectId = _options.ProjectId
         });
     }
+
+
 
     public async Task<FirebaseToken> VerifyTokenAsync(
         string idToken,

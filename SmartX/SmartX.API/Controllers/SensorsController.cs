@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmartX.Application.Requests.Sensor;
 using SmartX.Application.Services.CRUD;
 
@@ -6,6 +7,8 @@ namespace SmartX.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Administrator, Technician")]
+
 public class SensorsController : ControllerBase
 {
     private readonly SensorCrudService _crud;
@@ -16,10 +19,7 @@ public class SensorsController : ControllerBase
         _crud = crud;
     }
 
-    // =========================================================
     // GET ALL
-    // =========================================================
-
     [HttpGet]
     public async Task<IActionResult> GetAll(
         CancellationToken cancellationToken)
@@ -34,10 +34,7 @@ public class SensorsController : ControllerBase
         return Ok(result);
     }
 
-    // =========================================================
     // GET BY ID
-    // =========================================================
-
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(
         Guid id,
@@ -54,10 +51,7 @@ public class SensorsController : ControllerBase
         return Ok(result);
     }
 
-    // =========================================================
     // CREATE
-    // =========================================================
-
     [HttpPost]
     public async Task<IActionResult> Create(
         CreateSensorRequest request,
@@ -74,9 +68,7 @@ public class SensorsController : ControllerBase
         return Ok(result);
     }
 
-    // =========================================================
     // UPDATE
-    // =========================================================
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(
@@ -102,9 +94,7 @@ public class SensorsController : ControllerBase
         return Ok(result);
     }
 
-    // =========================================================
     // DELETE
-    // =========================================================
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(

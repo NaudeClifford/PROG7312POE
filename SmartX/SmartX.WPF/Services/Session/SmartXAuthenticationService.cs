@@ -2,7 +2,7 @@
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Sync;
 
-namespace SmartX.WPF.Services;
+namespace SmartX.WPF.Services.Session;
 
 public class SmartXAuthenticationService
 {
@@ -65,10 +65,16 @@ public class SmartXAuthenticationService
                 return false;
             }
 
+            if (string.IsNullOrWhiteSpace(result.IdToken))
+            {
+                await _credentialStore.DeleteAsync();
+                return false;
+            }
+
             var user =
-                await _apiClient
-                    .GetUserByFirebaseUidAsync(
-                        result.UserId);
+                await _apiClient.GetUserByFirebaseUidAsync(
+                    result.UserId,
+                    result.IdToken);
 
             if (user is null)
             {

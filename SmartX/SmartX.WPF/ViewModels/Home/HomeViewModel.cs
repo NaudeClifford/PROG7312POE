@@ -1,5 +1,6 @@
 ﻿using SmartX.WPF.Navigation;
-using SmartX.WPF.Services;
+using SmartX.WPF.Services.Connectivity;
+using SmartX.WPF.Services.Session;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.Signin;
@@ -11,18 +12,27 @@ namespace SmartX.WPF.ViewModels
     public class HomeViewModel : ViewModelBase
     {
         private readonly INavigationService _navigationService;
-        private readonly SmartXSession _session;
 
         public ICommand SignInCommand { get; }
         public ICommand SignUpCommand { get; }
         public ICommand GuestCommand { get; }
 
+        private string title = "Smart X";
+        private string subtitle = "Slogon";
+        private string description = "Description";
+
+        public string Title { get => title; set => SetProperty(ref title, value); }
+
+        public string Subtitle { get => subtitle; set => SetProperty(ref subtitle, value); }
+
+        public string Description { get => description; set => SetProperty(ref description, value); }
+
         public HomeViewModel(
             INavigationService navigationService,
-            SmartXSession session)
+            SmartXSession session,
+            IConnectivityService connectivityService) : base(connectivityService, session)
         {
             _navigationService = navigationService;
-            _session = session;
 
             SignInCommand = new RelayCommand(
                 NavigateToSignIn);
@@ -32,6 +42,8 @@ namespace SmartX.WPF.ViewModels
 
             GuestCommand = new RelayCommand(
                 EnterGuestMode);
+
+            
         }
 
         private void NavigateToSignIn(object? parameter)
@@ -46,9 +58,14 @@ namespace SmartX.WPF.ViewModels
 
         private void EnterGuestMode(object? parameter)
         {
-            _session.StartGuestSession("Guest");
+            Session.StartGuestSession("Guest");
 
             _navigationService.NavigateTo<GatewaySetupPage>();
         }
+
+
+
+
+
     }
 }

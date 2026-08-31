@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmartX.Application.Requests.Company;
 using SmartX.Application.Services.CRUD;
 
@@ -6,6 +8,7 @@ namespace SmartX.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Administrator, SuperAdmin")]
 public class CompaniesController : ControllerBase
 {
     private readonly CompanyCrudService _crud;
@@ -16,7 +19,9 @@ public class CompaniesController : ControllerBase
         _crud = crud;
     }
 
-    [HttpGet]
+    [HttpGet] 
+    [Authorize(Roles = "SuperAdmin")]
+
     public async Task<IActionResult> GetAll(
         CancellationToken cancellationToken)
     {
@@ -45,6 +50,8 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "SuperAdmin")]
+
     public async Task<IActionResult> Create(
         CreateCompanyRequest request,
         CancellationToken cancellationToken)
@@ -60,6 +67,8 @@ public class CompaniesController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = "SuperAdmin")]
+
     public async Task<IActionResult> Update(
         Guid id,
         UpdateCompanyRequest request,
@@ -82,7 +91,9 @@ public class CompaniesController : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("{id:guid}")]
+    [HttpDelete("{id:guid}")] 
+    [Authorize(Roles = "SuperAdmin")]
+
     public async Task<IActionResult> Delete(
         Guid id,
         CancellationToken cancellationToken)

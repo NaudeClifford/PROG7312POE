@@ -32,9 +32,7 @@
         </Grid.RowDefinitions>
 
 
-        <!-- ===================================================== -->
         <!-- TITLE BAR -->
-        <!-- ===================================================== -->
 
         <Border Grid.Row="0"
                 Background="{StaticResource DarkBrush}"
@@ -119,9 +117,7 @@
         </Border>
 
 
-        <!-- ===================================================== -->
         <!-- TOP NAVIGATION -->
-        <!-- ===================================================== -->
 
         <Border x:Name="NavigationBorder"
                 Grid.Row="1"
@@ -140,7 +136,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
 

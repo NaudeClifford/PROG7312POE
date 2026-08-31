@@ -61,20 +61,27 @@ public class JsonUserRepository : IUserRepository
     public async Task<IReadOnlyList<User>> GetAllAsync(
         CancellationToken cancellationToken = default)
     {
-        if (!File.Exists(_filePath))
+        try
+        {
+            if (!File.Exists(_filePath))
+                return [];
+
+            var json = await File.ReadAllTextAsync(
+                _filePath,
+                cancellationToken);
+
+            if (string.IsNullOrWhiteSpace(json))
+                return [];
+
+            var users = JsonSerializer.Deserialize<List<User>>(
+                json);
+
+            return users ?? [];
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
             return [];
-
-        var json = await File.ReadAllTextAsync(
-            _filePath,
-            cancellationToken);
-
-        if (string.IsNullOrWhiteSpace(json))
-            return [];
-
-        var users = JsonSerializer.Deserialize<List<User>>(
-            json);
-
-        return users ?? [];
+        }
     }
 
     public async Task AddAsync(

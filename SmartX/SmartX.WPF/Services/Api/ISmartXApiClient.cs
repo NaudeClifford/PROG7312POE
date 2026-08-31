@@ -86,7 +86,7 @@ public interface ISmartXApiClient
         CancellationToken cancellationToken = default);
 
     Task<UserDto?> GetUserByFirebaseUidAsync(
-        string firebaseUid,
+        string firebaseUid, string idToken,
         CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<UserDto>> GetUsersAsync(
