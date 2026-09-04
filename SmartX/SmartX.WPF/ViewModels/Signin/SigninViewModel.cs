@@ -6,6 +6,7 @@ using SmartX.WPF.Services.Session;
 using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Gateway;
+using SmartX.WPF.Views.Pages.Home;
 using System.Net.Http;
 using System.Windows.Input;
 
@@ -189,9 +190,7 @@ public class SigninViewModel : ViewModelBase
             }
 
             await _cacheSyncService.SyncSensorsAsync();
-
-            // Continue into the application
-            _navigationService.NavigateTo<GatewayPage>();
+            
         }
         catch (HttpRequestException)
         {

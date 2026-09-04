@@ -1,7 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SmartX.Application;
 using SmartX.Application.Authentication;
 using SmartX.Application.Mapping;
+using SmartX.Application.Requests.Gateway;
+using SmartX.Application.Validators;
 using SmartX.WPF.Authentication;
 using SmartX.WPF.Data;
 using SmartX.WPF.Navigation;
@@ -54,7 +58,7 @@ public partial class App
                 optional: false,
                 reloadOnChange: false)
             .Build();
-        
+
         // Firebase configuration
         var firebaseOptions = configuration
             .GetSection("Firebase")
@@ -115,6 +119,8 @@ public partial class App
             cfg.AddProfile<MappingProfile>();
         });
 
+        services.AddScoped< IValidator<CreateGatewayRequest>, CreateGatewayValidator>();
+
 
         services.AddSingleton<ILocalSensorCache, SQLiteSensorCache>();
         services.AddSingleton<ILocalTelemetryCache, SQLiteTelemetryCache>();
@@ -132,9 +138,10 @@ public partial class App
         services.AddTransient<HistoryViewModel>();
         services.AddTransient<SensorViewModel>();
         services.AddTransient<TelemetryViewModel>();
-        services.AddTransient<GatewayViewModel>();
+        services.AddSingleton<GatewayViewModel>();
         services.AddTransient<CompanyViewModel>();
         services.AddTransient<UsersViewModel>();
+        services.AddTransient<CompanyServicesViewModel>();
 
         // Pages
         services.AddTransient<HomePage>();
@@ -151,6 +158,7 @@ public partial class App
         services.AddTransient<CurrentCompanyPage>();
         services.AddTransient<UsersPage>();
         services.AddTransient<CompaniesPage>();
+        services.AddTransient<CompanyServicesPage>();
 
         //Main window
         services.AddSingleton<MainWindow>();

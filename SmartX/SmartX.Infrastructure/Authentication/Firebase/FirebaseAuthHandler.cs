@@ -30,6 +30,11 @@ public class FirebaseAuthHandler
     protected override async Task<AuthenticateResult>
         HandleAuthenticateAsync()
     {
+        Logger.LogInformation(
+    "AUTH REQUEST: {Method} {Path}",
+    Request.Method,
+    Request.Path);
+
 
         if (!Request.Headers.TryGetValue(
                 "Authorization",
@@ -78,15 +83,24 @@ public class FirebaseAuthHandler
             }
 
             var claims = new List<Claim>
-    {
-        new(
-            ClaimTypes.NameIdentifier,
-            decodedToken.Uid),
+{
+    new(
+        ClaimTypes.NameIdentifier,
+        decodedToken.Uid),
 
-        new(
-            ClaimTypes.Role,
-            user.Role.ToString())
-    };
+    new(
+        ClaimTypes.Name,
+        user.Id.ToString()),
+
+    new(
+        "CompanyId",
+        user.CompanyId.ToString()),
+
+    new(
+        ClaimTypes.Role,
+        user.Role.ToString())
+};
+
 
             var identity = new ClaimsIdentity(
                 claims,
@@ -97,6 +111,12 @@ public class FirebaseAuthHandler
             var ticket = new AuthenticationTicket(
                 principal,
                 Scheme.Name);
+            Logger.LogInformation(
+    "SMARTX AUTH SUCCESS: User={UserId}, FirebaseUid={FirebaseUid}, Role={Role}, CompanyId={CompanyId}",
+    user.Id,
+    decodedToken.Uid,
+    user.Role,
+    user.CompanyId);
 
             return AuthenticateResult.Success(ticket);
         }

@@ -1,84 +1,3 @@
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.WPF.exe
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.WPF.deps.json
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.WPF.runtimeconfig.json
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.WPF.dll
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.WPF.pdb
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.Shared.dll
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.Shared.pdb
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.csproj.AssemblyReference.cache
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\App.g.cs
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF_MarkupCompile.cache
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF_MarkupCompile.lref
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.g.resources
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.AssemblyInfoInputs.cache
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.AssemblyInfo.cs
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.csproj.CoreCompileInputs.cache
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.sourcelink.json
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.csproj.Up2Date
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.dll
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\refint\SmartX.WPF.dll
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.pdb
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.genruntimeconfig.cache
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\ref\SmartX.WPF.dll
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\MongoDB.Bson.dll
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Resources\Styles\ButtonStyles.baml
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Resources\Styles\CardStyles.baml
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Resources\Styles\Colors.baml
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Home\HomePage.g.cs
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Signin\SigninPage.g.cs
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Windows\MainWindow.g.cs
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\App.baml
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Home\HomePage.baml
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Signin\SigninPage.baml
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Windows\MainWindow.baml
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\History\HistoryPage.baml
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Login\LoginPage.baml
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorsPage.baml
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Telemetry\TelemetryPage.baml
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\History\HistoryPage.g.cs
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Login\LoginPage.g.cs
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorsPage.g.cs
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Telemetry\TelemetryPage.g.cs
-C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF_Content.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.csproj.AssemblyReference.cache
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Resources\Styles\ButtonStyles.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Resources\Styles\CardStyles.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Resources\Styles\Colors.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Company\CompaniesPage.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Company\CurrentCompanyPage.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewayEditPage.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewayPage.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewaySetupPage.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\History\HistoryPage.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Home\HomePage.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorEditPage.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorSetupPage.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorsPage.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Signin\SigninPage.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\SignUp\SignUpPage.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Telemetry\TelemetryPage.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Users\UsersPage.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Company\CompaniesPage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Company\CurrentCompanyPage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewayEditPage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewayPage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewaySetupPage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\History\HistoryPage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Home\HomePage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Network\NetworkPage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorEditPage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorSetupPage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorsPage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Signin\SigninPage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\SignUp\SignUpPage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Telemetry\TelemetryPage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Users\UsersPage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Windows\MainWindow.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\App.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF_Content.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF_MarkupCompile.cache
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF_MarkupCompile.lref
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\appsettings.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.WPF.exe
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.WPF.deps.json
@@ -86,9 +5,17 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Sm
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.WPF.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.WPF.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\AutoMapper.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\FirebaseAdmin.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\FluentValidation.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\FluentValidation.DependencyInjectionExtensions.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Google.Api.Gax.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Google.Api.Gax.Rest.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Google.Apis.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Google.Apis.Auth.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Google.Apis.Core.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.AspNetCore.Http.Abstractions.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.AspNetCore.Http.Features.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.Bcl.AsyncInterfaces.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.Data.Sqlite.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.Extensions.Configuration.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.Extensions.Configuration.Abstractions.dll
@@ -113,9 +40,11 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Mi
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.IdentityModel.Logging.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.IdentityModel.Tokens.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\MongoDB.Bson.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Newtonsoft.Json.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SQLitePCLRaw.batteries_v2.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SQLitePCLRaw.core.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SQLitePCLRaw.provider.e_sqlite3.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\System.Management.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\runtimes\browser-wasm\nativeassets\net9.0\e_sqlite3.a
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\runtimes\linux-arm\native\libe_sqlite3.so
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\runtimes\linux-arm64\native\libe_sqlite3.so
@@ -138,13 +67,54 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\ru
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\runtimes\win-arm64\native\e_sqlite3.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\runtimes\win-x64\native\e_sqlite3.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\runtimes\win-x86\native\e_sqlite3.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\runtimes\win\lib\net7.0\System.Management.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.Application.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.Domain.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.Shared.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.Application.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.Domain.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.Shared.pdb
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.csproj.AssemblyReference.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Resources\Styles\ButtonStyles.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Resources\Styles\CardStyles.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Resources\Styles\Colors.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Company\CompaniesPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Company\CurrentCompanyPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewayEditPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewayPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewaySetupPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\History\HistoryPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorEditPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorSetupPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorsPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Signin\SigninPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\SignUp\CompanyServicesPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\SignUp\SignUpPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Telemetry\TelemetryPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Users\UsersPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Company\CompaniesPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Company\CurrentCompanyPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewayEditPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewayPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewaySetupPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\History\HistoryPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Home\HomePage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Network\NetworkPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorEditPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorSetupPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorsPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Signin\SigninPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\SignUp\CompanyServicesPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\SignUp\SignUpPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Telemetry\TelemetryPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Users\UsersPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Windows\MainWindow.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\App.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF_Content.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF_MarkupCompile.cache
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF_MarkupCompile.lref
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\App.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Home\HomePage.baml
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Network\NetworkPage.baml
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Windows\MainWindow.baml
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.g.resources
@@ -159,3 +129,4 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\re
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.genruntimeconfig.cache
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\ref\SmartX.WPF.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Resources\Styles\ComboBoxStyle.baml

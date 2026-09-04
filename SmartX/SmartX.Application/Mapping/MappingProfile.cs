@@ -34,5 +34,7 @@ public class MappingProfile : Profile
 
         CreateMap<CompanyDto, Company>();
 
+        CreateMap<CompanyConfiguration, CompanyConfigurationDto>();
+
     }
 }

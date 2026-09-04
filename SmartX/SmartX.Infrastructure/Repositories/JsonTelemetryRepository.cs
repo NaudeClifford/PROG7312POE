@@ -86,6 +86,14 @@ public class JsonTelemetryRepository : ITelemetryRepository
 
         var telemetryList = telemetryRecords.ToList();
 
+        var existing = telemetryList.FirstOrDefault(
+                x => x.Id == telemetry.Id);
+
+        if (existing is not null)
+        {
+            telemetryList.Remove(existing);
+        }
+
         telemetryList.Add(telemetry);
 
         string json = JsonSerializer.Serialize(

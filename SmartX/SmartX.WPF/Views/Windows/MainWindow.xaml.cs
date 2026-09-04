@@ -1,17 +1,20 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SmartX.Domain.Enums;
 using SmartX.WPF.Navigation;
+using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.Views.Pages.Company;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.History;
 using SmartX.WPF.Views.Pages.Home;
 using SmartX.WPF.Views.Pages.Sensor;
+using SmartX.WPF.Views.Pages.Signin;
 using SmartX.WPF.Views.Pages.Telemetry;
 using SmartX.WPF.Views.Pages.Users;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace SmartX.WPF;
 
@@ -21,12 +24,14 @@ public partial class MainWindow : Window
     private readonly SmartXSession _session;
     private readonly SmartXAuthenticationService _authenticationService;
     private readonly INavigationService _navigationService;
+    private readonly ISmartXApiClient _apiClient;
+    private readonly DispatcherTimer _connectivityTimer;
 
     private NavigationStage _navigationStage =
         NavigationStage.Home;
 
-
     // NAVIGATION STAGE
+
     private enum NavigationStage
     {
         Home,
@@ -36,16 +41,16 @@ public partial class MainWindow : Window
         CurrentCompany,
         Companies,
 
-        // Normal gateway area
+        // Gateway area
         Gateway,
         Sensors,
         Telemetry,
-
-        NetworkMesh,  
         History,
 
+        NetworkMesh,
         CommandHistory
     }
+
 
     // CONSTRUCTOR
 
@@ -53,7 +58,9 @@ public partial class MainWindow : Window
         INavigationService navigationService,
         HomePage homePage,
         SmartXSession session,
-        SmartXAuthenticationService authenticationService)
+        SmartXAuthenticationService authenticationService,
+
+        ISmartXApiClient apiClient)
     {
         InitializeComponent();
 
@@ -61,67 +68,156 @@ public partial class MainWindow : Window
         _homePage = homePage;
         _session = session;
         _authenticationService = authenticationService;
+        _apiClient = apiClient;
+
+        UpdateLoggedInUser();
+
+        _session.PropertyChanged += Session_PropertyChanged;
 
         _navigationService.SetFrame(MainFrame);
+
 
         MainFrame.Navigated += MainFrame_Navigated;
 
         Loaded += MainWindow_Loaded;
+
+        _connectivityTimer =
+            new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(60)
+            };
+
+        _connectivityTimer.Tick +=
+            ConnectivityTimer_Tick;
     }
 
     // STARTUP
-    private void MainWindow_Loaded(
+
+    private async void MainWindow_Loaded(
         object sender,
         RoutedEventArgs e)
     {
+        Loaded -= MainWindow_Loaded;
+        _connectivityTimer.Start();
+
+
+        try
+        {        
+            await UpdateConnectionStatusAsync();
+
+            await InitializeNavigationAsync();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                ex.ToString(),
+                "Navigation Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+
+            NavigatePublicHome();
+        }
+    }
+
+
+    private async Task InitializeNavigationAsync()
+    {
+
         if (_session.IsAuthenticated)
         {
-            switch (_session.Role)
+
+            if (_session.Role == UserRole.SuperAdmin)
             {
-                case UserRole.SuperAdmin:
+                _session.CompleteOnboarding();
 
-                    NavigateHome();
+                NavigateHome();
 
-                    break;
-
-                case UserRole.Administrator:
-
-                    NavigateTo<GatewayPage>(
-                        NavigationStage.Gateway);
-
-                    break;
-
-                case UserRole.Technician:
-
-                    NavigateTo<GatewayPage>(
-                        NavigationStage.Gateway);
-
-                    break;
-
-                case UserRole.Viewer:
-
-                    NavigateHome();
-
-                    break;
-
-                default:
-
-                    NavigateHome();
-
-                    break;
+                return;
             }
+
+            if (_session.CompanyId != Guid.Empty)
+            {
+                var hasGateway =
+                    await CompanyHasGatewayAsync(
+                        _session.CompanyId);
+
+                if (hasGateway)
+                {
+                    _session.CompleteOnboarding();
+
+                    NavigateTo<GatewayPage>(
+                        NavigationStage.Gateway);
+
+                    return;
+                }
+
+                _session.BeginOnboarding();
+
+                NavigateTo<GatewaySetupPage>(
+                    NavigationStage.Gateway);
+
+                return;
+            }
+
+
+            // INVALID AUTHENTICATED SESSION
+
+            NavigateHome();
 
             return;
         }
+
+        // GUEST
 
         if (_session.IsGuest)
         {
             NavigateHome();
+
             return;
         }
 
-        NavigatePublicHome();
+        // NOT AUTHENTICATED
+
+        _navigationStage = NavigationStage.Home;
+
+        HideNavigation();
+
+        _navigationService.NavigateTo<HomePage>();
+
     }
+
+
+    private async Task<bool> CompanyHasGatewayAsync(
+        Guid companyId)
+    {
+        try
+        {
+            var gateways =
+                await _apiClient
+                    .GetGatewaysByCompanyIdAsync(companyId);
+
+            if (gateways is null || gateways.Count == 0)
+            {
+                return false;
+            }
+
+            var gateway =
+                gateways.FirstOrDefault(
+                    x => x.IsActive)
+                ?? gateways.First();
+
+            _session.SelectGateway(
+                gateway.Id,
+                gateway.Name);
+
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
 
     // PUBLIC NAVIGATION REFRESH
 
@@ -130,24 +226,40 @@ public partial class MainWindow : Window
         UpdateNavigation();
     }
 
+
     // NAVIGATION VISIBILITY
 
     private void UpdateNavigation()
     {
+
+        if (_session.IsOnboarding)
+        {
+            HideNavigation();
+
+            return;
+        }
+
         if (!_session.IsAuthenticated &&
             !_session.IsGuest)
         {
             HideNavigation();
+
             return;
         }
 
+        ShowNavigation();
+
+        ApplyNavigationPermissions();
+    }
+
+
+    private void ShowNavigation()
+    {
         NavigationBorder.Visibility =
             Visibility.Visible;
 
         NavigationRow.Height =
             new GridLength(70);
-
-        ApplyNavigationPermissions();
     }
 
 
@@ -193,6 +305,7 @@ public partial class MainWindow : Window
             Visibility.Collapsed;
     }
 
+
     // ROLE NAVIGATION
 
     private void ApplyNavigationPermissions()
@@ -203,16 +316,13 @@ public partial class MainWindow : Window
             Visibility.Visible;
 
 
-        // GUEST
-
         if (_session.IsGuest)
         {
             ApplyGuestNavigation();
+
             return;
         }
 
-
-        // AUTHENTICATED ROLE
 
         switch (_session.Role)
         {
@@ -257,10 +367,24 @@ public partial class MainWindow : Window
         if (e.Content is not Page page)
             return;
 
+
+        // ONBOARDING
+
+        if (page is GatewaySetupPage)
+        {
+            _navigationStage =
+                NavigationStage.Gateway;
+
+            HideNavigation();
+
+            return;
+        }
+
+
+        // NORMAL PAGES
+
         switch (page)
         {
-            // HOME
-
             case HomePage:
 
                 _navigationStage =
@@ -268,18 +392,12 @@ public partial class MainWindow : Window
 
                 break;
 
-
-            // USERS
-
             case UsersPage:
 
                 _navigationStage =
                     NavigationStage.Users;
 
                 break;
-
-
-            // COMPANY
 
             case CurrentCompanyPage:
 
@@ -295,8 +413,6 @@ public partial class MainWindow : Window
 
                 break;
 
-
-            // GATEWAY AREA
             case GatewayPage:
 
                 _navigationStage =
@@ -328,8 +444,10 @@ public partial class MainWindow : Window
                 break;
         }
 
+
         UpdateNavigation();
     }
+
 
     // GUEST
 
@@ -347,17 +465,15 @@ public partial class MainWindow : Window
         TelemetryButton.Visibility =
             Visibility.Visible;
 
-
         LogOutButton.Visibility =
             Visibility.Visible;
     }
+
 
     // ADMINISTRATOR
 
     private void ApplyAdministratorNavigation()
     {
-
-
         switch (_navigationStage)
         {
             case NavigationStage.Home:
@@ -373,9 +489,7 @@ public partial class MainWindow : Window
 
                 break;
 
-
             case NavigationStage.Users:
-                
 
                 CurrentCompanyButton.Visibility =
                     Visibility.Visible;
@@ -395,7 +509,6 @@ public partial class MainWindow : Window
 
                 break;
 
-
             case NavigationStage.Gateway:
 
                 UsersButton.Visibility =
@@ -404,9 +517,7 @@ public partial class MainWindow : Window
                 CurrentCompanyButton.Visibility =
                     Visibility.Visible;
 
-
                 break;
-
 
             case NavigationStage.Sensors:
 
@@ -417,36 +528,37 @@ public partial class MainWindow : Window
                     Visibility.Visible;
 
                 GatewayButton.Visibility =
-                Visibility.Visible;
-
-                TelemetryButton.Visibility =
                     Visibility.Visible;
 
-                UsersButton.Visibility =
-                      Visibility.Visible;
-
-                CurrentCompanyButton.Visibility =
+                TelemetryButton.Visibility =
                     Visibility.Visible;
 
                 break;
 
             case NavigationStage.Telemetry:
+
                 GatewayButton.Visibility =
-                Visibility.Visible;
+                    Visibility.Visible;
 
                 SensorsButton.Visibility =
                     Visibility.Visible;
 
                 UsersButton.Visibility =
-                      Visibility.Visible;
+                    Visibility.Visible;
 
                 CurrentCompanyButton.Visibility =
                     Visibility.Visible;
 
                 break;
 
-            case NavigationStage.NetworkMesh:
+            case NavigationStage.History:
 
+                GatewayButton.Visibility =
+                    Visibility.Visible;
+
+                break;
+
+            case NavigationStage.NetworkMesh:
             case NavigationStage.CommandHistory:
 
                 GatewayButton.Visibility =
@@ -460,6 +572,7 @@ public partial class MainWindow : Window
     }
 
     // TECHNICIAN
+
     private void ApplyTechnicianNavigation()
     {
         switch (_navigationStage)
@@ -468,43 +581,41 @@ public partial class MainWindow : Window
 
                 GatewayButton.Visibility =
                     Visibility.Visible;
+
                 break;
 
+            case NavigationStage.Gateway:
+
+                break;
 
             case NavigationStage.Sensors:
 
                 GatewayButton.Visibility =
-                Visibility.Visible;
-
-                TelemetryButton.Visibility =
                     Visibility.Visible;
 
-                UsersButton.Visibility =
-                      Visibility.Visible;
-
-                CurrentCompanyButton.Visibility =
+                TelemetryButton.Visibility =
                     Visibility.Visible;
 
                 break;
 
             case NavigationStage.Telemetry:
+
                 GatewayButton.Visibility =
-                Visibility.Visible;
+                    Visibility.Visible;
 
                 SensorsButton.Visibility =
                     Visibility.Visible;
 
-                UsersButton.Visibility =
-                      Visibility.Visible;
+                break;
 
-                CurrentCompanyButton.Visibility =
+            case NavigationStage.History:
+
+                GatewayButton.Visibility =
                     Visibility.Visible;
 
                 break;
 
-
             case NavigationStage.NetworkMesh:
-
             case NavigationStage.CommandHistory:
 
                 GatewayButton.Visibility =
@@ -514,23 +625,17 @@ public partial class MainWindow : Window
                     Visibility.Visible;
 
                 break;
-
-            case NavigationStage.Gateway:
-
-                break;
         }
     }
+
 
     // SUPER ADMINISTRATOR
 
     private void ApplySuperAdminNavigation()
     {
-
-
         switch (_navigationStage)
         {
             case NavigationStage.Home:
-
 
                 UsersButton.Visibility =
                     Visibility.Visible;
@@ -539,7 +644,6 @@ public partial class MainWindow : Window
                     Visibility.Visible;
 
                 break;
-
 
             case NavigationStage.Users:
 
@@ -555,13 +659,11 @@ public partial class MainWindow : Window
 
                 break;
 
-
             default:
 
                 break;
         }
     }
-
 
     // VIEWER
     private void ApplyViewerNavigation()
@@ -596,8 +698,6 @@ public partial class MainWindow : Window
             NavigationStage.Home;
 
         MainFrame.Navigate(_homePage);
-
-        UpdateNavigation();
     }
 
 
@@ -611,7 +711,72 @@ public partial class MainWindow : Window
         MainFrame.Navigate(_homePage);
     }
 
+    // CONNECTIVITY
+
+    private async void ConnectivityTimer_Tick(
+        object? sender,
+        EventArgs e)
+    {
+        await UpdateConnectionStatusAsync();
+    }
+
+
+    private async Task UpdateConnectionStatusAsync()
+    {
+        try
+        {
+            var isOnline =
+                await _apiClient.IsAvailableAsync();
+
+            if (isOnline)
+            {
+                ConnectionStatusIndicator.Fill =
+                    new System.Windows.Media.SolidColorBrush(
+                        System.Windows.Media.Color.FromRgb(
+                            0x28,
+                            0xA7,
+                            0x45));
+
+                ConnectionStatusText.Text = "Live";
+
+                ConnectionStatusText.Foreground =
+                    new System.Windows.Media.SolidColorBrush(
+                        System.Windows.Media.Color.FromRgb(
+                            0x21,
+                            0x88,
+                            0x38));
+            }
+            else
+            {
+                SetOfflineStatus();
+            }
+        }
+        catch
+        {
+            SetOfflineStatus();
+        }
+    }
+
+    private void SetOfflineStatus()
+    {
+        ConnectionStatusIndicator.Fill =
+            new System.Windows.Media.SolidColorBrush(
+                System.Windows.Media.Color.FromRgb(
+                    0xDC,
+                    0x35,
+                    0x45));
+
+        ConnectionStatusText.Text = "Offline";
+
+        ConnectionStatusText.Foreground =
+            new System.Windows.Media.SolidColorBrush(
+                System.Windows.Media.Color.FromRgb(
+                    0xC8,
+                    0x23,
+                    0x33));
+    }
     // USERS
+
     private void Users_Click(
         object sender,
         RoutedEventArgs e)
@@ -642,7 +807,9 @@ public partial class MainWindow : Window
             NavigationStage.CurrentCompany);
     }
 
-    // SUPER ADMIN - COMPANIES
+
+    // COMPANIES
+
     private void Companies_Click(
         object sender,
         RoutedEventArgs e)
@@ -658,12 +825,14 @@ public partial class MainWindow : Window
     }
 
     // GATEWAY
+
     private void Gateway_Click(
         object sender,
         RoutedEventArgs e)
     {
         if (_session.Role is not
-            (UserRole.Administrator or UserRole.Technician))
+            (UserRole.Administrator or
+             UserRole.Technician))
         {
             return;
         }
@@ -686,7 +855,6 @@ public partial class MainWindow : Window
     }
 
     // TELEMETRY
-
     private void Telemetry_Click(
         object sender,
         RoutedEventArgs e)
@@ -700,7 +868,6 @@ public partial class MainWindow : Window
 
 
     // HISTORY
-
     private void History_Click(
         object sender,
         RoutedEventArgs e)
@@ -713,6 +880,7 @@ public partial class MainWindow : Window
     }
 
     // GATEWAY AREA ACCESS
+
     private bool CanAccessGatewayArea()
     {
         return _session.Role is
@@ -720,7 +888,9 @@ public partial class MainWindow : Window
             UserRole.Administrator;
     }
 
+
     // GENERIC PAGE NAVIGATION
+
     private void NavigateTo<T>(
         NavigationStage stage)
         where T : Page
@@ -733,12 +903,10 @@ public partial class MainWindow : Window
             stage;
 
         MainFrame.Navigate(page);
-
-        UpdateNavigation();
     }
 
-
     // LOGOUT
+
     private async void LogOut_Click(
         object sender,
         RoutedEventArgs e)
@@ -764,7 +932,45 @@ public partial class MainWindow : Window
         NavigatePublicHome();
     }
 
+
+    private async void Session_PropertyChanged(
+        object? sender,
+        System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(SmartXSession.DisplayName))
+        {
+            UpdateLoggedInUser();
+        }
+
+        if (e.PropertyName == nameof(SmartXSession.IsAuthenticated))
+        {
+            await HandleSuccessfulLoginAsync();
+        }
+    }
+
+
+
+
+    private void UpdateLoggedInUser()
+    {
+        UserDisplayText.Text =
+            string.IsNullOrWhiteSpace(_session.DisplayName)
+                ? "Unknown user"
+                : _session.DisplayName;
+    }
+
+
+    protected override void OnClosed(EventArgs e)
+    {
+        _connectivityTimer.Stop();
+
+        _session.PropertyChanged -= Session_PropertyChanged;
+
+        base.OnClosed(e);
+    }
+
     // WINDOW CONTROLS
+
     private void TitleBar_MouseLeftButtonDown(
         object sender,
         MouseButtonEventArgs e)
@@ -802,6 +1008,11 @@ public partial class MainWindow : Window
         RoutedEventArgs e)
     {
         Close();
+    }
+
+    public async Task HandleSuccessfulLoginAsync()
+    {
+        await InitializeNavigationAsync();
     }
 
 }

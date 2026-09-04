@@ -12,7 +12,7 @@ public partial class GatewayPage : Page
     public GatewayPage(
         GatewayViewModel viewModel)
     {
-
+        
         InitializeComponent();
 
         _viewModel = viewModel;
@@ -27,7 +27,11 @@ public partial class GatewayPage : Page
     {
         Loaded -= GatewayPage_Loaded;
 
+        _viewModel.ResetEditor();
+
         await _viewModel.LoadAsync();
 
     }
+
+
 }

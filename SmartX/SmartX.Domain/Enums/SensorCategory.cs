@@ -2,6 +2,7 @@
 {
     public enum SensorCategory
     {
+        None,
         Environmental,
         PowerConsumption,
         Actuator

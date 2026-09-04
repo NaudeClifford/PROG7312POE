@@ -43,6 +43,9 @@
     <Compile Update="Views\Pages\Signin\SigninPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Pages\SignUp\CompanyServicesPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Pages\SignUp\SignUpPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SmartX.WPF"
         mc:Ignorable="d"
+        Icon="/SmartX.WPF;component/Assets/Logo/Logo.ico"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize"
         WindowStyle="None"
@@ -35,14 +36,15 @@
         <!-- TITLE BAR -->
 
         <Border Grid.Row="0"
-                Background="{StaticResource DarkBrush}"
-                MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+        Background="{StaticResource DarkBrush}"
+        MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
 
             <Grid>
 
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
@@ -50,181 +52,226 @@
                 <!-- Logo + Name -->
 
                 <Button Grid.Column="0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Padding="15,0"
-                        Cursor="Hand"
-                        Click="SmartXHome_Click">
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                BorderThickness="0"
+                Padding="15,0"
+                Cursor="Hand"
+                Click="SmartXHome_Click">
 
                     <StackPanel Orientation="Horizontal">
 
                         <Image Source="/Assets/Logo/Logo.jpg"
-                               Width="50"
-                               Height="30"
-                               Margin="0,0,10,0"/>
+                       Width="50"
+                       Height="30"
+                       Margin="0,0,10,0"/>
 
                         <TextBlock Text="SmartX"
-                                   Foreground="{StaticResource LightTextBrush}"
-                                   FontWeight="Bold"
-                                   FontSize="16"
-                                   VerticalAlignment="Center"/>
+                           Foreground="{StaticResource LightTextBrush}"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           VerticalAlignment="Center"/>
 
                     </StackPanel>
 
                 </Button>
 
+
                 <!-- USER -->
-                <StackPanel
-                Grid.Column="1"
-                Orientation="Horizontal"
-                VerticalAlignment="Center">
 
-                    <TextBlock
-                    Text="Logged in:"
-                    Foreground="#AAB7C4"
-                    Margin="0,0,6,0"/>
+                <StackPanel Grid.Column="1"
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center">
 
-                    <TextBlock
-                    Text="{Binding UserDisplayText}"
-                    Foreground="White"
-                    FontWeight="SemiBold"/>
+                    <TextBlock Text="Logged in:"
+                       Foreground="{StaticResource LightTextBrush}"
+                       Margin="0,0,6,0"/>
+
+                    <TextBlock x:Name="UserDisplayText"
+                       Foreground="{StaticResource LightTextBrush}"
+                       FontWeight="SemiBold"/>
 
                 </StackPanel>
-                
-                <!-- Window Controls -->
+
+
+                <!-- LIVE STATUS -->
 
                 <StackPanel Grid.Column="2"
-                            Orientation="Horizontal">
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    Margin="0,0,20,0">
+
+                    <Ellipse x:Name="ConnectionStatusIndicator"
+                     Width="9"
+                     Height="9"
+                     Fill="#28A745"
+                     Margin="0,0,8,0"
+                     VerticalAlignment="Center"/>
+
+                    <TextBlock x:Name="ConnectionStatusText"
+                       Text="Live"
+                       FontWeight="SemiBold"
+                       Foreground="#218838"
+                       VerticalAlignment="Center"/>
+
+                </StackPanel>
+
+
+                <!-- Window Controls -->
+
+                <StackPanel Grid.Column="3"
+                    Orientation="Horizontal">
 
                     <Button Content="—"
-                            Width="40"
-                            Click="Minimize_Click" Background="LightBlue"/>
+                    Width="40"
+                    Click="Minimize_Click"
+                    Background="LightBlue"/>
 
                     <Button Content="□"
-                            Width="40"
-                            Click="Maximize_Click" Background="LightBlue"/>
+                    Width="40"
+                    Click="Maximize_Click"
+                    Background="LightBlue"/>
 
                     <Button Content="X"
-                            Width="40"
-                            Click="Close_Click" Background="Red"/>
+                    Width="40"
+                    Click="Close_Click"
+                    Background="Red"/>
 
                 </StackPanel>
 
             </Grid>
 
         </Border>
-
 
         <!-- TOP NAVIGATION -->
 
         <Border x:Name="NavigationBorder"
-                Grid.Row="1"
-                Background="{StaticResource DarkBrush}">
+        Grid.Row="1"
+        Background="{StaticResource DarkBrush}">
 
             <Grid>
 
                 <Grid.ColumnDefinitions>
+
+                    <!-- Navigation buttons -->
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+
+                    <!-- Logout -->
                     <ColumnDefinition Width="Auto"/>
+
                 </Grid.ColumnDefinitions>
 
 
-                <!-- HOME -->
+                <!-- LEFT NAVIGATION -->
 
-                <Button x:Name="HomeButton"
-                        Grid.Column="0"
-                        Content="Home"
-                        Click="Home_Click"
-                        Style="{StaticResource BaseButtonStyle}"/>
+                <StackPanel
+            Grid.Column="0"
+            Orientation="Horizontal"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Stretch">
 
+                    <!-- HOME -->
 
-                <Button
-    x:Name="CompaniesButton"
-    Content="Companies"
-    Click="Companies_Click"
-    Visibility="Collapsed"
-                                            Style="{StaticResource BaseButtonStyle}"/>
-
-
-                <!-- GATEWAY -->
-
-                <Button x:Name="GatewayButton"
-                        Grid.Column="1"
-                        Content="Gateway"
-                        Click="Gateway_Click"
-                        Style="{StaticResource BaseButtonStyle}"/>
+                    <Button
+                x:Name="HomeButton"
+                Content="Home"
+                Click="Home_Click"
+                Visibility="Collapsed"
+                Style="{StaticResource BaseButtonStyle}"/>
 
 
-                <!-- SENSORS -->
+                    <!-- COMPANIES -->
 
-                <Button x:Name="SensorsButton"
-                        Grid.Column="2"
-                        Content="Sensors"
-                        Click="Sensors_Click"
-                        Style="{StaticResource BaseButtonStyle}"/>
-
-
-                <!-- TELEMETRY -->
-
-                <Button x:Name="TelemetryButton"
-                        Grid.Column="3"
-                        Content="Telemetry"
-                        Click="Telemetry_Click"
-                        Style="{StaticResource BaseButtonStyle}"/>
+                    <Button
+                x:Name="CompaniesButton"
+                Content="Companies"
+                Click="Companies_Click"
+                Visibility="Collapsed"
+                Style="{StaticResource BaseButtonStyle}"/>
 
 
-                <!-- HISTORY -->
+                    <!-- GATEWAY -->
 
-                <Button x:Name="HistoryButton"
-                        Grid.Column="4"
-                        Content="History"
-                        Click="History_Click"
-                        Style="{StaticResource BaseButtonStyle}"/>
-
-                <Button
-    x:Name="UsersButton"
-    Content="Users"
-    Click="Users_Click"
-    Visibility="Collapsed"
-                                            Style="{StaticResource BaseButtonStyle}"/>
+                    <Button
+                x:Name="GatewayButton"
+                Content="Gateway"
+                Click="Gateway_Click"
+                Visibility="Collapsed"
+                Style="{StaticResource BaseButtonStyle}"/>
 
 
-                <Button
-    x:Name="CurrentCompanyButton"
-    Content="Current Company"
-    Click="CurrentCompany_Click"
-    Visibility="Collapsed"
-                                            Style="{StaticResource BaseButtonStyle}"/>
+                    <!-- SENSORS -->
+
+                    <Button
+                x:Name="SensorsButton"
+                Content="Sensors"
+                Click="Sensors_Click"
+                Visibility="Collapsed"
+                Style="{StaticResource BaseButtonStyle}"/>
 
 
-                
+                    <!-- TELEMETRY -->
+
+                    <Button
+                x:Name="TelemetryButton"
+                Content="Telemetry"
+                Click="Telemetry_Click"
+                Visibility="Collapsed"
+                Style="{StaticResource BaseButtonStyle}"/>
+
+
+                    <!-- HISTORY -->
+
+                    <Button
+                x:Name="HistoryButton"
+                Content="History"
+                Click="History_Click"
+                Visibility="Collapsed"
+                Style="{StaticResource BaseButtonStyle}"/>
+
+
+                    <!-- USERS -->
+
+                    <Button
+                x:Name="UsersButton"
+                Content="Users"
+                Click="Users_Click"
+                Visibility="Collapsed"
+                Style="{StaticResource BaseButtonStyle}"/>
+
+
+                    <!-- CURRENT COMPANY -->
+
+                    <Button
+                x:Name="CurrentCompanyButton"
+                Content="Current Company"
+                Click="CurrentCompany_Click"
+                Visibility="Collapsed"
+                Style="{StaticResource BaseButtonStyle}"/>
+
+                </StackPanel>
+
+
                 <!-- LOG OUT -->
 
-                <Button x:Name="LogOutButton"
-                        Grid.Column="5"
-                        Content="Log Out"
-                        Click="LogOut_Click"
-                        Style="{StaticResource BaseButtonStyle}"/>
+                <Button
+            x:Name="LogOutButton"
+            Grid.Column="1"
+            Content="Log Out"
+            Click="LogOut_Click"
+            Visibility="Collapsed"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Stretch"
+            Style="{StaticResource BaseButtonStyle}"/>
 
             </Grid>
 
         </Border>
 
 
-        <!-- ===================================================== -->
+
         <!-- PAGE CONTENT -->
-        <!-- ===================================================== -->
 
         <Border Grid.Row="2"
                 Background="{StaticResource BackgroundBrush}">
@@ -236,9 +283,7 @@
         </Border>
 
 
-        <!-- ===================================================== -->
         <!-- FOOTER -->
-        <!-- ===================================================== -->
 
         <Border Grid.Row="3"
                 Background="{StaticResource DarkBrush}">

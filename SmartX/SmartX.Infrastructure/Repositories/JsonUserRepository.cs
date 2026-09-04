@@ -59,30 +59,50 @@ public class JsonUserRepository : IUserRepository
     }
 
     public async Task<IReadOnlyList<User>> GetAllAsync(
-        CancellationToken cancellationToken = default)
+    CancellationToken cancellationToken = default)
     {
         try
         {
+            Console.WriteLine(
+                $"USER JSON PATH: {_filePath}");
+
             if (!File.Exists(_filePath))
+            {
+                Console.WriteLine(
+                    "USER JSON DOES NOT EXIST!");
+
                 return [];
+            }
 
             var json = await File.ReadAllTextAsync(
                 _filePath,
                 cancellationToken);
 
-            if (string.IsNullOrWhiteSpace(json))
-                return [];
+            Console.WriteLine(
+                $"USER JSON LENGTH: {json.Length}");
 
-            var users = JsonSerializer.Deserialize<List<User>>(
-                json);
+            var users =
+                JsonSerializer.Deserialize<List<User>>(json);
+
+            Console.WriteLine(
+                $"USERS LOADED: {users?.Count ?? 0}");
+
+            foreach (var user in users ?? [])
+            {
+                Console.WriteLine(
+                    $"USER: {user.Email} | " +
+                    $"UID: {user.FirebaseUid}");
+            }
 
             return users ?? [];
         }
-        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        catch (OperationCanceledException)
+            when (cancellationToken.IsCancellationRequested)
         {
             return [];
         }
     }
+
 
     public async Task AddAsync(
         User user,

@@ -18,9 +18,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- ================================================= -->
             <!-- HEADER -->
-            <!-- ================================================= -->
 
             <Grid
                 Grid.Row="0"
@@ -50,9 +48,7 @@
 
             </Grid>
 
-            <!-- ================================================= -->
             <!-- FORM -->
-            <!-- ================================================= -->
 
             <Border
                 Grid.Row="1"
@@ -75,9 +71,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <!-- ========================================= -->
                     <!-- SENSOR NAME -->
-                    <!-- ========================================= -->
 
                     <StackPanel
                         Grid.Row="0"
@@ -111,9 +105,7 @@
 
                     </StackPanel>
 
-                    <!-- ========================================= -->
                     <!-- DEVICE IDENTIFIER -->
-                    <!-- ========================================= -->
 
                     <StackPanel
                         Grid.Row="0"
@@ -147,9 +139,7 @@
 
                     </StackPanel>
 
-                    <!-- ========================================= -->
                     <!-- LOCATION -->
-                    <!-- ========================================= -->
 
                     <StackPanel
                         Grid.Row="1"
@@ -183,9 +173,7 @@
 
                     </StackPanel>
 
-                    <!-- ========================================= -->
                     <!-- CATEGORY -->
-                    <!-- ========================================= -->
 
                     <StackPanel
                         Grid.Row="1"
@@ -207,8 +195,8 @@
                             Background="#FAFBFC">
 
                             <ComboBox
-                                ItemsSource="{Binding SensorCategories}"
-                                SelectedItem="{Binding Category}"
+                                ItemsSource="{Binding Categories}"
+                                    SelectedItem="{Binding Category, Mode=TwoWay}"
                                 Margin="6,0"
                                 BorderThickness="0"
                                 Background="Transparent"
@@ -219,9 +207,7 @@
 
                     </StackPanel>
 
-                    <!-- ========================================= -->
                     <!-- DESCRIPTION -->
-                    <!-- ========================================= -->
 
                     <StackPanel
                         Grid.Row="2"
@@ -257,9 +243,7 @@
 
                     </StackPanel>
 
-                    <!-- ========================================= -->
                     <!-- ERROR -->
-                    <!-- ========================================= -->
 
                     <TextBlock
                         Grid.Row="3"
@@ -270,9 +254,7 @@
                         TextWrapping="Wrap"
                         Margin="0,5,0,15"/>
 
-                    <!-- ========================================= -->
                     <!-- CREATE BUTTON -->
-                    <!-- ========================================= -->
 
                     <Button
                         Grid.Row="4"

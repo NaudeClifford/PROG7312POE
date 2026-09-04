@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "Id": "b9b4c08c-6506-4358-b07b-d35169665bbd",
+    "FirebaseUid": "aD0viBLRjohK9KUyx0mjrmUtVKI3",
+    "CompanyId": "70812192-51ee-465b-9aab-8b21f8ba1750",
+    "Email": "super12@gmail.com",
+    "DisplayName": "Super Admin",
+    "Role": 3,
+    "IsActive": true,
+    "CreatedAt": "2026-09-04T18:50:00Z",
+    "UpdatedAt": "2026-09-04T18:50:00Z"
+  }
+]

@@ -22,31 +22,35 @@
 
             <StackPanel>
 
-                <TextBlock Text="Telemetry"
-                           FontSize="32"
-                           FontWeight="Bold"
-                           Foreground="{StaticResource DarkBrush}"/>
+                <TextBlock
+                    Text="Telemetry"
+                    FontSize="32"
+                    FontWeight="Bold"
+                    Foreground="{StaticResource DarkBrush}"/>
 
-                <TextBlock Text="Live readings received from your connected sensors."
-                           FontSize="14"
-                           Foreground="#737A82"
-                           Margin="0,6,0,0"/>
+                <TextBlock
+                    Text="Live readings received from your connected sensors."
+                    FontSize="14"
+                    Foreground="#737A82"
+                    Margin="0,6,0,0"/>
 
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Right">
 
-                <Ellipse Width="9"
-                         Height="9"
-                         Fill="#28A745"
-                         Margin="0,0,8,0"
-                         VerticalAlignment="Center"/>
+            <StackPanel
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center">
 
-                <TextBlock Text="Live"
-                           FontWeight="SemiBold"
-                           Foreground="#218838"
-                           VerticalAlignment="Center"/>
+                <!-- DEVELOPMENT BUTTON -->
+
+                <Button
+                    Content="+ Add Telemetry"
+                    Command="{Binding AddTelemetryCommand}"
+                    Background="{StaticResource DarkBrush}"
+                    Foreground="White"
+                    Padding="18,9"
+                    Margin="0,0,25,0"/>
 
             </StackPanel>
 
@@ -55,8 +59,14 @@
 
         <!-- CURRENT VALUES -->
 
-        <Grid Grid.Row="1"
-              Margin="0,30,0,25">
+        <Grid
+            Grid.Row="1"
+            Margin="0,30,0,25">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -68,39 +78,45 @@
 
             <!-- TEMPERATURE -->
 
-            <Border Grid.Column="0"
-                    Margin="0,0,12,0"
-                    Padding="25"
-                    Background="White"
-                    CornerRadius="15">
+            <Border
+                Grid.Column="0"
+                Margin="0,0,12,0"
+                Padding="25"
+                Background="White"
+                CornerRadius="15">
 
                 <StackPanel>
 
-                    <TextBlock Text="TEMPERATURE"
-                               FontSize="11"
-                               FontWeight="SemiBold"
-                               Foreground="#8A929A"/>
+                    <TextBlock
+                        Text="TEMPERATURE"
+                        FontSize="11"
+                        FontWeight="SemiBold"
+                        Foreground="#8A929A"/>
 
-                    <StackPanel Orientation="Horizontal"
-                                Margin="0,10,0,0">
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Margin="0,10,0,0">
 
-                        <TextBlock Text="{Binding Temperature, StringFormat={}{0:F2}}"
-                                   FontSize="36"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource DarkBrush}"/>
+                        <TextBlock
+                            Text="{Binding Temperature, StringFormat={}{0:F2}}"
+                            FontSize="36"
+                            FontWeight="Bold"
+                            Foreground="{StaticResource DarkBrush}"/>
 
-                        <TextBlock Text="°C"
-                                   FontSize="18"
-                                   Foreground="#737A82"
-                                   VerticalAlignment="Bottom"
-                                   Margin="6,0,0,7"/>
+                        <TextBlock
+                            Text="°C"
+                            FontSize="18"
+                            Foreground="#737A82"
+                            VerticalAlignment="Bottom"
+                            Margin="6,0,0,7"/>
 
                     </StackPanel>
 
-                    <TextBlock Text="Latest reading"
-                               Foreground="#28A745"
-                               FontSize="12"
-                               Margin="0,5,0,0"/>
+                    <TextBlock
+                        Text="Latest reading"
+                        Foreground="#28A745"
+                        FontSize="12"
+                        Margin="0,5,0,0"/>
 
                 </StackPanel>
 
@@ -109,39 +125,45 @@
 
             <!-- VOLTAGE -->
 
-            <Border Grid.Column="1"
-                    Margin="12,0"
-                    Padding="25"
-                    Background="White"
-                    CornerRadius="15">
+            <Border
+                Grid.Column="1"
+                Margin="12,0"
+                Padding="25"
+                Background="White"
+                CornerRadius="15">
 
                 <StackPanel>
 
-                    <TextBlock Text="VOLTAGE"
-                               FontSize="11"
-                               FontWeight="SemiBold"
-                               Foreground="#8A929A"/>
+                    <TextBlock
+                        Text="VOLTAGE"
+                        FontSize="11"
+                        FontWeight="SemiBold"
+                        Foreground="#8A929A"/>
 
-                    <StackPanel Orientation="Horizontal"
-                                Margin="0,10,0,0">
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Margin="0,10,0,0">
 
-                        <TextBlock Text="{Binding Voltage, StringFormat={}{0:F2}}"
-                                   FontSize="36"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource DarkBrush}"/>
+                        <TextBlock
+                            Text="{Binding Voltage, StringFormat={}{0:F2}}"
+                            FontSize="36"
+                            FontWeight="Bold"
+                            Foreground="{StaticResource DarkBrush}"/>
 
-                        <TextBlock Text="V"
-                                   FontSize="18"
-                                   Foreground="#737A82"
-                                   VerticalAlignment="Bottom"
-                                   Margin="6,0,0,7"/>
+                        <TextBlock
+                            Text="V"
+                            FontSize="18"
+                            Foreground="#737A82"
+                            VerticalAlignment="Bottom"
+                            Margin="6,0,0,7"/>
 
                     </StackPanel>
 
-                    <TextBlock Text="Latest reading"
-                               Foreground="#28A745"
-                               FontSize="12"
-                               Margin="0,5,0,0"/>
+                    <TextBlock
+                        Text="Latest reading"
+                        Foreground="#28A745"
+                        FontSize="12"
+                        Margin="0,5,0,0"/>
 
                 </StackPanel>
 
@@ -150,39 +172,45 @@
 
             <!-- CURRENT -->
 
-            <Border Grid.Column="2"
-                    Margin="12,0"
-                    Padding="25"
-                    Background="White"
-                    CornerRadius="15">
+            <Border
+                Grid.Column="2"
+                Margin="12,0"
+                Padding="25"
+                Background="White"
+                CornerRadius="15">
 
                 <StackPanel>
 
-                    <TextBlock Text="CURRENT"
-                               FontSize="11"
-                               FontWeight="SemiBold"
-                               Foreground="#8A929A"/>
+                    <TextBlock
+                        Text="CURRENT"
+                        FontSize="11"
+                        FontWeight="SemiBold"
+                        Foreground="#8A929A"/>
 
-                    <StackPanel Orientation="Horizontal"
-                                Margin="0,10,0,0">
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Margin="0,10,0,0">
 
-                        <TextBlock Text="{Binding Current, StringFormat={}{0:F2}}"
-                                   FontSize="36"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource DarkBrush}"/>
+                        <TextBlock
+                            Text="{Binding Current, StringFormat={}{0:F2}}"
+                            FontSize="36"
+                            FontWeight="Bold"
+                            Foreground="{StaticResource DarkBrush}"/>
 
-                        <TextBlock Text="A"
-                                   FontSize="18"
-                                   Foreground="#737A82"
-                                   VerticalAlignment="Bottom"
-                                   Margin="6,0,0,7"/>
+                        <TextBlock
+                            Text="A"
+                            FontSize="18"
+                            Foreground="#737A82"
+                            VerticalAlignment="Bottom"
+                            Margin="6,0,0,7"/>
 
                     </StackPanel>
 
-                    <TextBlock Text="Latest reading"
-                               Foreground="#28A745"
-                               FontSize="12"
-                               Margin="0,5,0,0"/>
+                    <TextBlock
+                        Text="Latest reading"
+                        Foreground="#28A745"
+                        FontSize="12"
+                        Margin="0,5,0,0"/>
 
                 </StackPanel>
 
@@ -191,41 +219,160 @@
 
             <!-- POWER -->
 
-            <Border Grid.Column="3"
-                    Margin="12,0,0,0"
-                    Padding="25"
-                    Background="White"
-                    CornerRadius="15">
+            <Border
+                Grid.Column="3"
+                Margin="12,0,0,0"
+                Padding="25"
+                Background="White"
+                CornerRadius="15">
 
                 <StackPanel>
 
-                    <TextBlock Text="POWER"
-                               FontSize="11"
-                               FontWeight="SemiBold"
-                               Foreground="#8A929A"/>
+                    <TextBlock
+                        Text="POWER"
+                        FontSize="11"
+                        FontWeight="SemiBold"
+                        Foreground="#8A929A"/>
 
-                    <StackPanel Orientation="Horizontal"
-                                Margin="0,10,0,0">
+                    <StackPanel
+                        Orientation="Horizontal"
+                        Margin="0,10,0,0">
 
-                        <TextBlock Text="{Binding Power, StringFormat={}{0:F2}}"
-                                   FontSize="36"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource DarkBrush}"/>
+                        <TextBlock
+                            Text="{Binding Power, StringFormat={}{0:F2}}"
+                            FontSize="36"
+                            FontWeight="Bold"
+                            Foreground="{StaticResource DarkBrush}"/>
 
-                        <TextBlock Text="W"
-                                   FontSize="18"
-                                   Foreground="#737A82"
-                                   VerticalAlignment="Bottom"
-                                   Margin="6,0,0,7"/>
+                        <TextBlock
+                            Text="W"
+                            FontSize="18"
+                            Foreground="#737A82"
+                            VerticalAlignment="Bottom"
+                            Margin="6,0,0,7"/>
 
                     </StackPanel>
 
-                    <TextBlock Text="Latest reading"
-                               Foreground="#28A745"
-                               FontSize="12"
-                               Margin="0,5,0,0"/>
+                    <TextBlock
+                        Text="Latest reading"
+                        Foreground="#28A745"
+                        FontSize="12"
+                        Margin="0,5,0,0"/>
 
                 </StackPanel>
+
+            </Border>
+
+
+            <!-- FILTERS -->
+
+            <Border
+                Grid.Row="1"
+                Grid.ColumnSpan="4"
+                Background="White"
+                CornerRadius="12"
+                Padding="18"
+                Margin="0,20,0,0">
+
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="220"/>
+                        <ColumnDefinition Width="180"/>
+                        <ColumnDefinition Width="180"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+
+                    <!-- SENSOR -->
+
+                    <StackPanel
+                        Grid.Column="0">
+
+                        <TextBlock
+                            Text="Sensor"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Foreground="#737A82"
+                            Margin="0,0,0,5"/>
+
+                        <ComboBox
+                            ItemsSource="{Binding SensorFilters}"
+                            SelectedItem="{Binding SelectedSensorFilter,
+                                                   Mode=TwoWay}"
+                            Height="36"/>
+
+                    </StackPanel>
+
+
+                    <!-- FROM -->
+
+                    <StackPanel
+                        Grid.Column="1"
+                        Margin="15,0,0,0">
+
+                        <TextBlock
+                            Text="From"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Foreground="#737A82"
+                            Margin="0,0,0,5"/>
+
+                        <DatePicker
+                            SelectedDate="{Binding FromDate,
+                                                   Mode=TwoWay}"
+                            Height="36"/>
+
+                    </StackPanel>
+
+
+                    <!-- TO -->
+
+                    <StackPanel
+                        Grid.Column="2"
+                        Margin="15,0,0,0">
+
+                        <TextBlock
+                            Text="To"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Foreground="#737A82"
+                            Margin="0,0,0,5"/>
+
+                        <DatePicker
+                            SelectedDate="{Binding ToDate,
+                                                   Mode=TwoWay}"
+                            Height="36"/>
+
+                    </StackPanel>
+
+
+                    <!-- CLEAR -->
+
+                    <Button
+                        Grid.Column="3"
+                        Content="Clear"
+                        Command="{Binding ClearFiltersCommand}"
+                        Height="36"
+                        Padding="18,0"
+                        Margin="15,22,0,0"/>
+
+
+                    <!-- SELECTED SENSOR -->
+
+                    <TextBlock
+                        Grid.Column="4"
+                        Text="{Binding SelectedSensorName,
+                                       StringFormat=Sensor: {0}}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        FontSize="13"
+                        FontWeight="SemiBold"
+                        Foreground="#737A82"
+                        Margin="20,0,5,8"/>
+
+                </Grid>
 
             </Border>
 
@@ -234,10 +381,11 @@
 
         <!-- TELEMETRY TABLE -->
 
-        <Border Grid.Row="2"
-                Background="White"
-                CornerRadius="15"
-                Padding="25">
+        <Border
+            Grid.Row="2"
+            Background="White"
+            CornerRadius="15"
+            Padding="25">
 
             <Grid>
 
@@ -246,41 +394,108 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="Live Telemetry"
-                           FontSize="19"
-                           FontWeight="SemiBold"
-                           Foreground="{StaticResource DarkBrush}"/>
+
+                <!-- TABLE HEADER -->
+
+                <Grid>
+
+                    <StackPanel>
+
+                        <TextBlock
+                            Text="Live Telemetry"
+                            FontSize="19"
+                            FontWeight="SemiBold"
+                            Foreground="{StaticResource DarkBrush}"/>
+
+                        <TextBlock
+                            Text="{Binding SelectedSensorName,
+                                           StringFormat=Showing readings for: {0}}"
+                            FontSize="12"
+                            Foreground="#8A929A"
+                            Margin="0,4,0,0"/>
+
+                    </StackPanel>
 
 
-                <DataGrid Grid.Row="1"
-                          Margin="0,20,0,0"
-                          AutoGenerateColumns="False"
-                          IsReadOnly="True"
-                          BorderThickness="0"
-                          GridLinesVisibility="Horizontal"
-                          ItemsSource="{Binding Telemetry}">
+                    <!-- BACK BUTTONS -->
+
+                    <StackPanel
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+
+                        <Button
+                            Content="Back to Sensors"
+                            Command="{Binding BackToSensorsCommand}"
+                            Padding="15,7"
+                            Margin="0,0,8,0"/>
+
+                        <Button
+                            Content="Back to Gateways"
+                            Command="{Binding BackToGatewaysCommand}"
+                            Padding="15,7"/>
+
+                    </StackPanel>
+
+                </Grid>
+
+
+                <!-- DATA GRID -->
+
+                <DataGrid
+                    Grid.Row="1"
+                    Margin="0,20,0,0"
+                    AutoGenerateColumns="False"
+                    IsReadOnly="True"
+                    BorderThickness="0"
+                    GridLinesVisibility="Horizontal"
+                    HeadersVisibility="Column"
+                    ItemsSource="{Binding FilteredTelemetry}">
 
                     <DataGrid.Columns>
 
-                        <DataGridTextColumn Header="Timestamp"
-                                            Binding="{Binding Timestamp}"
-                                            Width="1.5*"/>
+                        <!-- TIMESTAMP -->
 
-                        <DataGridTextColumn Header="Voltage"
-                                            Binding="{Binding Voltage, StringFormat={}{0:F2}}"
-                                            Width="*"/>
+                        <DataGridTextColumn
+                            Header="Timestamp"
+                            Binding="{Binding Timestamp,
+                                              StringFormat={}{0:yyyy-MM-dd HH:mm:ss}}"
+                            Width="1.7*"/>
 
-                        <DataGridTextColumn Header="Current"
-                                            Binding="{Binding Current, StringFormat={}{0:F2}}"
-                                            Width="*"/>
 
-                        <DataGridTextColumn Header="Power"
-                                            Binding="{Binding Power, StringFormat={}{0:F2}}"
-                                            Width="*"/>
+                        <!-- VOLTAGE -->
 
-                        <DataGridTextColumn Header="Temperature"
-                                            Binding="{Binding Temperature, StringFormat={}{0:F2}}"
-                                            Width="*"/>
+                        <DataGridTextColumn
+                            Header="Voltage"
+                            Binding="{Binding Voltage,
+                                              StringFormat={}{0:F2}}"
+                            Width="*"/>
+
+
+                        <!-- CURRENT -->
+
+                        <DataGridTextColumn
+                            Header="Current"
+                            Binding="{Binding Current,
+                                              StringFormat={}{0:F2}}"
+                            Width="*"/>
+
+
+                        <!-- POWER -->
+
+                        <DataGridTextColumn
+                            Header="Power"
+                            Binding="{Binding Power,
+                                              StringFormat={}{0:F2}}"
+                            Width="*"/>
+
+
+                        <!-- TEMPERATURE -->
+
+                        <DataGridTextColumn
+                            Header="Temperature"
+                            Binding="{Binding Temperature,
+                                              StringFormat={}{0:F2}}"
+                            Width="*"/>
 
                     </DataGrid.Columns>
 

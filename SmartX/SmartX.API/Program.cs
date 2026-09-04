@@ -31,35 +31,13 @@ namespace SmartX.API
                     options => { });
 
             builder.Services.AddAuthorization();
-
+            
+            builder.Services.AddHttpContextAccessor();
 
             var firebaseProjectId =
                 builder.Configuration["Firebase:ProjectId"]
                 ?? throw new InvalidOperationException(
                     "Firebase ProjectId is not configured.");
-
-
-            builder.Services
-                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                options.Authority =
-                $"https://securetoken.google.com/{firebaseProjectId}";
-
-                options.TokenValidationParameters =
-                    new TokenValidationParameters
-                {
-                ValidateIssuer = true,
-                ValidIssuer =
-                    $"https://securetoken.google.com/{firebaseProjectId}",
-
-                ValidateAudience = true,
-                ValidAudience = firebaseProjectId,
-
-                ValidateLifetime = true
-                };
-            });
-
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();

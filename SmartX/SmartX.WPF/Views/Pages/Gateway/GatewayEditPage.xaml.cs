@@ -34,13 +34,13 @@ namespace SmartX.WPF.Views.Pages.Gateway
             if (e.Key != System.Windows.Input.Key.Enter)
                 return;
 
-            if (DataContext is not SigninViewModel viewModel)
+            if (DataContext is not GatewayViewModel viewModel)
                 return;
 
-            if (!viewModel.SignInCommand.CanExecute(null))
+            if (!viewModel.SaveGatewayCommand.CanExecute(null))
                 return;
 
-            viewModel.SignInCommand.Execute(null);
+            viewModel.SaveGatewayCommand.Execute(null);
 
             e.Handled = true;
         }

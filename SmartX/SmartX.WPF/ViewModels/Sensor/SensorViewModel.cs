@@ -34,6 +34,12 @@ public class SensorViewModel :
     private readonly INavigationService _navigationService;
     private readonly ICacheSyncService _cacheSyncService;
 
+    // FILTERS
+    private string _nameFilter = string.Empty;
+    private string _deviceIdentifierFilter = string.Empty;
+    private string _selectedCategoryFilter = "All";
+    private string _statusFilter = "All";
+
     // MODE
     public enum SensorMode
     {
@@ -75,7 +81,6 @@ public class SensorViewModel :
     private DomainSensor? _selectedSensor;
 
     // FORM
-
     private string _name = string.Empty;
     private string _deviceIdentifier = string.Empty;
     private SensorCategory _category;
@@ -90,7 +95,8 @@ public class SensorViewModel :
         INavigationService navigationService,
         SmartXSession session,
         ICacheSyncService cacheSyncService,
-        IConnectivityService connectivityService) : base(connectivityService, session)
+        IConnectivityService connectivityService)
+        : base(connectivityService, session)
     {
         _sensorCache = sensorCache;
         _apiClient = apiClient;
@@ -139,6 +145,158 @@ public class SensorViewModel :
                 OpenTelemetry);
     }
 
+    // ROLE OPTIONS
+    public ObservableCollection<UserRole> AvailableRoles { get; } =
+        [];
+
+    public ObservableCollection<string> CategoryFilters { get; } =
+        new(
+            new[]
+            {
+                "All"
+            }
+            .Concat(
+                Enum.GetNames<SensorCategory>())
+        );
+
+    // STATUS FILTER
+    public ObservableCollection<string> StatusFilters { get; } =
+    [
+        "All",
+        "Active",
+        "Inactive"
+    ];
+
+    // ROLE / COMPANY
+    public bool IsSuperAdmin =>
+        Session.Role == UserRole.SuperAdmin;
+
+    public bool IsAdministrator =>
+        Session.Role == UserRole.Administrator;
+
+    public bool HasCompany =>
+        EffectiveCompanyId != Guid.Empty;
+
+    public Guid EffectiveCompanyId =>
+        Session.Role == UserRole.SuperAdmin
+            ? Session.SelectedCompanyId
+            : Session.CompanyId;
+
+    // COMPANY LIST
+    private ObservableCollection<CompanyDto> _companies = [];
+
+    public ObservableCollection<CompanyDto> Companies =>
+        _companies;
+
+    private CompanyDto? _selectedCompany;
+
+    public CompanyDto? SelectedCompany
+    {
+        get => _selectedCompany;
+
+        set
+        {
+            if (!SetProperty(
+                    ref _selectedCompany,
+                    value))
+            {
+                return;
+            }
+
+            if (Session.Role == UserRole.SuperAdmin)
+            {
+                if (value is not null)
+                {
+                    Session.SelectCompany(
+                        value.Id,
+                        value.Name);
+                }
+                else
+                {
+                    Session.ClearSelectedCompany();
+                }
+            }
+
+            RaiseCommandStates();
+        }
+    }
+
+    // FILTER PROPERTIES
+    public string NameFilter
+    {
+        get => _nameFilter;
+
+        set
+        {
+            if (!SetProperty(
+                    ref _nameFilter,
+                    value))
+            {
+                return;
+            }
+
+            ApplyFilters();
+        }
+    }
+
+    public string DeviceIdentifierFilter
+    {
+        get => _deviceIdentifierFilter;
+
+        set
+        {
+            if (!SetProperty(
+                    ref _deviceIdentifierFilter,
+                    value))
+            {
+                return;
+            }
+
+            ApplyFilters();
+        }
+    }
+
+    public string SelectedCategoryFilter
+    {
+        get => _selectedCategoryFilter;
+
+        set
+        {
+            if (!SetProperty(
+                    ref _selectedCategoryFilter,
+                    value))
+            {
+                return;
+            }
+
+            ApplyFilters();
+        }
+    }
+
+    public string StatusFilter
+    {
+        get => _statusFilter;
+
+        set
+        {
+            if (!SetProperty(
+                    ref _statusFilter,
+                    value))
+            {
+                return;
+            }
+
+            ApplyFilters();
+        }
+    }
+
+    // COLLECTIONS
+    public ObservableCollection<DomainSensor> Sensors { get; } =
+        [];
+
+    public ObservableCollection<DomainSensor> FilteredSensors { get; } =
+        [];
+
     // SENSOR PROPERTIES
     public string Name
     {
@@ -169,36 +327,45 @@ public class SensorViewModel :
     public SensorCategory Category
     {
         get => _category;
-        set => SetProperty(ref _category, value);
+
+        set => SetProperty(
+            ref _category,
+            value);
     }
 
     public string? Location
     {
         get => _location;
-        set => SetProperty(ref _location, value);
+
+        set => SetProperty(
+            ref _location,
+            value);
     }
 
     public string? Description
     {
         get => _description;
-        set => SetProperty(ref _description, value);
+
+        set => SetProperty(
+            ref _description,
+            value);
     }
 
     public bool IsActive
     {
         get => _isActive;
-        set => SetProperty(ref _isActive, value);
+
+        set => SetProperty(
+            ref _isActive,
+            value);
     }
 
     public ObservableCollection<SensorCategory> Categories { get; } =
         new(Enum.GetValues<SensorCategory>());
 
     // COLLECTION
-
-    public ObservableCollection<DomainSensor> Sensors { get; } = [];
-
-    // LOG FILES
-    public ObservableCollection<SensorLogFileDto> LogFiles { get; } = [];
+    public ObservableCollection<SensorLogFileDto> LogFiles { get; } =
+        [];
 
     public bool HasLogFiles =>
         LogFiles.Count > 0;
@@ -214,15 +381,18 @@ public class SensorViewModel :
         Session.GatewayId.HasValue;
 
     // SELECTED SENSOR
-
     public DomainSensor? SelectedSensor
     {
         get => _selectedSensor;
 
         set
         {
-            if (!SetProperty(ref _selectedSensor, value))
+            if (!SetProperty(
+                    ref _selectedSensor,
+                    value))
+            {
                 return;
+            }
 
             if (value is not null)
             {
@@ -245,8 +415,12 @@ public class SensorViewModel :
 
         private set
         {
-            if (!SetProperty(ref _editingSensorId, value))
+            if (!SetProperty(
+                    ref _editingSensorId,
+                    value))
+            {
                 return;
+            }
 
             RaiseCommandStates();
         }
@@ -272,9 +446,7 @@ public class SensorViewModel :
     // NAVIGATION
     public void OnNavigatedTo(object parameter)
     {
-       
         // EDIT
-
         if (parameter is Guid sensorId)
         {
             Mode = SensorMode.Edit;
@@ -287,7 +459,6 @@ public class SensorViewModel :
         }
 
         // CREATE
-
         if (parameter is string mode &&
             mode.Equals(
                 "Create",
@@ -342,7 +513,6 @@ public class SensorViewModel :
 
                 return;
             }
-
         }
         catch (Exception ex)
         {
@@ -361,8 +531,11 @@ public class SensorViewModel :
     {
         try
         {
+            IsBusy = true;
+            ErrorMessage = string.Empty;
 
             Sensors.Clear();
+            FilteredSensors.Clear();
             SelectedSensor = null;
 
             if (Session.CompanyId == Guid.Empty)
@@ -372,7 +545,6 @@ public class SensorViewModel :
 
                 return;
             }
-
 
             if (!Session.GatewayId.HasValue ||
                 Session.GatewayId.Value == Guid.Empty)
@@ -399,7 +571,6 @@ public class SensorViewModel :
                 }
             }
 
-
             var sensors =
                 await _sensorCache.GetByGatewayIdAsync(
                     Session.GatewayId.Value,
@@ -411,6 +582,8 @@ public class SensorViewModel :
 
                 Sensors.Add(sensor);
             }
+
+            ApplyFilters();
 
             RaiseSensorCounts();
         }
@@ -427,6 +600,72 @@ public class SensorViewModel :
             IsBusy = false;
             RaiseCommandStates();
         }
+    }
+
+    // FILTERING
+    private void ApplyFilters()
+    {
+        FilteredSensors.Clear();
+
+        IEnumerable<DomainSensor> filtered =
+            Sensors;
+
+        if (!string.IsNullOrWhiteSpace(NameFilter))
+        {
+            filtered =
+                filtered.Where(
+                    sensor =>
+                        sensor.Name.Contains(
+                            NameFilter,
+                            StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (!string.IsNullOrWhiteSpace(DeviceIdentifierFilter))
+        {
+            filtered =
+                filtered.Where(
+                    sensor =>
+                        sensor.DeviceIdentifier.Contains(
+                            DeviceIdentifierFilter,
+                            StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (!string.Equals(
+                SelectedCategoryFilter,
+                "All",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            if (Enum.TryParse<SensorCategory>(
+                    SelectedCategoryFilter,
+                    true,
+                    out var selectedCategory))
+            {
+                filtered =
+                    filtered.Where(
+                        sensor =>
+                            sensor.Category == selectedCategory);
+            }
+        }
+
+        if (!string.Equals(
+                StatusFilter,
+                "All",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            var isActive =
+                string.Equals(
+                    StatusFilter,
+                    "Active",
+                    StringComparison.OrdinalIgnoreCase);
+
+            filtered =
+                filtered.Where(
+                    sensor =>
+                        sensor.IsActive == isActive);
+        }
+
+        foreach (var sensor in filtered)
+            FilteredSensors.Add(sensor);
     }
 
     // CREATE
@@ -491,7 +730,6 @@ public class SensorViewModel :
                 return;
 
             // CREATE
-
             if (IsCreateMode)
             {
                 if (!Session.GatewayId.HasValue)
@@ -522,7 +760,8 @@ public class SensorViewModel :
                                 ? string.Empty
                                 : Description.Trim(),
 
-                        GatewayId = Session.GatewayId.Value
+                        GatewayId =
+                            Session.GatewayId.Value
                     };
 
                 var sensorId =
@@ -538,7 +777,6 @@ public class SensorViewModel :
                 }
 
                 // REFRESH CACHE
-
                 await _cacheSyncService.SyncSensorsAsync();
 
                 MessageBox.Show(
@@ -548,14 +786,12 @@ public class SensorViewModel :
                     MessageBoxImage.Information);
 
                 // LoadAsync() will sync again and display it.
-
                 _navigationService.NavigateTo<SensorsPage>();
 
                 return;
             }
 
             // UPDATE
-
             if (SelectedSensor is null)
                 return;
 
@@ -597,16 +833,13 @@ public class SensorViewModel :
             }
 
             // REFRESH CACHE
-
             await _cacheSyncService.SyncSensorsAsync();
 
             // RETURN TO LIST
-
             _navigationService.NavigateTo<SensorsPage>();
         }
         catch (HttpRequestException)
         {
-
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
         }
@@ -669,7 +902,6 @@ public class SensorViewModel :
                 }
                 catch (HttpRequestException)
                 {
-
                     ErrorMessage =
                         "Unable to connect to the SmartX API. Showing cached data.";
                 }
@@ -709,7 +941,6 @@ public class SensorViewModel :
         }
         catch (HttpRequestException)
         {
-
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
         }
@@ -729,7 +960,6 @@ public class SensorViewModel :
     }
 
     // DELETE
-
     private bool CanDeleteSensor()
     {
         return IsListMode &&
@@ -781,17 +1011,14 @@ public class SensorViewModel :
                 return;
             }
 
-            
             // REFRESH CACHE
             await _cacheSyncService.SyncSensorsAsync();
 
             // RELOAD LIST
-
             await LoadAsync();
         }
         catch (HttpRequestException)
         {
-
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
         }
@@ -807,7 +1034,6 @@ public class SensorViewModel :
     }
 
     // CANCEL
-
     private bool CanCancel()
     {
         return !IsBusy &&
@@ -902,7 +1128,6 @@ public class SensorViewModel :
             var fileInfo =
                 new FileInfo(dialog.FileName);
 
-
             if (!await RequireOnlineAsync())
                 return;
 
@@ -939,7 +1164,6 @@ public class SensorViewModel :
         }
         catch (HttpRequestException)
         {
-
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
         }
@@ -991,7 +1215,7 @@ public class SensorViewModel :
 
     // SESSION
     protected override async void OnSessionPropertyChanged(
-    PropertyChangedEventArgs e)
+        PropertyChangedEventArgs e)
     {
         base.OnSessionPropertyChanged(e);
 
@@ -1010,6 +1234,7 @@ public class SensorViewModel :
         if (!Session.GatewayId.HasValue)
         {
             Sensors.Clear();
+            FilteredSensors.Clear();
             SelectedSensor = null;
 
             RaiseSensorCounts();
@@ -1024,7 +1249,6 @@ public class SensorViewModel :
             await LoadAsync();
         }
     }
-
 
     // COUNTS
     private void RaiseSensorCounts()
@@ -1048,7 +1272,6 @@ public class SensorViewModel :
         0;
 
     // CONNECTIVITY
-
     protected override void RaiseConnectivityState()
     {
         RaiseCommandStates();

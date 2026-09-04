@@ -11,6 +11,7 @@ public static class CompanyMapper
         var name = reader.GetOrdinal("Name");
         var description = reader.GetOrdinal("Description");
         var isActive = reader.GetOrdinal("IsActive");
+        var deletionRequested = reader.GetOrdinal("DeletionRequested");
         var createdAt = reader.GetOrdinal("CreatedAt");
         var updatedAt = reader.GetOrdinal("UpdatedAt");
 
@@ -20,6 +21,7 @@ public static class CompanyMapper
             Name = reader.GetString(name),
             Description = reader.GetString(description),
             IsActive = reader.GetInt32(isActive) == 1,
+            DeletionRequested = reader.GetInt32(deletionRequested) == 1,
             CreatedAt = DateTime.Parse(reader.GetString(createdAt)),
             UpdatedAt = DateTime.Parse(reader.GetString(updatedAt))
         };

@@ -1,12 +1,15 @@
-﻿using SmartX.Application.Requests.Company;
+﻿using SmartX.Application.Authentication;
+using SmartX.Application.Requests.Company;
 using SmartX.Application.Requests.Gateway;
 using SmartX.Application.Requests.Sensor;
+using SmartX.Application.Requests.Telemetry;
 using SmartX.Application.Requests.User;
-
+using SmartX.Application.Services.Registration;
 using SmartX.Shared.DTOs;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
 using SmartX.Shared.Models;
+using SmartX.Shared.Responses;
 using SmartX.WPF.Services.Session;
 using System.Diagnostics;
 using System.IO;
@@ -54,7 +57,7 @@ public class SmartXApiClient(
     {
         try
         {
-            AddAuthenticationHeader();
+            _httpClient.DefaultRequestHeaders.Authorization = null;
 
             using var response =
                 await _httpClient.GetAsync(
@@ -509,6 +512,38 @@ public class SmartXApiClient(
         return result.Data ?? [];
     }
 
+    public async Task<Guid>
+    CreateTelemetryAsync(
+        CreateTelemetryRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        AddAuthenticationHeader();
+
+        var response =
+            await _httpClient.PostAsJsonAsync(
+                "api/Telemetry",
+                request,
+                cancellationToken);
+
+        var result =
+            await response.Content.ReadFromJsonAsync<
+                Result<Guid>>(
+                cancellationToken);
+
+        if (result is null)
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+
+        if (!response.IsSuccessStatusCode ||
+            !result.Success)
+        {
+            throw new InvalidOperationException(
+                result.Error ??
+                "Failed to create telemetry.");
+        }
+
+        return result.Data;
+    }
     // USERS - CRUD
     public async Task<IReadOnlyList<UserDto>>
         GetUsersAsync(
@@ -781,6 +816,103 @@ public class SmartXApiClient(
         return result.Data;
     }
 
+    public async Task<RegistrationResultDto> RegisterCompanyAsync(
+    RegisterCompanyRequest request,
+    CancellationToken cancellationToken = default)
+    {
+        if (request is null)
+            throw new ArgumentNullException(nameof(request));
+
+        if (string.IsNullOrWhiteSpace(request.IdToken))
+            throw new InvalidOperationException(
+                "Firebase ID token is empty.");
+
+        using var httpRequest = new HttpRequestMessage(
+            HttpMethod.Post,
+            "api/Companies/register");
+
+
+        // Send Firebase token as Bearer authentication
+        httpRequest.Headers.Authorization =
+            new AuthenticationHeaderValue(
+                "Bearer",
+                request.IdToken);
+
+        httpRequest.Content =
+            JsonContent.Create(request);
+
+        using var response =
+            await _httpClient.SendAsync(
+                httpRequest,
+                cancellationToken);
+
+        // READ THE BODY FIRST
+        var body =
+            await response.Content.ReadAsStringAsync(
+                cancellationToken);
+
+        // NOW check HTTP status
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException(
+                $"Registration API failed " +
+                $"({(int)response.StatusCode} {response.StatusCode}). " +
+                $"Response: {body}");
+        }
+
+        // Check for empty response
+        if (string.IsNullOrWhiteSpace(body))
+        {
+            throw new InvalidOperationException(
+                "Registration API returned an empty response.");
+        }
+
+        RegistrationResultDto? registration;
+
+        try
+        {
+            var result =
+                JsonSerializer.Deserialize<
+                    Result<RegistrationResultDto>>(
+                        body,
+                        new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        });
+
+            if (result is null)
+            {
+                throw new InvalidOperationException(
+                    "Registration API returned invalid JSON.");
+            }
+
+            if (!result.Success)
+            {
+                throw new InvalidOperationException(
+                    result.Error ??
+                    "Registration failed.");
+            }
+
+            registration = result.Data;
+        }
+        catch (JsonException ex)
+        {
+            throw new InvalidOperationException(
+                $"Registration API returned invalid JSON. " +
+                $"Response: {body}",
+                ex);
+        }
+
+        if (registration is null)
+        {
+            throw new InvalidOperationException(
+                "Registration succeeded but returned no registration data.");
+        }
+
+        return registration;
+    }
+
+
 
     // COMPANIES - CRUD
     public async Task<IReadOnlyList<CompanyDto>>
@@ -894,7 +1026,6 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-
     public async Task<bool>
         UpdateCompanyAsync(
             UpdateCompanyRequest request,
@@ -908,27 +1039,104 @@ public class SmartXApiClient(
                 request,
                 cancellationToken);
 
-        if (response.StatusCode ==
-            HttpStatusCode.NotFound)
+        var body =
+            await response.Content.ReadAsStringAsync(
+                cancellationToken);
+
+        // Handle HTTP errors BEFORE attempting JSON deserialization
+        if (!response.IsSuccessStatusCode)
         {
-            return false;
+            throw new HttpRequestException(
+                $"Unable to update company " +
+                $"({(int)response.StatusCode}): {body}");
+        }
+
+        if (string.IsNullOrWhiteSpace(body))
+        {
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
         }
 
         var result =
-            await response.Content.ReadFromJsonAsync<
-                Result<bool>>(
-                cancellationToken);
+            JsonSerializer.Deserialize<Result<bool>>(
+                body,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
 
         if (result is null)
+        {
             throw new InvalidOperationException(
-                "The API returned an empty response.");
+                "The API returned an invalid response.");
+        }
 
-        if (!response.IsSuccessStatusCode ||
-            !result.Success)
+        if (!result.Success)
         {
             throw new InvalidOperationException(
                 result.Error ??
                 "Failed to update company.");
+        }
+
+        return result.Data;
+    }
+    public async Task<bool>
+    RequestCompanyDeletionAsync(
+        Guid companyId,
+        CancellationToken cancellationToken = default)
+    {
+        AddAuthenticationHeader();
+
+        var response =
+            await _httpClient.PostAsync(
+                $"api/Companies/{companyId}/deletion-request",
+                null,
+                cancellationToken);
+
+        var body =
+            await response.Content.ReadAsStringAsync(
+                cancellationToken);
+
+        if (response.StatusCode ==
+            HttpStatusCode.Conflict)
+        {
+            throw new InvalidOperationException(
+                "A deletion request already exists.");
+        }
+
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
+            throw new InvalidOperationException(
+                "Company not found.");
+        }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException(
+                $"Unable to request company deletion " +
+                $"({(int)response.StatusCode}): {body}");
+        }
+
+        var result =
+            JsonSerializer.Deserialize<Result<bool>>(
+                body,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+        if (result is null)
+        {
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+        }
+
+        if (!result.Success)
+        {
+            throw new InvalidOperationException(
+                result.Error ??
+                "Unable to request company deletion.");
         }
 
         return result.Data;
@@ -971,6 +1179,167 @@ public class SmartXApiClient(
         }
 
         return result.Data;
+    }
+
+    public async Task<CompanyConfigurationDto?>
+    GetCompanyConfigurationAsync(
+        Guid companyId,
+        CancellationToken cancellationToken = default)
+    {
+        AddAuthenticationHeader();
+
+        var response =
+            await _httpClient.GetAsync(
+                $"api/company-configuration/{companyId}",
+                cancellationToken);
+
+        if (response.StatusCode ==
+            HttpStatusCode.NotFound)
+        {
+            return null;
+        }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var body =
+                await response.Content.ReadAsStringAsync(
+                    cancellationToken);
+
+            throw new HttpRequestException(
+                $"Unable to retrieve company configuration " +
+                $"({(int)response.StatusCode}): {body}");
+        }
+
+        var result =
+            await response.Content.ReadFromJsonAsync<
+                Result<CompanyConfigurationDto>>(
+                    cancellationToken);
+
+        if (result is null)
+        {
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+        }
+
+        if (!result.Success)
+        {
+            throw new InvalidOperationException(
+                result.Error ??
+                "Unable to retrieve company configuration.");
+        }
+
+        return result.Data;
+    }
+
+
+    public async Task<bool>
+    UpdateCompanyConfigurationAsync(
+        UpdateCompanyConfigurationRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        AddAuthenticationHeader();
+
+        var response =
+            await _httpClient.PutAsJsonAsync(
+                $"api/company-configuration/{request.CompanyId}",
+                request,
+                cancellationToken);
+
+        var body =
+            await response.Content.ReadAsStringAsync(
+                cancellationToken);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException(
+                $"Company configuration failed " +
+                $"({(int)response.StatusCode}): {body}");
+        }
+
+        var result =
+            JsonSerializer.Deserialize<
+                Result<bool>>(
+                    body,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+        if (result is null)
+        {
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+        }
+
+        if (!result.Success)
+        {
+            throw new InvalidOperationException(
+                result.Error ??
+                "Unable to save company configuration.");
+        }
+
+        return result.Data;
+    }
+
+    public async Task<bool>
+    CompleteOnboardingAsync(
+        Guid companyId,
+        CancellationToken cancellationToken = default)
+    {
+        AddAuthenticationHeader();
+
+        var response =
+            await _httpClient.PostAsync(
+                $"api/Companies/{companyId}/onboarding/complete",
+                null,
+                cancellationToken);
+
+        var body =
+            await response.Content.ReadAsStringAsync(
+                cancellationToken);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException(
+                $"Unable to complete onboarding " +
+                $"({(int)response.StatusCode}): {body}");
+        }
+
+        var result =
+            JsonSerializer.Deserialize<
+                Result<bool>>(
+                    body,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+        if (result is null)
+        {
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+        }
+
+        if (!result.Success)
+        {
+            throw new InvalidOperationException(
+                result.Error ??
+                "Unable to complete onboarding.");
+        }
+
+        return result.Data;
+    }
+
+    public async Task<bool> CompleteCompanyOnboardingAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default)
+    {
+        var response = await _httpClient.PostAsync(
+            $"api/Companies/{companyId}/onboarding/complete",
+            null,
+            cancellationToken);
+
+        return response.IsSuccessStatusCode;
     }
 
 

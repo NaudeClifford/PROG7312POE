@@ -3,10 +3,11 @@ using FirebaseAdmin;
 using FirebaseAdmin.Auth;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Options;
+using SmartX.Application.Authentication;
 
 namespace SmartX.Infrastructure.Authentication.Firebase;
 
-public class FirebaseAuthService
+public class FirebaseAuthService : IFirebaseTokenService
 {
     private readonly FirebaseOptions _options;
 
@@ -46,12 +47,9 @@ public class FirebaseAuthService
             ProjectId = _options.ProjectId
         });
     }
-
-
-
     public async Task<FirebaseToken> VerifyTokenAsync(
-        string idToken,
-        CancellationToken cancellationToken = default)
+    string idToken,
+    CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(idToken))
         {
@@ -62,5 +60,49 @@ public class FirebaseAuthService
 
         return await FirebaseAuth.DefaultInstance
             .VerifyIdTokenAsync(idToken);
+    }
+
+    public async Task<FirebaseUserIdentity> VerifyIdTokenAsync(
+    string idToken,
+    CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(idToken))
+        {
+            throw new ArgumentException(
+                "Firebase ID token is required.",
+                nameof(idToken));
+        }
+
+        var decodedToken =
+            await FirebaseAuth.DefaultInstance
+                .VerifyIdTokenAsync(idToken);
+
+        var email =
+            decodedToken.Claims.TryGetValue(
+                "email",
+                out var emailClaim)
+                    ? emailClaim?.ToString() ?? string.Empty
+                    : string.Empty;
+
+        return new FirebaseUserIdentity
+        {
+            FirebaseUid = decodedToken.Uid,
+            Email = email
+        };
+    }
+
+    public async Task DeleteUserAsync(
+    string firebaseUid,
+    CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(firebaseUid))
+        {
+            throw new ArgumentException(
+                "Firebase UID is required.",
+                nameof(firebaseUid));
+        }
+
+        await FirebaseAuth.DefaultInstance
+            .DeleteUserAsync(firebaseUid);
     }
 }

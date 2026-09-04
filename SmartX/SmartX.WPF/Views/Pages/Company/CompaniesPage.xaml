@@ -159,7 +159,11 @@
                         <DataGridCheckBoxColumn Header="Active"
                                                 Binding="{Binding IsActive}"
                                                 Width="*"/>
-
+                        
+                        <DataGridTextColumn Header="Deletion Request"
+                        Binding="{Binding DeletionRequest}"
+                        Width="*"/>
+                        
                         <DataGridTextColumn Header="Created"
                                             Binding="{Binding CreatedAt}"
                                             Width="*"/>
@@ -168,14 +172,38 @@
                                             Binding="{Binding UpdatedAt}"
                                             Width="*"/>
 
+                        
                     </DataGrid.Columns>
 
                 </DataGrid>
 
-                <TextBlock Grid.Row="2"
-                           Text="{Binding ErrorMessage}"
-                           Foreground="#DC2626"
-                           Margin="5,10,5,0"/>
+                <!-- COMPANY ACTIONS -->
+
+                <StackPanel
+    Grid.Row="2"
+    Orientation="Horizontal"
+    Margin="5,10,5,0">
+
+                    <TextBlock
+        Text="{Binding ErrorMessage}"
+        Foreground="#DC2626"
+        FontSize="13"
+        TextWrapping="Wrap"
+        VerticalAlignment="Center"
+        Margin="0,0,20,0"/>
+
+                    <Button
+        Content="Delete Company"
+        Command="{Binding DeleteCompanyCommand}"
+        Width="150"
+        Height="38"
+        Background="#DC2626"
+        Foreground="White"
+        BorderBrush="#B91C1C"
+        FontWeight="SemiBold"
+        HorizontalAlignment="Right"/>
+                </StackPanel>
+
 
             </Grid>
 

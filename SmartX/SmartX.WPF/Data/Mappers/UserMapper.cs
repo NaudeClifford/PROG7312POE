@@ -1,12 +1,13 @@
 ﻿using Microsoft.Data.Sqlite;
 using SmartX.Domain.Entities;
 using SmartX.Domain.Enums;
+using SmartX.Shared.DTOs;
 
 namespace SmartX.WPF.Data.Mappers;
 
 public static class UserMapper
 {
-    public static User Map(SqliteDataReader reader)
+    public static UserDto Map(SqliteDataReader reader)
     {
         var id = reader.GetOrdinal("Id");
         var companyId = reader.GetOrdinal("CompanyId");
@@ -17,7 +18,7 @@ public static class UserMapper
         var isActive = reader.GetOrdinal("IsActive");
         var createdAt = reader.GetOrdinal("CreatedAt");
 
-        return new User
+        return new UserDto
         {
             Id = Guid.Parse(
                 reader.GetString(id)),

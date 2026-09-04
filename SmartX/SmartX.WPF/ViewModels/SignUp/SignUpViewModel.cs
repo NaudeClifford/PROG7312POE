@@ -1,15 +1,13 @@
 ﻿using SmartX.Application.Authentication;
 using SmartX.Application.Requests.Company;
-using SmartX.Application.Requests.User;
-using SmartX.Domain.Enums;
-using SmartX.Shared.Models;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Gateway;
-using System.Windows.Input;
+using SmartX.WPF.Views.Pages.SignUp;
+using System.Net.Http;
 
 namespace SmartX.WPF.ViewModels.SignUp;
 
@@ -17,9 +15,10 @@ public class SignUpViewModel : ViewModelBase
 {
     private readonly IAuthenticationService _authenticationService;
     private readonly ISmartXApiClient _apiClient;
+    private readonly INavigationService _navigationService;
 
-    private Guid _companyId;
     private int _currentStep = 1;
+
     private string _companyName = string.Empty;
     private string _companyDescription = string.Empty;
 
@@ -28,16 +27,20 @@ public class SignUpViewModel : ViewModelBase
     private string _password = string.Empty;
     private string _confirmPassword = string.Empty;
 
-    private string _errorMessage = string.Empty;
     private bool _hasError;
 
-    private readonly INavigationService _navigationService;
+    private const int CompanyStep = 1;
+    private const int AdministratorStep = 2;
+    private const int ServicesStep = 3;
+    private const int GatewayStep = 4;
+
     public SignUpViewModel(
         IAuthenticationService authenticationService,
         ISmartXApiClient apiClient,
         SmartXSession session,
         INavigationService navigationService,
-        IConnectivityService connectivityService) : base(connectivityService, session)
+        IConnectivityService connectivityService)
+        : base(connectivityService, session)
     {
         _authenticationService = authenticationService;
         _apiClient = apiClient;
@@ -50,14 +53,19 @@ public class SignUpViewModel : ViewModelBase
         CancelCommand = new AsyncRelayCommand(
             CancelAsync,
             () => !IsBusy);
+
+        BackCommand = new AsyncRelayCommand(
+            BackAsync,
+            () => CanGoBack);
     }
 
-    // PROPERTIES
+    // STEP STATE
 
     public int CurrentStep
     {
         get => _currentStep;
-        set
+
+        private set
         {
             if (_currentStep == value)
                 return;
@@ -65,17 +73,81 @@ public class SignUpViewModel : ViewModelBase
             _currentStep = value;
 
             OnPropertyChanged();
+
             OnPropertyChanged(nameof(IsCompanyStep));
             OnPropertyChanged(nameof(IsAdministratorStep));
+            OnPropertyChanged(nameof(IsServicesStep));
+            OnPropertyChanged(nameof(IsGatewayStep));
+            OnPropertyChanged(nameof(CanGoBack));
             OnPropertyChanged(nameof(StepTitle));
             OnPropertyChanged(nameof(ButtonText));
+
+            BackCommand.RaiseCanExecuteChanged();
+            ContinueCommand.RaiseCanExecuteChanged();
         }
     }
+
+    public bool IsCompanyStep =>
+        CurrentStep == CompanyStep;
+
+    public bool IsAdministratorStep =>
+        CurrentStep == AdministratorStep;
+
+    public bool IsServicesStep =>
+        CurrentStep == ServicesStep;
+
+    public bool IsGatewayStep =>
+        CurrentStep == GatewayStep;
+
+    public bool CanGoBack =>
+        CurrentStep > CompanyStep && !IsBusy;
+
+    public string StepTitle =>
+        CurrentStep switch
+        {
+            CompanyStep =>
+                "Create your company",
+
+            AdministratorStep =>
+                "Create your administrator account",
+
+            ServicesStep =>
+                "Configure company services",
+
+            GatewayStep =>
+                "Set up your gateway",
+
+            _ =>
+                string.Empty
+        };
+
+    public string ButtonText =>
+        CurrentStep switch
+        {
+            CompanyStep =>
+                "Continue",
+
+            AdministratorStep =>
+                "Create Administrator",
+
+            ServicesStep =>
+                "Continue",
+
+            GatewayStep =>
+                "Create Gateway",
+
+            _ =>
+                "Continue"
+        };
+
+    // COMPANY
 
     public string CompanyName
     {
         get => _companyName;
-        set => SetProperty(ref _companyName, value);
+        set => SetProperty(
+            ref _companyName,
+            value);
     }
 
     public string CompanyDescription
@@ -85,6 +157,8 @@ public class SignUpViewModel : ViewModelBase
             ref _companyDescription,
             value);
     }
+
+    // ADMINISTRATOR
 
     public string DisplayName
     {
@@ -118,53 +192,54 @@ public class SignUpViewModel : ViewModelBase
             value);
     }
 
+    // ERROR
+
     public bool HasError
     {
         get => _hasError;
+
         private set => SetProperty(
             ref _hasError,
             value);
     }
 
-    public bool IsCompanyStep =>
-        CurrentStep == 1;
+    // COMMANDS
 
-    public bool IsAdministratorStep =>
-        CurrentStep == 2;
+    public AsyncRelayCommand ContinueCommand { get; }
 
-    public string StepTitle =>
-        CurrentStep == 1
-            ? "Create your company"
-            : "Create your administrator account";
+    public AsyncRelayCommand CancelCommand { get; }
 
-    public string ButtonText =>
-        CurrentStep == 1
-            ? "Continue"
-            : "Create Administrator";
-
-    public ICommand ContinueCommand { get; }
-
-    public ICommand CancelCommand { get; }
-
+    public AsyncRelayCommand BackCommand { get; }
 
     // FLOW
+
     private async Task ContinueAsync()
     {
         ClearError();
 
-        if (CurrentStep == 1)
+        switch (CurrentStep)
         {
-            await CreateCompanyAsync();
-            return;
-        }
+            case CompanyStep:
+                ContinueFromCompanyStep();
+                break;
 
-        await CreateAdministratorAsync();
+            case AdministratorStep:
+                await RegisterAsync();
+                break;
+
+            case ServicesStep:
+                await ContinueToGatewayAsync();
+                break;
+
+            case GatewayStep:
+                break;
+        }
     }
 
 
-    // CREATE COMPANY
+    // STEP 1
 
-    private async Task CreateCompanyAsync()
+    private void ContinueFromCompanyStep()
     {
         if (string.IsNullOrWhiteSpace(CompanyName))
         {
@@ -174,43 +249,13 @@ public class SignUpViewModel : ViewModelBase
             return;
         }
 
-        try
-        {
-            IsBusy = true;
-
-            var command = new CreateCompanyRequest
-            {
-                Name = CompanyName.Trim(),
-                Description = CompanyDescription.Trim()
-            };
-
-            _companyId =
-                await _apiClient.CreateCompanyAsync(
-                    command);
-
-            if (_companyId == Guid.Empty)
-            {
-                ShowError(
-                    "The company was not created.");
-
-                return;
-            }
-
-            CurrentStep = 2;
-        }
-        catch (Exception ex)
-        {
-            ShowError(ex.Message);
-        }
-        finally
-        {
-            IsBusy = false;
-        }
+        CurrentStep = AdministratorStep;
     }
 
+    // STEP 2
+    // FIREBASE + SMARTX REGISTRATION
 
-    // CREATE FIREBASE + SMARTX ADMINISTRATOR
-    private async Task CreateAdministratorAsync()
+    private async Task RegisterAsync()
     {
         if (string.IsNullOrWhiteSpace(DisplayName))
         {
@@ -244,21 +289,11 @@ public class SignUpViewModel : ViewModelBase
             return;
         }
 
-        if (_companyId == Guid.Empty)
-        {
-            ShowError(
-                "Company setup has expired. Please start again.");
-
-            CurrentStep = 1;
-
-            return;
-        }
-
         try
         {
             IsBusy = true;
 
-            // Create Firebase account
+            // 1. Create Firebase account
 
             var firebaseResult =
                 await _authenticationService.SignUpAsync(
@@ -273,129 +308,86 @@ public class SignUpViewModel : ViewModelBase
 
                 return;
             }
-            if (string.IsNullOrWhiteSpace(firebaseResult.UserId))
+
+            if (string.IsNullOrWhiteSpace(
+                firebaseResult.UserId))
             {
-                throw new InvalidOperationException(" UserId is missing.");
+                throw new InvalidOperationException(
+                    "Firebase did not return a user ID.");
             }
 
-            // Create SmartX user
-            var userCommand = new CreateUserRequest
+            if (string.IsNullOrWhiteSpace(
+                firebaseResult.IdToken))
             {
-                CompanyId = _companyId,
-
-                FirebaseUid = firebaseResult.UserId,
-
-                Email =
-                    firebaseResult.Email ??
-                    Email.Trim(),
-
-                DisplayName =
-                    DisplayName.Trim(),
-
-                Role = UserRole.Administrator,
-
-                IsActive = true
-            };
-
-            var userId =
-                await _apiClient.CreateUserAsync(
-                    userCommand);
-
-            if (userId == Guid.Empty)
-            {
-                ShowError(
-                    "The administrator account could not be created.");
-
-                return;
+                throw new InvalidOperationException(
+                    "Firebase did not return an ID token.");
             }
 
-            // Load created SmartX user
-
-            if (string.IsNullOrWhiteSpace(firebaseResult.UserId))
+            if (string.IsNullOrWhiteSpace(
+                firebaseResult.RefreshToken))
             {
-                ErrorMessage =
-                    "Firebase did not return a user ID.";
-
-                return;
+                throw new InvalidOperationException(
+                    "Firebase did not return a refresh token.");
             }
 
-            if (string.IsNullOrWhiteSpace(firebaseResult.IdToken))
-            {
-                ErrorMessage =
-                    "Firebase did not return an ID token.";
+            // 2. Register Company + Administrator
 
-                return;
-            }
-
-            var user =
-                await _apiClient.GetUserByFirebaseUidAsync(
-                    firebaseResult.UserId, firebaseResult.IdToken);
-
-            if (user is null)
-            {
-                ShowError(
-                    "The administrator was created, but the SmartX user could not be loaded.");
-
-                return;
-            }
-
-            // Sign into SmartX session
-
-                if (string.IsNullOrWhiteSpace(firebaseResult.RefreshToken))
+            var registrationRequest =
+                new RegisterCompanyRequest
                 {
-                    throw new InvalidOperationException("Refresh token is missing.");
-                }
+                    CompanyName =
+                        CompanyName.Trim(),
 
-                if (string.IsNullOrWhiteSpace(firebaseResult.IdToken))
-                {
-                    throw new InvalidOperationException("IdToken is missing.");
-                }
+                    Description =
+                        CompanyDescription.Trim(),
 
-                Session.SignIn(
-                    user,
-                    firebaseResult.IdToken,
-                    firebaseResult.RefreshToken);
+                    DisplayName =
+                        DisplayName.Trim(),
 
-            // Continue directly to Gateway Setup
-            _navigationService.NavigateTo<GatewaySetupPage>();
+                    IdToken =
+                        firebaseResult.IdToken
+                };
+
+            var registration =
+                await _apiClient.RegisterCompanyAsync(
+                    registrationRequest);
+
+            // 3. Validate registration response
+
+            if (registration.CompanyId == Guid.Empty)
+            {
+                throw new InvalidOperationException(
+                    "Registration did not return a company ID.");
+            }
+
+            if (registration.User is null)
+            {
+                throw new InvalidOperationException(
+                    "Registration did not return the administrator.");
+            }
+
+            // 4. Establish SmartX session
+
+            Session.SignIn(
+                registration.User,
+                firebaseResult.IdToken,
+                firebaseResult.RefreshToken);
+
+            // 5. Continue to services
+
+            CurrentStep = ServicesStep;
+
+            _navigationService
+                .NavigateTo<CompanyServicesPage>("OnBoarding");
         }
         catch (InvalidOperationException ex)
         {
-            ShowError(
-                $"Unable to sign in: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
             ShowError(ex.Message);
         }
-        finally
-        {
-            IsBusy = false;
-        }
-    }
-
-
-    // CANCEL COMPANY SETUP
-    private async Task CancelAsync()
-    {
-        if (_companyId == Guid.Empty)
-            return;
-
-        try
-        {
-            IsBusy = true;
-
-            await _apiClient.DeleteCompanyAsync(
-                _companyId);
-
-            _companyId = Guid.Empty;
-
-            CurrentStep = 1;
-        }
         catch (Exception ex)
         {
             ShowError(
-                $"Unable to cancel company setup: {ex.Message}");
+                $"Registration failed: {ex.Message}");
         }
         finally
         {
@@ -403,6 +395,71 @@ public class SignUpViewModel : ViewModelBase
         }
     }
 
+    // STEP 3 → STEP 4
+
+    private async Task ContinueToGatewayAsync()
+    {
+        if (Session.CompanyId == Guid.Empty)
+        {
+            ShowError(
+                "No company is associated with this session.");
+
+            return;
+        }
+
+        CurrentStep = GatewayStep;
+
+        _navigationService
+            .NavigateTo<GatewaySetupPage>("OnBoarding");
+
+        await Task.CompletedTask;
+    }
+    // BACK
+
+    private async Task BackAsync()
+    {
+        if (!CanGoBack)
+            return;
+
+        ClearError();
+
+        switch (CurrentStep)
+        {
+            case AdministratorStep:
+
+                CurrentStep = CompanyStep;
+
+                break;
+
+            case ServicesStep:
+
+                CurrentStep = AdministratorStep;
+
+                break;
+
+            case GatewayStep:
+
+                CurrentStep = ServicesStep;
+
+                _navigationService
+                    .NavigateTo<CompanyServicesPage>();
+
+                break;
+        }
+
+        await Task.CompletedTask;
+    }
+
+    // CANCEL
+
+    private async Task CancelAsync()
+    {
+        ClearError();
+
+        CurrentStep = CompanyStep;
+
+        await Task.CompletedTask;
+    }
 
     // ERROR HANDLING
 
@@ -412,8 +469,7 @@ public class SignUpViewModel : ViewModelBase
         ErrorMessage = string.Empty;
     }
 
-    private void ShowError(
-        string message)
+    private void ShowError(string message)
     {
         ErrorMessage = message;
         HasError = true;

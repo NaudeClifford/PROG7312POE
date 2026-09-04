@@ -11,11 +11,6 @@ public class UpdateUserValidator : AbstractValidator<UpdateUserRequest>
             .NotEmpty()
             .WithMessage("User ID is required.");
 
-        RuleFor(x => x.Email)
-            .NotEmpty()
-            .EmailAddress()
-            .WithMessage("A valid email address is required.");
-
         RuleFor(x => x.DisplayName)
             .NotEmpty()
             .WithMessage("Display name is required.");

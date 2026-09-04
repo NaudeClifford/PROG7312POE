@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SmartX.Application.Authentication;
 using SmartX.Application.Services;
 using SmartX.Domain.Interfaces;
 using SmartX.Infrastructure.Authentication.Firebase;
@@ -14,11 +16,19 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.Configure<FirebaseOptions>(configuration.GetSection("Firebase"));
+        // Firebase configuration
+        services.Configure<FirebaseOptions>(
+            configuration.GetSection("Firebase"));
 
+        // Infrastructure services
         services.AddSingleton<MongoContext>();
+
         services.AddSingleton<FirebaseAuthService>();
 
+        services.AddSingleton<IFirebaseTokenService>(
+            sp => sp.GetRequiredService<FirebaseAuthService>());
+
+        // Repositories
         services.AddScoped<ISensorRepository, JsonSensorRepository>();
         services.AddScoped<ITelemetryRepository, JsonTelemetryRepository>();
         services.AddScoped<IUserRepository, JsonUserRepository>();
@@ -26,6 +36,8 @@ public static class DependencyInjection
         services.AddScoped<IGatewayRepository, JsonGatewayRepository>();
         services.AddScoped<ISensorLogFileRepository, JsonSensorLogFileRepository>();
         services.AddScoped<IAuditLogRepository, JsonAuditLogRepository>();
+        services.AddScoped<ICompanyConfigurationRepository, JsonCompanyConfigurationRepository>();
+
 
         return services;
     }

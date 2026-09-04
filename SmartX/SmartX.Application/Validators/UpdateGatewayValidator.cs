@@ -34,7 +34,18 @@ public class UpdateGatewayValidator
 
         RuleFor(x => x.IpAddress)
             .MaximumLength(50)
-            .WithMessage(
-                "IP address must not exceed 50 characters.");
+            .When(x => !string.IsNullOrWhiteSpace(x.IpAddress))
+            .WithMessage("IP address must not exceed 50 characters.");
+
+        RuleFor(x => x.IpAddress)
+    .Must(BeValidIpAddress)
+    .When(x => !string.IsNullOrWhiteSpace(x.IpAddress))
+    .WithMessage("Please enter a valid IP address.");
+    }
+    private static bool BeValidIpAddress(string? ipAddress)
+    {
+        return System.Net.IPAddress.TryParse(
+            ipAddress,
+            out _);
     }
 }

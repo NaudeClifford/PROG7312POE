@@ -64,6 +64,10 @@
               "target": "Package",
               "version": "[16.2.0, )"
             },
+            "FirebaseAdmin": {
+              "target": "Package",
+              "version": "[3.6.0, )"
+            },
             "FluentValidation": {
               "target": "Package",
               "version": "[12.1.1, )"
@@ -71,6 +75,10 @@
             "FluentValidation.DependencyInjectionExtensions": {
               "target": "Package",
               "version": "[12.1.1, )"
+            },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.3.10, )"
             },
             "Microsoft.AspNetCore.Http.Features": {
               "target": "Package",

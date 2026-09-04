@@ -15,6 +15,7 @@ public class CompanyCrudService :
         UpdateCompanyRequest>
 {
     private readonly ICompanyRepository _companyRepository;
+    private readonly ICompanyConfigurationRepository _configurationRepository;
 
     private readonly IValidator<CreateCompanyRequest>
         _createValidator;
@@ -30,10 +31,12 @@ public class CompanyCrudService :
         ICompanyRepository companyRepository,
         IValidator<CreateCompanyRequest> createValidator,
         IValidator<UpdateCompanyRequest> updateValidator,
+        ICompanyConfigurationRepository configurationRepository,
         IMapper mapper,
         AuditLogService auditLog)
     {
         _companyRepository = companyRepository;
+        _configurationRepository = configurationRepository;
         _createValidator = createValidator;
         _updateValidator = updateValidator;
         _mapper = mapper;
@@ -100,7 +103,7 @@ public class CompanyCrudService :
         {
             Id = Guid.NewGuid(),
             Name = request.Name,
-            Description = request.Description,
+            Description = request.Description ?? string.Empty,
             IsActive = true,
             CreatedAt = now,
             UpdatedAt = now
@@ -150,7 +153,7 @@ public class CompanyCrudService :
         }
 
         company.Name = request.Name;
-        company.Description = request.Description;
+        company.Description = request.Description ?? string.Empty;
         company.IsActive = request.IsActive;
 
         // UpdatedAt is used by WPF synchronization.
@@ -205,4 +208,183 @@ public class CompanyCrudService :
 
         return Result<bool>.Ok(true);
     }
+
+    // Company Configuration
+
+    public async Task<Result<CompanyConfigurationDto>> GetConfigurationAsync(
+        Guid companyId,
+        CancellationToken cancellationToken = default)
+    {
+        if (companyId == Guid.Empty)
+        {
+            return Result<CompanyConfigurationDto>.Fail(
+                "Company ID is required.");
+        }
+
+        var company = await _companyRepository.GetByIdAsync(
+            companyId,
+            cancellationToken);
+
+        if (company is null)
+        {
+            return Result<CompanyConfigurationDto>.Fail(
+                "Company not found.");
+        }
+
+        var configuration =
+            await _configurationRepository.GetByCompanyIdAsync(
+                companyId,
+                cancellationToken);
+
+        // No configuration yet = SmartX defaults.
+        configuration ??= new CompanyConfiguration
+        {
+            CompanyId = companyId,
+            UseCustomApi = false,
+            UseCustomFirebase = false,
+            ApiBaseUrl = string.Empty,
+            FirebaseProjectId = string.Empty,
+            FirebaseApiKey = string.Empty,
+            UpdatedAt = DateTime.UtcNow
+        };
+
+        var dto = _mapper.Map<CompanyConfigurationDto>(
+            configuration);
+
+        return Result<CompanyConfigurationDto>.Ok(dto);
+    }
+
+    public async Task<Result<bool>> UpdateConfigurationAsync(
+        UpdateCompanyConfigurationRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        if (request.CompanyId == Guid.Empty)
+        {
+            return Result<bool>.Fail(
+                "Company ID is required.");
+        }
+
+        var company = await _companyRepository.GetByIdAsync(
+            request.CompanyId,
+            cancellationToken);
+
+        if (company is null)
+        {
+            return Result<bool>.Fail(
+                "Company not found.");
+        }
+
+        if (request.UseCustomApi &&
+            string.IsNullOrWhiteSpace(request.ApiBaseUrl))
+        {
+            return Result<bool>.Fail(
+                "API URL is required when using a custom API.");
+        }
+
+        if (request.UseCustomFirebase &&
+            string.IsNullOrWhiteSpace(request.FirebaseProjectId))
+        {
+            return Result<bool>.Fail(
+                "Firebase Project ID is required when using custom Firebase.");
+        }
+
+        var configuration =
+            await _configurationRepository.GetByCompanyIdAsync(
+                request.CompanyId,
+                cancellationToken);
+
+        var isNew = configuration is null;
+
+        configuration ??= new CompanyConfiguration
+        {
+            CompanyId = request.CompanyId
+        };
+
+        configuration.UseCustomApi = request.UseCustomApi;
+
+        configuration.ApiBaseUrl =
+            request.UseCustomApi
+                ? request.ApiBaseUrl.Trim()
+                : string.Empty;
+
+        configuration.UseCustomFirebase =
+            request.UseCustomFirebase;
+
+        configuration.FirebaseProjectId =
+            request.UseCustomFirebase
+                ? request.FirebaseProjectId.Trim()
+                : string.Empty;
+
+        configuration.FirebaseApiKey =
+            request.UseCustomFirebase
+                ? request.FirebaseApiKey.Trim()
+                : string.Empty;
+
+        configuration.UpdatedAt = DateTime.UtcNow;
+
+        if (isNew)
+        {
+            await _configurationRepository.AddAsync(
+                configuration,
+                cancellationToken);
+        }
+        else
+        {
+            await _configurationRepository.UpdateAsync(
+                configuration,
+                cancellationToken);
+        }
+
+        return Result<bool>.Ok(true);
+    }
+
+    public async Task<Result<bool>> RequestDeletionAsync(
+        Guid companyId,
+        CancellationToken cancellationToken = default)
+    {
+        if (companyId == Guid.Empty)
+        {
+            return Result<bool>.Fail(
+                "Company ID is required.");
+        }
+
+        var company = await _companyRepository.GetByIdAsync(
+            companyId,
+            cancellationToken);
+
+        if (company is null)
+        {
+            return Result<bool>.Fail(
+                "Company not found.");
+        }
+
+        if (company.DeletionRequested)
+        {
+            return Result<bool>.Fail(
+                "A deletion request already exists.");
+        }
+
+        company.DeletionRequested = true;
+
+        // WPF synchronization uses UpdatedAt.
+        company.UpdatedAt = DateTime.UtcNow;
+
+        await _companyRepository.UpdateAsync(
+            company,
+            cancellationToken);
+
+        await _auditLog.LogAsync(
+            entityType: "Company",
+            entityId: company.Id,
+            action: "DeletionRequested",
+            companyId: company.Id,
+            details: "Company deletion requested.",
+            cancellationToken: cancellationToken);
+
+        return Result<bool>.Ok(true);
+    }
+
+
+
+
 }

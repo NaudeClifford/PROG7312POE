@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using SmartX.Application.Authentication;
 using SmartX.Application.Requests.User;
 using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.DTOs;
 using SmartX.Shared.Models;
+using FirebaseAdmin.Auth;
+using Microsoft.AspNetCore.Http;
 
 namespace SmartX.Application.Services.CRUD;
 
@@ -16,15 +19,20 @@ public class UserCrudService :
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
     private readonly AuditLogService _auditLog;
+    private readonly IFirebaseTokenService _firebaseTokenService;
+
 
     public UserCrudService(
         IUserRepository userRepository,
         IMapper mapper,
-        AuditLogService auditLog)
+        AuditLogService auditLog,
+        IFirebaseTokenService firebaseTokenService,
+        IHttpContextAccessor httpContextAccessor)
     {
         _userRepository = userRepository;
         _mapper = mapper;
         _auditLog = auditLog;
+        _firebaseTokenService = firebaseTokenService;
     }
 
     public async Task<Result<IReadOnlyList<UserDto>>> GetAllAsync(
@@ -195,11 +203,6 @@ public class UserCrudService :
                 "Company ID is required.");
         }
 
-        if (string.IsNullOrWhiteSpace(request.Email))
-        {
-            return Result<bool>.Fail(
-                "A valid email address is required.");
-        }
 
         if (string.IsNullOrWhiteSpace(request.DisplayName))
         {
@@ -237,7 +240,6 @@ public class UserCrudService :
 
         user.CompanyId = request.CompanyId;
         user.FirebaseUid = request.FirebaseUid;
-        user.Email = request.Email;
         user.DisplayName = request.DisplayName;
         user.Role = request.Role;
         user.IsActive = request.IsActive;
@@ -261,8 +263,8 @@ public class UserCrudService :
     }
 
     public async Task<Result<bool>> DeleteAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
+    Guid id,
+    CancellationToken cancellationToken = default)
     {
         if (id == Guid.Empty)
         {
@@ -280,18 +282,38 @@ public class UserCrudService :
                 "User not found.");
         }
 
-        await _userRepository.DeleteAsync(
-            id,
-            cancellationToken);
+        if (string.IsNullOrWhiteSpace(user.FirebaseUid))
+        {
+            return Result<bool>.Fail(
+                "The user does not have a Firebase UID.");
+        }
 
-        await _auditLog.LogAsync(
-            entityType: "User",
-            entityId: user.Id,
-            action: "Deleted",
-            companyId: user.CompanyId,
-            details: "User deleted.",
-            cancellationToken: cancellationToken);
+        try
+        {
+            // Delete Firebase Authentication account first.
+            await _firebaseTokenService.DeleteUserAsync(
+                user.FirebaseUid,
+                cancellationToken);
 
-        return Result<bool>.Ok(true);
+            // Delete SmartX user only after Firebase succeeds.
+            await _userRepository.DeleteAsync(
+                id,
+                cancellationToken);
+
+            await _auditLog.LogAsync(
+                entityType: "User",
+                entityId: user.Id,
+                action: "Deleted",
+                companyId: user.CompanyId,
+                details: "User deleted.",
+                cancellationToken: cancellationToken);
+
+            return Result<bool>.Ok(true);
+        }
+        catch (FirebaseAuthException ex)
+        {
+            return Result<bool>.Fail(
+                $"Unable to delete the Firebase account: {ex.Message}");
+        }
     }
 }

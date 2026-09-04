@@ -224,7 +224,8 @@ public class FirebaseAuthService : IAuthenticationService
 
     public class FirebaseRefreshResponse
     {
-        [JsonPropertyName("access_token")]
+
+        [JsonPropertyName("id_token")]
         public string IdToken { get; set; } = string.Empty;
 
         [JsonPropertyName("refresh_token")]

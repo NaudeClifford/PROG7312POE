@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartX.Application.Requests.Company;
 using SmartX.Application.Services.CRUD;
+using SmartX.Application.Services.Registration;
 
 namespace SmartX.API.Controllers;
 
@@ -12,11 +13,14 @@ namespace SmartX.API.Controllers;
 public class CompaniesController : ControllerBase
 {
     private readonly CompanyCrudService _crud;
+    private readonly RegistrationService _service;
 
     public CompaniesController(
-        CompanyCrudService crud)
+        CompanyCrudService crud,
+        RegistrationService service)
     {
         _crud = crud;
+        _service = service;
     }
 
     [HttpGet] 
@@ -28,10 +32,9 @@ public class CompaniesController : ControllerBase
         var result = await _crud.GetAllAsync(
             cancellationToken);
 
-        if (!result.Success)
-            return BadRequest(result);
-
-        return Ok(result);
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
     }
 
     [HttpGet("{id:guid}")]
@@ -39,36 +42,27 @@ public class CompaniesController : ControllerBase
         Guid id,
         CancellationToken cancellationToken)
     {
-        var result = await _crud.GetByIdAsync(
-            id,
-            cancellationToken);
+        var result = await _crud.GetByIdAsync(id, cancellationToken);
 
-        if (!result.Success)
-            return NotFound(result);
-
-        return Ok(result);
+        return result.Success
+            ? Ok(result)
+            : NotFound(result);
     }
 
     [HttpPost]
     [Authorize(Roles = "SuperAdmin")]
-
     public async Task<IActionResult> Create(
         CreateCompanyRequest request,
         CancellationToken cancellationToken)
     {
-        var result = await _crud.CreateAsync(
-            request,
-            cancellationToken);
+        var result = await _crud.CreateAsync( request, cancellationToken);
 
-        if (!result.Success)
-            return BadRequest(result);
-
-        return Ok(result);
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
     }
 
     [HttpPut("{id:guid}")]
-    [Authorize(Roles = "SuperAdmin")]
-
     public async Task<IActionResult> Update(
         Guid id,
         UpdateCompanyRequest request,
@@ -80,16 +74,35 @@ public class CompaniesController : ControllerBase
             request,
             cancellationToken);
 
-        if (!result.Success)
-        {
-            if (result.Error == "Company not found.")
-                return NotFound(result);
+        if (result.Success)
+            return Ok(result);
 
-            return BadRequest(result);
-        }
-
-        return Ok(result);
+        return result.Error == "Company not found."
+            ? NotFound(result)
+            : BadRequest(result);
     }
+
+    [HttpPost("{companyId:guid}/deletion-request")]
+    public async Task<IActionResult> RequestDeletion(
+    Guid companyId,
+    CancellationToken cancellationToken)
+    {
+        var result = await _crud.RequestDeletionAsync(
+            companyId,
+            cancellationToken);
+
+        if (result.Success)
+            return Ok(result);
+
+        return result.Error switch
+        {
+            "Company not found." => NotFound(result),
+            "Company ID is required." => BadRequest(result),
+            "A deletion request already exists." => Conflict(result),
+            _ => BadRequest(result)
+        };
+    }
+
 
     [HttpDelete("{id:guid}")] 
     [Authorize(Roles = "SuperAdmin")]
@@ -102,14 +115,81 @@ public class CompaniesController : ControllerBase
             id,
             cancellationToken);
 
-        if (!result.Success)
-        {
-            if (result.Error == "Company not found.")
-                return NotFound(result);
+        if (result.Success)
+            return Ok(result);
 
-            return BadRequest(result);
-        }
-
-        return Ok(result);
+        return result.Error == "Company not found."
+            ? NotFound(result)
+            : BadRequest(result);
     }
+
+    // Configuration
+
+    [HttpGet("{companyId:guid}/configuration")]
+    public async Task<IActionResult> GetConfiguration(
+        Guid companyId,
+        CancellationToken cancellationToken)
+    {
+        var result = await _crud.GetConfigurationAsync(
+            companyId,
+            cancellationToken);
+
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
+    }
+
+    [HttpPut("{companyId:guid}/configuration")]
+    public async Task<IActionResult> UpdateConfiguration(
+        Guid companyId,
+        UpdateCompanyConfigurationRequest request,
+        CancellationToken cancellationToken)
+    {
+        request.CompanyId = companyId;
+
+        var result = await _crud.UpdateConfigurationAsync(
+            request,
+            cancellationToken);
+
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
+    }
+
+    // Registration
+
+    [HttpPost("register")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Register(
+        RegisterCompanyRequest request,
+        CancellationToken cancellationToken)
+    {
+        var result = await _service.RegisterAsync(
+            request,
+            cancellationToken);
+
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
+    }
+
+    // Onboarding
+
+    [HttpPost("{companyId:guid}/onboarding/complete")]
+    public async Task<IActionResult> CompleteOnboarding(
+        Guid companyId,
+        CancellationToken cancellationToken)
+    {
+        var result = await _service.CompleteOnboardingAsync(
+            companyId,
+            cancellationToken);
+
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
+    }
+
+
+
+
 }

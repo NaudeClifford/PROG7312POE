@@ -11,6 +11,10 @@ namespace SmartX.Shared.DTOs
 
         public bool IsActive { get; set; }
 
+        public bool OnboardingComplete { get; set; }
+
+        public bool DeletionRequested { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }

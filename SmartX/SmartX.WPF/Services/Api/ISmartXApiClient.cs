@@ -1,15 +1,13 @@
 ﻿using SmartX.Application.Requests.Company;
 using SmartX.Application.Requests.Gateway;
 using SmartX.Application.Requests.Sensor;
+using SmartX.Application.Requests.Telemetry;
 using SmartX.Application.Requests.User;
+using SmartX.Application.Services.Registration;
 using SmartX.Shared.DTOs;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SmartX.WPF.Services.Api;
 
@@ -75,7 +73,9 @@ public interface ISmartXApiClient
         DateTime to,
         CancellationToken cancellationToken = default);
 
-
+    Task<Guid> CreateTelemetryAsync(
+    CreateTelemetryRequest request,
+    CancellationToken cancellationToken = default);
     // USERS - CRUD
     Task<UserDto?> GetUserByIdAsync(
         Guid id,
@@ -104,6 +104,13 @@ public interface ISmartXApiClient
         Guid id,
         CancellationToken cancellationToken = default);
 
+    Task<RegistrationResultDto> RegisterCompanyAsync(
+        RegisterCompanyRequest request,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> CompleteCompanyOnboardingAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default);
 
     // COMPANIES - CRUD
     Task<IReadOnlyList<CompanyDto>> GetCompaniesAsync(
@@ -121,8 +128,26 @@ public interface ISmartXApiClient
         UpdateCompanyRequest request,
         CancellationToken cancellationToken = default);
 
+    Task<bool> RequestCompanyDeletionAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default);
+
     Task<bool> DeleteCompanyAsync(
         Guid id,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> CompleteOnboardingAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default);
+
+    // COMPANY CONFIGURATION
+
+    Task<CompanyConfigurationDto?> GetCompanyConfigurationAsync(
+        Guid companyId,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> UpdateCompanyConfigurationAsync(
+        UpdateCompanyConfigurationRequest request,
         CancellationToken cancellationToken = default);
 
 

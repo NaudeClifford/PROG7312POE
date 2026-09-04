@@ -1,5 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
-using SmartX.Domain.Entities;
+using SmartX.Shared.DTOs;
 using SmartX.WPF.Data;
 using SmartX.WPF.Data.Mappers;
 
@@ -12,7 +12,7 @@ public class SQLiteUserCache(
 
     // GET BY ID
 
-    public async Task<User?> GetByIdAsync(
+    public async Task<UserDto?> GetByIdAsync(
         Guid id,
         CancellationToken cancellationToken = default)
     {
@@ -53,11 +53,11 @@ public class SQLiteUserCache(
 
     // GET BY COMPANY
 
-    public async Task<IReadOnlyList<User>> GetByCompanyIdAsync(
+    public async Task<IReadOnlyList<UserDto>> GetByCompanyIdAsync(
         Guid companyId,
         CancellationToken cancellationToken = default)
     {
-        var users = new List<User>();
+        var users = new List<UserDto>();
 
         using var connection = _database.CreateConnection();
 
@@ -102,7 +102,7 @@ public class SQLiteUserCache(
 
     // GET BY FIREBASE UID
 
-    public async Task<User?> GetByFirebaseUidAsync(
+    public async Task<UserDto?> GetByFirebaseUidAsync(
         string firebaseUid,
         CancellationToken cancellationToken = default)
     {
@@ -143,7 +143,7 @@ public class SQLiteUserCache(
 
     // GET BY EMAIL
 
-    public async Task<User?> GetByEmailAsync(
+    public async Task<UserDto?> GetByEmailAsync(
         string email,
         CancellationToken cancellationToken = default)
     {
@@ -185,7 +185,7 @@ public class SQLiteUserCache(
     // SYNC UPDATE
 
     public async Task UpdateAsync(
-        User user,
+        UserDto user,
         CancellationToken cancellationToken = default)
     {
         using var connection = _database.CreateConnection();
@@ -251,8 +251,6 @@ public class SQLiteUserCache(
         if (rowsAffected > 0)
             return;
 
-        // INSERT IF NOT CACHED
-
         command.CommandText = """
             INSERT INTO Users
             (
@@ -284,9 +282,11 @@ public class SQLiteUserCache(
             cancellationToken);
     }
 
+    // DELETE
+
     public async Task DeleteAsync(
-    Guid id,
-    CancellationToken cancellationToken = default)
+        Guid id,
+        CancellationToken cancellationToken = default)
     {
         using var connection = _database.CreateConnection();
 
@@ -295,9 +295,9 @@ public class SQLiteUserCache(
         using var command = connection.CreateCommand();
 
         command.CommandText = """
-        DELETE FROM Users
-        WHERE Id = $id;
-        """;
+            DELETE FROM Users
+            WHERE Id = $id;
+            """;
 
         command.Parameters.AddWithValue(
             "$id",

@@ -1,7 +1,7 @@
-﻿using AutoMapper;
+﻿using SmartX.Application.Authentication;
 using SmartX.Application.Requests.User;
-using SmartX.Domain.Entities;
 using SmartX.Domain.Enums;
+using SmartX.Shared.DTOs;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Repositories.Local;
 using SmartX.WPF.Services.Api;
@@ -9,75 +9,92 @@ using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels.Base;
-using SmartX.WPF.Views.Pages.Company;
-using SmartX.WPF.Views.Pages.Gateway;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Net.Http;
+using System.Windows;
 
 namespace SmartX.WPF.ViewModels.Pages.Users;
 
-public class UsersViewModel : ViewModelBase
+public class UsersViewModel :
+    ViewModelBase,
+    INavigationAware
 {
-    private readonly ISmartXApiClient _apiClient;
-    private readonly INavigationService _navigationService;
-    private readonly IMapper _mapper;
+    // DEPENDENCIES
+
     private readonly ILocalUserCache _userCache;
+    private readonly ISmartXApiClient _apiClient;
     private readonly ICacheSyncService _cacheSyncService;
-    private bool _isEditing;
+    private readonly IAuthenticationService _authenticationService;
 
-    private string _errorMessage = string.Empty;
-    private string _currentCompanyName = "Current Company";
+    // FORM MODE
 
-    private User? _selectedUser;
-
-    // FORM STATE
-
-    private string _formEmail = string.Empty;
-    private string _formDisplayName = string.Empty;
-    private UserRole _formRole = UserRole.Viewer;
-    private bool _formIsActive = true;
-
-    // COLLECTION
-
-    public ObservableCollection<User> Users { get; } = [];
-
-    // COMPANY
-
-    public Guid EffectiveCompanyId =>
-        Session.Role == UserRole.SuperAdmin
-            ? Session.SelectedCompanyId
-            : Session.CompanyId;
-
-    public Guid CompanyId =>
-        EffectiveCompanyId;
-
-    public bool HasCompany =>
-        EffectiveCompanyId != Guid.Empty;
-
-    public string CurrentCompanyName1
+    public enum UserMode
     {
-        get => _currentCompanyName;
+        List,
+        Create,
+        Edit
+    }
 
-        private set => SetProperty(
-            ref _currentCompanyName,
-            value);
+    private UserMode _mode = UserMode.List;
+
+    public UserMode Mode
+    {
+        get => _mode;
+
+        private set
+        {
+            if (!SetProperty(ref _mode, value))
+                return;
+
+            OnPropertyChanged(nameof(IsListMode));
+            OnPropertyChanged(nameof(IsCreateMode));
+            OnPropertyChanged(nameof(IsEditMode));
+
+            RaiseCommandStates();
+        }
+    }
+
+    public bool IsListMode =>
+        Mode == UserMode.List;
+
+    public bool IsCreateMode =>
+        Mode == UserMode.Create;
+
+    public bool IsEditMode =>
+        Mode == UserMode.Edit;
+
+    // EDITING
+
+    private Guid? _editingUserId;
+
+    public Guid? EditingUserId
+    {
+        get => _editingUserId;
+
+        private set
+        {
+            if (!SetProperty(ref _editingUserId, value))
+                return;
+
+            RaiseCommandStates();
+        }
     }
 
     // SELECTED USER
 
-    public User? SelectedUser
+    private UserDto? _selectedUser;
+
+    public UserDto? SelectedUser
     {
         get => _selectedUser;
 
         set
         {
-            if (!SetProperty(
-                    ref _selectedUser,
-                    value))
-            {
+            if (!SetProperty(ref _selectedUser, value))
                 return;
-            }
+
+            if (value is not null) LoadUserIntoForm(value);
 
             RaiseCommandStates();
         }
@@ -85,45 +102,11 @@ public class UsersViewModel : ViewModelBase
 
     // FORM
 
-    public bool IsEditing
-    {
-        get => _isEditing;
-
-        private set
-        {
-            if (!SetProperty(
-                    ref _isEditing,
-                    value))
-            {
-                return;
-            }
-
-            OnPropertyChanged(
-                nameof(IsCreating));
-
-            RaiseCommandStates();
-        }
-    }
-
-    public bool IsCreating =>
-        !IsEditing;
-
-    public string FormEmail
-    {
-        get => _formEmail;
-
-        set
-        {
-            if (!SetProperty(
-                    ref _formEmail,
-                    value))
-            {
-                return;
-            }
-
-            RaiseCommandStates();
-        }
-    }
+    private string _formDisplayName = string.Empty;
+    private string _formEmail = string.Empty;
+    private string _formPassword = string.Empty;
+    private UserRole _formRole;
+    private bool _formIsActive = true;
 
     public string FormDisplayName
     {
@@ -131,12 +114,34 @@ public class UsersViewModel : ViewModelBase
 
         set
         {
-            if (!SetProperty(
-                    ref _formDisplayName,
-                    value))
-            {
+            if (!SetProperty(ref _formDisplayName, value))
                 return;
-            }
+
+            RaiseCommandStates();
+        }
+    }
+
+    public string FormEmail
+    {
+        get => _formEmail;
+
+        set
+        {
+            if (!SetProperty(ref _formEmail, value))
+                return;
+
+            RaiseCommandStates();
+        }
+    }
+
+    public string FormPassword
+    {
+        get => _formPassword;
+
+        set
+        {
+            if (!SetProperty(ref _formPassword, value))
+                return;
 
             RaiseCommandStates();
         }
@@ -146,128 +151,327 @@ public class UsersViewModel : ViewModelBase
     {
         get => _formRole;
 
-        set => SetProperty(
-            ref _formRole,
-            value);
+        set
+        {
+            if (!SetProperty(ref _formRole, value))
+                return;
+
+            RaiseCommandStates();
+        }
     }
 
     public bool FormIsActive
     {
         get => _formIsActive;
 
-        set => SetProperty(
-            ref _formIsActive,
-            value);
+        set
+        {
+            SetProperty(
+                ref _formIsActive,
+                value);
+        }
     }
 
-    public Array UserRoles =>
-        Enum.GetValues<UserRole>();
+    // ROLE OPTIONS
+
+    public ObservableCollection<UserRole> AvailableRoles { get; } =
+        [];
+
+    public ObservableCollection<string> RoleFilters { get; } =
+    [
+        "All",
+        "SuperAdmin",
+        "Administrator",
+        "Technician",
+        "Viewer"
+    ];
+
+    // STATUS FILTER
+
+    public ObservableCollection<string> StatusFilters { get; } =
+    [
+        "All",
+        "Active",
+        "Inactive"
+    ];
+
+    // ROLE / COMPANY
+
+    public bool IsSuperAdmin =>
+        Session.Role == UserRole.SuperAdmin;
+
+    public bool IsAdministrator =>
+        Session.Role == UserRole.Administrator;
+
+    public bool HasCompany =>
+        EffectiveCompanyId != Guid.Empty;
+
+    public Guid EffectiveCompanyId =>
+        Session.Role == UserRole.SuperAdmin
+            ? Session.SelectedCompanyId
+            : Session.CompanyId;
+
+    // COMPANY LIST
+
+    private ObservableCollection<CompanyDto> _companies = [];
+
+    public ObservableCollection<CompanyDto> Companies =>
+        _companies;
+
+    private CompanyDto? _selectedCompany;
+
+    public CompanyDto? SelectedCompany
+    {
+        get => _selectedCompany;
+
+        set
+        {
+            if (!SetProperty(
+                    ref _selectedCompany,
+                    value))
+            {
+                return;
+            }
+
+            if (Session.Role == UserRole.SuperAdmin)
+            {
+                if (value is not null)
+                {
+                    Session.SelectCompany(
+                        value.Id,
+                        value.Name);
+                }
+                else
+                {
+                    Session.ClearSelectedCompany();
+                }
+            }
+
+            RaiseCommandStates();
+        }
+    }
+
+    // FILTERS
+
+    private string _nameFilter = string.Empty;
+    private string _emailFilter = string.Empty;
+    private string _selectedRoleFilter = "All";
+    private string _statusFilter = "All";
+
+    public string NameFilter
+    {
+        get => _nameFilter;
+
+        set
+        {
+            if (!SetProperty(
+                    ref _nameFilter,
+                    value))
+            {
+                return;
+            }
+
+            ApplyFilters();
+        }
+    }
+
+    public string EmailFilter
+    {
+        get => _emailFilter;
+
+        set
+        {
+            if (!SetProperty(
+                    ref _emailFilter,
+                    value))
+            {
+                return;
+            }
+
+            ApplyFilters();
+        }
+    }
+
+    public string SelectedRoleFilter
+    {
+        get => _selectedRoleFilter;
+
+        set
+        {
+            if (!SetProperty(
+                    ref _selectedRoleFilter,
+                    value))
+            {
+                return;
+            }
+
+            ApplyFilters();
+        }
+    }
+
+    public string StatusFilter
+    {
+        get => _statusFilter;
+
+        set
+        {
+            if (!SetProperty(
+                    ref _statusFilter,
+                    value))
+            {
+                return;
+            }
+
+            ApplyFilters();
+        }
+    }
+
+    // COLLECTIONS
+
+    public ObservableCollection<UserDto> Users { get; } =
+        [];
+
+    public ObservableCollection<UserDto> FilteredUsers { get; } =
+        [];
 
     // COUNTS
+
     public int TotalUsers =>
-        Users.Count;
+        FilteredUsers.Count;
 
     public int ActiveUsers =>
-        Users.Count(x => x.IsActive);
-
-    public int InactiveUsers =>
-        Users.Count(x => !x.IsActive);
-
-    public int AdministratorCount =>
-        Users.Count(x =>
-            x.Role == UserRole.Administrator);
+        FilteredUsers.Count(x => x.IsActive);
 
     public int TechnicianCount =>
-        Users.Count(x =>
+        FilteredUsers.Count(x =>
             x.Role == UserRole.Technician);
 
     public int ViewerCount =>
-        Users.Count(x =>
+        FilteredUsers.Count(x =>
             x.Role == UserRole.Viewer);
 
-    public int SuperAdminCount =>
-        Users.Count(x =>
-            x.Role == UserRole.SuperAdmin);
+    public int AdministratorCount =>
+        FilteredUsers.Count(x =>
+            x.Role == UserRole.Administrator);
 
     // COMMANDS
-
-    public AsyncRelayCommand BackCommand { get; }
-
-    public AsyncRelayCommand RefreshCommand { get; }
 
     public AsyncRelayCommand AddUserCommand { get; }
 
     public AsyncRelayCommand EditUserCommand { get; }
 
-    public AsyncRelayCommand SaveUserCommand { get; }
-
-    public AsyncRelayCommand CancelEditCommand { get; }
-
     public AsyncRelayCommand DeleteUserCommand { get; }
 
+    public AsyncRelayCommand SaveUserCommand { get; }
+
+    public AsyncRelayCommand CancelCommand { get; }
+
+    public AsyncRelayCommand RefreshCommand { get; }
+
+    public AsyncRelayCommand ClearFiltersCommand { get; }
+
     // CONSTRUCTOR
+
     public UsersViewModel(
-        ISmartXApiClient apiClient,
-        INavigationService navigationService,
-        SmartXSession session,
-        IMapper mapper,
         ILocalUserCache userCache,
+        ISmartXApiClient apiClient,
+        SmartXSession session,
         ICacheSyncService cacheSyncService,
-        IConnectivityService connectivityService) : base(connectivityService, session)
+        IConnectivityService connectivityService,
+        IAuthenticationService authenticationService)
+        : base(
+            connectivityService,
+            session)
     {
-        _apiClient = apiClient;
-        _navigationService = navigationService;
-        _mapper = mapper;
-        _userCache = userCache;
-        _cacheSyncService = cacheSyncService;
+        _userCache = userCache
+            ?? throw new ArgumentNullException(nameof(userCache));
 
-        // BACK
+        _apiClient = apiClient
+            ?? throw new ArgumentNullException(nameof(apiClient));
 
-        BackCommand =
-            new AsyncRelayCommand(
-                BackAsync);
+        _cacheSyncService = cacheSyncService
+            ?? throw new ArgumentNullException(nameof(cacheSyncService));
 
-        // REFRESH
+        _authenticationService = authenticationService
+            ?? throw new ArgumentNullException(nameof(authenticationService));
 
-        RefreshCommand =
-            new AsyncRelayCommand(
-                () => LoadAsync(),
-                CanRefresh);
-
-        // ADD
+        UpdateAvailableRoles();
 
         AddUserCommand =
             new AsyncRelayCommand(
                 AddUserAsync,
-                CanModifyUsers);
-
-        // EDIT
+                CanAddUser);
 
         EditUserCommand =
             new AsyncRelayCommand(
                 EditUserAsync,
                 CanEditUser);
 
-        // SAVE
+        DeleteUserCommand =
+            new AsyncRelayCommand(
+                DeleteUserAsync,
+                CanDeleteUser);
 
         SaveUserCommand =
             new AsyncRelayCommand(
                 SaveUserAsync,
                 CanSaveUser);
 
-        // CANCEL
-
-        CancelEditCommand =
+        CancelCommand =
             new AsyncRelayCommand(
-                CancelEditAsync,
-                CanCancelEdit);
+                CancelAsync,
+                CanCancel);
 
-        // DELETE
-
-        DeleteUserCommand =
+        RefreshCommand =
             new AsyncRelayCommand(
-                DeleteUserAsync,
-                CanEditUser);
+                RefreshAsync,
+                CanRefresh);
+
+        ClearFiltersCommand =
+            new AsyncRelayCommand(
+                ClearFiltersAsync);
+    }
+
+    // NAVIGATION
+
+    public void OnNavigatedTo(object parameter)
+    {
+
+        // EDIT
+
+        if (parameter is Guid userId)
+        {
+            Mode = UserMode.Edit;
+
+            EditingUserId = userId;
+
+            _ = LoadUserForEditAsync(userId);
+
+            return;
+        }
+
+        // CREATE
+
+        if (parameter is string mode &&
+            mode.Equals(
+                "Create",
+                StringComparison.OrdinalIgnoreCase))
+        {
+            Mode = UserMode.Create;
+
+            ResetForm();
+
+            _ = LoadCreateModeAsync();
+
+            return;
+        }
+
+        // LIST
+        Mode = UserMode.List;
+
+        EditingUserId = null;
+
+        _ = LoadAsync();
     }
 
     // LOAD
@@ -278,159 +482,438 @@ public class UsersViewModel : ViewModelBase
         try
         {
             IsBusy = true;
+            IsLoaded = false;
             ErrorMessage = string.Empty;
 
             Users.Clear();
-            SelectedUser = null;
+            FilteredUsers.Clear();
 
-            CancelForm();
+            RaiseCounts();
 
-            OnPropertyChanged(
-                nameof(CompanyId));
-
-            OnPropertyChanged(
-                nameof(EffectiveCompanyId));
-
-            OnPropertyChanged(
-                nameof(HasCompany));
-
-            var companyId =
-                EffectiveCompanyId;
-
-            // NO COMPANY
-
-            if (companyId == Guid.Empty)
+            if (!HasCompany)
             {
-                CurrentCompanyName1 =
-                    "No Company Selected";
-
                 ErrorMessage =
-                    "No company is selected.";
-
-                RaiseCounts();
+                    Session.Role == UserRole.SuperAdmin
+                        ? "Select a company to view its users."
+                        : "No company is associated with this account.";
 
                 return;
             }
 
-            // CHECK API
+            await CheckOnlineAsync(
+                cancellationToken);
 
-            try
-            {
-                IsOnline =
-                    await _apiClient.IsAvailableAsync(
-                        cancellationToken);
-            }
-            catch (HttpRequestException)
-            {
-                IsOnline = false;
-            }
-
-            
-            // ONLINE
             if (IsOnline)
             {
                 try
                 {
-                    // SYNC COMPANY
-
-                    await _cacheSyncService.SyncCompanyAsync(
-                        companyId,
-                        cancellationToken);
-
-                    // SYNC USERS
                     await _cacheSyncService.SyncUsersAsync(
-                        companyId,
+                        EffectiveCompanyId,
                         cancellationToken);
                 }
                 catch (HttpRequestException)
                 {
-                    IsOnline = false;
-
                     ErrorMessage =
-                        "Unable to synchronize with the SmartX API.";
+                        "Unable to connect to the SmartX API. Showing cached users.";
                 }
             }
 
-            // COMPANY NAME FROM CACHE/API
-
-            if (IsOnline)
-            {
-                var company =
-                    await _apiClient.GetCompanyByIdAsync(
-                        companyId,
-                        cancellationToken);
-
-                CurrentCompanyName1 =
-                    company?.Name ??
-                    "Current Company";
-            }
-            
-            // READ USERS FROM LOCAL CACHE
-
-            var cachedUsers =
+            var usersDto =
                 await _userCache.GetByCompanyIdAsync(
-                    companyId,
+                    EffectiveCompanyId,
                     cancellationToken);
 
-            foreach (var user in cachedUsers)
+            foreach (var user in usersDto)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
                 Users.Add(user);
             }
 
-            RaiseCounts();
+            ApplyFilters();
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+            IsLoaded = true;
 
-            // OFFLINE WITH NO CACHE
-            if (!IsOnline &&
-                Users.Count == 0)
+            RaiseCommandStates();
+        }
+    }
+
+    // REFRESH
+
+    private bool CanRefresh()
+    {
+        return !IsBusy &&
+               HasCompany;
+    }
+
+    private async Task RefreshAsync()
+    {
+        if (!CanRefresh())
+            return;
+
+        await LoadAsync();
+    }
+
+    // FILTERING
+
+    private void ApplyFilters()
+    {
+        FilteredUsers.Clear();
+
+        IEnumerable<UserDto> query = Users;
+
+        if (!string.IsNullOrWhiteSpace(NameFilter))
+        {
+            var filter = NameFilter.Trim();
+
+            query =
+                query.Where(x =>
+                    !string.IsNullOrWhiteSpace(x.DisplayName) &&
+                    x.DisplayName.Contains(
+                        filter,
+                        StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (!string.IsNullOrWhiteSpace(EmailFilter))
+        {
+            var filter = EmailFilter.Trim();
+
+            query =
+                query.Where(x =>
+                    !string.IsNullOrWhiteSpace(x.Email) &&
+                    x.Email.Contains(
+                        filter,
+                        StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (!string.IsNullOrWhiteSpace(SelectedRoleFilter) &&
+            SelectedRoleFilter != "All")
+        {
+            if (Enum.TryParse<UserRole>(
+                    SelectedRoleFilter,
+                    true,
+                    out var selectedRole))
+            {
+                query =
+                    query.Where(x =>
+                        x.Role == selectedRole);
+            }
+        }
+
+        if (StatusFilter == "Active")
+        {
+            query =
+                query.Where(x =>
+                    x.IsActive);
+        }
+        else if (StatusFilter == "Inactive")
+        {
+            query =
+                query.Where(x =>
+                    !x.IsActive);
+        }
+
+        foreach (var user in query)
+        {
+            FilteredUsers.Add(user);
+        }
+
+        RaiseCounts();
+    }
+
+    // CLEAR FILTERS
+
+    private async Task ClearFiltersAsync()
+    {
+        NameFilter = string.Empty;
+        EmailFilter = string.Empty;
+        SelectedRoleFilter = "All";
+        StatusFilter = "All";
+
+        ApplyFilters();
+
+        await Task.CompletedTask;
+    }
+
+    // CREATE MODE LOAD
+    private async Task LoadCreateModeAsync()
+    {
+        try
+        {
+            IsBusy = true;
+            IsLoaded = false;
+            ErrorMessage = string.Empty;
+
+            if (!HasCompany)
             {
                 ErrorMessage =
-                    "Unable to connect to the SmartX API and no cached users are available.";
+                    Session.Role == UserRole.SuperAdmin
+                        ? "Select a company before creating a user."
+                        : "No company is associated with this account.";
+
+                return;
+            }
+
+            await CheckOnlineAsync();
+
+            if (!IsOnline)
+            {
+                ErrorMessage =
+                    "You are offline. Creating users is unavailable.";
+
+                return;
+            }
+
+            UpdateAvailableRoles();
+
+            if (AvailableRoles.Count == 0)
+            {
+                ErrorMessage =
+                    "You do not have permission to create users.";
+
+                return;
+            }
+
+            if (!AvailableRoles.Contains(FormRole))
+            {
+                FormRole = AvailableRoles[0];
             }
         }
         catch (OperationCanceledException)
         {
             throw;
         }
-        catch (HttpRequestException)
+        catch (Exception ex)
         {
-            IsOnline = false;
+            ErrorMessage = ex.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+            IsLoaded = true;
 
-            ErrorMessage =
-                "Unable to connect to the SmartX API.";
+            RaiseCommandStates();
+        }
+    }
 
-            // FALLBACK TO CACHE
-            try
+    // LOAD EDIT
+    private async Task LoadUserForEditAsync(
+        Guid userId)
+    {
+        try
+        {
+            IsBusy = true;
+            IsLoaded = false;
+            ErrorMessage = string.Empty;
+
+            if (!HasCompany)
             {
-                var companyId =
-                    EffectiveCompanyId;
+                ErrorMessage =
+                    Session.Role == UserRole.SuperAdmin
+                        ? "Select a company to edit this user."
+                        : "No company is associated with this account.";
 
-                if (companyId != Guid.Empty)
+                return;
+            }
+
+            await CheckOnlineAsync();
+
+            if (IsOnline)
+            {
+                try
                 {
-                    var cachedUsers =
-                        await _userCache.GetByCompanyIdAsync(
-                            companyId,
-                            cancellationToken);
-
-                    Users.Clear();
-
-                    foreach (var user in cachedUsers)
-                    {
-                        Users.Add(user);
-                    }
-
-                    RaiseCounts();
+                    await _cacheSyncService.SyncUserAsync(
+                        userId);
+                }
+                catch (HttpRequestException)
+                {
+                    ErrorMessage =
+                        "Unable to connect to the SmartX API. Showing cached data.";
                 }
             }
-            catch
+
+            var user =
+                await _userCache.GetByIdAsync(
+                    userId);
+
+            if (user is null)
             {
+                ErrorMessage =
+                    "The selected user could not be found.";
+
+                return;
             }
+
+            if (user.CompanyId != EffectiveCompanyId)
+            {
+                ErrorMessage =
+                    "The selected user does not belong to the selected company.";
+
+                return;
+            }
+
+            SelectedUser = user;
+
+            EditingUserId = user.Id;
+
+            LoadUserIntoForm(user);
+        }
+        catch (HttpRequestException)
+        {
+            ErrorMessage =
+                "Unable to connect to the SmartX API.";
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
+            ErrorMessage = ex.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+            IsLoaded = true;
+
+            RaiseCommandStates();
+        }
+    }
+
+    // ADD USER
+
+    private bool CanAddUser()
+    {
+        return IsListMode &&
+               IsOnline &&
+               !IsBusy &&
+               HasCompany &&
+               HasUserWritePermission();
+    }
+
+    private async Task AddUserAsync()
+    {
+        if (!CanAddUser())
+            return;
+
+        EditingUserId = null;
+
+        ResetForm();
+
+        Mode = UserMode.Create;
+
+        await LoadCreateModeAsync();
+    }
+
+    // EDIT USER
+
+    private bool CanEditUser()
+    {
+        return IsListMode &&
+               IsOnline &&
+               !IsBusy &&
+               SelectedUser is not null &&
+               HasCompany &&
+               HasUserWritePermission();
+    }
+
+    private async Task EditUserAsync()
+    {
+        if (!CanEditUser())
+            return;
+
+        if (SelectedUser is null)
+            return;
+
+        EditingUserId =
+            SelectedUser.Id;
+
+        Mode = UserMode.Edit;
+
+        LoadUserIntoForm(
+            SelectedUser);
+
+        await Task.CompletedTask;
+    }
+
+    // DELETE USER
+
+    private bool CanDeleteUser()
+    {
+        return IsListMode &&
+               IsOnline &&
+               !IsBusy &&
+               SelectedUser is not null &&
+               HasCompany &&
+               HasUserWritePermission();
+    }
+
+    private async Task DeleteUserAsync()
+    {
+        if (!CanDeleteUser())
+            return;
+
+        if (SelectedUser is null)
+            return;
+
+        var result =
+            MessageBox.Show(
+                $"Are you sure you want to delete '{SelectedUser.DisplayName}'?\n\nThis action cannot be undone.",
+                "Delete User",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+        if (result != MessageBoxResult.Yes)
+            return;
+
+        try
+        {
+            IsBusy = true;
+            ErrorMessage = string.Empty;
+
+            if (!await RequireOnlineAsync())
+                return;
+
+            var deleted =
+                await _apiClient.DeleteUserAsync(
+                    SelectedUser.Id);
+
+            if (!deleted)
+            {
+                ErrorMessage =
+                    "Unable to delete the user.";
+
+                return;
+            }
+
+            await _cacheSyncService.SyncUsersAsync(
+                EffectiveCompanyId);
+
+            await LoadAsync();
+        }
+        catch (HttpRequestException)
+        {
             ErrorMessage =
-                ex.Message;
+                "Unable to connect to the SmartX API.";
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
         }
         finally
         {
@@ -440,143 +923,33 @@ public class UsersViewModel : ViewModelBase
         }
     }
 
-    // SESSION CHANGE
-    private async void Session_PropertyChanged(
-        object? sender,
-        PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName !=
-                nameof(SmartXSession.CompanyId) &&
-            e.PropertyName !=
-                nameof(SmartXSession.SelectedCompanyId))
-        {
-            return;
-        }
-
-        OnPropertyChanged(
-            nameof(CompanyId));
-
-        OnPropertyChanged(
-            nameof(EffectiveCompanyId));
-
-        OnPropertyChanged(
-            nameof(HasCompany));
-
-        await LoadAsync();
-    }
-
-    // PERMISSIONS
-    private bool HasUserWritePermission()
-    {
-        return Session.Role ==
-                   UserRole.Administrator ||
-               Session.Role ==
-                   UserRole.SuperAdmin;
-    }
-
-    private bool CanRefresh()
-    {
-        return !IsBusy &&
-               HasCompany;
-    }
-
-    private bool CanModifyUsers()
-    {
-        return IsOnline &&
-               !IsBusy &&
-               HasCompany &&
-               HasUserWritePermission();
-    }
-
-    private bool CanEditUser()
-    {
-        return IsOnline &&
-               !IsBusy &&
-               HasCompany &&
-               SelectedUser != null &&
-               HasUserWritePermission();
-    }
+    // SAVE USER
 
     private bool CanSaveUser()
     {
-        return IsOnline &&
-               !IsBusy &&
-               HasCompany &&
-               HasUserWritePermission() &&
-               !string.IsNullOrWhiteSpace(
-                   FormEmail) &&
-               !string.IsNullOrWhiteSpace(
-                   FormDisplayName);
+        if (!IsOnline ||
+            IsBusy ||
+            !HasCompany ||
+            !HasUserWritePermission())
+        {
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(FormDisplayName) ||
+            string.IsNullOrWhiteSpace(FormEmail))
+        {
+            return false;
+        }
+
+        if (IsCreateMode)
+        {
+            return !string.IsNullOrWhiteSpace(FormPassword);
+        }
+
+        return IsEditMode &&
+               EditingUserId.HasValue;
     }
 
-    private bool CanCancelEdit()
-    {
-        return !IsBusy &&
-               IsEditing;
-    }
-
-    // ADD USER
-    private async Task AddUserAsync()
-    {
-        if (!CanModifyUsers())
-            return;
-
-        SelectedUser = null;
-
-        FormEmail =
-            string.Empty;
-
-        FormDisplayName =
-            string.Empty;
-
-        FormRole =
-            UserRole.Viewer;
-
-        FormIsActive =
-            true;
-
-        IsEditing = false;
-
-        ErrorMessage =
-            string.Empty;
-
-        await Task.CompletedTask;
-
-        RaiseCommandStates();
-    }
-
-    // EDIT USER
-    private async Task EditUserAsync()
-    {
-        if (!CanEditUser())
-            return;
-
-        if (SelectedUser is null)
-            return;
-
-        FormEmail =
-            SelectedUser.Email;
-
-        FormDisplayName =
-            SelectedUser.DisplayName;
-
-        FormRole =
-            SelectedUser.Role;
-
-        FormIsActive =
-            SelectedUser.IsActive;
-
-        IsEditing = true;
-
-        ErrorMessage =
-            string.Empty;
-
-        await Task.CompletedTask;
-
-        RaiseCommandStates();
-    }
-
-    // SAVE USER
     private async Task SaveUserAsync()
     {
         if (!CanSaveUser())
@@ -587,31 +960,52 @@ public class UsersViewModel : ViewModelBase
             IsBusy = true;
             ErrorMessage = string.Empty;
 
-            var companyId =
-                EffectiveCompanyId;
-
-            if (companyId == Guid.Empty)
-            {
-                ErrorMessage =
-                    "No company is selected.";
-
+            if (!await RequireOnlineAsync())
                 return;
-            }
 
-            // UPDATE
-            if (IsEditing)
+            // CREATE
+            //
+            // Step 1:
+            // Create the Firebase authentication account.
+            //
+            // Step 2:
+            // Use the returned Firebase UID to create
+            // the SmartX application user.
+            //
+
+            if (IsCreateMode)
             {
-                if (SelectedUser is null)
+                var firebaseResult =
+                    await _authenticationService.SignUpAsync(
+                        FormEmail.Trim(),
+                        FormPassword);
+
+                if (!firebaseResult.Success)
+                {
+                    ErrorMessage =
+                        firebaseResult.ErrorMessage ??
+                        "Unable to create the Firebase account.";
+
                     return;
+                }
 
-                var command =
-                    new UpdateUserRequest
+                if (string.IsNullOrWhiteSpace(
+                        firebaseResult.UserId))
+                {
+                    ErrorMessage =
+                        "Firebase did not return a valid user ID.";
+
+                    return;
+                }
+
+                var request =
+                    new CreateUserRequest
                     {
-                        Id =
-                            SelectedUser.Id,
-
                         CompanyId =
-                            SelectedUser.CompanyId,
+                            EffectiveCompanyId,
+
+                        FirebaseUid =
+                            firebaseResult.UserId,
 
                         Email =
                             FormEmail.Trim(),
@@ -623,46 +1017,57 @@ public class UsersViewModel : ViewModelBase
                             FormRole,
 
                         IsActive =
-                            FormIsActive
+                            true
                     };
 
-                var updated =
-                    await _apiClient.UpdateUserAsync(
-                        command);
+                var userId =
+                    await _apiClient.CreateUserAsync(
+                        request);
 
-                if (!updated)
+                if (userId == Guid.Empty)
                 {
                     ErrorMessage =
-                        "Unable to update the user.";
+                        "The API did not return a valid user ID.";
 
                     return;
                 }
 
-                // API SUCCESS
+                await _cacheSyncService.SyncUsersAsync(
+                    EffectiveCompanyId);
 
-                await _cacheSyncService.SyncUserAsync(
-                    SelectedUser.Id);
+                ResetForm();
 
-                // RELOAD FROM CACHE
+                Mode = UserMode.List;
 
-                await ReloadUsersFromCacheAsync(
-                    companyId);
-
-                CancelForm();
+                await LoadAsync();
 
                 return;
             }
 
-            // CREATE
+            // UPDATE
 
-            var createCommand =
-                new CreateUserRequest
+            if (!EditingUserId.HasValue)
+                return;
+
+            if (SelectedUser is null)
+            {
+                ErrorMessage =
+                    "The selected user could not be found.";
+
+                return;
+            }
+
+            var updateRequest =
+                new UpdateUserRequest
                 {
-                    CompanyId =
-                        companyId,
+                    Id =
+                        EditingUserId.Value,
 
-                    Email =
-                        FormEmail.Trim(),
+                    CompanyId =
+                        SelectedUser.CompanyId,
+
+                    FirebaseUid =
+                        SelectedUser.FirebaseUid,
 
                     DisplayName =
                         FormDisplayName.Trim(),
@@ -674,123 +1079,39 @@ public class UsersViewModel : ViewModelBase
                         FormIsActive
                 };
 
-            var userId =
-                await _apiClient.CreateUserAsync(
-                    createCommand);
+            var updated =
+                await _apiClient.UpdateUserAsync(
+                    updateRequest);
 
-            // SYNC CREATED USER INTO LOCAL CACHE
-
-            await _cacheSyncService.SyncUserAsync(
-                userId);
-
-            // RELOAD FROM CACHE
-
-            await ReloadUsersFromCacheAsync(
-                companyId);
-
-            SelectedUser =
-                Users.FirstOrDefault(
-                    x => x.Id == userId);
-
-            CancelForm();
-        }
-        catch (HttpRequestException)
-        {
-
-            ErrorMessage =
-                "Unable to connect to the SmartX API.";
-        }
-        catch (Exception ex)
-        {
-            ErrorMessage =
-                ex.Message;
-        }
-        finally
-        {
-            IsBusy = false;
-
-            RaiseCommandStates();
-        }
-    }
-
-    // DELETE USER
-
-    private async Task DeleteUserAsync()
-    {
-        if (!CanEditUser())
-            return;
-
-        if (SelectedUser is null)
-            return;
-
-        // PREVENT SELF DELETE
-
-        if (SelectedUser.Id ==
-            Session.UserId)
-        {
-            ErrorMessage =
-                "You cannot delete your own account.";
-
-            return;
-        }
-
-        // SUPER ADMIN PROTECTION
-
-        if (SelectedUser.Role ==
-                UserRole.SuperAdmin &&
-            Session.Role !=
-                UserRole.SuperAdmin)
-        {
-            ErrorMessage =
-                "Only a SuperAdmin can delete a SuperAdmin.";
-
-            return;
-        }
-
-        try
-        {
-            IsBusy = true;
-            ErrorMessage = string.Empty;
-
-            var userId =
-                SelectedUser.Id;
-
-            var deleted =
-                await _apiClient.DeleteUserAsync(
-                    userId);
-
-            if (!deleted)
+            if (!updated)
             {
                 ErrorMessage =
-                    "Unable to delete the user.";
+                    "The user could not be updated.";
 
                 return;
             }
 
-            // REMOVE FROM LOCAL CACHE
-
-            await _userCache.DeleteAsync(
-                userId);
-
-            // RELOAD FROM CACHE
-
-            await ReloadUsersFromCacheAsync(
+            await _cacheSyncService.SyncUsersAsync(
                 EffectiveCompanyId);
 
-            SelectedUser = null;
+            ResetForm();
 
-            CancelForm();
+            Mode = UserMode.List;
+
+            await LoadAsync();
         }
         catch (HttpRequestException)
         {
-
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
         }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
         catch (Exception ex)
         {
-            ErrorMessage =
-                ex.Message;
+            ErrorMessage = ex.Message;
         }
         finally
         {
@@ -800,102 +1121,206 @@ public class UsersViewModel : ViewModelBase
         }
     }
 
-    // CACHE RELOAD
-
-    private async Task ReloadUsersFromCacheAsync(
-        Guid companyId,
-        CancellationToken cancellationToken = default)
-    {
-        Users.Clear();
-
-        var cachedUsers =
-            await _userCache.GetByCompanyIdAsync(
-                companyId,
-                cancellationToken);
-
-        foreach (var user in cachedUsers)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            Users.Add(user);
-        }
-
-        RaiseCounts();
-    }
-
     // CANCEL
 
-    private async Task CancelEditAsync()
+    private bool CanCancel()
     {
-        if (!CanCancelEdit())
-            return;
-
-        CancelForm();
-
-        await Task.CompletedTask;
-
-        RaiseCommandStates();
+        return !IsBusy &&
+               !IsListMode;
     }
 
-    private void CancelForm()
+    private async Task CancelAsync()
     {
-        IsEditing = false;
+        if (!CanCancel())
+            return;
+
+        ResetForm();
+
+        Mode = UserMode.List;
+
+        await LoadAsync();
+    }
+
+    // FORM
+
+    private void LoadUserIntoForm(
+        UserDto user)
+    {
+        FormDisplayName =
+            user.DisplayName;
 
         FormEmail =
+            user.Email;
+
+        FormRole =
+            user.Role;
+
+        FormIsActive =
+            user.IsActive;
+
+        // Password is only required when
+        // creating a Firebase account.
+        FormPassword =
             string.Empty;
+    }
+
+    private void ResetForm()
+    {
+        EditingUserId = null;
+
+        SelectedUser = null;
 
         FormDisplayName =
             string.Empty;
 
-        FormRole =
-            UserRole.Viewer;
+        FormEmail =
+            string.Empty;
+
+        FormPassword =
+            string.Empty;
 
         FormIsActive =
             true;
+
+        UpdateAvailableRoles();
+
+        if (AvailableRoles.Count > 0)
+        {
+            FormRole =
+                AvailableRoles[0];
+        }
     }
 
-    // BACK
+    // ROLE PERMISSIONS
 
-    private async Task BackAsync()
+    private bool HasUserWritePermission()
     {
-        if (Session.Role ==
-            UserRole.SuperAdmin)
+        return Session.Role is
+            UserRole.SuperAdmin or
+            UserRole.Administrator;
+    }
+
+    private void UpdateAvailableRoles()
+    {
+        AvailableRoles.Clear();
+
+        if (Session.Role == UserRole.SuperAdmin)
         {
-            _navigationService
-                .NavigateTo<CompaniesPage>();
-        }
-        else
-        {
-            _navigationService
-                .NavigateTo<GatewayPage>();
+            foreach (var role in
+                     Enum.GetValues<UserRole>())
+            {
+                AvailableRoles.Add(role);
+            }
+
+            return;
         }
 
-        await Task.CompletedTask;
+        if (Session.Role == UserRole.Administrator)
+        {
+            AvailableRoles.Add(
+                UserRole.Administrator);
+
+            AvailableRoles.Add(
+                UserRole.Technician);
+
+            AvailableRoles.Add(
+                UserRole.Viewer);
+        }
+    }
+
+    // SESSION CHANGES
+
+    protected override async void OnSessionPropertyChanged(
+        PropertyChangedEventArgs e)
+    {
+        base.OnSessionPropertyChanged(e);
+
+        // SELECTED COMPANY ID
+
+        if (e.PropertyName ==
+            nameof(SmartXSession.SelectedCompanyId))
+        {
+            OnPropertyChanged(nameof(IsSuperAdmin));
+            OnPropertyChanged(nameof(IsAdministrator));
+            OnPropertyChanged(nameof(EffectiveCompanyId));
+            OnPropertyChanged(nameof(HasCompany));
+
+            UpdateAvailableRoles();
+
+            RaiseCommandStates();
+
+            if (Session.Role == UserRole.SuperAdmin)
+            {
+                await LoadAsync();
+            }
+
+            return;
+        }
+
+        // COMPANY ID
+
+        if (e.PropertyName ==
+            nameof(SmartXSession.CompanyId))
+        {
+            OnPropertyChanged(nameof(EffectiveCompanyId));
+            OnPropertyChanged(nameof(HasCompany));
+
+            RaiseCommandStates();
+
+            await LoadAsync();
+
+            return;
+        }
+
+        // ROLE
+
+        if (e.PropertyName ==
+            nameof(SmartXSession.Role))
+        {
+            OnPropertyChanged(nameof(IsSuperAdmin));
+            OnPropertyChanged(nameof(IsAdministrator));
+
+            UpdateAvailableRoles();
+
+            RaiseCommandStates();
+        }
     }
 
     // COUNTS
 
     private void RaiseCounts()
     {
-        OnPropertyChanged(
-            nameof(TotalUsers));
+        OnPropertyChanged(nameof(TotalUsers));
+        OnPropertyChanged(nameof(ActiveUsers));
+        OnPropertyChanged(nameof(TechnicianCount));
+        OnPropertyChanged(nameof(ViewerCount));
+        OnPropertyChanged(nameof(AdministratorCount));
+    }
 
-        OnPropertyChanged(
-            nameof(ActiveUsers));
+    // COMMAND STATES
 
-        OnPropertyChanged(
-            nameof(InactiveUsers));
+    protected override void RaiseCommandStates()
+    {
+        AddUserCommand?.RaiseCanExecuteChanged();
+        EditUserCommand?.RaiseCanExecuteChanged();
+        DeleteUserCommand?.RaiseCanExecuteChanged();
+        SaveUserCommand?.RaiseCanExecuteChanged();
+        CancelCommand?.RaiseCanExecuteChanged();
+        RefreshCommand?.RaiseCanExecuteChanged();
+        ClearFiltersCommand?.RaiseCanExecuteChanged();
+    }
 
-        OnPropertyChanged(
-            nameof(AdministratorCount));
+    // CONNECTIVITY
 
-        OnPropertyChanged(
-            nameof(TechnicianCount));
+    protected override void RaiseConnectivityState()
+    {
+        RaiseCommandStates();
+    }
 
-        OnPropertyChanged(
-            nameof(ViewerCount));
+    protected override void OnBusyStateChanged()
+    {
+        OnPropertyChanged(nameof(IsBusyVisibility));
 
-        OnPropertyChanged(
-            nameof(SuperAdminCount));
+        RaiseCommandStates();
     }
 }

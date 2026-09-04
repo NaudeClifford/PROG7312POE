@@ -5,6 +5,7 @@ using SmartX.Application.Queries.Telemetry;
 using SmartX.Application.Queries.Users;
 using SmartX.Application.Services;
 using SmartX.Application.Services.CRUD;
+using SmartX.Application.Services.Registration;
 using SmartX.Application.Validators;
 using SmartX.Application.Validators.Company;
 using SmartX.Application.Validators.Sensor;
@@ -43,6 +44,8 @@ public static class DependencyInjection
 
         //Services
         services.AddScoped<AuditLogService>();
+        services.AddScoped<RegistrationService>();
+
 
         //Auto Mapper
         services.AddAutoMapper(cfg =>

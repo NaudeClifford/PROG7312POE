@@ -24,6 +24,7 @@ public class SQLiteCompanyCache(
                 Name,
                 Description,
                 IsActive,
+                DeletionRequested,
                 CreatedAt,
                 UpdatedAt
             FROM Companies
@@ -55,6 +56,7 @@ public class SQLiteCompanyCache(
                 Name,
                 Description,
                 IsActive,
+                DeletionRequested,
                 CreatedAt,
                 UpdatedAt
             FROM Companies
@@ -89,6 +91,7 @@ public class SQLiteCompanyCache(
                 Name = $name,
                 Description = $description,
                 IsActive = $isActive,
+                DeletionRequested = $deletionRequested,
                 CreatedAt = $createdAt,
                 UpdatedAt = $updatedAt
             WHERE Id = $id;
@@ -105,6 +108,9 @@ public class SQLiteCompanyCache(
 
         command.Parameters.AddWithValue(
             "$isActive", company.IsActive ? 1 : 0);
+
+        command.Parameters.AddWithValue(
+            "$deletionRequested", company.DeletionRequested ? 1 : 0);
 
         command.Parameters.AddWithValue(
             "$createdAt", company.CreatedAt.ToString("O"));
@@ -125,6 +131,7 @@ public class SQLiteCompanyCache(
                 Name,
                 Description,
                 IsActive,
+                DeletionRequested,
                 CreatedAt,
                 UpdatedAt
             )
@@ -134,6 +141,7 @@ public class SQLiteCompanyCache(
                 $name,
                 $description,
                 $isActive,
+                $deletionRequested,
                 $createdAt,
                 $updatedAt
             );

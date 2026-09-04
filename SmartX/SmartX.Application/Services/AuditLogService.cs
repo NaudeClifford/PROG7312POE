@@ -1,16 +1,22 @@
-﻿using SmartX.Domain.Entities;
+﻿using Microsoft.AspNetCore.Http;
+using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
+using System.Security.Claims;
 
 namespace SmartX.Application.Services;
 
 public class AuditLogService
 {
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
     private readonly IAuditLogRepository _repository;
 
     public AuditLogService(
-        IAuditLogRepository repository)
+        IAuditLogRepository repository,
+        IHttpContextAccessor httpContextAccessor)
     {
         _repository = repository;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public Task LogAsync(
@@ -29,7 +35,7 @@ public class AuditLogService
             Id = Guid.NewGuid(),
 
             CompanyId = companyId,
-            UserId = userId,
+            UserId = userId ?? GetCurrentUserId(),
 
             EntityType = entityType,
             EntityId = entityId,
@@ -45,5 +51,20 @@ public class AuditLogService
         return _repository.AddAsync(
             log,
             cancellationToken);
+    }
+
+    private Guid? GetCurrentUserId()
+    {
+        var claim =
+            _httpContextAccessor.HttpContext?
+                .User
+                .FindFirst(ClaimTypes.Name);
+
+        if (claim is null)
+            return null;
+
+        return Guid.TryParse(claim.Value, out var userId)
+            ? userId
+            : null;
     }
 }

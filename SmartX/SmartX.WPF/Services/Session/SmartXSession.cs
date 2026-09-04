@@ -14,6 +14,9 @@ public class SmartXSession : INotifyPropertyChanged
     private Guid _userId;
     private Guid _companyId;
     private Guid? _gatewayId;
+    private bool _isOnboardingComplete;
+    private bool _isOnboarding;
+
 
     private string? _firebaseUid;
     private string? _email;
@@ -81,6 +84,17 @@ public class SmartXSession : INotifyPropertyChanged
         private set => SetField(ref _idToken, value);
     }
 
+    public void SetCompany(
+    Guid companyId,
+    string companyName)
+    {
+        SelectedCompanyId = companyId;
+        SelectedCompanyName = companyName;
+
+        ClearGateway();
+    }
+
+
     public string? RefreshToken
     {
         get => _refreshToken;
@@ -123,6 +137,55 @@ public class SmartXSession : INotifyPropertyChanged
         private set => SetField(ref _selectedCompanyName, value);
     }
 
+    public bool IsOnboardingComplete
+    {
+        get => _isOnboardingComplete;
+
+        private set
+        {
+            if (_isOnboardingComplete == value)
+                return;
+
+            _isOnboardingComplete = value;
+
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsOnboarding
+    {
+        get => _isOnboarding;
+        private set
+        {
+            if (_isOnboarding == value)
+                return;
+
+            _isOnboarding = value;
+
+            OnPropertyChanged();
+        }
+    }
+
+    public void BeginOnboarding()
+    {
+        IsOnboarding = true;
+        IsOnboardingComplete = false;
+    }
+
+    public void CompleteOnboarding()
+    {
+        IsOnboarding = false;
+        IsOnboardingComplete = true;
+    }
+
+    public void SetOnboardingCompleted(bool completed)
+    {
+        IsOnboardingComplete = completed;
+        IsOnboarding = !completed;
+    }
+
+
+
 
     // PROPERTY CHANGED
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -159,6 +222,11 @@ public class SmartXSession : INotifyPropertyChanged
         string refreshToken)
     {
         ArgumentNullException.ThrowIfNull(user);
+
+        if (string.IsNullOrWhiteSpace(idToken))
+            throw new ArgumentException(
+                "ID token cannot be empty.",
+                nameof(idToken));
 
         UserId = user.Id;
         CompanyId = user.CompanyId;

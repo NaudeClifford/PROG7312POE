@@ -26,9 +26,7 @@ public class SmartXCacheDatabase
 
         using var command = connection.CreateCommand();
 
-        // =====================================================
         // SENSORS
-        // =====================================================
 
         command.CommandText = """
             CREATE TABLE IF NOT EXISTS Sensors
@@ -50,9 +48,7 @@ public class SmartXCacheDatabase
             cancellationToken);
 
 
-        // =====================================================
         // TELEMETRY
-        // =====================================================
 
         command.CommandText = """
             CREATE TABLE IF NOT EXISTS Telemetry
@@ -73,9 +69,7 @@ public class SmartXCacheDatabase
             cancellationToken);
 
 
-        // =====================================================
         // USERS
-        // =====================================================
 
         command.CommandText = """
             CREATE TABLE IF NOT EXISTS Users
@@ -96,9 +90,7 @@ public class SmartXCacheDatabase
             cancellationToken);
 
 
-        // =====================================================
         // COMPANIES
-        // =====================================================
 
         command.CommandText = """
             CREATE TABLE IF NOT EXISTS Companies
@@ -107,6 +99,7 @@ public class SmartXCacheDatabase
                 Name TEXT NOT NULL,
                 Description TEXT NOT NULL,
                 IsActive INTEGER NOT NULL,
+                DeletionRequested INTEGER NOT NULL DEFAULT 0,
                 CreatedAt TEXT NOT NULL,
                 UpdatedAt TEXT NOT NULL
             );

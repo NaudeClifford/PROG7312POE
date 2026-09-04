@@ -31,9 +31,7 @@ public class CacheSyncService(
         gatewayCache;
 
 
-    // =========================================================
     // SENSORS
-    // =========================================================
 
     public async Task SyncSensorsAsync(
     CancellationToken cancellationToken = default)
@@ -75,9 +73,7 @@ public class CacheSyncService(
         }
     }
 
-    // =========================================================
     // TELEMETRY
-    // =========================================================
 
     public async Task SyncTelemetryAsync(
         Guid sensorId,
@@ -123,9 +119,7 @@ public class CacheSyncService(
     }
 
 
-    // =========================================================
     // USER
-    // =========================================================
 
     public async Task SyncUserAsync(
         Guid userId,
@@ -152,28 +146,13 @@ public class CacheSyncService(
             return;
         }
 
-        var user = new User
-        {
-            Id = dto.Id,
-            FirebaseUid = dto.FirebaseUid,
-            Email = dto.Email,
-            CompanyId = dto.CompanyId,
-            DisplayName = dto.DisplayName,
-            Role = dto.Role,
-            IsActive = dto.IsActive,
-            CreatedAt = dto.CreatedAt,
-            UpdatedAt = dto.UpdatedAt
-        };
-
         await _userCache.UpdateAsync(
-            user,
-            cancellationToken);
+    dto,
+    cancellationToken);
     }
 
 
-    // =========================================================
     // COMPANIES
-    // =========================================================
 
     public async Task SyncCompanyAsync(
     Guid companyId,
@@ -207,6 +186,7 @@ public class CacheSyncService(
             Name = dto.Name,
             Description = dto.Description,
             IsActive = dto.IsActive,
+            DeletionRequested = dto.DeletionRequested,
             CreatedAt = dto.CreatedAt,
             UpdatedAt = dto.UpdatedAt
         };
@@ -216,10 +196,7 @@ public class CacheSyncService(
             cancellationToken);
     }
 
-
-    // =========================================================
     // GATEWAYS
-    // =========================================================
 
     public async Task SyncGatewaysAsync(
     Guid companyId,
@@ -279,6 +256,14 @@ public class CacheSyncService(
                 companyId,
                 cancellationToken);
 
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var cachedUsers =
+            await _userCache.GetByCompanyIdAsync(
+                companyId,
+                cancellationToken);
+
+        // UPDATE / INSERT
         foreach (var dto in users)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -294,22 +279,27 @@ public class CacheSyncService(
                 continue;
             }
 
-            var user = new User
-            {
-                Id = dto.Id,
-                FirebaseUid = dto.FirebaseUid,
-                Email = dto.Email,
-                CompanyId = dto.CompanyId,
-                DisplayName = dto.DisplayName,
-                Role = dto.Role,
-                IsActive = dto.IsActive,
-                CreatedAt = dto.CreatedAt,
-                UpdatedAt = dto.UpdatedAt
-            };
-
             await _userCache.UpdateAsync(
-                user,
+                dto,
                 cancellationToken);
+        }
+
+        // DELETE STALE USERS
+        var apiUserIds =
+            users
+                .Select(x => x.Id)
+                .ToHashSet();
+
+        foreach (var cachedUser in cachedUsers)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (!apiUserIds.Contains(cachedUser.Id))
+            {
+                await _userCache.DeleteAsync(
+                    cachedUser.Id,
+                    cancellationToken);
+            }
         }
     }
 }

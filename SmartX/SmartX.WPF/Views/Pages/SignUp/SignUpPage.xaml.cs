@@ -42,13 +42,10 @@ public partial class SignUpPage : Page
         if (e.Key != System.Windows.Input.Key.Enter)
             return;
 
-        if (DataContext is not SigninViewModel viewModel)
+        if (DataContext is not SignUpViewModel viewModel)
             return;
 
-        if (!viewModel.SignInCommand.CanExecute(null))
-            return;
 
-        viewModel.SignInCommand.Execute(null);
 
         e.Handled = true;
     }
