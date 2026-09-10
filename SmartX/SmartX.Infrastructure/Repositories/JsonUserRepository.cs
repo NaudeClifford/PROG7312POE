@@ -63,36 +63,15 @@ public class JsonUserRepository : IUserRepository
     {
         try
         {
-            Console.WriteLine(
-                $"USER JSON PATH: {_filePath}");
 
-            if (!File.Exists(_filePath))
-            {
-                Console.WriteLine(
-                    "USER JSON DOES NOT EXIST!");
-
-                return [];
-            }
-
+            if (!File.Exists(_filePath))return [];
+            
             var json = await File.ReadAllTextAsync(
                 _filePath,
                 cancellationToken);
 
-            Console.WriteLine(
-                $"USER JSON LENGTH: {json.Length}");
-
             var users =
                 JsonSerializer.Deserialize<List<User>>(json);
-
-            Console.WriteLine(
-                $"USERS LOADED: {users?.Count ?? 0}");
-
-            foreach (var user in users ?? [])
-            {
-                Console.WriteLine(
-                    $"USER: {user.Email} | " +
-                    $"UID: {user.FirebaseUid}");
-            }
 
             return users ?? [];
         }

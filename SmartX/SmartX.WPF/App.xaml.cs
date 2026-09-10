@@ -1,9 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SmartX.Application;
 using SmartX.Application.Authentication;
-using SmartX.Application.Mapping;
 using SmartX.Application.Requests.Gateway;
 using SmartX.Application.Validators;
 using SmartX.WPF.Authentication;
@@ -13,6 +11,7 @@ using SmartX.WPF.Repositories.Local;
 using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
+using SmartX.WPF.Services.Demo;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels;
@@ -33,6 +32,7 @@ using SmartX.WPF.Views.Pages.SignUp;
 using SmartX.WPF.Views.Pages.Telemetry;
 using SmartX.WPF.Views.Pages.Users;
 using System.Windows;
+using SmartX.Shared.Mapping;
 
 namespace SmartX.WPF;
 
@@ -113,11 +113,6 @@ public partial class App
         // SQLite Cache
         services.AddSingleton<SmartXCacheDatabase>();
 
-        //AutoMapper
-        services.AddAutoMapper(cfg =>
-        {
-            cfg.AddProfile<MappingProfile>();
-        });
 
         services.AddScoped< IValidator<CreateGatewayRequest>, CreateGatewayValidator>();
 
@@ -172,6 +167,11 @@ public partial class App
         // Remembered login
         services.AddSingleton<SmartXCredentialStore>();
         services.AddSingleton<SmartXAuthenticationService>();
+
+        //Guest
+        services.AddSingleton<IGuestDemoService, GuestDemoService>();
+
+        services.AddSmartXMapping();
 
     }
 

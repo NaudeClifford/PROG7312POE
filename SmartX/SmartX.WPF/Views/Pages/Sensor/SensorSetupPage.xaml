@@ -263,7 +263,7 @@
                         Height="50"
                         HorizontalAlignment="Right"
                         Padding="30,0"
-                        Command="{Binding CreateSensorCommand}"
+                        Command="{Binding SaveSensorCommand}"
                         FontSize="15"
                         FontWeight="SemiBold"
                         Style="{StaticResource BaseButtonStyle}"/>

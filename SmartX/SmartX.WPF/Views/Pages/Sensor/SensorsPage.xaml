@@ -253,6 +253,7 @@
                     BorderThickness="0"
                     GridLinesVisibility="Horizontal"
                     ItemsSource="{Binding FilteredSensors}"
+                    Background="White"
                     HorizontalAlignment="Stretch">
 
                     <DataGrid.Columns>
@@ -301,6 +302,7 @@
                                         Command="{Binding DataContext.OpenTelemetryCommand,
                                             RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                         CommandParameter="{Binding}"
+                                        Style="{StaticResource SecondaryButtonStyle}"
                                         Padding="12,6"/>
 
                                 </DataTemplate>

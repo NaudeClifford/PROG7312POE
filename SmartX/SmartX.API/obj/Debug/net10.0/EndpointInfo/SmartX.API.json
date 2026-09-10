@@ -153,6 +153,29 @@
         }
       }
     },
+    "/api/Companies/{companyId}/deletion-request/cancel": {
+      "post": {
+        "tags": [
+          "Companies"
+        ],
+        "parameters": [
+          {
+            "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Companies/{companyId}/configuration": {
       "get": {
         "tags": [
@@ -255,6 +278,29 @@
         "parameters": [
           {
             "name": "companyId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Companies/{id}/guest": {
+      "delete": {
+        "tags": [
+          "Companies"
+        ],
+        "parameters": [
+          {
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
@@ -671,6 +717,29 @@
         }
       }
     },
+    "/api/Sensors/gateway/{gatewayId}": {
+      "get": {
+        "tags": [
+          "Sensors"
+        ],
+        "parameters": [
+          {
+            "name": "gatewayId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/": {
       "get": {
         "tags": [
@@ -718,17 +787,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTelemetryCommand"
+                "$ref": "#/components/schemas/CreateTelemetryRequest"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTelemetryCommand"
+                "$ref": "#/components/schemas/CreateTelemetryRequest"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTelemetryCommand"
+                "$ref": "#/components/schemas/CreateTelemetryRequest"
               }
             }
           }
@@ -1094,14 +1163,14 @@
         },
         "additionalProperties": false
       },
-      "CreateTelemetryCommand": {
+      "CreateTelemetryRequest": {
         "type": "object",
         "properties": {
           "sensorId": {
             "type": "string",
             "format": "uuid"
           },
-          "timeStamp": {
+          "timestamp": {
             "type": "string",
             "format": "date-time"
           },
@@ -1340,7 +1409,8 @@
           0,
           1,
           2,
-          3
+          3,
+          4
         ],
         "type": "integer",
         "format": "int32"

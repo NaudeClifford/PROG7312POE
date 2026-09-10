@@ -1,47 +1,43 @@
 ﻿using SmartX.WPF.Navigation;
-using SmartX.WPF.ViewModels;
 using SmartX.WPF.ViewModels.Pages.Sensor;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
+namespace SmartX.WPF.Views.Pages.Sensor;
 
-namespace SmartX.WPF.Views.Pages.Sensor
+public partial class SensorEditPage : Page, INavigationAware
 {
-    /// <summary>
-    /// Interaction logic for SensorEditPage.xaml
-    /// </summary>
-    public partial class SensorEditPage : Page, INavigationAware
+    private readonly SensorViewModel _viewModel;
+
+    public SensorEditPage(SensorViewModel viewModel)
     {
-        public SensorEditPage(SensorViewModel viewModel)
+        InitializeComponent();
+
+        _viewModel = viewModel;
+        DataContext = _viewModel;
+    }
+
+    private void Page_PreviewKeyDown(
+        object sender,
+        KeyEventArgs e)
+    {
+        if (e.Key != Key.Enter)
+            return;
+
+        if (_viewModel.SaveSensorCommand.CanExecute(null))
         {
-            InitializeComponent();
-
-            DataContext = viewModel;
-        }
-
-        private void Page_PreviewKeyDown(
-    object sender,
-    System.Windows.Input.KeyEventArgs e)
-        {
-            if (e.Key != System.Windows.Input.Key.Enter)
-                return;
-
-            if (DataContext is not SigninViewModel viewModel)
-                return;
-
-            if (!viewModel.SignInCommand.CanExecute(null))
-                return;
-
-            viewModel.SignInCommand.Execute(null);
+            _viewModel.SaveSensorCommand.Execute(null);
 
             e.Handled = true;
         }
+    }
 
-        public void OnNavigatedTo(object parameter)
+    public void OnNavigatedTo(object parameter)
+    {
+        if (parameter is Guid sensorId)
         {
-            if (DataContext is INavigationAware navigationAware)
-            {
-                navigationAware.OnNavigatedTo(parameter);
-            }
+            _viewModel.OnNavigatedTo(sensorId);
         }
     }
 }

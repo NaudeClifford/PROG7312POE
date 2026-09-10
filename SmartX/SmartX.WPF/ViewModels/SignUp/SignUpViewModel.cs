@@ -28,11 +28,18 @@ public class SignUpViewModel : ViewModelBase
     private string _confirmPassword = string.Empty;
 
     private bool _hasError;
+    private bool _isGuestSignup;
 
     private const int CompanyStep = 1;
     private const int AdministratorStep = 2;
     private const int ServicesStep = 3;
     private const int GatewayStep = 4;
+
+    private static readonly Guid GuestUserId =
+        Guid.Parse("11111111-1111-1111-1111-111111111111");
+
+    private static readonly Guid GuestCompanyId =
+        Guid.Parse("22222222-2222-2222-2222-222222222222");
 
     public SignUpViewModel(
         IAuthenticationService authenticationService,
@@ -59,12 +66,22 @@ public class SignUpViewModel : ViewModelBase
             () => CanGoBack);
     }
 
-    // STEP STATE
+    public bool IsGuestSignup
+    {
+        get => _isGuestSignup;
+        private set => SetProperty(
+            ref _isGuestSignup,
+            value);
+    }
+
+    public void SetGuestSignupMode(bool isGuestSignup)
+    {
+        IsGuestSignup = isGuestSignup;
+    }
 
     public int CurrentStep
     {
         get => _currentStep;
-
         private set
         {
             if (_currentStep == value)
@@ -73,7 +90,6 @@ public class SignUpViewModel : ViewModelBase
             _currentStep = value;
 
             OnPropertyChanged();
-
             OnPropertyChanged(nameof(IsCompanyStep));
             OnPropertyChanged(nameof(IsAdministratorStep));
             OnPropertyChanged(nameof(IsServicesStep));
@@ -105,42 +121,22 @@ public class SignUpViewModel : ViewModelBase
     public string StepTitle =>
         CurrentStep switch
         {
-            CompanyStep =>
-                "Create your company",
-
-            AdministratorStep =>
-                "Create your administrator account",
-
-            ServicesStep =>
-                "Configure company services",
-
-            GatewayStep =>
-                "Set up your gateway",
-
-            _ =>
-                string.Empty
+            CompanyStep => "Create your company",
+            AdministratorStep => "Create your administrator account",
+            ServicesStep => "Configure company services",
+            GatewayStep => "Set up your gateway",
+            _ => string.Empty
         };
 
     public string ButtonText =>
         CurrentStep switch
         {
-            CompanyStep =>
-                "Continue",
-
-            AdministratorStep =>
-                "Create Administrator",
-
-            ServicesStep =>
-                "Continue",
-
-            GatewayStep =>
-                "Create Gateway",
-
-            _ =>
-                "Continue"
+            CompanyStep => "Continue",
+            AdministratorStep => "Create Administrator",
+            ServicesStep => "Continue",
+            GatewayStep => "Create Gateway",
+            _ => "Continue"
         };
-
-    // COMPANY
 
     public string CompanyName
     {
@@ -157,8 +153,6 @@ public class SignUpViewModel : ViewModelBase
             ref _companyDescription,
             value);
     }
-
-    // ADMINISTRATOR
 
     public string DisplayName
     {
@@ -192,26 +186,19 @@ public class SignUpViewModel : ViewModelBase
             value);
     }
 
-    // ERROR
-
     public bool HasError
     {
         get => _hasError;
-
         private set => SetProperty(
             ref _hasError,
             value);
     }
-
-    // COMMANDS
 
     public AsyncRelayCommand ContinueCommand { get; }
 
     public AsyncRelayCommand CancelCommand { get; }
 
     public AsyncRelayCommand BackCommand { get; }
-
-    // FLOW
 
     private async Task ContinueAsync()
     {
@@ -224,7 +211,15 @@ public class SignUpViewModel : ViewModelBase
                 break;
 
             case AdministratorStep:
-                await RegisterAsync();
+                if (IsGuestSignup)
+                {
+                    StartGuestSession();
+                }
+                else
+                {
+                    await RegisterAsync();
+                }
+
                 break;
 
             case ServicesStep:
@@ -235,9 +230,6 @@ public class SignUpViewModel : ViewModelBase
                 break;
         }
     }
-
-
-    // STEP 1
 
     private void ContinueFromCompanyStep()
     {
@@ -252,8 +244,56 @@ public class SignUpViewModel : ViewModelBase
         CurrentStep = AdministratorStep;
     }
 
-    // STEP 2
-    // FIREBASE + SMARTX REGISTRATION
+    private void StartGuestSession()
+    {
+        try
+        {
+            IsBusy = true;
+            ClearError();
+
+            var userName =
+                string.IsNullOrWhiteSpace(DisplayName)
+                    ? "Demo Administrator"
+                    : DisplayName.Trim();
+
+            var companyName =
+                string.IsNullOrWhiteSpace(CompanyName)
+                    ? "SmartX Demo Company"
+                    : CompanyName.Trim();
+
+            if(Session.FirebaseUid == null || Session.IdToken == null || Session.RefreshToken == null)
+            {
+                throw new InvalidOperationException(
+                    "Session information is incomplete.");
+            }
+
+            Session.StartGuestSession(
+                GuestUserId,
+                GuestCompanyId,
+                userName,
+                companyName,
+                Session.FirebaseUid,
+                Session.IdToken,
+                Session.RefreshToken);
+
+
+            CurrentStep = ServicesStep;
+
+            _navigationService.NavigateTo<CompanyServicesPage>(
+                "OnBoarding");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                ex.ToString());
+
+            ShowError(ex.Message);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
 
     private async Task RegisterAsync()
     {
@@ -292,8 +332,7 @@ public class SignUpViewModel : ViewModelBase
         try
         {
             IsBusy = true;
-
-            // 1. Create Firebase account
+            ErrorMessage = string.Empty;
 
             var firebaseResult =
                 await _authenticationService.SignUpAsync(
@@ -309,28 +348,23 @@ public class SignUpViewModel : ViewModelBase
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(
-                firebaseResult.UserId))
+            if (string.IsNullOrWhiteSpace(firebaseResult.UserId))
             {
                 throw new InvalidOperationException(
                     "Firebase did not return a user ID.");
             }
 
-            if (string.IsNullOrWhiteSpace(
-                firebaseResult.IdToken))
+            if (string.IsNullOrWhiteSpace(firebaseResult.IdToken))
             {
                 throw new InvalidOperationException(
                     "Firebase did not return an ID token.");
             }
 
-            if (string.IsNullOrWhiteSpace(
-                firebaseResult.RefreshToken))
+            if (string.IsNullOrWhiteSpace(firebaseResult.RefreshToken))
             {
                 throw new InvalidOperationException(
                     "Firebase did not return a refresh token.");
             }
-
-            // 2. Register Company + Administrator
 
             var registrationRequest =
                 new RegisterCompanyRequest
@@ -352,8 +386,6 @@ public class SignUpViewModel : ViewModelBase
                 await _apiClient.RegisterCompanyAsync(
                     registrationRequest);
 
-            // 3. Validate registration response
-
             if (registration.CompanyId == Guid.Empty)
             {
                 throw new InvalidOperationException(
@@ -366,36 +398,34 @@ public class SignUpViewModel : ViewModelBase
                     "Registration did not return the administrator.");
             }
 
-            // 4. Establish SmartX session
-
             Session.SignIn(
                 registration.User,
+                CompanyName.Trim(),
                 firebaseResult.IdToken,
                 firebaseResult.RefreshToken);
 
-            // 5. Continue to services
-
             CurrentStep = ServicesStep;
 
-            _navigationService
-                .NavigateTo<CompanyServicesPage>("OnBoarding");
+            _navigationService.NavigateTo<CompanyServicesPage>(
+                "OnBoarding");
         }
-        catch (InvalidOperationException ex)
+        catch (HttpRequestException)
         {
-            ShowError(ex.Message);
+            ShowError(
+                "Unable to connect to the SmartX API.");
         }
         catch (Exception ex)
         {
-            ShowError(
-                $"Registration failed: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine(
+                ex.ToString());
+
+            ShowError(ex.Message);
         }
         finally
         {
             IsBusy = false;
         }
     }
-
-    // STEP 3 → STEP 4
 
     private async Task ContinueToGatewayAsync()
     {
@@ -409,12 +439,11 @@ public class SignUpViewModel : ViewModelBase
 
         CurrentStep = GatewayStep;
 
-        _navigationService
-            .NavigateTo<GatewaySetupPage>("OnBoarding");
+        _navigationService.NavigateTo<GatewaySetupPage>(
+            "OnBoarding");
 
         await Task.CompletedTask;
     }
-    // BACK
 
     private async Task BackAsync()
     {
@@ -426,31 +455,22 @@ public class SignUpViewModel : ViewModelBase
         switch (CurrentStep)
         {
             case AdministratorStep:
-
                 CurrentStep = CompanyStep;
-
                 break;
 
             case ServicesStep:
-
                 CurrentStep = AdministratorStep;
-
                 break;
 
             case GatewayStep:
-
                 CurrentStep = ServicesStep;
 
-                _navigationService
-                    .NavigateTo<CompanyServicesPage>();
-
+                _navigationService.NavigateTo<CompanyServicesPage>();
                 break;
         }
 
         await Task.CompletedTask;
     }
-
-    // CANCEL
 
     private async Task CancelAsync()
     {
@@ -460,8 +480,6 @@ public class SignUpViewModel : ViewModelBase
 
         await Task.CompletedTask;
     }
-
-    // ERROR HANDLING
 
     private void ClearError()
     {

@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartX.Application.Commands.Telemetry;
 using SmartX.Application.Queries.Telemetry;
+using SmartX.Application.Requests.Telemetry;
 
 namespace SmartX.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 [Authorize(Roles = "Administrator, Technician")]
-
 public class TelemetryController : ControllerBase
 {
     private readonly CreateTelemetryHandler _createTelemetryHandler;
@@ -35,7 +35,7 @@ public class TelemetryController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> CreateTelemetry(
-        CreateTelemetryCommand command,
+        CreateTelemetryRequest command,
         CancellationToken cancellationToken)
     {
         var result =
@@ -43,10 +43,9 @@ public class TelemetryController : ControllerBase
                 command,
                 cancellationToken);
 
-        if (!result.Success)
-            return BadRequest(result);
-
-        return Ok(result);
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
     }
 
     [HttpGet("{id:guid}")]
@@ -54,18 +53,23 @@ public class TelemetryController : ControllerBase
         Guid id,
         CancellationToken cancellationToken)
     {
+        if (id == Guid.Empty)
+            return BadRequest("Telemetry ID is required.");
+
         var result =
             await _getTelemetryByIdHandler.HandleAsync(
                 new GetTelemetryByIdQuery
                 {
                     TelemetryId = id
-                },
+                }, User,
                 cancellationToken);
 
-        if (!result.Success)
-            return NotFound(result);
+        if (result.Success)
+            return Ok(result);
 
-        return Ok(result);
+        return result.Error == "Telemetry not found."
+            ? NotFound(result)
+            : BadRequest(result);
     }
 
     [HttpGet("sensor/{sensorId:guid}")]
@@ -73,18 +77,20 @@ public class TelemetryController : ControllerBase
         Guid sensorId,
         CancellationToken cancellationToken)
     {
+        if (sensorId == Guid.Empty)
+            return BadRequest("Sensor ID is required.");
+
         var result =
             await _getTelemetryBySensorHandler.HandleAsync(
                 new GetTelemetryBySensorQuery
                 {
                     SensorId = sensorId
-                },
+                }, User ,
                 cancellationToken);
 
-        if (!result.Success)
-            return BadRequest(result);
-
-        return Ok(result);
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
     }
 
     [HttpGet("sensor/{sensorId:guid}/latest")]
@@ -92,18 +98,24 @@ public class TelemetryController : ControllerBase
         Guid sensorId,
         CancellationToken cancellationToken)
     {
+        if (sensorId == Guid.Empty)
+            return BadRequest("Sensor ID is required.");
+
         var result =
             await _getLatestTelemetryBySensorHandler.HandleAsync(
                 new GetLatestTelemetryBySensorQuery
                 {
                     SensorId = sensorId
                 },
+                User,
                 cancellationToken);
 
-        if (!result.Success)
-            return NotFound(result);
+        if (result.Success)
+            return Ok(result);
 
-        return Ok(result);
+        return result.Error == "Telemetry not found."
+            ? NotFound(result)
+            : BadRequest(result);
     }
 
     [HttpGet("sensor/{sensorId:guid}/history")]
@@ -113,6 +125,13 @@ public class TelemetryController : ControllerBase
         [FromQuery] DateTime to,
         CancellationToken cancellationToken)
     {
+        if (sensorId == Guid.Empty)
+            return BadRequest("Sensor ID is required.");
+
+        if (from > to)
+            return BadRequest(
+                "The 'from' date must be before the 'to' date.");
+
         var result =
             await _getTelemetryByDateRangeHandler.HandleAsync(
                 new GetTelemetryByDateRangeQuery
@@ -121,11 +140,11 @@ public class TelemetryController : ControllerBase
                     From = from,
                     To = to
                 },
+                User,
                 cancellationToken);
 
-        if (!result.Success)
-            return BadRequest(result);
-
-        return Ok(result);
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
     }
 }

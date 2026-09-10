@@ -124,7 +124,6 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\SmartX.API
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\SmartX.API.runtimeconfig.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\SmartX.API.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\SmartX.API.pdb
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\AutoMapper.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\DnsClient.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\FirebaseAdmin.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\FluentValidation.dll
@@ -191,3 +190,5 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\refint\Sma
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.genruntimeconfig.cache
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\ref\SmartX.API.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Mapster.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Mapster.Core.dll

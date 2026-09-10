@@ -1,12 +1,15 @@
-﻿using AutoMapper;
-using SmartX.Application.Requests.Company;
+﻿using SmartX.Application.Requests.Company;
 using SmartX.Domain.Enums;
+using SmartX.Shared.Mapping;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.ViewModels.Base;
+using SmartX.WPF.Views.Pages.Company;
+using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.Home;
+using SmartX.WPF.Views.Pages.SignUp;
 using SmartX.WPF.Views.Pages.Users;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -32,7 +35,9 @@ public class CompanyViewModel :
 
     private DomainCompany.Company? _selectedCompany;
 
-    // Current company details
+    // Current company detail
+
+
     private Guid _companyId;
     private string _companyName = string.Empty;
     private string _description = string.Empty;
@@ -57,6 +62,9 @@ public class CompanyViewModel :
             {
                 return;
             }
+            OnPropertyChanged(nameof(DeletionRequested));
+            OnPropertyChanged(nameof(RequestDeletionVisibility));
+            OnPropertyChanged(nameof(CancelDeletionVisibility));
 
             RaiseCommandStates();
         }
@@ -75,6 +83,9 @@ public class CompanyViewModel :
 
     private string _editCompanyName = string.Empty;
     private string _editDescription = string.Empty;
+
+    public bool DeletionRequested =>
+    SelectedCompany?.DeletionRequested ?? false;
 
     public string EditCompanyName
     {
@@ -174,6 +185,12 @@ public class CompanyViewModel :
     public AsyncRelayCommand RequestDeletionCommand { get; }
 
     public AsyncRelayCommand DeleteCompanyCommand { get; }
+    public AsyncRelayCommand ForceDeleteCompanyCommand { get; }
+
+    public AsyncRelayCommand CancelDeletionCommand { get; }
+    public AsyncRelayCommand CompanyConfigurationCommand { get; }
+    public AsyncRelayCommand ContinueToGatewaySetupCommand { get; }
+
 
     // CONSTRUCTOR
 
@@ -202,6 +219,12 @@ public class CompanyViewModel :
                 OpenUsersAsync,
                 CanOpenUsers);
 
+        ContinueToGatewaySetupCommand =
+    new AsyncRelayCommand(
+        ContinueToGatewaySetupAsync,
+        CanContinueToGatewaySetup);
+
+
         DeleteCompanyCommand =
     new AsyncRelayCommand(
         DeleteCompanyAsync,
@@ -224,6 +247,41 @@ public class CompanyViewModel :
                 CancelEditAsync,
                 () => !IsBusy);
 
+
+        CancelDeletionCommand =
+    new AsyncRelayCommand(
+        CancelDeletionAsync,
+        CanCancelDeletion);
+        
+        ForceDeleteCompanyCommand =
+    new AsyncRelayCommand(
+        ForceDeleteCompanyAsync,
+        CanForceDeleteCompany);
+
+        CompanyConfigurationCommand =
+    new AsyncRelayCommand(
+        OpenCompanyConfigurationAsync,
+        CanOpenCompanyConfiguration);
+
+
+    }
+    private bool CanContinueToGatewaySetup()
+    {
+        return !IsBusy &&
+               IsOnline &&
+               Session.IsAuthenticated &&
+               Session.Role == UserRole.Administrator &&
+               CompanyId != Guid.Empty;
+    }
+
+    private async Task ContinueToGatewaySetupAsync()
+    {
+        if (!CanContinueToGatewaySetup())
+            return;
+
+        _navigationService.NavigateTo<GatewaySetupPage>();
+
+        await Task.CompletedTask;
     }
 
 
@@ -235,6 +293,11 @@ public class CompanyViewModel :
         IsAdministrator
             ? Visibility.Visible
             : Visibility.Collapsed;
+
+    public Visibility AdministratorOnlyVisibility =>
+    Session.Role == UserRole.Administrator
+        ? Visibility.Visible
+        : Visibility.Collapsed;
 
     public Visibility ReadOnlyVisibility =>
         IsAdministrator
@@ -249,15 +312,27 @@ public class CompanyViewModel :
 
     public void OnNavigatedTo(object parameter)
     {
+        Guid companyId;
 
-        if (parameter is Guid companyId)
+        if (parameter is Guid parameterCompanyId &&
+            parameterCompanyId != Guid.Empty)
         {
-            _ = LoadCompanyAsync(companyId);
+            companyId = parameterCompanyId;
+        }
+        else
+        {
+            companyId = Session.SelectedCompanyId;
+        }
+
+        if (companyId == Guid.Empty)
+        {
+            ErrorMessage = "No current company is selected.";
             return;
         }
 
-        _ = LoadAsync();
+        _ = LoadCompanyAsync(companyId);
     }
+
 
     // LOAD COMPANIES
 
@@ -283,16 +358,6 @@ public class CompanyViewModel :
                     "You do not have permission to view companies.";
 
                 RaiseCounts();
-
-                return;
-            }
-
-            // API
-
-            if (!await CheckOnlineAsync(cancellationToken))
-            {
-                ErrorMessage =
-                    "Unable to connect to the SmartX API.";
 
                 return;
             }
@@ -355,9 +420,6 @@ public class CompanyViewModel :
             IsBusy = true;
             ErrorMessage = string.Empty;
 
-            if (!await RequireOnlineAsync())
-                return;
-
             var companyId = SelectedCompany.Id;
 
             var success =
@@ -407,8 +469,8 @@ public class CompanyViewModel :
 
     // LOAD CURRENT / SELECTED COMPANY
     public async Task LoadCompanyAsync(
-        Guid companyId,
-        CancellationToken cancellationToken = default)
+    Guid companyId,
+    CancellationToken cancellationToken = default)
     {
         if (IsBusy)
             return;
@@ -418,33 +480,15 @@ public class CompanyViewModel :
             IsBusy = true;
             ErrorMessage = string.Empty;
 
-            // AUTHENTICATION
-
             if (!Session.IsAuthenticated)
             {
-                ErrorMessage =
-                    "You are not authenticated.";
-
+                ErrorMessage = "You are not authenticated.";
                 return;
             }
-
-            // COMPANY
 
             if (companyId == Guid.Empty)
             {
-                ErrorMessage =
-                    "No company was specified.";
-
-                return;
-            }
-
-            // API
-
-            if (!await CheckOnlineAsync(cancellationToken))
-            {
-                ErrorMessage =
-                    "Unable to connect to the SmartX API.";
-
+                ErrorMessage = "No company was specified.";
                 return;
             }
 
@@ -455,50 +499,29 @@ public class CompanyViewModel :
 
             if (companyDTO is null)
             {
-                ErrorMessage =
-                    "The company could not be found.";
-
+                ErrorMessage = "The company could not be found.";
                 return;
             }
 
-            // UPDATE VIEWMODEL
-            var company = _mapper.Map<DomainCompany.Company>(companyDTO);
-            CompanyId =
-                company.Id;
+            var company =
+                _mapper.Map<DomainCompany.Company>(companyDTO);
 
-            CompanyName =
-                company.Name ?? string.Empty;
+            // CURRENT COMPANY DETAILS
 
-            Description =
-                company.Description ?? string.Empty;
+            CompanyId = company.Id;
+            CompanyName = company.Name ?? string.Empty;
+            Description = company.Description ?? string.Empty;
+            IsActive = company.IsActive;
+            UpdatedAt = company.UpdatedAt;
+
+            // EDIT VALUES
 
             EditCompanyName = CompanyName;
             EditDescription = Description;
 
-            IsActive =
-                company.IsActive;
+            // CURRENT SELECTED COMPANY
 
-            UpdatedAt =
-                company.UpdatedAt;
-
-
-            // UPDATE SELECTED COMPANY
-
-            var existing =
-                Companies.FirstOrDefault(
-                    x => x.Id == company.Id);
-
-            if (existing is not null)
-            {
-                SelectedCompany = existing;
-            }
-            else
-            {
-                Companies.Add(company);
-                SelectedCompany = company;
-            }
-            RaiseCounts();
-
+            SelectedCompany = company;
         }
         catch (OperationCanceledException)
         {
@@ -506,7 +529,6 @@ public class CompanyViewModel :
         }
         catch (HttpRequestException)
         {
-
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
         }
@@ -520,6 +542,7 @@ public class CompanyViewModel :
             RaiseCommandStates();
         }
     }
+
 
     // OPEN USERS
     private bool CanOpenUsers()
@@ -547,6 +570,27 @@ public class CompanyViewModel :
 
         await Task.CompletedTask;
     }
+
+
+    private bool CanOpenCompanyConfiguration()
+    {
+        return !IsBusy &&
+               IsOnline &&
+               Session.IsAuthenticated &&
+               Session.CompanyId != Guid.Empty &&
+               Session.Role is UserRole.Administrator;
+    }
+
+    private async Task OpenCompanyConfigurationAsync()
+    {
+        if (!CanOpenCompanyConfiguration())
+            return;
+
+        _navigationService.NavigateTo<CompanyServicesPage>();
+
+        await Task.CompletedTask;
+    }
+
 
     // REFRESH
     private bool CanRefresh()
@@ -587,40 +631,65 @@ public class CompanyViewModel :
         DeleteCompanyCommand?
     .RaiseCanExecuteChanged();
 
+        CompanyConfigurationCommand?
+    .RaiseCanExecuteChanged();
+
+
 
         SaveCompanyCommand?
     .RaiseCanExecuteChanged();
 
         RequestDeletionCommand?
     .RaiseCanExecuteChanged();
+        
+        ForceDeleteCompanyCommand?
+    .RaiseCanExecuteChanged();
 
         CancelEditCommand?
             .RaiseCanExecuteChanged();
 
+        OnPropertyChanged(nameof(AdministratorOnlyVisibility));
         OnPropertyChanged(nameof(IsAdministrator));
         OnPropertyChanged(nameof(AdministratorEditVisibility));
         OnPropertyChanged(nameof(ReadOnlyVisibility));
         OnPropertyChanged(nameof(RequestDeletionVisibility));
+        OnPropertyChanged(nameof(CancelDeletionVisibility));
+        OnPropertyChanged(nameof(DeletionRequested));
 
 
     }
 
     public Visibility RequestDeletionVisibility =>
-    Session.Role == UserRole.Administrator ||
-    Session.Role == UserRole.SuperAdmin
-        ? Visibility.Visible
-        : Visibility.Collapsed;
+        Session.Role == UserRole.Administrator &&
+        !DeletionRequested
+            ? Visibility.Visible
+            : Visibility.Collapsed;
+
+    public Visibility CancelDeletionVisibility =>
+        Session.Role == UserRole.Administrator &&
+        DeletionRequested
+            ? Visibility.Visible
+            : Visibility.Collapsed;
 
 
     // SESSION
     protected override void OnSessionPropertyChanged(
-        PropertyChangedEventArgs e)
+    PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(SmartXSession.Role) ||
             e.PropertyName == nameof(SmartXSession.SelectedCompanyId))
-                RaiseCommandStates();
-        
+        {
+            OnPropertyChanged(nameof(CurrentCompanyId));
+            RaiseCommandStates();
+
+            if (e.PropertyName == nameof(SmartXSession.SelectedCompanyId) &&
+                Session.SelectedCompanyId != Guid.Empty)
+            {
+                _ = LoadCompanyAsync(Session.SelectedCompanyId);
+            }
+        }
     }
+
     // CONNECTIVITY
 
     protected override void RaiseConnectivityState()
@@ -648,9 +717,6 @@ public class CompanyViewModel :
         {
             IsBusy = true;
             ErrorMessage = string.Empty;
-
-            if (!await RequireOnlineAsync())
-                return;
 
             var request = new UpdateCompanyRequest
             {
@@ -720,14 +786,80 @@ public class CompanyViewModel :
         return Task.CompletedTask;
     }
 
+    private bool CanCancelDeletion()
+    {
+        return !IsBusy &&
+               IsOnline &&
+               Session.IsAuthenticated &&
+               Session.Role == UserRole.Administrator &&
+               CompanyId != Guid.Empty &&
+               _selectedCompany?.DeletionRequested == true;
+    }
+
+    private async Task CancelDeletionAsync()
+    {
+        if (!CanCancelDeletion())
+            return;
+
+        try
+        {
+            IsBusy = true;
+            ErrorMessage = string.Empty;
+
+            var success =
+                await _apiClient.CancelDeletionAsync(
+                    CompanyId);
+
+            if (!success)
+            {
+                ErrorMessage =
+                    "The company deletion request could not be cancelled.";
+
+                return;
+            }
+
+            if (SelectedCompany is not null)
+            {
+                SelectedCompany.DeletionRequested = false;
+            }
+
+            OnPropertyChanged(nameof(DeletionRequested));
+            OnPropertyChanged(nameof(RequestDeletionVisibility));
+            OnPropertyChanged(nameof(CancelDeletionVisibility));
+            RaiseCommandStates();
+
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (HttpRequestException)
+        {
+            ErrorMessage =
+                "Unable to connect to the SmartX API.";
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+            RaiseCommandStates();
+        }
+    }
 
     private bool CanRequestDeletion()
     {
         return !IsBusy &&
                IsOnline &&
                Session.IsAuthenticated &&
-               CompanyId != Guid.Empty;
+               Session.Role == UserRole.Administrator &&
+               CompanyId != Guid.Empty &&
+               (SelectedCompany is null ||
+                !SelectedCompany.DeletionRequested);
     }
+
     private async Task RequestDeletionAsync()
     {
         if (!CanRequestDeletion())
@@ -738,23 +870,121 @@ public class CompanyViewModel :
             IsBusy = true;
             ErrorMessage = string.Empty;
 
-            if (!await RequireOnlineAsync())
-                return;
-
             var success =
                 await _apiClient.RequestCompanyDeletionAsync(
                     CompanyId);
 
+            if (SelectedCompany is not null)
+            {
+                SelectedCompany.DeletionRequested = true;
+            }
+
+            OnPropertyChanged(nameof(DeletionRequested));
+            OnPropertyChanged(nameof(RequestDeletionVisibility));
+            OnPropertyChanged(nameof(CancelDeletionVisibility));
+            RaiseCommandStates();
+
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (HttpRequestException)
+        {
+            ErrorMessage =
+                "Unable to connect to the SmartX API.";
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+            RaiseCommandStates();
+        }
+    }
+
+    private bool CanForceDeleteCompany()
+    {
+        return !IsBusy &&
+               IsOnline &&
+               Session.Role == UserRole.SuperAdmin &&
+               SelectedCompany is not null;
+    }
+
+    private async Task ForceDeleteCompanyAsync()
+    {
+        if (!CanForceDeleteCompany())
+            return;
+
+        if (SelectedCompany is null)
+            return;
+
+        var companyName =
+            SelectedCompany.Name;
+
+        var firstConfirmation =
+            MessageBox.Show(
+                $"You are about to permanently delete '{companyName}'.\n\n" +
+                "This will remove the company and ALL linked data, including:\n\n" +
+                "• Users\n" +
+                "• Sensors\n" +
+                "• Gateways\n" +
+                "• Other company-linked records\n\n" +
+                "This action cannot be undone.\n\n" +
+                "Are you sure you want to continue?",
+                "FORCE DELETE COMPANY",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+        if (firstConfirmation != MessageBoxResult.Yes)
+            return;
+
+        var secondConfirmation =
+            MessageBox.Show(
+                $"FINAL CONFIRMATION\n\n" +
+                $"Permanently delete '{companyName}' and ALL linked users, " +
+                "sensors, gateways, and other company data?\n\n" +
+                "There is no undo for this operation.",
+                "Confirm Permanent Deletion",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Stop);
+
+        if (secondConfirmation != MessageBoxResult.Yes)
+            return;
+
+        try
+        {
+            IsBusy = true;
+            ErrorMessage = string.Empty;
+
+            var companyId =
+                SelectedCompany.Id;
+
+            var success =
+                await _apiClient.DeleteCompanyAsync(
+                    companyId);
+
             if (!success)
             {
                 ErrorMessage =
-                    "The company deletion request could not be submitted.";
+                    "The company could not be permanently deleted.";
 
                 return;
             }
 
-            ErrorMessage =
-                "Your company deletion request has been submitted.";
+            Companies.Remove(SelectedCompany);
+
+            SelectedCompany = null;
+
+            CompanyId = Guid.Empty;
+            CompanyName = string.Empty;
+            Description = string.Empty;
+            EditCompanyName = string.Empty;
+            EditDescription = string.Empty;
+
+            RaiseCounts();
         }
         catch (OperationCanceledException)
         {

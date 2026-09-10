@@ -57,7 +57,7 @@
                         <TextBlock Text="{Binding CurrentCompanyName}"
                                    Margin="0,5,0,0"
                                    FontSize="14"
-                                   Foreground="#6B7280"/>
+                                   Foreground="{StaticResource LightTextBrush}"/>
 
                     </StackPanel>
 
@@ -75,6 +75,13 @@
                                                   
                                 Style="{StaticResource BaseButtonStyle}"
                                 Padding="18,9"/>
+
+                        <Button Content="Delete User"
+        Command="{Binding DeleteUserCommand}"
+        Padding="18,9"
+        Style="{StaticResource BaseButtonStyle}"
+        Margin="0,0,10,0"/>
+
 
                     </StackPanel>
 
@@ -244,6 +251,7 @@
                     <Button Grid.Column="5"
                             Content="Clear"
                             Command="{Binding ClearFiltersCommand}"
+                            Style="{StaticResource BaseButtonStyle}"
                             Padding="16,7"
                             Margin="10,18,0,0"/>
 
@@ -406,7 +414,7 @@
                     <TextBlock Grid.Row="0"
                                Text="{Binding ErrorMessage}"
                                Foreground="#DC2626"
-                               Margin="18,14"
+                               Margin="18,-2"
                                TextWrapping="Wrap"/>
 
 
@@ -414,12 +422,13 @@
                     <DataGrid Grid.Row="1"
                               ItemsSource="{Binding FilteredUsers}"
                               SelectedItem="{Binding SelectedUser}"
+                              Background="White"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               IsReadOnly="True"
                               HeadersVisibility="Column"
                               SelectionMode="Single"
-                              Margin="14">
+                              Margin="5">
 
                         <DataGrid.Columns>
 
@@ -579,6 +588,7 @@
                         <Button Grid.Column="1"
                                 Content="Cancel"
                                 Command="{Binding CancelCommand}"
+                                Style="{StaticResource BaseButtonStyle}"
                                 Padding="18,9"/>
 
                     </Grid>
@@ -757,11 +767,13 @@
 
                                 <Button Content="Save User"
                                         Command="{Binding SaveUserCommand}"
+                                        Style="{StaticResource BaseButtonStyle}"
                                         Padding="22,10"
                                         Margin="0,0,10,0"/>
 
                                 <Button Content="Cancel"
                                         Command="{Binding CancelCommand}"
+                                        Style="{StaticResource BaseButtonStyle}"
                                         Padding="22,10"/>
 
                             </StackPanel>

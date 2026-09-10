@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using SmartX.Application.Mapping;
+using SmartX.Application.Commands.Telemetry;
 using SmartX.Application.Queries.Telemetry;
 using SmartX.Application.Queries.Users;
 using SmartX.Application.Services;
@@ -9,6 +9,8 @@ using SmartX.Application.Services.Registration;
 using SmartX.Application.Validators;
 using SmartX.Application.Validators.Company;
 using SmartX.Application.Validators.Sensor;
+using SmartX.Domain.Interfaces;
+using SmartX.Shared.Mapping;
 
 namespace SmartX.Application;
 
@@ -17,6 +19,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(
         this IServiceCollection services)
     {
+
         //Validators
         services.AddValidatorsFromAssemblyContaining<CreateSensorValidator>();
         services.AddValidatorsFromAssemblyContaining<CreateCompanyValidator>();
@@ -37,6 +40,8 @@ public static class DependencyInjection
         services.AddScoped<GetLatestTelemetryBySensorHandler>();
         services.AddScoped<GetTelemetryByDateRangeHandler>();
         services.AddScoped<GetTelemetryByIdHandler>();
+        services.AddScoped<CreateTelemetryHandler>();
+
 
         //User handlers
         services.AddScoped<GetUserByFirebaseUidHandler>();
@@ -46,12 +51,7 @@ public static class DependencyInjection
         services.AddScoped<AuditLogService>();
         services.AddScoped<RegistrationService>();
 
-
-        //Auto Mapper
-        services.AddAutoMapper(cfg =>
-        {
-            cfg.AddProfile<MappingProfile>();
-        });
+        services.AddSmartXMapping();
 
         return services;
     }

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using SmartX.Application.Requests.Telemetry;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.Models;
 
@@ -8,12 +9,12 @@ public class CreateTelemetryHandler
 {
     private readonly ITelemetryRepository _telemetryRepository;
     private readonly ISensorRepository _sensorRepository;
-    private readonly IValidator<CreateTelemetryCommand> _validator;
+    private readonly IValidator<CreateTelemetryRequest> _validator;
 
     public CreateTelemetryHandler(
         ITelemetryRepository telemetryRepository,
         ISensorRepository sensorRepository,
-        IValidator<CreateTelemetryCommand> validator)
+        IValidator<CreateTelemetryRequest> validator)
     {
         _telemetryRepository = telemetryRepository;
         _sensorRepository = sensorRepository;
@@ -21,12 +22,12 @@ public class CreateTelemetryHandler
     }
 
     public async Task<Result<Guid>> HandleAsync(
-        CreateTelemetryCommand command,
+        CreateTelemetryRequest request,
         CancellationToken cancellationToken = default)
     {
         var validationResult =
             await _validator.ValidateAsync(
-                command,
+                request,
                 cancellationToken);
 
         if (!validationResult.IsValid)
@@ -41,7 +42,7 @@ public class CreateTelemetryHandler
 
         var sensor =
             await _sensorRepository.GetByIdAsync(
-                command.SensorId,
+                request.SensorId,
                 cancellationToken);
 
         if (sensor is null)
@@ -52,18 +53,32 @@ public class CreateTelemetryHandler
 
         var now = DateTime.UtcNow;
 
-        var telemetry = new Domain.Entities.Telemetry
-        {
-            Id = Guid.NewGuid(),
-            SensorId = command.SensorId,
-            Timestamp = command.TimeStamp,
-            Voltage = command.Voltage,
-            Current = command.Current,
-            Power = command.Power,
-            Temperature = command.Temperature,
-            CreatedAt = now,
-            UpdatedAt = now
-        };
+        var telemetry =
+            new SmartX.Domain.Entities.Telemetry
+            {
+                Id = Guid.NewGuid(),
+
+                SensorId =
+                    request.SensorId,
+
+                Timestamp =
+                    request.Timestamp,
+
+                Voltage =
+                    request.Voltage,
+
+                Current =
+                    request.Current,
+
+                Power =
+                    request.Power,
+
+                Temperature =
+                    request.Temperature,
+
+                CreatedAt = now,
+                UpdatedAt = now
+            };
 
         await _telemetryRepository.AddAsync(
             telemetry,

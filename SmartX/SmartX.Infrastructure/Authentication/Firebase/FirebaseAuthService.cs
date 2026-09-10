@@ -4,10 +4,11 @@ using FirebaseAdmin.Auth;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Options;
 using SmartX.Application.Authentication;
+using SmartX.Domain.Interfaces;
 
 namespace SmartX.Infrastructure.Authentication.Firebase;
 
-public class FirebaseAuthService : IFirebaseTokenService
+public class FirebaseAuthService : IFirebaseTokenService, IFirebaseUserService
 {
     private readonly FirebaseOptions _options;
 
@@ -40,13 +41,16 @@ public class FirebaseAuthService : IFirebaseTokenService
                 serviceAccountPath);
         }
 
+        var credential = GoogleCredential.FromFile(
+            serviceAccountPath);
+
         FirebaseApp.Create(new AppOptions
         {
-            Credential = GoogleCredential.FromFile(serviceAccountPath),
-
+            Credential = credential,
             ProjectId = _options.ProjectId
         });
     }
+
     public async Task<FirebaseToken> VerifyTokenAsync(
     string idToken,
     CancellationToken cancellationToken = default)
@@ -92,17 +96,24 @@ public class FirebaseAuthService : IFirebaseTokenService
     }
 
     public async Task DeleteUserAsync(
-    string firebaseUid,
-    CancellationToken cancellationToken = default)
+     string firebaseUid,
+     CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(firebaseUid))
-        {
-            throw new ArgumentException(
-                "Firebase UID is required.",
-                nameof(firebaseUid));
-        }
+            return;
 
-        await FirebaseAuth.DefaultInstance
-            .DeleteUserAsync(firebaseUid);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        InitializeFirebase();
+
+        try
+        {
+            await FirebaseAuth.DefaultInstance.DeleteUserAsync(
+                firebaseUid);
+        }
+        catch (FirebaseAuthException)
+        {
+        }
     }
+
 }

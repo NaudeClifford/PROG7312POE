@@ -132,9 +132,15 @@ public interface ISmartXApiClient
     Guid companyId,
     CancellationToken cancellationToken = default);
 
-    Task<bool> DeleteCompanyAsync(
-        Guid id,
+    Task<bool> DeleteGuestCompanyAsync(
+        Guid companyId,
         CancellationToken cancellationToken = default);
+
+
+    Task<bool> CancelDeletionAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default);
+
 
     Task<bool> CompleteOnboardingAsync(
     Guid companyId,
@@ -174,4 +180,14 @@ public interface ISmartXApiClient
     Task<bool> DeleteGatewayAsync(
         Guid id,
         CancellationToken cancellationToken = default);
+
+    Task<bool> DeleteCompanyAsync(
+        Guid companyId,
+        CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<SensorDto>> GetSensorsByGatewayIdAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
+
 }

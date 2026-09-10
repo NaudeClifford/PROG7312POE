@@ -7,11 +7,16 @@ namespace SmartX.Shared.DTOs
         public Guid Id { get; set; }
 
         public Guid CompanyId { get; set; }
+
+        public string CompanyName { get; set; } = string.Empty;
+
         public string FirebaseUid { get; set; } = string.Empty;
 
         public string Email { get; set; } = string.Empty;
 
         public string DisplayName { get; set; } = string.Empty;
+
+
 
         public UserRole Role { get; set; } = UserRole.Viewer;
 

@@ -4,7 +4,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d"
-      Background="#F5F7FA">
+      Background="{StaticResource BackgroundBrush}">
 
     <Grid Margin="30">
 
@@ -23,322 +23,334 @@
                 Text="Current Company"
                 FontSize="28"
                 FontWeight="SemiBold"
-                Foreground="#1F2937"/>
+                HorizontalAlignment="Center"
+                
+                Foreground="{StaticResource  LightTextBrush}"/>
 
             <TextBlock
                 Text="View and manage your current company configuration."
                 Margin="0,6,0,0"
                 FontSize="14"
-                Foreground="#6B7280"/>
+                 HorizontalAlignment="Center"
+                Foreground="{StaticResource LightTextBrush}"/>
 
         </StackPanel>
 
 
         <!-- CONTENT -->
 
-        <Grid Grid.Row="2">
+        <ScrollViewer
+    Grid.Row="2"
+    VerticalScrollBarVisibility="Auto"
+    HorizontalScrollBarVisibility="Disabled">
 
-            <Border
-                Background="White"
-                CornerRadius="10"
-                Padding="30"
-                BorderBrush="#E5E7EB"
-                BorderThickness="1"
-                MaxWidth="800"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
+            <Grid
+        Margin="0,0,0,30">
 
-                <Grid>
+                <Border
+            Background="White"
+            CornerRadius="10"
+            Padding="30"
+            BorderBrush="#E5E7EB"
+            BorderThickness="1"
+            MaxWidth="800"
+            HorizontalAlignment="Center">
 
-                    <Grid.RowDefinitions>
+                    <Grid>
 
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="25"/>
+                        <Grid.RowDefinitions>
 
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="25"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="25"/>
 
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="18"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="25"/>
 
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="18"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="18"/>
 
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="30"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="18"/>
 
-                        <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="30"/>
 
-                    </Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
 
-
-                    <!-- COMPANY NAME -->
-
-                    <StackPanel Grid.Row="0">
-
-                        <TextBlock
-                            Text="Company Name"
-                            FontSize="12"
-                            FontWeight="SemiBold"
-                            Foreground="#6B7280"/>
-
-                        <!-- ADMIN EDIT -->
-
-                        <Border
-                            Visibility="{Binding AdministratorEditVisibility}"
-                            Height="44"
-                            Margin="0,6,0,0"
-                            Background="#FAFBFC"
-                            BorderBrush="#D1D5DB"
-                            BorderThickness="1"
-                            CornerRadius="7">
-
-                            <TextBox
-                                Text="{Binding EditCompanyName, UpdateSourceTrigger=PropertyChanged}"
-                                Margin="10,0"
-                                BorderThickness="0"
-                                Background="Transparent"
-                                FontSize="16"
-                                VerticalContentAlignment="Center"/>
-
-                        </Border>
-
-                        <!-- NON-ADMIN VIEW -->
-
-                        <TextBlock
-                            Visibility="{Binding ReadOnlyVisibility}"
-                            Text="{Binding CompanyName}"
-                            Margin="0,5,0,0"
-                            FontSize="20"
-                            FontWeight="SemiBold"
-                            Foreground="#111827"/>
-
-                    </StackPanel>
+                        </Grid.RowDefinitions>
 
 
-                    <!-- DESCRIPTION -->
+                        <!-- COMPANY NAME -->
 
-                    <StackPanel Grid.Row="2">
+                        <StackPanel Grid.Row="0">
 
-                        <TextBlock
-                            Text="Description"
-                            FontSize="12"
-                            FontWeight="SemiBold"
-                            Foreground="#6B7280"/>
+                            <TextBlock
+                        Text="Company Name"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Foreground="#6B7280"/>
 
-                        <!-- ADMIN EDIT -->
+                            <Border
+                        Visibility="{Binding AdministratorEditVisibility}"
+                        Height="44"
+                        Margin="0,6,0,0"
+                        Background="#FAFBFC"
+                        BorderBrush="#D1D5DB"
+                        BorderThickness="1"
+                        CornerRadius="7">
 
-                        <Border
-                            Visibility="{Binding AdministratorEditVisibility}"
-                            MinHeight="80"
-                            Margin="0,6,0,0"
-                            Background="#FAFBFC"
-                            BorderBrush="#D1D5DB"
-                            BorderThickness="1"
-                            CornerRadius="7">
+                                <TextBox
+                            Text="{Binding EditCompanyName, UpdateSourceTrigger=PropertyChanged}"
+                            Margin="10,0"
+                            BorderThickness="0"
+                            Background="Transparent"
+                            FontSize="16"
+                            VerticalContentAlignment="Center"/>
 
-                            <TextBox
-                                Text="{Binding EditDescription, UpdateSourceTrigger=PropertyChanged}"
-                                Margin="10"
-                                BorderThickness="0"
-                                Background="Transparent"
-                                FontSize="14"
-                                TextWrapping="Wrap"
-                                AcceptsReturn="True"
-                                VerticalScrollBarVisibility="Auto"/>
+                            </Border>
 
-                        </Border>
-
-                        <!-- NON-ADMIN VIEW -->
-
-                        <TextBlock
-                            Visibility="{Binding ReadOnlyVisibility}"
-                            Text="{Binding Description}"
-                            Margin="0,5,0,0"
-                            FontSize="14"
-                            Foreground="#374151"
-                            TextWrapping="Wrap"/>
-
-                    </StackPanel>
-
-
-                    <!-- STATUS -->
-
-                    <StackPanel Grid.Row="4">
-
-                        <TextBlock
-                            Text="Status"
-                            FontSize="12"
-                            FontWeight="SemiBold"
-                            Foreground="#6B7280"/>
-
-                        <TextBlock
-                            Text="{Binding StatusText}"
-                            Margin="0,5,0,0"
-                            FontSize="14"
-                            FontWeight="SemiBold"
-                            Foreground="{Binding StatusColor}"/>
-
-                    </StackPanel>
-
-
-                    <!-- COMPANY ID -->
-
-                    <StackPanel Grid.Row="6">
-
-                        <TextBlock
-                            Text="Company ID"
-                            FontSize="12"
-                            FontWeight="SemiBold"
-                            Foreground="#6B7280"/>
-
-                        <TextBlock
-                            Text="{Binding CompanyId}"
-                            Margin="0,5,0,0"
-                            FontSize="13"
-                            Foreground="#4B5563"/>
-
-                    </StackPanel>
-
-
-                    <!-- UPDATED -->
-
-                    <StackPanel Grid.Row="8">
-
-                        <TextBlock
-                            Text="Last Updated"
-                            FontSize="12"
-                            FontWeight="SemiBold"
-                            Foreground="#6B7280"/>
-
-                        <TextBlock
-                            Text="{Binding UpdatedAt}"
-                            Margin="0,5,0,0"
-                            FontSize="13"
-                            Foreground="#4B5563"/>
-
-                    </StackPanel>
-
-
-                    <!-- ACTIONS -->
-
-                    <StackPanel
-    Grid.Row="10"
-    HorizontalAlignment="Left">
-
-                        <!-- NORMAL ACTIONS -->
-
-                        <StackPanel
-        Orientation="Horizontal">
-
-                            <Button
-            Visibility="{Binding AdministratorEditVisibility}"
-            Content="Save Changes"
-            Command="{Binding SaveCompanyCommand}"
-            Width="140"
-            Height="42"
-            Margin="0,0,10,0"
-            FontWeight="SemiBold"
-            Style="{StaticResource BaseButtonStyle}"/>
-
-                            <Button
-            Visibility="{Binding AdministratorEditVisibility}"
-            Content="Cancel"
-            Command="{Binding CancelEditCommand}"
-            Width="100"
-            Height="42"/>
+                            <TextBlock
+                        Visibility="{Binding ReadOnlyVisibility}"
+                        Text="{Binding CompanyName}"
+                        Margin="0,5,0,0"
+                        FontSize="20"
+                        FontWeight="SemiBold"
+                        Foreground="#111827"/>
 
                         </StackPanel>
 
 
-                        <!-- DELETION -->
+                        <!-- DESCRIPTION -->
 
-                        <Border
-    Visibility="{Binding RequestDeletionVisibility}"
-    Margin="0,25,0,0"
-    Padding="15"
-    Background="#FEF2F2"
-    BorderBrush="#FECACA"
-    BorderThickness="1"
-    CornerRadius="8">
+                        <StackPanel Grid.Row="2">
 
-                            <StackPanel>
+                            <TextBlock
+                        Text="Description"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Foreground="#6B7280"/>
 
-                                <TextBlock
-            Text="Danger Zone"
-            FontSize="14"
-            FontWeight="SemiBold"
-            Foreground="#991B1B"/>
+                            <Border
+                        Visibility="{Binding AdministratorEditVisibility}"
+                        MinHeight="80"
+                        Margin="0,6,0,0"
+                        Background="#FAFBFC"
+                        BorderBrush="#D1D5DB"
+                        BorderThickness="1"
+                        CornerRadius="7">
 
-                                <TextBlock
-            Text="If you no longer want to use this company, you can request that it be deleted. A SuperAdmin will review the request."
-            Margin="0,5,0,12"
-            FontSize="12"
-            Foreground="#7F1D1D"
-            TextWrapping="Wrap"
-            MaxWidth="500"/>
+                                <TextBox
+                            Text="{Binding EditDescription, UpdateSourceTrigger=PropertyChanged}"
+                            Margin="10"
+                            BorderThickness="0"
+                            Background="Transparent"
+                            FontSize="14"
+                            TextWrapping="Wrap"
+                            AcceptsReturn="True"
+                            VerticalScrollBarVisibility="Auto"/>
+
+                            </Border>
+
+                            <TextBlock
+                        Visibility="{Binding ReadOnlyVisibility}"
+                        Text="{Binding Description}"
+                        Margin="0,5,0,0"
+                        FontSize="14"
+                        Foreground="#374151"
+                        TextWrapping="Wrap"/>
+
+                        </StackPanel>
+
+
+                        <!-- STATUS -->
+
+                        <StackPanel Grid.Row="4">
+
+                            <TextBlock
+                        Text="Status"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Foreground="#6B7280"/>
+
+                            <TextBlock
+                        Text="{Binding StatusText}"
+                        Margin="0,5,0,0"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Foreground="{Binding StatusColor}"/>
+
+                        </StackPanel>
+
+
+                        <!-- COMPANY ID -->
+
+                        <StackPanel Grid.Row="6">
+
+                            <TextBlock
+                        Text="Company ID"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Foreground="#6B7280"/>
+
+                            <TextBlock
+                        Text="{Binding CompanyId}"
+                        Margin="0,5,0,0"
+                        FontSize="13"
+                        Foreground="#4B5563"/>
+
+                        </StackPanel>
+
+
+                        <!-- UPDATED -->
+
+                        <StackPanel Grid.Row="8">
+
+                            <TextBlock
+                        Text="Last Updated"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Foreground="#6B7280"/>
+
+                            <TextBlock
+                        Text="{Binding UpdatedAt}"
+                        Margin="0,5,0,0"
+                        FontSize="13"
+                        Foreground="#4B5563"/>
+
+                        </StackPanel>
+
+
+                        <!-- ACTIONS -->
+
+                        <StackPanel
+                    Grid.Row="10"
+                    HorizontalAlignment="Left">
+
+                            <!-- NORMAL ACTIONS -->
+
+                            <StackPanel Orientation="Horizontal">
 
                                 <Button
-            Content="Request Company Deletion"
-            Command="{Binding RequestDeletionCommand}"
-            Width="190"
-            Height="38"
-            HorizontalAlignment="Left"
-            Background="#DC2626"
-            Foreground="White"
-            BorderBrush="#B91C1C"
-            FontWeight="SemiBold"/>
+                            Visibility="{Binding AdministratorEditVisibility}"
+                            Content="Save Changes"
+                            Command="{Binding SaveCompanyCommand}"
+                            Width="140"
+                            Height="42"
+                            Margin="0,0,10,0"
+                            FontWeight="SemiBold"
+                            Style="{StaticResource BaseButtonStyle}"/>
+
+                                <Button
+                            Visibility="{Binding AdministratorEditVisibility}"
+                            Content="Cancel"
+                            Command="{Binding CancelEditCommand}"
+                            Style="{StaticResource BaseButtonStyle}"
+                            Width="100"
+                            Height="42"/>
+
+                                <Button
+    Visibility="{Binding AdministratorOnlyVisibility}"
+    Content="Company Configuration"
+    Command="{Binding CompanyConfigurationCommand}"
+    Width="190"
+    Height="42"
+    Margin="0,0,0,12"
+    HorizontalAlignment="Left"
+    FontWeight="SemiBold"
+    Style="{StaticResource BaseButtonStyle}"/>
+
+                                <Button
+    Visibility="{Binding AdministratorEditVisibility}"
+    Content="Continue to Gateway Setup →"
+    Command="{Binding ContinueToGatewaySetupCommand}"
+    Width="220"
+    Height="42"
+    Margin="0,15,0,0"
+    HorizontalAlignment="Left"
+    FontWeight="SemiBold"
+    Style="{StaticResource BaseButtonStyle}"/>
+
+
+
 
                             </StackPanel>
 
-                        </Border>
+
+                            <!-- DELETION -->
+
+                            <Border
+                        Visibility="{Binding RequestDeletionVisibility}"
+                        Margin="0,25,0,0"
+                        Padding="15"
+                        Background="#FEF2F2"
+                        BorderBrush="#FECACA"
+                        BorderThickness="1"
+                        CornerRadius="8">
+
+                                <StackPanel>
+
+                                    <TextBlock
+                                Text="Danger Zone"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Foreground="#991B1B"/>
+
+                                    <TextBlock
+                                Text="If you no longer want to use this company, you can request that it be deleted. A SuperAdmin will review the request."
+                                Margin="0,5,0,12"
+                                FontSize="12"
+                                Foreground="#7F1D1D"
+                                TextWrapping="Wrap"
+                                MaxWidth="500"/>
+
+                                    <Button
+                                Visibility="{Binding RequestDeletionVisibility}"
+                                Content="Request Company Deletion"
+                                Command="{Binding RequestDeletionCommand}"
+                                Width="190"
+                                Height="38"
+                                HorizontalAlignment="Left"
+                                Background="#DC2626"
+                                Foreground="White"
+                                BorderBrush="#B91C1C"
+                                FontWeight="SemiBold"/>
+
+                                    <Button
+                                Visibility="{Binding CancelDeletionVisibility}"
+                                Content="Cancel Deletion Request"
+                                Command="{Binding CancelDeletionCommand}"
+                                Width="190"
+                                Height="38"
+                                Margin="0,8,0,0"
+                                HorizontalAlignment="Left"
+                                Background="#6B7280"
+                                Foreground="White"
+                                FontWeight="SemiBold"/>
+
+                                </StackPanel>
+
+                            </Border>
 
 
+                            <!-- ERROR -->
 
-                        <!-- ERROR / STATUS -->
+                            <TextBlock
+                        Text="{Binding ErrorMessage}"
+                        Foreground="#DC2626"
+                        FontSize="13"
+                        TextWrapping="Wrap"
+                        Margin="0,12,0,0"/>
 
-                        <TextBlock
-        Text="{Binding ErrorMessage}"
-        Foreground="#DC2626"
-        FontSize="13"
-        TextWrapping="Wrap"
-        Margin="0,12,0,0"/>
+                        </StackPanel>
 
-                    </StackPanel>
+                    </Grid>
 
+                </Border>
 
-                </Grid>
+            </Grid>
 
-            </Border>
+        </ScrollViewer>
 
-
-            <!-- BUSY -->
-
-            <Border
-                Background="#80000000"
-                Visibility="{Binding IsBusyVisibility}"
-                CornerRadius="10">
-
-                <StackPanel
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-
-                    <ProgressBar
-                        Width="180"
-                        Height="6"
-                        IsIndeterminate="True"/>
-
-                    <TextBlock
-                        Text="Loading company..."
-                        Margin="0,12,0,0"
-                        HorizontalAlignment="Center"
-                        Foreground="White"/>
-
-                </StackPanel>
-
-            </Border>
-
-        </Grid>
 
     </Grid>
 

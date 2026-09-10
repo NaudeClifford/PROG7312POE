@@ -322,9 +322,9 @@ public class SQLiteTelemetryCache(
         }
     }
 
-        public async Task<IReadOnlyList<Telemetry>> GetByGatewayIdAsync(
-    Guid gatewayId,
-    CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Telemetry>> GetByGatewayIdAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default)
     {
         using var connection = _database.CreateConnection();
 
@@ -343,9 +343,9 @@ public class SQLiteTelemetryCache(
             t.Temperature,
             t.CreatedAt,
             t.UpdatedAt
-        FROM Telemetry t
-        INNER JOIN Sensors s
-            ON t.SensorId = s.Id
+        FROM Telemetry AS t
+        INNER JOIN Sensors AS s
+            ON s.Id = t.SensorId
         WHERE s.GatewayId = $gatewayId
         ORDER BY t.Timestamp DESC;
         """;
@@ -362,11 +362,13 @@ public class SQLiteTelemetryCache(
 
         while (await reader.ReadAsync(cancellationToken))
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             telemetry.Add(
                 TelemetryMapper.Map(reader));
         }
 
         return telemetry;
-    
     }
+
 }

@@ -4,7 +4,6 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Sm
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.WPF.runtimeconfig.json
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.WPF.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SmartX.WPF.pdb
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\AutoMapper.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\FirebaseAdmin.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\FluentValidation.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\FluentValidation.DependencyInjectionExtensions.dll
@@ -35,10 +34,6 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Mi
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.Extensions.Options.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.Extensions.Options.ConfigurationExtensions.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.Extensions.Primitives.dll
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.IdentityModel.Abstractions.dll
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.IdentityModel.JsonWebTokens.dll
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.IdentityModel.Logging.dll
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.IdentityModel.Tokens.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\MongoDB.Bson.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Newtonsoft.Json.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\SQLitePCLRaw.batteries_v2.dll
@@ -130,3 +125,5 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Sm
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.genruntimeconfig.cache
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\ref\SmartX.WPF.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Resources\Styles\ComboBoxStyle.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Mapster.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Mapster.Core.dll

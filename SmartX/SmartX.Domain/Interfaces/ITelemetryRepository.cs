@@ -25,4 +25,7 @@ public interface ITelemetryRepository
         DateTime from,
         DateTime to,
         CancellationToken cancellationToken = default);
+    Task DeleteAsync(
+        Guid id,
+        CancellationToken cancellationToken = default);
 }

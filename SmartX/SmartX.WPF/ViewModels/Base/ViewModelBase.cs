@@ -1,6 +1,7 @@
 ﻿using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.Session;
 using System.ComponentModel;
+using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
@@ -92,20 +93,43 @@ public abstract class ViewModelBase : INotifyPropertyChanged
             connectivityService
             ?? throw new ArgumentNullException(nameof(connectivityService));
 
-        Session =
-            session
-            ?? throw new ArgumentNullException(nameof(session));
+        ConnectivityService.NetworkAvailabilityChanged +=
+            ConnectivityService_NetworkAvailabilityChanged;
+
+        Session = session ?? throw new ArgumentNullException(nameof(session));
 
         Session.PropertyChanged += Session_PropertyChanged;
+
+        IsOnline = ConnectivityService.IsOnline;
 
         RefreshSessionDisplay();
     }
 
-    // CONNECTIVITY
+    private void ConnectivityService_NetworkAvailabilityChanged(
+    object? sender,
+    bool isOnline)
+    {
+        System.Windows.Application.Current?.Dispatcher.Invoke(
+            new Action(() =>
+            {
+                IsOnline = isOnline;
+            }));
 
-    protected async Task<bool> CheckOnlineAsync(
+
+    }
+
+    // CONNECTIVITy
+    protected async Task<bool> CheckApiAvailableAsync(
         CancellationToken cancellationToken = default)
     {
+        if (!IsOnline)
+        {
+            ErrorMessage =
+                "No network connection is available.";
+
+            return false;
+        }
+
         try
         {
             var result =
@@ -113,16 +137,36 @@ public abstract class ViewModelBase : INotifyPropertyChanged
                     .CheckConnectivityAsync(
                         cancellationToken);
 
-            IsOnline = result;
+            if (!result)
+            {
+                ErrorMessage =
+                    "The SmartX API is currently unavailable.";
 
-            return result;
+                IsOnline = false;
+
+                return false;
+            }
+
+            IsOnline = true;
+
+            return true;
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (HttpRequestException)
+        {
+            ErrorMessage =
+                "Unable to connect to the SmartX API.";
+
+            IsOnline = false;
+
+            return false;
         }
         catch (Exception ex)
         {
             ErrorMessage = ex.Message;
-
-            Console.WriteLine(
-                $"Connectivity error: {ex}");
 
             IsOnline = false;
 
@@ -131,11 +175,15 @@ public abstract class ViewModelBase : INotifyPropertyChanged
     }
 
 
-    protected async Task<bool> RequireOnlineAsync(
-        CancellationToken cancellationToken = default)
+    protected bool RequireNetwork()
     {
-        return await CheckOnlineAsync(
-            cancellationToken);
+        if (IsOnline)
+            return true;
+
+        ErrorMessage =
+            "No network connection is available.";
+
+        return false;
     }
 
     protected virtual void RaiseConnectivityState()
@@ -252,6 +300,10 @@ public abstract class ViewModelBase : INotifyPropertyChanged
     {
         if (Session is null)
             return;
+
+        ConnectivityService.NetworkAvailabilityChanged -=
+            ConnectivityService_NetworkAvailabilityChanged;
+
 
         Session.PropertyChanged -=
             Session_PropertyChanged;

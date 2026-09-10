@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartX.Shared.DTOs;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,4 +29,10 @@ public interface ICacheSyncService
     Task SyncUsersAsync(
         Guid companyId,
         CancellationToken cancellationToken = default);
+
+    Task<CompanyDto?> GetCompanyAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default);
+
+
 }

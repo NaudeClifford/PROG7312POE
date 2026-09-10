@@ -29,12 +29,14 @@
                     Text="Gateway Setup"
                     FontSize="30"
                     FontWeight="Bold"
-                    Foreground="#20242A"/>
+                    HorizontalAlignment="Center"
+                    Foreground="{StaticResource LightTextBrush}"/>
 
                 <TextBlock
                     Text="Configure gateways for your SmartX company."
+                                        HorizontalAlignment="Center"
                     FontSize="14"
-                    Foreground="#707780"
+                    Foreground="{StaticResource LightTextBrush}"
                     Margin="0,8,0,30"/>
 
             </StackPanel>
@@ -250,7 +252,8 @@
                     Text="Your Gateways"
                     FontSize="22"
                     FontWeight="Bold"
-                    Foreground="#20242A"
+                    HorizontalAlignment="Center"
+                    Foreground="{StaticResource LightTextBrush}"
                     Margin="0,0,0,15"/>
 
                 <ItemsControl

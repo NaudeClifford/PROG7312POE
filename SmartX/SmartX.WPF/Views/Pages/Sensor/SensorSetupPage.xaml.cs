@@ -1,11 +1,12 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using SmartX.WPF.Navigation;
 using SmartX.WPF.ViewModels.Pages.Sensor;
 
 namespace SmartX.WPF.Views.Pages.Sensor;
 
-public partial class SensorSetupPage : Page
+public partial class SensorSetupPage : Page, INavigationAware
 {
     private readonly SensorViewModel _viewModel;
 
@@ -17,17 +18,11 @@ public partial class SensorSetupPage : Page
         _viewModel = viewModel;
 
         DataContext = _viewModel;
-
-        Loaded += SensorSetupPage_Loaded;
     }
 
-    private async void SensorSetupPage_Loaded(
-        object sender,
-        RoutedEventArgs e)
+    public void OnNavigatedTo(object parameter)
     {
-        Loaded -= SensorSetupPage_Loaded;
-
-        await _viewModel.LoadAsync();
+        _viewModel.OnNavigatedTo(parameter);
     }
 
     private void Page_PreviewKeyDown(

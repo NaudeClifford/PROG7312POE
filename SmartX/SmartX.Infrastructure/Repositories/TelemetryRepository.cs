@@ -73,4 +73,19 @@ public class TelemetryRepository : ITelemetryRepository
             .SortBy(x => x.Timestamp)
             .ToListAsync(cancellationToken);
     }
+    public async Task DeleteAsync(
+    Guid id,
+    CancellationToken cancellationToken = default)
+    {
+        var filter = Builders<Telemetry>.Filter.Eq(
+            x => x.Id,
+            id);
+
+        await _collection.DeleteOneAsync(
+            filter,
+            cancellationToken);
+    }
+
+
+
 }

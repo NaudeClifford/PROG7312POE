@@ -7,8 +7,7 @@ namespace SmartX.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Administrator, Technician")]
-
+[Authorize(Roles = "Administrator, Technician, SuperAdmin")]
 public class SensorsController : ControllerBase
 {
     private readonly SensorCrudService _crud;
@@ -28,10 +27,9 @@ public class SensorsController : ControllerBase
             await _crud.GetAllAsync(
                 cancellationToken);
 
-        if (!result.Success)
-            return BadRequest(result);
-
-        return Ok(result);
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
     }
 
     // GET BY ID
@@ -40,15 +38,21 @@ public class SensorsController : ControllerBase
         Guid id,
         CancellationToken cancellationToken)
     {
+        if (id == Guid.Empty)
+            return BadRequest("Sensor ID is required.");
+
         var result =
             await _crud.GetByIdAsync(
                 id,
+                User,
                 cancellationToken);
 
-        if (!result.Success)
-            return NotFound(result);
+        if (result.Success)
+            return Ok(result);
 
-        return Ok(result);
+        return result.Error == "Sensor not found."
+            ? NotFound(result)
+            : Forbid();
     }
 
     // CREATE
@@ -60,60 +64,94 @@ public class SensorsController : ControllerBase
         var result =
             await _crud.CreateAsync(
                 request,
+                User,
                 cancellationToken);
 
-        if (!result.Success)
-            return BadRequest(result);
-
-        return Ok(result);
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
     }
-
     // UPDATE
-
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(
         Guid id,
         UpdateSensorRequest request,
         CancellationToken cancellationToken)
     {
+        if (id == Guid.Empty)
+            return BadRequest("Sensor ID is required.");
+
         request.Id = id;
 
         var result =
             await _crud.UpdateAsync(
                 request,
+                User,
                 cancellationToken);
 
-        if (!result.Success)
-        {
-            if (result.Error == "Sensor not found.")
-                return NotFound(result);
+        if (result.Success)
+            return Ok(result);
 
-            return BadRequest(result);
-        }
-
-        return Ok(result);
+        return result.Error == "Sensor not found."
+            ? NotFound(result)
+            : result.Error == "You do not have access to this sensor."
+                ? Forbid()
+                : BadRequest(result);
     }
 
     // DELETE
-
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(
         Guid id,
         CancellationToken cancellationToken)
     {
+        if (id == Guid.Empty)
+            return BadRequest("Sensor ID is required.");
+
         var result =
             await _crud.DeleteAsync(
                 id,
+                User,
                 cancellationToken);
 
-        if (!result.Success)
-        {
-            if (result.Error == "Sensor not found.")
-                return NotFound(result);
+        if (result.Success)
+            return Ok(result);
 
-            return BadRequest(result);
-        }
-
-        return Ok(result);
+        return result.Error == "Sensor not found."
+            ? NotFound(result)
+            : result.Error == "You do not have access to this sensor."
+                ? Forbid()
+                : BadRequest(result);
     }
+
+    [HttpGet("gateway/{gatewayId:guid}")]
+    public async Task<IActionResult> GetByGatewayId(
+    Guid gatewayId,
+    CancellationToken cancellationToken)
+    {
+        if (gatewayId == Guid.Empty)
+            return BadRequest("Gateway ID is required.");
+
+        var result =
+            await _crud.GetByGatewayIdAsync(
+                gatewayId,
+                User,
+                cancellationToken);
+
+        if (result.Success)
+            return Ok(result);
+
+        return result.Error switch
+        {
+            "Gateway not found." =>
+                NotFound(result),
+
+            "You do not have access to this gateway." =>
+                Forbid(),
+
+            _ =>
+                BadRequest(result)
+        };
+    }
+
 }

@@ -130,6 +130,10 @@ public class SensorViewModel :
                 CancelAsync,
                 CanCancel);
 
+        ClearFiltersCommand =
+            new AsyncRelayCommand(
+                ClearFiltersAsync);
+
         // OTHER
         BackToGatewaysCommand =
             new AsyncRelayCommand(
@@ -441,6 +445,9 @@ public class SensorViewModel :
 
     public AsyncRelayCommand AddLogFileCommand { get; }
 
+    public AsyncRelayCommand ClearFiltersCommand { get; }
+
+
     public ICommand OpenTelemetryCommand { get; }
 
     // NAVIGATION
@@ -505,14 +512,6 @@ public class SensorViewModel :
 
                 return;
             }
-
-            if (!await CheckOnlineAsync())
-            {
-                ErrorMessage =
-                    "You are offline. Creating sensors is unavailable.";
-
-                return;
-            }
         }
         catch (Exception ex)
         {
@@ -554,8 +553,6 @@ public class SensorViewModel :
 
                 return;
             }
-
-            await CheckOnlineAsync(cancellationToken);
 
             if (IsOnline)
             {
@@ -671,12 +668,17 @@ public class SensorViewModel :
     // CREATE
     private bool CanAddSensor()
     {
-        return IsListMode &&
-               IsOnline &&
-               !IsBusy &&
-               HasSelectedGateway &&
-               HasSensorWritePermission();
+        var result =
+            IsListMode &&
+            IsOnline &&
+            !IsBusy &&
+            HasSelectedGateway &&
+            HasSensorWritePermission();
+
+        return result;
     }
+
+
 
     private async Task AddSensorAsync()
     {
@@ -698,6 +700,8 @@ public class SensorViewModel :
                !string.IsNullOrWhiteSpace(Name) &&
                !string.IsNullOrWhiteSpace(DeviceIdentifier) &&
                HasSensorWritePermission();
+
+
     }
 
     // SAVE / CREATE
@@ -725,9 +729,6 @@ public class SensorViewModel :
         {
             IsBusy = true;
             ErrorMessage = string.Empty;
-
-            if (!await RequireOnlineAsync())
-                return;
 
             // CREATE
             if (IsCreateMode)
@@ -795,6 +796,9 @@ public class SensorViewModel :
             if (SelectedSensor is null)
                 return;
 
+            if (Session.GatewayId is null)
+                return; 
+
             var updateCommand =
                 new UpdateSensorRequest
                 {
@@ -817,7 +821,9 @@ public class SensorViewModel :
                             ? string.Empty
                             : Description.Trim(),
 
-                    IsActive = IsActive
+                    IsActive = IsActive,
+
+                   GatewayId = Session.GatewayId.Value,
                 };
 
             var updated =
@@ -869,31 +875,47 @@ public class SensorViewModel :
                HasSensorWritePermission();
     }
 
-    private async Task EditSensorAsync()
+    private Task EditSensorAsync()
     {
         if (!CanEditSensor())
-            return;
+            return Task.CompletedTask;
 
         if (SelectedSensor is null)
-            return;
+            return Task.CompletedTask;
+
+        var sensorId = SelectedSensor.Id;
 
         _navigationService.NavigateTo<SensorEditPage>(
-            SelectedSensor.Id);
+            sensorId);
 
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 
     // LOAD EDIT
     private async Task LoadSensorForEditAsync(
-        Guid sensorId)
+    Guid sensorId)
     {
         try
         {
             IsBusy = true;
             ErrorMessage = string.Empty;
 
-            await CheckOnlineAsync();
+            LogFiles.Clear();
+            OnPropertyChanged(nameof(HasLogFiles));
 
+            if (!Session.GatewayId.HasValue ||
+                Session.GatewayId.Value == Guid.Empty)
+            {
+                ErrorMessage =
+                    "No gateway is currently selected.";
+
+                return;
+            }
+
+            var gatewayId =
+                Session.GatewayId.Value;
+
+            // Refresh local sensor cache when online.
             if (IsOnline)
             {
                 try
@@ -902,14 +924,14 @@ public class SensorViewModel :
                 }
                 catch (HttpRequestException)
                 {
+                    // Continue using cached data.
                     ErrorMessage =
                         "Unable to connect to the SmartX API. Showing cached data.";
                 }
             }
 
             var sensor =
-                await _sensorCache.GetByIdAsync(
-                    sensorId);
+                await _sensorCache.GetByIdAsync(sensorId);
 
             if (sensor is null)
             {
@@ -919,38 +941,57 @@ public class SensorViewModel :
                 return;
             }
 
+            // Make sure the sensor belongs to the
+            // gateway currently selected in the session.
+            if (sensor.GatewayId != gatewayId)
+            {
+                ErrorMessage =
+                    "The selected sensor does not belong to the current gateway.";
+
+                return;
+            }
+
+            EditingSensorId = sensor.Id;
             SelectedSensor = sensor;
 
-            Name = sensor.Name;
-            DeviceIdentifier = sensor.DeviceIdentifier;
-            Category = sensor.Category;
-            Location = sensor.Location;
-            Description = sensor.Description;
-            IsActive = sensor.IsActive;
+            // Explicitly populate the edit form.
+            Name =
+                sensor.Name;
 
-            // Log files require the API.
+            DeviceIdentifier =
+                sensor.DeviceIdentifier;
+
+            Category =
+                sensor.Category;
+
+            Location =
+                sensor.Location;
+
+            Description =
+                sensor.Description;
+
+            IsActive =
+                sensor.IsActive;
+
+            // Log files require API connectivity.
             if (IsOnline)
             {
-                await LoadLogFilesAsync(sensorId);
+                await LoadLogFilesAsync(sensor.Id);
             }
-            else
-            {
-                LogFiles.Clear();
-                OnPropertyChanged(nameof(HasLogFiles));
-            }
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
         }
         catch (HttpRequestException)
         {
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
         }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
         catch (Exception ex)
         {
-            ErrorMessage = ex.Message;
+            ErrorMessage =
+                ex.Message;
         }
         finally
         {
@@ -958,6 +999,7 @@ public class SensorViewModel :
             RaiseCommandStates();
         }
     }
+
 
     // DELETE
     private bool CanDeleteSensor()
@@ -992,9 +1034,6 @@ public class SensorViewModel :
         {
             IsBusy = true;
             ErrorMessage = string.Empty;
-
-            if (!await RequireOnlineAsync())
-                return;
 
             var sensorId =
                 SelectedSensor.Id;
@@ -1128,9 +1167,6 @@ public class SensorViewModel :
             var fileInfo =
                 new FileInfo(dialog.FileName);
 
-            if (!await RequireOnlineAsync())
-                return;
-
             if (!fileInfo.Exists)
             {
                 ErrorMessage =
@@ -1213,6 +1249,17 @@ public class SensorViewModel :
             UserRole.Administrator;
     }
 
+    private async Task ClearFiltersAsync()
+    {
+        NameFilter = string.Empty;
+        DeviceIdentifierFilter = string.Empty;
+        SelectedCategoryFilter = "All";
+        StatusFilter = "All";
+
+        await Task.CompletedTask;
+    }
+
+
     // SESSION
     protected override async void OnSessionPropertyChanged(
         PropertyChangedEventArgs e)
@@ -1287,5 +1334,7 @@ public class SensorViewModel :
         CancelCommand?.RaiseCanExecuteChanged();
         AddLogFileCommand?.RaiseCanExecuteChanged();
         BackToGatewaysCommand?.RaiseCanExecuteChanged();
+        ClearFiltersCommand?.RaiseCanExecuteChanged();
+
     }
 }

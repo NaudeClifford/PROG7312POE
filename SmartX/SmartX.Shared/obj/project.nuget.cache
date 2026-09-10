@@ -1,9 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "OkhdGnuvGUk=",
+  "dgSpecHash": "hBwf/2QCtzY=",
   "success": true,
   "projectFilePath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\cliff\\.nuget\\packages\\mapster\\10.0.12\\mapster.10.0.12.nupkg.sha512",
+    "C:\\Users\\cliff\\.nuget\\packages\\mapster.core\\10.0.12\\mapster.core.10.0.12.nupkg.sha512",
+    "C:\\Users\\cliff\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.11\\microsoft.extensions.dependencyinjection.abstractions.10.0.11.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\mongodb.bson\\3.11.0\\mongodb.bson.3.11.0.nupkg.sha512"
   ],
   "logs": []

@@ -24,13 +24,15 @@ public class GatewaysController : ControllerBase
     public async Task<IActionResult> GetAll(
         CancellationToken cancellationToken)
     {
-        var result = await _crud.GetAllAsync(
-            cancellationToken);
+        var companyId = GetUserCompanyId();
 
-        if (!result.Success)
-            return BadRequest(result);
+        if (companyId is null) return Forbid();
 
-        return Ok(result);
+        var result = await _crud.GetByCompanyIdAsync(companyId.Value, User, cancellationToken);
+
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
     }
 
     [HttpGet("{id:guid}")]
@@ -38,14 +40,25 @@ public class GatewaysController : ControllerBase
         Guid id,
         CancellationToken cancellationToken)
     {
+        if (id == Guid.Empty)
+            return BadRequest("Gateway ID is required.");
+
+        var companyId = GetUserCompanyId();
+
+        if (companyId is null)
+            return Forbid();
+
         var result = await _crud.GetByIdAsync(
             id,
+            User,
             cancellationToken);
 
-        if (!result.Success)
-            return NotFound(result);
+        if (result.Success)
+            return Ok(result);
 
-        return Ok(result);
+        return result.Error == "Gateway not found."
+            ? NotFound(result)
+            : BadRequest(result);
     }
 
     [HttpPost]  
@@ -55,14 +68,21 @@ public class GatewaysController : ControllerBase
         CreateGatewayRequest request,
         CancellationToken cancellationToken)
     {
+        var companyId = GetUserCompanyId();
+
+        if (companyId is null)
+            return Forbid();
+
+        // Never trust the CompanyId supplied by the client.
+        request.CompanyId = companyId.Value;
+
         var result = await _crud.CreateAsync(
-            request,
+            request, User,
             cancellationToken);
 
-        if (!result.Success)
-            return BadRequest(result);
-
-        return Ok(result);
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
     }
 
     [HttpPut("{id:guid}")]
@@ -73,21 +93,30 @@ public class GatewaysController : ControllerBase
         UpdateGatewayRequest request,
         CancellationToken cancellationToken)
     {
+        if (id == Guid.Empty)
+            return BadRequest("Gateway ID is required.");
+
+        var companyId = GetUserCompanyId();
+
+        if (companyId is null)
+            return Forbid();
+
         request.Id = id;
+
+        // The authenticated user's company is authoritative.
+        request.CompanyId = companyId.Value;
 
         var result = await _crud.UpdateAsync(
             request,
+            User,
             cancellationToken);
 
-        if (!result.Success)
-        {
-            if (result.Error == "Gateway not found.")
-                return NotFound(result);
+        if (result.Success)
+            return Ok(result);
 
-            return BadRequest(result);
-        }
-
-        return Ok(result);
+        return result.Error == "Gateway not found."
+            ? NotFound(result)
+            : BadRequest(result);
     }
 
     [HttpDelete("{id:guid}")]
@@ -97,19 +126,25 @@ public class GatewaysController : ControllerBase
         Guid id,
         CancellationToken cancellationToken)
     {
+        if (id == Guid.Empty)
+            return BadRequest("Gateway ID is required.");
+
+        var companyId = GetUserCompanyId();
+
+        if (companyId is null)
+            return Forbid();
+
         var result = await _crud.DeleteAsync(
             id,
+            User,
             cancellationToken);
 
-        if (!result.Success)
-        {
-            if (result.Error == "Gateway not found.")
-                return NotFound(result);
+        if (result.Success)
+            return Ok(result);
 
-            return BadRequest(result);
-        }
-
-        return Ok(result);
+        return result.Error == "Gateway not found."
+            ? NotFound(result)
+            : BadRequest(result);
     }
 
     [HttpGet("company/{companyId:guid}")]
@@ -117,13 +152,36 @@ public class GatewaysController : ControllerBase
     Guid companyId,
     CancellationToken cancellationToken)
     {
+        if (companyId == Guid.Empty)
+            return BadRequest("Company ID is required.");
+
+        var userCompanyId = GetUserCompanyId();
+
+        if (userCompanyId is null)
+            return Forbid();
+
+        // Normal users may only access their own company.
+        if (userCompanyId.Value != companyId)
+            return Forbid();
+
         var result = await _crud.GetByCompanyIdAsync(
-            companyId,
+            companyId, User,
             cancellationToken);
 
-        if (!result.Success)
-            return BadRequest(result);
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
+    }
 
-        return Ok(result);
+    private Guid? GetUserCompanyId()
+    {
+        var claim = User.FindFirst("CompanyId");
+
+        if (claim is null ||
+            !Guid.TryParse(claim.Value, out var companyId) ||
+            companyId == Guid.Empty)
+                return null;
+        
+        return companyId;
     }
 }

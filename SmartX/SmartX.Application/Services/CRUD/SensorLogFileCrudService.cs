@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using SmartX.Shared.Mapping;
 using FluentValidation;
 using SmartX.Application.Requests.SensorLogFile;
 using SmartX.Domain.Entities;

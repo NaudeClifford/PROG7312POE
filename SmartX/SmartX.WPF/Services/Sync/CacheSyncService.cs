@@ -1,7 +1,10 @@
-﻿using SmartX.Domain.Entities;
+﻿using SmartX.Shared.Mapping;
+using SmartX.Domain.Entities;
 using SmartX.Domain.Enums;
+using SmartX.Shared.DTOs;
 using SmartX.WPF.Repositories.Local;
 using SmartX.WPF.Services.Api;
+using System.Net.Http;
 
 namespace SmartX.WPF.Services.Sync;
 
@@ -11,24 +14,16 @@ public class CacheSyncService(
     ILocalTelemetryCache telemetryCache,
     ILocalUserCache userCache,
     ILocalCompanyCache companyCache,
-    ILocalGatewayCache gatewayCache) : ICacheSyncService
+    ILocalGatewayCache gatewayCache,
+    IMapper mapper) : ICacheSyncService
 {
     private readonly ISmartXApiClient _apiClient = apiClient;
-
-    private readonly ILocalSensorCache _sensorCache =
-        sensorCache;
-
-    private readonly ILocalTelemetryCache _telemetryCache =
-        telemetryCache;
-
-    private readonly ILocalUserCache _userCache =
-        userCache;
-
-    private readonly ILocalCompanyCache _companyCache =
-        companyCache;
-
-    private readonly ILocalGatewayCache _gatewayCache =
-        gatewayCache;
+    private readonly ILocalSensorCache _sensorCache = sensorCache;
+    private readonly ILocalTelemetryCache _telemetryCache = telemetryCache;
+    private readonly ILocalUserCache _userCache = userCache;
+    private readonly ILocalCompanyCache _companyCache = companyCache;
+    private readonly ILocalGatewayCache _gatewayCache = gatewayCache;
+    private readonly IMapper _mapper = mapper;
 
 
     // SENSORS
@@ -52,20 +47,7 @@ public class CacheSyncService(
             {
                 continue;
             }
-
-            var sensor = new Sensor
-            {
-                Id = dto.Id,
-                Name = dto.Name,
-                DeviceIdentifier = dto.DeviceIdentifier,
-                Category = (SensorCategory)dto.Category,
-                Location = dto.Location,
-                Description = dto.Description,
-                IsActive = dto.IsActive,
-                GatewayId = dto.GatewayId,
-                CreatedAt = dto.CreatedAt,
-                UpdatedAt = dto.UpdatedAt
-            };
+            var sensor = _mapper.Map<Sensor>(dto);
 
             await _sensorCache.UpdateAsync(
                 sensor,
@@ -98,19 +80,8 @@ public class CacheSyncService(
             {
                 continue;
             }
-
-            var entity = new Telemetry
-            {
-                Id = dto.Id,
-                SensorId = dto.SensorId,
-                Timestamp = dto.Timestamp,
-                Voltage = dto.Voltage,
-                Current = dto.Current,
-                Power = dto.Power,
-                Temperature = dto.Temperature,
-                CreatedAt = dto.CreatedAt,
-                UpdatedAt = dto.UpdatedAt
-            };
+            var entity =
+            _mapper.Map<Telemetry>(dto);
 
             await _telemetryCache.UpdateAsync(
                 entity,
@@ -151,7 +122,6 @@ public class CacheSyncService(
     cancellationToken);
     }
 
-
     // COMPANIES
 
     public async Task SyncCompanyAsync(
@@ -169,9 +139,11 @@ public class CacheSyncService(
         if (dto is null)
             return;
 
+        cancellationToken.ThrowIfCancellationRequested();
+
         var cached =
             await _companyCache.GetByIdAsync(
-                dto.Id,
+                companyId,
                 cancellationToken);
 
         if (cached is not null &&
@@ -180,21 +152,14 @@ public class CacheSyncService(
             return;
         }
 
-        var company = new Company
-        {
-            Id = dto.Id,
-            Name = dto.Name,
-            Description = dto.Description,
-            IsActive = dto.IsActive,
-            DeletionRequested = dto.DeletionRequested,
-            CreatedAt = dto.CreatedAt,
-            UpdatedAt = dto.UpdatedAt
-        };
+        var company =
+            _mapper.Map<Company>(dto);
 
         await _companyCache.UpdateAsync(
             company,
             cancellationToken);
     }
+
 
     // GATEWAYS
 
@@ -224,19 +189,7 @@ public class CacheSyncService(
             {
                 continue;
             }
-
-            var gateway = new Gateway
-            {
-                Id = dto.Id,
-                CompanyId = dto.CompanyId,
-                Name = dto.Name,
-                Description = dto.Description,
-                SerialNumber = dto.SerialNumber,
-                IpAddress = dto.IpAddress,
-                IsActive = dto.IsActive,
-                CreatedAt = dto.CreatedAt,
-                UpdatedAt = dto.UpdatedAt
-            };
+            var gateway = _mapper.Map<Gateway>(dto);
 
             await _gatewayCache.UpdateAsync(
                 gateway,
@@ -302,4 +255,44 @@ public class CacheSyncService(
             }
         }
     }
+
+    public async Task<CompanyDto?> GetCompanyAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default)
+    {
+        if (companyId == Guid.Empty)
+            return null;
+
+        var cached =
+            await _companyCache.GetByIdAsync(
+                companyId,
+                cancellationToken);
+
+        if (cached is not null)
+        {
+            return _mapper.Map<CompanyDto>(cached);
+        }
+
+        var dto =
+            await _apiClient.GetCompanyByIdAsync(
+                companyId,
+                cancellationToken);
+
+        if (dto is null)
+            return null;
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var company =
+            _mapper.Map<Company>(dto);
+
+        await _companyCache.UpdateAsync(
+            company,
+            cancellationToken);
+
+        return dto;
+    }
+
+
+
 }

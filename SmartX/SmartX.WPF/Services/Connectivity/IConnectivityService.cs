@@ -4,6 +4,9 @@ public interface IConnectivityService
 {
     bool IsOnline { get; }
 
-    Task<bool> CheckConnectivityAsync(
-        CancellationToken cancellationToken = default);
+    event EventHandler<bool>? NetworkAvailabilityChanged;
+
+    Task<bool> CheckConnectivityAsync(CancellationToken cancellationToken = default);
+
+    Task<bool> IsNetworkAvailableAsync(CancellationToken cancellationToken = default);
 }

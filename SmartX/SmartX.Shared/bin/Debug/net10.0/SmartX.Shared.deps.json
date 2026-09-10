@@ -8,11 +8,40 @@
     ".NETCoreApp,Version=v10.0": {
       "SmartX.Shared/1.0.0": {
         "dependencies": {
+          "Mapster": "10.0.12",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.11",
           "MongoDB.Bson": "3.11.0",
           "SmartX.Domain": "1.0.0"
         },
         "runtime": {
           "SmartX.Shared.dll": {}
+        }
+      },
+      "Mapster/10.0.12": {
+        "dependencies": {
+          "Mapster.Core": "10.0.12"
+        },
+        "runtime": {
+          "lib/net10.0/Mapster.dll": {
+            "assemblyVersion": "10.0.12.0",
+            "fileVersion": "10.0.12.0"
+          }
+        }
+      },
+      "Mapster.Core/10.0.12": {
+        "runtime": {
+          "lib/netstandard2.0/Mapster.Core.dll": {
+            "assemblyVersion": "10.0.12.0",
+            "fileVersion": "10.0.12.0"
+          }
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.11": {
+        "runtime": {
+          "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.1126.37416"
+          }
         }
       },
       "MongoDB.Bson/3.11.0": {
@@ -38,6 +67,27 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "Mapster/10.0.12": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ap0sVf4YxqYVSj2wafyrknuj2hWkWhpSm+SXTvrOQlc2vLG7u51dJ8GazaSHLLG6saHN5uPCBeP+YIqXS0a1vg==",
+      "path": "mapster/10.0.12",
+      "hashPath": "mapster.10.0.12.nupkg.sha512"
+    },
+    "Mapster.Core/10.0.12": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-iLPB0xAzxMWKhbBjWb4ZdQMV/TNEuZafDOoONhtDjBD4bEmf6BwcZt2v0MHhS7xbjwi1JUR266XMarfEs9BUIw==",
+      "path": "mapster.core/10.0.12",
+      "hashPath": "mapster.core.10.0.12.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/a1aJz4m7ylhEDf25ugQChLQoN5XwoGjWw/BoR/ZWWKsO1v4DdJElS1uyngahz4B/eOzjFk1KNTkarRLE5wsIg==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/10.0.11",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.10.0.11.nupkg.sha512"
     },
     "MongoDB.Bson/3.11.0": {
       "type": "package",

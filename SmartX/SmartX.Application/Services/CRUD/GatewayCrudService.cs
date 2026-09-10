@@ -1,10 +1,12 @@
-﻿using AutoMapper;
+﻿using SmartX.Shared.Mapping;
 using FluentValidation;
 using SmartX.Application.Requests.Gateway;
 using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.DTOs;
 using SmartX.Shared.Models;
+using System.ComponentModel.Design;
+using System.Security.Claims;
 
 namespace SmartX.Application.Services.CRUD;
 
@@ -53,33 +55,48 @@ public class GatewayCrudService :
 
     public async Task<Result<GatewayDto>> GetByIdAsync(
         Guid id,
+        ClaimsPrincipal user,
         CancellationToken cancellationToken = default)
     {
         if (id == Guid.Empty)
-        {
             return Result<GatewayDto>.Fail(
                 "Gateway ID is required.");
-        }
 
         var gateway = await _gatewayRepository.GetByIdAsync(
             id,
             cancellationToken);
 
         if (gateway is null)
-        {
             return Result<GatewayDto>.Fail(
                 "Gateway not found.");
-        }
+
+        if (!CanAccessCompany(user, gateway.CompanyId))
+            return Result<GatewayDto>.Fail(
+                "You do not have access to this gateway.");
 
         var dto = _mapper.Map<GatewayDto>(gateway);
 
         return Result<GatewayDto>.Ok(dto);
     }
 
+
     public async Task<Result<Guid>> CreateAsync(
         CreateGatewayRequest request,
+        ClaimsPrincipal user,
         CancellationToken cancellationToken = default)
     {
+        if (request is null)
+            return Result<Guid>.Fail(
+                "Request is required.");
+
+        if (request.CompanyId == Guid.Empty)
+            return Result<Guid>.Fail(
+                "Company ID is required.");
+
+        if (!CanAccessCompany(user, request.CompanyId))
+            return Result<Guid>.Fail(
+                "You do not have access to this company.");
+
         var validationResult = await _createValidator.ValidateAsync(
             request,
             cancellationToken);
@@ -131,11 +148,21 @@ public class GatewayCrudService :
 
     public async Task<Result<bool>> UpdateAsync(
         UpdateGatewayRequest request,
+        ClaimsPrincipal user,
         CancellationToken cancellationToken = default)
     {
-        var validationResult = await _updateValidator.ValidateAsync(
-            request,
-            cancellationToken);
+        if (request is null)
+            return Result<bool>.Fail(
+                "Request is required.");
+
+        if (request.Id == Guid.Empty)
+            return Result<bool>.Fail(
+                "Gateway ID is required.");
+
+        var validationResult =
+            await _updateValidator.ValidateAsync(
+                request,
+                cancellationToken);
 
         if (!validationResult.IsValid)
         {
@@ -152,26 +179,22 @@ public class GatewayCrudService :
             cancellationToken);
 
         if (gateway is null)
-        {
             return Result<bool>.Fail(
                 "Gateway not found.");
-        }
 
-        gateway.CompanyId = request.CompanyId;
+        if (!CanAccessCompany(user, gateway.CompanyId))
+            return Result<bool>.Fail(
+                "You do not have access to this gateway.");
+
         gateway.Name = request.Name;
         gateway.Description = request.Description;
         gateway.SerialNumber = request.SerialNumber;
         gateway.IpAddress = request.IpAddress;
         gateway.IsActive = request.IsActive;
 
-        // CreatedAt is preserved.
-        // UpdatedAt changes whenever the gateway is modified
-        // so WPF synchronization can detect the change.
         gateway.UpdatedAt = DateTime.UtcNow;
 
-        await _gatewayRepository.UpdateAsync(
-            gateway,
-            cancellationToken);
+        await _gatewayRepository.UpdateAsync(gateway, cancellationToken);
 
         await _auditLog.LogAsync(
             entityType: "Gateway",
@@ -186,23 +209,20 @@ public class GatewayCrudService :
 
     public async Task<Result<bool>> DeleteAsync(
         Guid id,
+        ClaimsPrincipal user,
         CancellationToken cancellationToken = default)
     {
-        if (id == Guid.Empty)
-        {
-            return Result<bool>.Fail(
+        if (id == Guid.Empty) return Result<bool>.Fail(
                 "Gateway ID is required.");
-        }
 
-        var gateway = await _gatewayRepository.GetByIdAsync(
-            id,
-            cancellationToken);
+        var gateway = await _gatewayRepository.GetByIdAsync(id, cancellationToken);
 
-        if (gateway is null)
-        {
-            return Result<bool>.Fail(
+        if (gateway is null) return Result<bool>.Fail(
                 "Gateway not found.");
-        }
+
+        if (!CanAccessCompany(user, gateway.CompanyId))
+            return Result<bool>.Fail(
+                "You do not have access to this gateway.");
 
         await _gatewayRepository.DeleteAsync(
             id,
@@ -221,20 +241,50 @@ public class GatewayCrudService :
 
     public async Task<Result<IReadOnlyList<GatewayDto>>> GetByCompanyIdAsync(
         Guid companyId,
+        ClaimsPrincipal user,
         CancellationToken cancellationToken = default)
     {
         if (companyId == Guid.Empty)
-        {
             return Result<IReadOnlyList<GatewayDto>>.Fail(
                 "Company ID is required.");
-        }
 
-        var gateways = await _gatewayRepository.GetByCompanyIdAsync(
-            companyId,
-            cancellationToken);
+        if (!CanAccessCompany(user, companyId))
+            return Result<IReadOnlyList<GatewayDto>>.Fail(
+                "You do not have access to this company.");
+
+        var gateways =
+            await _gatewayRepository.GetByCompanyIdAsync(
+                companyId,
+                cancellationToken);
 
         var dtos = _mapper.Map<List<GatewayDto>>(gateways);
 
         return Result<IReadOnlyList<GatewayDto>>.Ok(dtos);
     }
+
+    private static bool CanAccessCompany(
+            ClaimsPrincipal user,
+            Guid companyId)
+    {
+        if (companyId == Guid.Empty)
+            return false;
+
+        var isAdministrator =
+            user.IsInRole("Administrator");
+
+        var isTechnician =
+            user.IsInRole("Technician");
+
+        if (!isAdministrator && !isTechnician)
+            return false;
+
+        var claim =
+            user.FindFirst("CompanyId")?.Value;
+
+        if (!Guid.TryParse(claim, out var userCompanyId))
+            return false;
+
+        return userCompanyId == companyId;
+    }
+
 }

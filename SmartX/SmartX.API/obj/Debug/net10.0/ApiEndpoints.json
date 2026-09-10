@@ -98,6 +98,22 @@
   },
   {
     "ContainingType": "SmartX.API.Controllers.CompaniesController",
+    "Method": "CancelDeletion",
+    "RelativePath": "api/Companies/{companyId}/deletion-request/cancel",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "companyId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.CompaniesController",
     "Method": "CompleteOnboarding",
     "RelativePath": "api/Companies/{companyId}/onboarding/complete",
     "HttpMethod": "POST",
@@ -153,6 +169,22 @@
     "ContainingType": "SmartX.API.Controllers.CompaniesController",
     "Method": "Delete",
     "RelativePath": "api/Companies/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.CompaniesController",
+    "Method": "DeleteGuest",
+    "RelativePath": "api/Companies/{id}/guest",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -445,6 +477,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SmartX.API.Controllers.SensorsController",
+    "Method": "GetByGatewayId",
+    "RelativePath": "api/Sensors/gateway/{gatewayId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SmartX.API.Controllers.TelemetryController",
     "Method": "CreateTelemetry",
     "RelativePath": "api/Telemetry",
@@ -454,7 +502,7 @@
     "Parameters": [
       {
         "Name": "command",
-        "Type": "SmartX.Application.Commands.Telemetry.CreateTelemetryCommand",
+        "Type": "SmartX.Application.Requests.Telemetry.CreateTelemetryRequest",
         "IsRequired": true
       }
     ],

@@ -15,6 +15,11 @@ namespace SmartX.Domain.Interfaces
         Task UpdateAsync(
             CompanyConfiguration configuration,
             CancellationToken cancellationToken = default);
+
+        Task DeleteAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default);
+
     }
 
 }

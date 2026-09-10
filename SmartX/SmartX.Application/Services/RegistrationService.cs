@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using SmartX.Shared.Mapping;
 using FirebaseAdmin.Auth;
 using SmartX.Application.Authentication;
 using SmartX.Application.Requests.Company;
@@ -7,6 +7,7 @@ using SmartX.Domain.Enums;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.DTOs;
 using SmartX.Shared.Models;
+using System.Security.Claims;
 
 namespace SmartX.Application.Services.Registration;
 
@@ -125,9 +126,22 @@ public class RegistrationService
     }
 
     public async Task<Result<bool>> CompleteOnboardingAsync(
-    Guid companyId,
-    CancellationToken cancellationToken = default)
+        Guid companyId,
+        ClaimsPrincipal user,
+        CancellationToken cancellationToken = default)
     {
+        if (companyId == Guid.Empty)
+        {
+            return Result<bool>.Fail(
+                "Company ID is required.");
+        }
+
+        if (!CanAccessCompany(user, companyId))
+        {
+            return Result<bool>.Fail(
+                "You do not have access to this company.");
+        }
+
         var company =
             await _companyRepository.GetByIdAsync(
                 companyId,
@@ -145,6 +159,11 @@ public class RegistrationService
                 "Company is inactive.");
         }
 
+        if (company.OnboardingComplete)
+        {
+            return Result<bool>.Ok(true);
+        }
+
         company.OnboardingComplete = true;
         company.UpdatedAt = DateTime.UtcNow;
 
@@ -153,6 +172,28 @@ public class RegistrationService
             cancellationToken);
 
         return Result<bool>.Ok(true);
+    }
+
+    private static bool CanAccessCompany(
+    ClaimsPrincipal user,
+    Guid companyId)
+    {
+        if (companyId == Guid.Empty)
+            return false;
+
+        if (user.IsInRole("SuperAdmin"))
+            return true;
+
+        if (!user.IsInRole("Administrator"))
+            return false;
+
+        var companyClaim =
+            user.FindFirst("CompanyId")?.Value;
+
+        return Guid.TryParse(
+                   companyClaim,
+                   out var userCompanyId)
+               && userCompanyId == companyId;
     }
 
 }

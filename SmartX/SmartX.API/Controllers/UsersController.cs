@@ -7,8 +7,7 @@ namespace SmartX.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "SuperAdmin, Administrator")]
-
+[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly UserCrudService _crud;
@@ -19,86 +18,94 @@ public class UsersController : ControllerBase
         _crud = crud;
     }
 
-    [HttpGet]    
-    [Authorize]
-
+    [HttpGet]
+    [Authorize(Roles = "SuperAdmin")]
     public async Task<IActionResult> GetAll(
         CancellationToken cancellationToken)
     {
-        var result = await _crud.GetAllAsync(
-            cancellationToken);
+        var result =
+            await _crud.GetAllAsync(
+                cancellationToken);
 
-        if (!result.Success)
-            return BadRequest(result);
-
-        return Ok(result);
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
     }
 
-    [HttpGet("{id:guid}")]   
-    [Authorize]
-
+    [HttpGet("{id:guid}")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public async Task<IActionResult> GetById(
         Guid id,
         CancellationToken cancellationToken)
     {
-        var result = await _crud.GetByIdAsync(
-            id,
-            cancellationToken);
+        var result =
+            await _crud.GetByIdAsync(
+                id,
+                User,
+                cancellationToken);
 
-        if (!result.Success)
-            return NotFound(result);
+        if (result.Success)
+            return Ok(result);
 
-        return Ok(result);
+        return result.Error == "User not found."
+            ? NotFound(result)
+            : Forbid();
     }
 
-    [HttpGet("firebase/{firebaseUid}")]  
-    [Authorize]
-
+    [HttpGet("firebase/{firebaseUid}")]
+    [Authorize(Roles = "SuperAdmin, Administrator, Technician")]
     public async Task<IActionResult> GetByFirebaseUid(
         string firebaseUid,
         CancellationToken cancellationToken)
     {
-        var result = await _crud.GetByFirebaseUidAsync(
-            firebaseUid,
-            cancellationToken);
+        var result =
+            await _crud.GetByFirebaseUidAsync(
+                firebaseUid,
+                cancellationToken);
 
-        if (!result.Success)
-            return NotFound(result);
-
-        return Ok(result);
+        return result.Success
+            ? Ok(result)
+            : NotFound(result);
     }
 
     [HttpGet("company/{companyId:guid}")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public async Task<IActionResult> GetByCompanyId(
         Guid companyId,
         CancellationToken cancellationToken)
     {
-        var result = await _crud.GetByCompanyIdAsync(
-            companyId,
-            cancellationToken);
+        var result =
+            await _crud.GetByCompanyIdAsync(
+                companyId,
+                User,
+                cancellationToken);
 
-        if (!result.Success)
-            return BadRequest(result);
+        if (result.Success)
+            return Ok(result);
 
-        return Ok(result);
+        return Forbid();
     }
 
     [HttpPost]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public async Task<IActionResult> Create(
         CreateUserRequest request,
         CancellationToken cancellationToken)
     {
-        var result = await _crud.CreateAsync(
-            request,
-            cancellationToken);
+        var result =
+            await _crud.CreateAsync(
+                request,
+                User,
+                cancellationToken);
 
-        if (!result.Success)
-            return BadRequest(result);
+        if (result.Success)
+            return Ok(result);
 
-        return Ok(result);
+        return BadRequest(result);
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public async Task<IActionResult> Update(
         Guid id,
         UpdateUserRequest request,
@@ -106,39 +113,53 @@ public class UsersController : ControllerBase
     {
         request.Id = id;
 
-        var result = await _crud.UpdateAsync(
-            request,
-            cancellationToken);
+        var result =
+            await _crud.UpdateAsync(
+                request,
+                User,
+                cancellationToken);
 
-        if (!result.Success)
-        {
-            if (result.Error == "User not found.")
-                return NotFound(result);
+        if (result.Success)
+            return Ok(result);
 
-            return BadRequest(result);
-        }
+        if (result.Error == "User not found.")
+            return NotFound(result);
 
-        return Ok(result);
+
+
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        if (result.Error.Contains("permission") ||
+            result.Error.Contains("access"))
+            return Forbid();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+
+        return BadRequest(result);
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Roles = "SuperAdmin,Administrator")]
     public async Task<IActionResult> Delete(
         Guid id,
         CancellationToken cancellationToken)
     {
-        var result = await _crud.DeleteAsync(
-            id,
-            cancellationToken);
+        var result =
+            await _crud.DeleteAsync(
+                id,
+                User,
+                cancellationToken);
 
-        if (!result.Success)
-        {
-            if (result.Error == "User not found.")
-                return NotFound(result);
+        if (result.Success)
+            return Ok(result);
 
-            return BadRequest(result);
-        }
+        if (result.Error == "User not found.")
+            return NotFound(result);
 
-        return Ok(result);
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+        if (result.Error.Contains("permission") ||
+            result.Error.Contains("SuperAdmin"))
+            return Forbid();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+
+        return BadRequest(result);
     }
-
 }

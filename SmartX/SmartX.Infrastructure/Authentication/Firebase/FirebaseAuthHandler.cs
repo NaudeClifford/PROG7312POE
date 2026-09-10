@@ -30,11 +30,6 @@ public class FirebaseAuthHandler
     protected override async Task<AuthenticateResult>
         HandleAuthenticateAsync()
     {
-        Logger.LogInformation(
-    "AUTH REQUEST: {Method} {Path}",
-    Request.Method,
-    Request.Path);
-
 
         if (!Request.Headers.TryGetValue(
                 "Authorization",
@@ -83,7 +78,7 @@ public class FirebaseAuthHandler
             }
 
             var claims = new List<Claim>
-{
+            {
     new(
         ClaimTypes.NameIdentifier,
         decodedToken.Uid),
@@ -99,7 +94,7 @@ public class FirebaseAuthHandler
     new(
         ClaimTypes.Role,
         user.Role.ToString())
-};
+            };
 
 
             var identity = new ClaimsIdentity(
@@ -111,24 +106,18 @@ public class FirebaseAuthHandler
             var ticket = new AuthenticationTicket(
                 principal,
                 Scheme.Name);
-            Logger.LogInformation(
-    "SMARTX AUTH SUCCESS: User={UserId}, FirebaseUid={FirebaseUid}, Role={Role}, CompanyId={CompanyId}",
-    user.Id,
-    decodedToken.Uid,
-    user.Role,
-    user.CompanyId);
 
             return AuthenticateResult.Success(ticket);
         }
-        catch (FirebaseAuthException ex)
+        catch (FirebaseAuthException)
         {
             return AuthenticateResult.Fail(
-                $"Firebase authentication failed: {ex.Message}");
+                "Authentication failed.");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return AuthenticateResult.Fail(
-                $"Authentication handler failed: {ex.Message}");
+                "Authentication failed.");
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using SmartX.Application.Requests.Telemetry;
+using SmartX.Shared.Mapping;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Repositories.Local;
 using SmartX.WPF.Services.Api;
@@ -21,6 +22,9 @@ public class TelemetryViewModel : ViewModelBase
     private readonly ILocalSensorCache _sensorCache;
     private readonly INavigationService _navigationService;
     private readonly ISmartXApiClient _apiClient;
+    private readonly IMapper _mapper;
+
+
     private Guid? _selectedSensorId;
 
     private string _selectedSensorFilter = "All";
@@ -33,9 +37,9 @@ public class TelemetryViewModel : ViewModelBase
 
     private DomainTelemetry[] _telemetryArray = [];
 
-    public ObservableCollection<DomainTelemetry> Telemetry { get; } = [];
+    public ObservableCollection<TelemetryDisplayModel> Telemetry { get; } = [];
 
-    public ObservableCollection<DomainTelemetry> FilteredTelemetry { get; } = [];
+    public ObservableCollection<TelemetryDisplayModel> FilteredTelemetry { get; } = [];
 
     public ObservableCollection<DomainSensor> Sensors { get; } = [];
 
@@ -45,6 +49,13 @@ public class TelemetryViewModel : ViewModelBase
     ];
 
     // SELECTED SENSOR
+    public string GetSensorName(Guid sensorId)
+    {
+        return Sensors.FirstOrDefault(
+                   x => x.Id == sensorId)
+               ?.Name
+               ?? "Unknown Sensor";
+    }
 
     public Guid? SelectedSensorId
     {
@@ -73,6 +84,9 @@ public class TelemetryViewModel : ViewModelBase
 
                 OnPropertyChanged(
                     nameof(SelectedSensorFilter));
+
+                RaiseCommandStates();
+
             }
             else
             {
@@ -80,10 +94,15 @@ public class TelemetryViewModel : ViewModelBase
 
                 OnPropertyChanged(
                     nameof(SelectedSensorFilter));
+
+                RaiseCommandStates();
+
+
             }
 
             ApplyFilters();
             RaiseFilterState();
+            RaiseCommandStates();
         }
     }
 
@@ -201,11 +220,12 @@ public class TelemetryViewModel : ViewModelBase
 
     // TELEMETRY VALUES
 
-    public DomainTelemetry? LatestTelemetry =>
+    public TelemetryDisplayModel? LatestTelemetry =>
         FilteredTelemetry
             .OrderByDescending(
                 x => x.Timestamp)
             .FirstOrDefault();
+
 
     public double? Temperature =>
         LatestTelemetry?.Temperature;
@@ -230,6 +250,8 @@ public class TelemetryViewModel : ViewModelBase
 
     public AsyncRelayCommand AddTelemetryCommand { get; }
 
+    public AsyncRelayCommand ReloadTelemetryCommand { get; }
+
     // CONSTRUCTOR
 
     public TelemetryViewModel(
@@ -238,6 +260,7 @@ public class TelemetryViewModel : ViewModelBase
         INavigationService navigationService,
         IConnectivityService connectivityService,
         SmartXSession session,
+        IMapper mapper,
         ISmartXApiClient apiClient) : base(
             connectivityService,
             session)
@@ -246,6 +269,7 @@ public class TelemetryViewModel : ViewModelBase
         _sensorCache = sensorCache;
         _apiClient = apiClient;
         _navigationService = navigationService;
+        _mapper = mapper;
 
         BackToSensorsCommand =
             new AsyncRelayCommand(
@@ -261,31 +285,29 @@ public class TelemetryViewModel : ViewModelBase
 
         AddTelemetryCommand =
             new AsyncRelayCommand(
-                AddTelemetryAsync);
+                AddTelemetryAsync,
+                CanAddTelemetry);
+
+        ReloadTelemetryCommand =
+            new AsyncRelayCommand(
+        ReloadTelemetryAsync,
+        CanReloadTelemetry);
+
     }
 
     // LOAD PAGE
 
     public async Task LoadAsync(
-        Guid? sensorId = null,
-        CancellationToken cancellationToken = default)
+    Guid? sensorId = null,
+    CancellationToken cancellationToken = default)
     {
+        if (IsBusy)
+            return;
+
         try
         {
             IsBusy = true;
             ErrorMessage = string.Empty;
-
-            await CheckOnlineAsync(
-                cancellationToken);
-
-            Telemetry.Clear();
-            FilteredTelemetry.Clear();
-            Sensors.Clear();
-            SensorFilters.Clear();
-
-            SensorFilters.Add("All");
-
-            // GATEWAY REQUIRED
 
             if (Session.GatewayId is not Guid gatewayId ||
                 gatewayId == Guid.Empty)
@@ -293,51 +315,29 @@ public class TelemetryViewModel : ViewModelBase
                 _selectedSensorId = null;
                 _selectedSensorFilter = "All";
 
-                OnPropertyChanged(
-                    nameof(SelectedSensorId));
+                OnPropertyChanged(nameof(SelectedSensorId));
+                OnPropertyChanged(nameof(SelectedSensor));
+                OnPropertyChanged(nameof(SelectedSensorName));
+                OnPropertyChanged(nameof(SelectedSensorFilter));
 
-                OnPropertyChanged(
-                    nameof(SelectedSensor));
+                Telemetry.Clear();
+                FilteredTelemetry.Clear();
 
-                OnPropertyChanged(
-                    nameof(SelectedSensorName));
-
-                OnPropertyChanged(
-                    nameof(SelectedSensorFilter));
-
-                ErrorMessage =
-                    "No gateway selected.";
+                ErrorMessage = "No gateway selected.";
 
                 RaiseTelemetryProperties();
 
                 return;
             }
 
-            // LOAD SENSORS FOR CURRENT GATEWAY
-
-            var sensors =
-                await _sensorCache.GetByGatewayIdAsync(
-                    gatewayId,
-                    cancellationToken);
-
-            foreach (var sensor in sensors)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                Sensors.Add(sensor);
-
-                SensorFilters.Add(
-                    sensor.Name);
-            }
-
-            // SENSOR SELECTION
+            await LoadSensorsAsync(
+                gatewayId,
+                cancellationToken);
 
             if (sensorId.HasValue &&
-                Sensors.Any(
-                    x => x.Id == sensorId.Value))
+                Sensors.Any(x => x.Id == sensorId.Value))
             {
-                _selectedSensorId =
-                    sensorId.Value;
+                _selectedSensorId = sensorId.Value;
 
                 var selectedSensor =
                     Sensors.First(
@@ -352,24 +352,16 @@ public class TelemetryViewModel : ViewModelBase
                 _selectedSensorFilter = "All";
             }
 
-            OnPropertyChanged(
-                nameof(SelectedSensorId));
-
-            OnPropertyChanged(
-                nameof(SelectedSensor));
-
-            OnPropertyChanged(
-                nameof(SelectedSensorName));
-
-            OnPropertyChanged(
-                nameof(SelectedSensorFilter));
-
-            // LOAD TELEMETRY
+            OnPropertyChanged(nameof(SelectedSensorId));
+            OnPropertyChanged(nameof(SelectedSensor));
+            OnPropertyChanged(nameof(SelectedSensorName));
+            OnPropertyChanged(nameof(SelectedSensorFilter));
 
             await LoadTelemetryAsync(
                 cancellationToken);
 
             RaiseFilterState();
+            RaiseCommandStates();
         }
         catch (OperationCanceledException)
         {
@@ -382,15 +374,55 @@ public class TelemetryViewModel : ViewModelBase
         finally
         {
             IsBusy = false;
+            RaiseCommandStates();
         }
     }
 
-    public Task LoadSensorAsync(
-        Guid sensorId)
+    private async Task LoadSensorsAsync(
+    Guid gatewayId,
+    CancellationToken cancellationToken = default)
     {
-        SelectedSensorId = sensorId;
+        Sensors.Clear();
+        SensorFilters.Clear();
+        SensorFilters.Add("All");
 
-        return Task.CompletedTask;
+        var sensors =
+            await _sensorCache.GetByGatewayIdAsync(
+                gatewayId,
+                cancellationToken);
+
+        if (sensors is null || sensors.Count == 0)
+        {
+            var sensorDtos =
+                await _apiClient.GetSensorsByGatewayIdAsync(
+                    gatewayId,
+                    cancellationToken);
+
+            foreach (var sensorDto in sensorDtos)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var sensor =
+                    _mapper.Map<DomainSensor>(sensorDto);
+
+                await _sensorCache.UpdateAsync(
+                    sensor,
+                    cancellationToken);
+
+                Sensors.Add(sensor);
+                SensorFilters.Add(sensor.Name);
+            }
+
+            return;
+        }
+
+        foreach (var sensor in sensors)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            Sensors.Add(sensor);
+            SensorFilters.Add(sensor.Name);
+        }
     }
 
     // LOAD TELEMETRY
@@ -401,7 +433,6 @@ public class TelemetryViewModel : ViewModelBase
         if (!Session.GatewayId.HasValue)
         {
             Telemetry.Clear();
-
             FilteredTelemetry.Clear();
 
             _telemetryCollection.Clear();
@@ -414,10 +445,22 @@ public class TelemetryViewModel : ViewModelBase
             return;
         }
 
-        var telemetry =
-            await _telemetryCache.GetByGatewayIdAsync(
-                Session.GatewayId.Value,
-                cancellationToken);
+        IEnumerable<DomainTelemetry> telemetry;
+
+        if (_selectedSensorId.HasValue)
+        {
+            telemetry =
+                await _telemetryCache.GetBySensorIdAsync(
+                    _selectedSensorId.Value,
+                    cancellationToken);
+        }
+        else
+        {
+            telemetry =
+                await _telemetryCache.GetByGatewayIdAsync(
+                    Session.GatewayId.Value,
+                    cancellationToken);
+        }
 
         _telemetryCollection.Clear();
 
@@ -428,77 +471,52 @@ public class TelemetryViewModel : ViewModelBase
             _telemetryCollection.Add(item);
         }
 
-        _telemetryArray =  _telemetryCollection.ToArray();
+        _telemetryArray =
+            _telemetryCollection.ToArray();
 
-        //Reclusion
-        TotalPower = CalculateTotalPower(_telemetryArray, 0);
+        TotalPower =
+            CalculateTotalPower(
+                _telemetryArray,
+                0);
 
-        OnPropertyChanged(nameof(TotalPower));
-
-        if (_telemetryArray.Length >= 2)
-        {
-            TelemetryReading first = new(_telemetryArray[0]);
-
-            TelemetryReading second = new(_telemetryArray[1]);
-
-            if (first > second)
-            {
-                // First reading is newer.
-            }
-        }
+        OnPropertyChanged(
+            nameof(TotalPower));
 
         Telemetry.Clear();
-
 
         foreach (var item in _telemetryCollection.Items)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            Telemetry.Add(item);
+            Telemetry.Add(
+                CreateDisplayModel(item));
         }
 
         ApplyFilters();
     }
 
     // FILTERING
-
     private void ApplyFilters()
     {
         FilteredTelemetry.Clear();
 
-        IEnumerable<DomainTelemetry> filtered =
+        IEnumerable<TelemetryDisplayModel> filtered =
             Telemetry;
 
-        if (!string.Equals(
-                SelectedSensorFilter,
-                "All",
-                StringComparison.OrdinalIgnoreCase))
+        if (_selectedSensorId.HasValue)
         {
-            var sensor =
-                Sensors.FirstOrDefault(
-                    x => x.Name.Equals(
-                        SelectedSensorFilter,
-                        StringComparison.OrdinalIgnoreCase));
+            var sensorId = _selectedSensorId.Value;
 
-            if (sensor is not null)
-            {
-                filtered =
-                    filtered.Where(
-                        x => x.SensorId == sensor.Id);
-            }
-            else
-            {
-                filtered =
-                    Enumerable.Empty<DomainTelemetry>();
-            }
+            filtered =
+                filtered.Where(
+                    x => x.SensorId == sensorId);
         }
 
         if (FromDate.HasValue)
         {
             filtered =
                 filtered.Where(
-                    x => x.Timestamp >=
-                         FromDate.Value);
+                    x => x.Timestamp >= FromDate.Value);
         }
 
         if (ToDate.HasValue)
@@ -515,14 +533,25 @@ public class TelemetryViewModel : ViewModelBase
             filtered.OrderByDescending(
                 x => x.Timestamp);
 
-        foreach (var item in filtered)
-            FilteredTelemetry.Add(item);
+        foreach (var telemetry in filtered)
+        {
+            FilteredTelemetry.Add(telemetry);
+        }
 
         RaiseTelemetryProperties();
     }
 
+
+
     // ADD TELEMETRY
     // DEVELOPMENT ONLY
+    private bool CanAddTelemetry()
+    {
+        return !IsBusy &&
+               IsOnline &&
+               SelectedSensorId.HasValue &&
+               HasGateway;
+    }
 
     private async Task AddTelemetryAsync()
     {
@@ -541,10 +570,6 @@ public class TelemetryViewModel : ViewModelBase
         {
             IsBusy = true;
             ErrorMessage = string.Empty;
-
-            // CHECK CONNECTIVITY
-            await CheckOnlineAsync(
-                CancellationToken.None);
 
             var random = new Random();
 
@@ -591,19 +616,9 @@ public class TelemetryViewModel : ViewModelBase
                     "did not return the saved telemetry.");
             }
 
-            var telemetry = new DomainTelemetry
-            {
-                Id = savedTelemetry.Id,
-                SensorId = savedTelemetry.SensorId,
-                Timestamp = savedTelemetry.Timestamp,
-                Voltage = savedTelemetry.Voltage,
-                Current = savedTelemetry.Current,
-                Power = savedTelemetry.Power,
-                Temperature = savedTelemetry.Temperature,
-                CreatedAt = savedTelemetry.CreatedAt,
-                UpdatedAt = savedTelemetry.UpdatedAt
-            };
-
+            var telemetry =
+                _mapper.Map<DomainTelemetry>(
+                    savedTelemetry);
 
             // UPDATE LOCAL SQLITE CACHE
             await _telemetryCache.UpdateAsync(
@@ -629,7 +644,7 @@ public class TelemetryViewModel : ViewModelBase
 
             // ADD TO UI COLLECTION
             Telemetry.Add(
-                telemetry);
+                CreateDisplayModel(telemetry));
 
             // REAPPLY FILTERS
             ApplyFilters();
@@ -646,7 +661,34 @@ public class TelemetryViewModel : ViewModelBase
         await Task.CompletedTask;
     }
 
+
+    private TelemetryDisplayModel CreateDisplayModel(
+    DomainTelemetry telemetry)
+    {
+        var sensor =
+            Sensors.FirstOrDefault(
+                x => x.Id == telemetry.SensorId);
+
+        return new TelemetryDisplayModel
+        {
+            Id = telemetry.Id,
+            SensorId = telemetry.SensorId,
+            SensorName = sensor?.Name ?? "Unknown Sensor",
+            Timestamp = telemetry.Timestamp,
+            Voltage = telemetry.Voltage,
+            Current = telemetry.Current,
+            Power = telemetry.Power,
+            Temperature = telemetry.Temperature
+        };
+    }
+
     // RELOAD
+    private bool CanReloadTelemetry()
+    {
+        return !IsBusy &&
+               IsOnline &&
+               HasGateway;
+    }
 
     private async Task ReloadTelemetryAsync()
     {
@@ -655,20 +697,19 @@ public class TelemetryViewModel : ViewModelBase
 
         try
         {
-            IsBusy = true;
-            ErrorMessage = string.Empty;
-
-            await LoadTelemetryAsync();
+            await LoadAsync(
+                _selectedSensorId);
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
             ErrorMessage = ex.Message;
         }
-        finally
-        {
-            IsBusy = false;
-        }
     }
+
 
     // BACK TO SENSORS
 
@@ -788,6 +829,15 @@ public class TelemetryViewModel : ViewModelBase
             nameof(TotalPower));
     }
 
+
+    protected override void RaiseCommandStates()
+    {
+        AddTelemetryCommand?.RaiseCanExecuteChanged();
+        BackToSensorsCommand?.RaiseCanExecuteChanged();
+        BackToGatewaysCommand?.RaiseCanExecuteChanged();
+        ClearFiltersCommand?.RaiseCanExecuteChanged();
+    }
+
     // SESSION
 
     protected override async void OnSessionPropertyChanged(
@@ -824,4 +874,5 @@ public class TelemetryViewModel : ViewModelBase
 
         await LoadAsync();
     }
+
 }

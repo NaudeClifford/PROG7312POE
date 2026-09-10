@@ -7,14 +7,12 @@ public partial class CompanyServicesPage : Page
 {
     private readonly CompanyServicesViewModel _viewModel;
 
-
     public CompanyServicesPage(
         CompanyServicesViewModel viewModel)
     {
         InitializeComponent();
 
         _viewModel = viewModel;
-
         DataContext = _viewModel;
 
         Loaded += CompanyServicesPage_Loaded;
@@ -32,7 +30,11 @@ public partial class CompanyServicesPage : Page
     public void OnNavigatedTo(object? parameter)
     {
         _viewModel.IsOnboarding =
-            parameter?.ToString() == "OnBoarding";
+            string.Equals(
+                parameter?.ToString(),
+                "OnBoarding",
+                StringComparison.OrdinalIgnoreCase);
     }
-
 }
+
+

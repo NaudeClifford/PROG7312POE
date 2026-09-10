@@ -1,29 +1,85 @@
-﻿using AutoMapper;
-using SmartX.Shared.Models;
+﻿using SmartX.Shared.Mapping;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.DTOs.Telemetry;
+using SmartX.Shared.Models;
+using System.Security.Claims;
 
 namespace SmartX.Application.Queries.Telemetry;
 
 public class GetLatestTelemetryBySensorHandler
 {
     private readonly ITelemetryRepository _telemetryRepository;
+    private readonly ISensorRepository _sensorRepository;
+    private readonly IGatewayRepository _gatewayRepository;
     private readonly IMapper _mapper;
 
     public GetLatestTelemetryBySensorHandler(
         ITelemetryRepository telemetryRepository,
+        ISensorRepository sensorRepository,
+        IGatewayRepository gatewayRepository,
         IMapper mapper)
     {
         _telemetryRepository = telemetryRepository;
+        _sensorRepository = sensorRepository;
+        _gatewayRepository = gatewayRepository;
         _mapper = mapper;
     }
 
     public async Task<Result<TelemetryDto?>> HandleAsync(
         GetLatestTelemetryBySensorQuery query,
+        ClaimsPrincipal user,
         CancellationToken cancellationToken = default)
     {
-        var telemetry = await _telemetryRepository
-            .GetLatestBySensorIdAsync(
+        if (query.SensorId == Guid.Empty)
+        {
+            return Result<TelemetryDto?>.Fail(
+                "Sensor ID is required.");
+        }
+
+        var userCompanyId = GetUserCompanyId(user);
+
+        if (userCompanyId is null)
+        {
+            return Result<TelemetryDto?>.Fail(
+                "You do not have access to this sensor.");
+        }
+
+        var sensor =
+            await _sensorRepository.GetByIdAsync(
+                query.SensorId,
+                cancellationToken);
+
+        if (sensor is null)
+        {
+            return Result<TelemetryDto?>.Fail(
+                "Sensor not found.");
+        }
+
+        if (!sensor.GatewayId.HasValue)
+        {
+            return Result<TelemetryDto?>.Fail(
+                "Sensor is not associated with a gateway.");
+        }
+
+        var gateway =
+            await _gatewayRepository.GetByIdAsync(
+                sensor.GatewayId.Value,
+                cancellationToken);
+
+        if (gateway is null)
+        {
+            return Result<TelemetryDto?>.Fail(
+                "Gateway not found.");
+        }
+
+        if (gateway.CompanyId != userCompanyId.Value)
+        {
+            return Result<TelemetryDto?>.Fail(
+                "You do not have access to this sensor.");
+        }
+
+        var telemetry =
+            await _telemetryRepository.GetLatestBySensorIdAsync(
                 query.SensorId,
                 cancellationToken);
 
@@ -33,8 +89,25 @@ public class GetLatestTelemetryBySensorHandler
                 "Telemetry not found.");
         }
 
-        var dto = _mapper.Map<TelemetryDto>(telemetry);
+        var dto =
+            _mapper.Map<TelemetryDto>(
+                telemetry);
 
         return Result<TelemetryDto?>.Ok(dto);
+    }
+
+    private static Guid? GetUserCompanyId(
+        ClaimsPrincipal user)
+    {
+        var claim =
+            user.FindFirst("CompanyId")?.Value;
+
+        if (!Guid.TryParse(claim, out var companyId) ||
+            companyId == Guid.Empty)
+        {
+            return null;
+        }
+
+        return companyId;
     }
 }

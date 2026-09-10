@@ -1,4 +1,5 @@
 ﻿using SmartX.Application.Authentication;
+using SmartX.Domain.Enums;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
@@ -7,6 +8,7 @@ using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.Home;
+using SmartX.WPF.Views.Pages.SignUp;
 using System.Net.Http;
 using System.Windows.Input;
 
@@ -19,10 +21,34 @@ public class SigninViewModel : ViewModelBase
     private readonly ICacheSyncService _cacheSyncService;
     private readonly INavigationService _navigationService;
     private readonly SmartXCredentialStore _credentialStore;
+
     private string _email = string.Empty;
     private string _password = string.Empty;
-
     private bool _rememberMe;
+
+    public SigninViewModel(
+        IAuthenticationService authenticationService,
+        ISmartXApiClient apiClient,
+        SmartXSession session,
+        ICacheSyncService cacheSyncService,
+        INavigationService navigationService,
+        IConnectivityService connectivityService,
+        SmartXCredentialStore credentialStore)
+        : base(connectivityService, session)
+    {
+        _authenticationService = authenticationService;
+        _apiClient = apiClient;
+        _cacheSyncService = cacheSyncService;
+        _navigationService = navigationService;
+        _credentialStore = credentialStore;
+
+        SignInCommand = new AsyncRelayCommand(
+            SignInAsync,
+            CanSignIn);
+
+        GuestCommand = new RelayCommand(
+            _ => EnterGuestMode());
+    }
 
     public bool RememberMe
     {
@@ -61,37 +87,19 @@ public class SigninViewModel : ViewModelBase
         }
     }
 
-    private void EnterGuestMode()
-    {
-        Session.StartGuestSession("Guest");
-
-        _navigationService.NavigateTo<GatewayPage>();
-    }
-
     public AsyncRelayCommand SignInCommand { get; }
+
     public ICommand GuestCommand { get; }
 
-    public SigninViewModel(
-        IAuthenticationService authenticationService,
-        ISmartXApiClient apiClient,
-        SmartXSession session,
-        ICacheSyncService cacheSyncService,
-        INavigationService navigationService,
-        IConnectivityService connectivityService,
-        SmartXCredentialStore credentialStore) : base(connectivityService, session)
+    public bool HasError =>
+        !string.IsNullOrWhiteSpace(ErrorMessage);
+
+    public string SignInButtonText =>
+        IsBusy ? "Signing in..." : "Sign In";
+
+    private void EnterGuestMode()
     {
-        _authenticationService = authenticationService;
-        _apiClient = apiClient;
-        _cacheSyncService = cacheSyncService;
-        _navigationService = navigationService;
-        _credentialStore = credentialStore;
-
-        SignInCommand = new AsyncRelayCommand(
-            SignInAsync,
-            CanSignIn);
-
-        GuestCommand = new RelayCommand(
-            _ => EnterGuestMode());
+        _navigationService.NavigateTo<SignUpPage>("Guest");
     }
 
     private bool CanSignIn()
@@ -107,6 +115,8 @@ public class SigninViewModel : ViewModelBase
         {
             IsBusy = true;
             ErrorMessage = string.Empty;
+            OnPropertyChanged(nameof(HasError));
+
 
             var result =
                 await _authenticationService.SignInAsync(
@@ -118,6 +128,8 @@ public class SigninViewModel : ViewModelBase
                 ErrorMessage =
                     result.ErrorMessage ??
                     "Login failed.";
+
+                OnPropertyChanged(nameof(HasError));
 
                 return;
             }
@@ -140,8 +152,8 @@ public class SigninViewModel : ViewModelBase
 
             var user =
                 await _apiClient.GetUserByFirebaseUidAsync(
-                    result.UserId, result.IdToken);
-
+                    result.UserId,
+                    result.IdToken);
 
             if (user is null)
             {
@@ -159,11 +171,52 @@ public class SigninViewModel : ViewModelBase
                 return;
             }
 
-            // Store authenticated user/session
+            if (user.Role != UserRole.SuperAdmin &&
+                user.CompanyId == Guid.Empty)
+            {
+                ErrorMessage =
+                    "Your account is not associated with a company.";
+
+                return;
+            }
+
+            if (result.RefreshToken == null)
+            {
+                ErrorMessage =
+                    "Your account has a null refresh token.";
+
+                return;
+            }
+
             Session.SignIn(
                 user,
-                result.IdToken ?? string.Empty,
-                result.RefreshToken ?? string.Empty);
+                result.IdToken,
+                result.RefreshToken);
+
+            if (string.IsNullOrWhiteSpace(Session.IdToken))
+            {
+                throw new InvalidOperationException(
+                    "Authentication succeeded, but SmartXSession did not retain the ID token.");
+            }
+
+            if (user.Role != UserRole.SuperAdmin)
+            {
+                var company =
+                    await _cacheSyncService.GetCompanyAsync(
+                        user.CompanyId);
+
+                if (company is null)
+                {
+                    Session.SignOut();
+
+                    ErrorMessage =
+                        "The company associated with your account could not be found.";
+
+                    return;
+                }
+
+                Session.SetCompanyName(company.Name);
+            }
 
             if (RememberMe &&
                 !string.IsNullOrWhiteSpace(result.RefreshToken))
@@ -176,44 +229,44 @@ public class SigninViewModel : ViewModelBase
                 await _credentialStore.DeleteAsync();
             }
 
-            // Synchronize local cache
-            await _cacheSyncService.SyncUserAsync(
-                user.Id);
+            await _cacheSyncService.SyncUserAsync(user.Id);
 
-            if (user.CompanyId != Guid.Empty)
+            if (user.Role != UserRole.SuperAdmin)
             {
-                await _cacheSyncService.SyncCompanyAsync(
-                    user.CompanyId);
-
                 await _cacheSyncService.SyncGatewaysAsync(
                     user.CompanyId);
-            }
 
-            await _cacheSyncService.SyncSensorsAsync();
-            
+                await _cacheSyncService.SyncSensorsAsync();
+
+                _navigationService.NavigateTo<GatewayPage>();
+            }
+            else
+            {
+                _navigationService.NavigateTo<HomePage>();
+            }
         }
         catch (HttpRequestException)
         {
             ErrorMessage =
                 "Unable to connect to the SmartX API.";
         }
-
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(
+                ex.ToString());
 
             ErrorMessage = ex.Message;
         }
-
         finally
         {
             IsBusy = false;
         }
     }
 
-    public bool HasError =>
-    !string.IsNullOrWhiteSpace(ErrorMessage);
 
-    public string SignInButtonText =>
-        IsBusy ? "Signing in..." : "Sign In";
+
 }

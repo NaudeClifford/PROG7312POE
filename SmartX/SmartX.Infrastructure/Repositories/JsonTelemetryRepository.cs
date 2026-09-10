@@ -111,4 +111,19 @@ public class JsonTelemetryRepository : ITelemetryRepository
             json,
             cancellationToken);
     }
+
+    public async Task DeleteAsync(
+        Guid id,
+        CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var telemetry = await GetByIdAsync(id, cancellationToken);
+
+        if (telemetry is null)
+            return;
+
+    }
+
+
 }

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using SmartX.Shared.Mapping;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.DTOs;
 using SmartX.Shared.Models;

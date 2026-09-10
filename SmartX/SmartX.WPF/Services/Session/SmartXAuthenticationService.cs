@@ -1,4 +1,5 @@
 ﻿using SmartX.Application.Authentication;
+using SmartX.Domain.Enums;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Sync;
 
@@ -19,20 +20,11 @@ public class SmartXAuthenticationService
         ICacheSyncService cacheSyncService,
         SmartXCredentialStore credentialStore)
     {
-        _authenticationService =
-            authenticationService;
-
-        _apiClient =
-            apiClient;
-
-        _session =
-            session;
-
-        _cacheSyncService =
-            cacheSyncService;
-
-        _credentialStore =
-            credentialStore;
+        _authenticationService = authenticationService;
+        _apiClient = apiClient;
+        _session = session;
+        _cacheSyncService = cacheSyncService;
+        _credentialStore = credentialStore;
     }
 
     public async Task<bool> TryRestoreSessionAsync()
@@ -46,26 +38,12 @@ public class SmartXAuthenticationService
         try
         {
             var result =
-                await _authenticationService
-                    .RefreshTokenAsync(
-                        refreshToken);
+                await _authenticationService.RefreshTokenAsync(
+                    refreshToken);
 
-            if (!result.Success)
-            {
-                await _credentialStore.DeleteAsync();
-
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(
-                    result.UserId))
-            {
-                await _credentialStore.DeleteAsync();
-
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(result.IdToken))
+            if (!result.Success ||
+                string.IsNullOrWhiteSpace(result.UserId) ||
+                string.IsNullOrWhiteSpace(result.IdToken))
             {
                 await _credentialStore.DeleteAsync();
                 return false;
@@ -76,61 +54,87 @@ public class SmartXAuthenticationService
                     result.UserId,
                     result.IdToken);
 
-            if (user is null)
+            if (user is null ||
+                !user.IsActive)
             {
                 await _credentialStore.DeleteAsync();
-
                 return false;
             }
 
-            if (!user.IsActive)
+            if (user.Role != UserRole.SuperAdmin &&
+                user.CompanyId == Guid.Empty)
             {
                 await _credentialStore.DeleteAsync();
-
                 return false;
             }
 
             _session.SignIn(
                 user,
-                result.IdToken ?? string.Empty,
-                result.RefreshToken ??
-                    refreshToken);
+                result.IdToken,
+                result.RefreshToken ?? refreshToken);
 
-            var newRefreshToken =
-                result.RefreshToken;
-
-            if (!string.IsNullOrWhiteSpace(
-                    newRefreshToken))
+            if (!string.IsNullOrWhiteSpace(result.RefreshToken))
             {
-                await _credentialStore
-                    .SaveAsync(
-                        newRefreshToken);
+                await _credentialStore.SaveAsync(
+                    result.RefreshToken);
             }
 
-            await _cacheSyncService
-                .SyncUserAsync(user.Id);
+            if (user.Role != UserRole.SuperAdmin)
+            {
+                var company =
+                    await _cacheSyncService.GetCompanyAsync(
+                        user.CompanyId);
 
-            await _cacheSyncService
-                .SyncCompanyAsync(user.CompanyId);
+                if (company is null)
+                {
+                    _session.SignOut();
+                    await _credentialStore.DeleteAsync();
+                    return false;
+                }
 
-            await _cacheSyncService
-                .SyncGatewaysAsync(user.CompanyId);
+                _session.SetCompanyName(company.Name);
 
-            await _cacheSyncService
-                .SyncSensorsAsync();
+                await _cacheSyncService.SyncGatewaysAsync(
+                    user.CompanyId);
+
+                await _cacheSyncService.SyncSensorsAsync();
+            }
+
+            await _cacheSyncService.SyncUserAsync(
+                user.Id);
 
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine(
+                $"Session restore failed: {ex}");
+
             return false;
         }
     }
 
     public async Task LogoutAsync()
     {
-        await _credentialStore.DeleteAsync();
+        var isGuest = _session.IsGuest;
+        var userId = _session.UserId;
+        var companyId = _session.CompanyId;
 
-        _session.SignOut();
+        try
+        {
+            if (isGuest &&
+                userId != Guid.Empty &&
+                companyId != Guid.Empty)
+            {
+                await _apiClient.DeleteCompanyAsync(
+                    companyId);
+            }
+        }
+        finally
+        {
+            await _credentialStore.DeleteAsync();
+            _session.SignOut();
+        }
     }
+
 }

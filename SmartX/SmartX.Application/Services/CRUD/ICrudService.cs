@@ -1,6 +1,7 @@
-﻿using SmartX.Shared.Models;
+﻿using System.Security.Claims;
+using SmartX.Shared.Models;
 
-namespace SmartX.Application.Services.CRUD;
+namespace SmartX.Domain.Interfaces;
 
 public interface ICrudService<TDto, TCreateRequest, TUpdateRequest>
 {
@@ -9,17 +10,21 @@ public interface ICrudService<TDto, TCreateRequest, TUpdateRequest>
 
     Task<Result<TDto>> GetByIdAsync(
         Guid id,
+        ClaimsPrincipal user,
         CancellationToken cancellationToken = default);
 
     Task<Result<Guid>> CreateAsync(
         TCreateRequest request,
+        ClaimsPrincipal user,
         CancellationToken cancellationToken = default);
 
     Task<Result<bool>> UpdateAsync(
         TUpdateRequest request,
+        ClaimsPrincipal user,
         CancellationToken cancellationToken = default);
 
     Task<Result<bool>> DeleteAsync(
         Guid id,
+        ClaimsPrincipal user,
         CancellationToken cancellationToken = default);
 }

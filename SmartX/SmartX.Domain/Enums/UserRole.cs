@@ -5,5 +5,8 @@ public enum UserRole
     Viewer = 0,
     Technician = 1,
     Administrator = 2,
-    SuperAdmin = 3
+    SuperAdmin = 3,
+
+    Guest = 4
+
 }

@@ -41,7 +41,7 @@ namespace SmartX.WPF.ViewModels
                 NavigateToSignUp);
 
             GuestCommand = new RelayCommand(
-                EnterGuestMode);
+                _ => EnterGuestMode());
 
             
         }
@@ -56,16 +56,10 @@ namespace SmartX.WPF.ViewModels
             _navigationService.NavigateTo<SignUpPage>();
         }
 
-        private void EnterGuestMode(object? parameter)
+        private void EnterGuestMode()
         {
-            Session.StartGuestSession("Guest");
-
-            _navigationService.NavigateTo<GatewaySetupPage>();
+            _navigationService.NavigateTo<SignUpPage>("Guest");
         }
-
-
-
-
 
     }
 }

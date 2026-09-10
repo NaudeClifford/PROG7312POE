@@ -14,7 +14,7 @@ namespace SmartX.WPF.Data.Mappers
             var current = reader.GetOrdinal("Current");
             var power = reader.GetOrdinal("Power");
             var temperature = reader.GetOrdinal("Temperature");
-            var CreatedAt = reader.GetOrdinal("UpdatedAt");
+            var CreatedAt = reader.GetOrdinal("CreatedAt");
             var updatedAt = reader.GetOrdinal("UpdatedAt");
 
             return new Telemetry

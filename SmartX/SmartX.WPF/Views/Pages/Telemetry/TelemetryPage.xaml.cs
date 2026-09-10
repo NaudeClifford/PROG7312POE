@@ -1,5 +1,6 @@
 ﻿using SmartX.WPF.Navigation;
 using SmartX.WPF.ViewModels.Telemetry;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -9,34 +10,43 @@ public partial class TelemetryPage : Page, INavigationAware
 {
     private readonly TelemetryViewModel _viewModel;
 
+    private bool _navigationWasHandled;
+
     public TelemetryPage(
         TelemetryViewModel viewModel)
     {
         InitializeComponent();
 
         _viewModel = viewModel;
-
         DataContext = _viewModel;
 
         Loaded += TelemetryPage_Loaded;
+    }
+
+    public void OnNavigatedTo(object parameter)
+    {
+        _navigationWasHandled = true;
+
+        if (parameter is Guid sensorId &&
+            sensorId != Guid.Empty)
+        {
+            _ = _viewModel.LoadAsync(sensorId);
+            return;
+        }
+
+        _ = _viewModel.LoadAsync();
     }
 
     private async void TelemetryPage_Loaded(
         object sender,
         RoutedEventArgs e)
     {
-        await _viewModel.LoadAsync();
-    }
-
-    public async void OnNavigatedTo(object parameter)
-    {
-        if (parameter is not Guid sensorId)
-            throw new ArgumentException(
-                "TelemetryPage requires a sensor ID.");
-
-        if (DataContext is TelemetryViewModel viewModel)
+        if (_navigationWasHandled)
         {
-            await viewModel.LoadSensorAsync(sensorId);
+            _navigationWasHandled = false;
+            return;
         }
+
+        await _viewModel.LoadAsync();
     }
 }

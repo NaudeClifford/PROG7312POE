@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using SmartX.Domain.Interfaces;
+using SmartX.Infrastructure.Authentication.Firebase;
 using SmartX.Application;
 using SmartX.Infrastructure;
-using SmartX.Infrastructure.Authentication.Firebase;
 
 namespace SmartX.API
 {
@@ -29,6 +28,7 @@ namespace SmartX.API
                 .AddScheme<AuthenticationSchemeOptions, FirebaseAuthHandler>(
                     "Firebase",
                     options => { });
+            builder.Services.AddScoped<IFirebaseUserService, FirebaseAuthService>();
 
             builder.Services.AddAuthorization();
             

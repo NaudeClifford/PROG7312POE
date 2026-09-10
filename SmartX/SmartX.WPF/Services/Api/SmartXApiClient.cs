@@ -1,5 +1,4 @@
-﻿using SmartX.Application.Authentication;
-using SmartX.Application.Requests.Company;
+﻿using SmartX.Application.Requests.Company;
 using SmartX.Application.Requests.Gateway;
 using SmartX.Application.Requests.Sensor;
 using SmartX.Application.Requests.Telemetry;
@@ -9,9 +8,7 @@ using SmartX.Shared.DTOs;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
 using SmartX.Shared.Models;
-using SmartX.Shared.Responses;
 using SmartX.WPF.Services.Session;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -27,10 +24,6 @@ public class SmartXApiClient(
 {
     private readonly HttpClient _httpClient = httpClient;
     private readonly SmartXSession _session = session;
-        
-
-
-    // AUTHENTICATION
 
     private void AddAuthenticationHeader()
     {
@@ -47,10 +40,55 @@ public class SmartXApiClient(
                 "Bearer",
                 _session.IdToken);
     }
+    public async Task<bool> DeleteCompanyAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default)
+    {
+        if (companyId == Guid.Empty)
+            return false;
 
+        AddAuthenticationHeader();
 
+        var response = await _httpClient.DeleteAsync(
+            $"api/Companies/{companyId}",
+            cancellationToken);
 
-    // HEALTH
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return false;
+
+        var body = await response.Content.ReadAsStringAsync(
+            cancellationToken);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException(
+                $"Unable to delete company " +
+                $"({(int)response.StatusCode} {response.StatusCode}): {body}");
+        }
+
+        var result =
+            JsonSerializer.Deserialize<Result<bool>>(
+                body,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+        if (result is null)
+        {
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+        }
+
+        if (!result.Success)
+        {
+            throw new InvalidOperationException(
+                result.Error ??
+                "Unable to delete company.");
+        }
+
+        return result.Data;
+    }
 
     public async Task<bool> IsAvailableAsync(
         CancellationToken cancellationToken = default)
@@ -71,9 +109,6 @@ public class SmartXApiClient(
             return false;
         }
     }
-
-
-    // SENSORS - CRUD
 
     public async Task<IReadOnlyList<SensorDto>>
         GetSensorsAsync(
@@ -104,7 +139,6 @@ public class SmartXApiClient(
 
         return result.Data ?? [];
     }
-
 
     public async Task<SensorDto?>
         GetSensorByIdAsync(
@@ -143,7 +177,6 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-
     public async Task<Guid>
         CreateSensorAsync(
             CreateSensorRequest request,
@@ -176,7 +209,6 @@ public class SmartXApiClient(
 
         return result.Data;
     }
-
 
     public async Task<bool>
         UpdateSensorAsync(
@@ -217,7 +249,6 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-
     public async Task<bool>
         DeleteSensorAsync(
             Guid id,
@@ -256,8 +287,6 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-
-    // SENSOR LOG FILES
     public async Task<IReadOnlyList<SensorLogFileDto>>
         GetSensorLogFilesAsync(
             Guid sensorId,
@@ -294,7 +323,6 @@ public class SmartXApiClient(
 
         return result.Data ?? [];
     }
-
 
     public async Task<SensorLogFileUploadResultDto>
         UploadSensorLogFileAsync(
@@ -364,8 +392,6 @@ public class SmartXApiClient(
             };
     }
 
-
-    // TELEMETRY - CQRS
     public async Task<TelemetryDto?>
         GetTelemetryByIdAsync(
             Guid id,
@@ -373,9 +399,21 @@ public class SmartXApiClient(
     {
         AddAuthenticationHeader();
 
-        var response =
-            await _httpClient.GetAsync(
-                $"api/Telemetry/{id}",
+        using var request =
+            new HttpRequestMessage(
+                HttpMethod.Get,
+                $"api/Telemetry/{id}");
+
+        request.Headers.CacheControl =
+            new CacheControlHeaderValue
+            {
+                NoCache = true,
+                NoStore = true
+            };
+
+        using var response =
+            await _httpClient.SendAsync(
+                request,
                 cancellationToken);
 
         if (response.StatusCode ==
@@ -403,7 +441,6 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-
     public async Task<IReadOnlyList<TelemetryDto>>
         GetTelemetryBySensorIdAsync(
             Guid sensorId,
@@ -411,9 +448,21 @@ public class SmartXApiClient(
     {
         AddAuthenticationHeader();
 
-        var response =
-            await _httpClient.GetAsync(
-                $"api/Telemetry/sensor/{sensorId}",
+        using var request =
+            new HttpRequestMessage(
+                HttpMethod.Get,
+                $"api/Telemetry/sensor/{sensorId}");
+
+        request.Headers.CacheControl =
+            new CacheControlHeaderValue
+            {
+                NoCache = true,
+                NoStore = true
+            };
+
+        using var response =
+            await _httpClient.SendAsync(
+                request,
                 cancellationToken);
 
         response.EnsureSuccessStatusCode();
@@ -435,7 +484,6 @@ public class SmartXApiClient(
         return result.Data ?? [];
     }
 
-
     public async Task<TelemetryDto?>
         GetLatestTelemetryBySensorIdAsync(
             Guid sensorId,
@@ -443,9 +491,21 @@ public class SmartXApiClient(
     {
         AddAuthenticationHeader();
 
-        var response =
-            await _httpClient.GetAsync(
-                $"api/Telemetry/sensor/{sensorId}/latest",
+        using var request =
+            new HttpRequestMessage(
+                HttpMethod.Get,
+                $"api/Telemetry/sensor/{sensorId}/latest");
+
+        request.Headers.CacheControl =
+            new CacheControlHeaderValue
+            {
+                NoCache = true,
+                NoStore = true
+            };
+
+        using var response =
+            await _httpClient.SendAsync(
+                request,
                 cancellationToken);
 
         if (response.StatusCode ==
@@ -472,7 +532,6 @@ public class SmartXApiClient(
 
         return result.Data;
     }
-
 
     public async Task<IReadOnlyList<TelemetryDto>>
         GetTelemetryByDateRangeAsync(
@@ -513,9 +572,9 @@ public class SmartXApiClient(
     }
 
     public async Task<Guid>
-    CreateTelemetryAsync(
-        CreateTelemetryRequest request,
-        CancellationToken cancellationToken = default)
+        CreateTelemetryAsync(
+            CreateTelemetryRequest request,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -544,7 +603,7 @@ public class SmartXApiClient(
 
         return result.Data;
     }
-    // USERS - CRUD
+
     public async Task<IReadOnlyList<UserDto>>
         GetUsersAsync(
             CancellationToken cancellationToken = default)
@@ -574,7 +633,6 @@ public class SmartXApiClient(
 
         return result.Data ?? [];
     }
-
 
     public async Task<IReadOnlyList<UserDto>>
         GetUsersByCompanyIdAsync(
@@ -606,7 +664,6 @@ public class SmartXApiClient(
 
         return result.Data ?? [];
     }
-
 
     public async Task<UserDto?>
         GetUserByIdAsync(
@@ -645,10 +702,10 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-
     public async Task<UserDto?>
         GetUserByFirebaseUidAsync(
-            string firebaseUid, string idToken,
+            string firebaseUid,
+            string idToken,
             CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(firebaseUid))
@@ -703,7 +760,6 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-
     public async Task<Guid>
         CreateUserAsync(
             CreateUserRequest request,
@@ -736,7 +792,6 @@ public class SmartXApiClient(
 
         return result.Data;
     }
-
 
     public async Task<bool>
         UpdateUserAsync(
@@ -777,7 +832,6 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-
     public async Task<bool>
         DeleteUserAsync(
             Guid id,
@@ -816,9 +870,10 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-    public async Task<RegistrationResultDto> RegisterCompanyAsync(
-    RegisterCompanyRequest request,
-    CancellationToken cancellationToken = default)
+    public async Task<RegistrationResultDto>
+        RegisterCompanyAsync(
+            RegisterCompanyRequest request,
+            CancellationToken cancellationToken = default)
     {
         if (request is null)
             throw new ArgumentNullException(nameof(request));
@@ -827,12 +882,11 @@ public class SmartXApiClient(
             throw new InvalidOperationException(
                 "Firebase ID token is empty.");
 
-        using var httpRequest = new HttpRequestMessage(
-            HttpMethod.Post,
-            "api/Companies/register");
+        using var httpRequest =
+            new HttpRequestMessage(
+                HttpMethod.Post,
+                "api/Companies/register");
 
-
-        // Send Firebase token as Bearer authentication
         httpRequest.Headers.Authorization =
             new AuthenticationHeaderValue(
                 "Bearer",
@@ -846,12 +900,10 @@ public class SmartXApiClient(
                 httpRequest,
                 cancellationToken);
 
-        // READ THE BODY FIRST
         var body =
             await response.Content.ReadAsStringAsync(
                 cancellationToken);
 
-        // NOW check HTTP status
         if (!response.IsSuccessStatusCode)
         {
             throw new HttpRequestException(
@@ -860,7 +912,6 @@ public class SmartXApiClient(
                 $"Response: {body}");
         }
 
-        // Check for empty response
         if (string.IsNullOrWhiteSpace(body))
         {
             throw new InvalidOperationException(
@@ -874,11 +925,11 @@ public class SmartXApiClient(
             var result =
                 JsonSerializer.Deserialize<
                     Result<RegistrationResultDto>>(
-                        body,
-                        new JsonSerializerOptions
-                        {
-                            PropertyNameCaseInsensitive = true
-                        });
+                    body,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
 
             if (result is null)
             {
@@ -912,9 +963,6 @@ public class SmartXApiClient(
         return registration;
     }
 
-
-
-    // COMPANIES - CRUD
     public async Task<IReadOnlyList<CompanyDto>>
         GetCompaniesAsync(
             CancellationToken cancellationToken = default)
@@ -930,12 +978,28 @@ public class SmartXApiClient(
             await response.Content.ReadAsStringAsync(
                 cancellationToken);
 
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException(
+                $"Get companies failed: " +
+                $"{(int)response.StatusCode} {response.StatusCode}. " +
+                $"Response: {body}");
+        }
+
+        if (string.IsNullOrWhiteSpace(body))
+        {
+            throw new InvalidOperationException(
+                "Get companies returned an empty response.");
+        }
 
         var result =
             JsonSerializer.Deserialize<
                 Result<IReadOnlyList<CompanyDto>>>(
-                    body);
+                body,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
 
         if (result is null)
             throw new InvalidOperationException(
@@ -949,12 +1013,10 @@ public class SmartXApiClient(
         return result.Data ?? [];
     }
 
-
-
     public async Task<CompanyDto?>
-        GetCompanyByIdAsync(
-            Guid id,
-            CancellationToken cancellationToken = default)
+     GetCompanyByIdAsync(
+         Guid id,
+         CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -967,27 +1029,57 @@ public class SmartXApiClient(
             await response.Content.ReadAsStringAsync(
                 cancellationToken);
 
+        System.Diagnostics.Debug.WriteLine(
+            $"GET company {id}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"Status: {(int)response.StatusCode} {response.StatusCode}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"Response: {body}");
+
         if (response.StatusCode ==
             HttpStatusCode.NotFound)
         {
             return null;
         }
 
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException(
+                $"Get company failed: " +
+                $"{(int)response.StatusCode} " +
+                $"{response.StatusCode}. " +
+                $"Response: {body}");
+        }
 
-        var result =
-            await response.Content.ReadFromJsonAsync<
-                Result<CompanyDto>>(
-                cancellationToken);
-
-        if (result is null)
+        if (string.IsNullOrWhiteSpace(body))
+        {
             throw new InvalidOperationException(
                 "The API returned an empty response.");
+        }
+
+        var result =
+            JsonSerializer.Deserialize<
+                Result<CompanyDto>>(
+                    body,
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    });
+
+        if (result is null)
+        {
+            throw new InvalidOperationException(
+                "The API returned invalid JSON.");
+        }
 
         if (!result.Success)
+        {
             throw new InvalidOperationException(
                 result.Error ??
                 "Failed to retrieve company.");
+        }
 
         return result.Data;
     }
@@ -1043,7 +1135,6 @@ public class SmartXApiClient(
             await response.Content.ReadAsStringAsync(
                 cancellationToken);
 
-        // Handle HTTP errors BEFORE attempting JSON deserialization
         if (!response.IsSuccessStatusCode)
         {
             throw new HttpRequestException(
@@ -1080,10 +1171,11 @@ public class SmartXApiClient(
 
         return result.Data;
     }
+
     public async Task<bool>
-    RequestCompanyDeletionAsync(
-        Guid companyId,
-        CancellationToken cancellationToken = default)
+        RequestCompanyDeletionAsync(
+            Guid companyId,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -1142,55 +1234,66 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-
     public async Task<bool>
-        DeleteCompanyAsync(
-            Guid id,
+        CancelDeletionAsync(
+            Guid companyId,
             CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
         var response =
-            await _httpClient.DeleteAsync(
-                $"api/Companies/{id}",
+            await _httpClient.PostAsync(
+                $"api/Companies/{companyId}/deletion-request/cancel",
+                null,
+                cancellationToken);
+
+        var body =
+            await response.Content.ReadAsStringAsync(
                 cancellationToken);
 
         if (response.StatusCode ==
             HttpStatusCode.NotFound)
-        {
             return false;
-        }
 
-        var result =
-            await response.Content.ReadFromJsonAsync<
-                Result<bool>>(
-                cancellationToken);
+        if (!response.IsSuccessStatusCode)
+            throw new HttpRequestException(
+                $"Unable to cancel company deletion " +
+                $"({(int)response.StatusCode}): {body}");
 
-        if (result is null)
+        if (string.IsNullOrWhiteSpace(body))
             throw new InvalidOperationException(
                 "The API returned an empty response.");
 
-        if (!response.IsSuccessStatusCode ||
-            !result.Success)
-        {
+        var result =
+            JsonSerializer.Deserialize<Result<bool>>(
+                body,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+        if (result is null)
+            throw new InvalidOperationException(
+                "The API returned an invalid response.");
+
+        if (!result.Success)
             throw new InvalidOperationException(
                 result.Error ??
-                "Failed to delete company.");
-        }
+                "Unable to cancel company deletion.");
 
         return result.Data;
     }
 
     public async Task<CompanyConfigurationDto?>
-    GetCompanyConfigurationAsync(
-        Guid companyId,
-        CancellationToken cancellationToken = default)
+        GetCompanyConfigurationAsync(
+            Guid companyId,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
         var response =
             await _httpClient.GetAsync(
-                $"api/company-configuration/{companyId}",
+                $"api/Companies/{companyId}/configuration",
                 cancellationToken);
 
         if (response.StatusCode ==
@@ -1213,7 +1316,7 @@ public class SmartXApiClient(
         var result =
             await response.Content.ReadFromJsonAsync<
                 Result<CompanyConfigurationDto>>(
-                    cancellationToken);
+                cancellationToken);
 
         if (result is null)
         {
@@ -1231,17 +1334,16 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-
     public async Task<bool>
-    UpdateCompanyConfigurationAsync(
-        UpdateCompanyConfigurationRequest request,
-        CancellationToken cancellationToken = default)
+        UpdateCompanyConfigurationAsync(
+            UpdateCompanyConfigurationRequest request,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
         var response =
             await _httpClient.PutAsJsonAsync(
-                $"api/company-configuration/{request.CompanyId}",
+                $"api/Companies/{request.CompanyId}/configuration",
                 request,
                 cancellationToken);
 
@@ -1259,11 +1361,11 @@ public class SmartXApiClient(
         var result =
             JsonSerializer.Deserialize<
                 Result<bool>>(
-                    body,
-                    new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
+                body,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
 
         if (result is null)
         {
@@ -1282,9 +1384,9 @@ public class SmartXApiClient(
     }
 
     public async Task<bool>
-    CompleteOnboardingAsync(
-        Guid companyId,
-        CancellationToken cancellationToken = default)
+        CompleteOnboardingAsync(
+            Guid companyId,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -1308,11 +1410,11 @@ public class SmartXApiClient(
         var result =
             JsonSerializer.Deserialize<
                 Result<bool>>(
-                    body,
-                    new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
+                body,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
 
         if (result is null)
         {
@@ -1330,20 +1432,23 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-    public async Task<bool> CompleteCompanyOnboardingAsync(
-    Guid companyId,
-    CancellationToken cancellationToken = default)
+    public async Task<bool>
+       CompleteCompanyOnboardingAsync(
+           Guid companyId,
+           CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.PostAsync(
-            $"api/Companies/{companyId}/onboarding/complete",
-            null,
-            cancellationToken);
+        AddAuthenticationHeader();
+
+        var response =
+            await _httpClient.PostAsync(
+                $"api/Companies/{companyId}/onboarding/complete",
+                null,
+                cancellationToken);
 
         return response.IsSuccessStatusCode;
     }
 
 
-    // GATEWAYS - CRUD
     public async Task<IReadOnlyList<GatewayDto>>
         GetGatewaysAsync(
             CancellationToken cancellationToken = default)
@@ -1373,7 +1478,6 @@ public class SmartXApiClient(
 
         return result.Data ?? [];
     }
-
 
     public async Task<IReadOnlyList<GatewayDto>>
         GetGatewaysByCompanyIdAsync(
@@ -1405,7 +1509,6 @@ public class SmartXApiClient(
 
         return result.Data ?? [];
     }
-
 
     public async Task<GatewayDto?>
         GetGatewayByIdAsync(
@@ -1444,7 +1547,6 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-
     public async Task<Guid>
         CreateGatewayAsync(
             CreateGatewayRequest request,
@@ -1477,7 +1579,6 @@ public class SmartXApiClient(
 
         return result.Data;
     }
-
 
     public async Task<bool>
         UpdateGatewayAsync(
@@ -1518,7 +1619,6 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-
     public async Task<bool>
         DeleteGatewayAsync(
             Guid id,
@@ -1556,4 +1656,133 @@ public class SmartXApiClient(
 
         return result.Data;
     }
+
+    public async Task<bool> DeleteGuestCompanyAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default)
+    {
+        if (companyId == Guid.Empty)
+            return false;
+
+        AddAuthenticationHeader();
+
+        using var response =
+            await _httpClient.DeleteAsync(
+                $"api/Companies/{companyId}/guest",
+                cancellationToken);
+
+        var body =
+            await response.Content.ReadAsStringAsync(
+                cancellationToken);
+
+        System.Diagnostics.Debug.WriteLine(
+            $"DELETE guest company: {companyId}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"Status: {(int)response.StatusCode} {response.StatusCode}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"Response: {body}");
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return false;
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException(
+                $"Unable to delete guest company " +
+                $"({(int)response.StatusCode} " +
+                $"{response.StatusCode}): {body}");
+        }
+
+        if (string.IsNullOrWhiteSpace(body))
+        {
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+        }
+
+        var result =
+            JsonSerializer.Deserialize<Result<bool>>(
+                body,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+        if (result is null)
+        {
+            throw new InvalidOperationException(
+                "The API returned an invalid response.");
+        }
+
+        if (!result.Success)
+        {
+            throw new InvalidOperationException(
+                result.Error ??
+                "Failed to delete guest company.");
+        }
+
+        return result.Data;
+    }
+
+
+
+
+
+    public async Task<IReadOnlyList<SensorDto>>
+     GetSensorsByGatewayIdAsync(
+         Guid gatewayId,
+         CancellationToken cancellationToken = default)
+    {
+        if (gatewayId == Guid.Empty)
+            return [];
+
+        AddAuthenticationHeader();
+
+        var response =
+            await _httpClient.GetAsync(
+                $"api/Sensors/gateway/{gatewayId}",
+                cancellationToken);
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return [];
+
+        var body =
+            await response.Content.ReadAsStringAsync(
+                cancellationToken);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException(
+                $"Unable to retrieve sensors for gateway " +
+                $"{gatewayId} " +
+                $"({(int)response.StatusCode}): {body}");
+        }
+
+        var result =
+            JsonSerializer.Deserialize<
+                Result<IReadOnlyList<SensorDto>>>(
+                body,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+        if (result is null)
+        {
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+        }
+
+        if (!result.Success)
+        {
+            throw new InvalidOperationException(
+                result.Error ??
+                "Failed to retrieve gateway sensors.");
+        }
+
+        return result.Data ?? [];
+    }
+
+
 }

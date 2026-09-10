@@ -20,6 +20,8 @@ public class CompanyServicesViewModel : ViewModelBase
 
     private string _apiBaseUrl = string.Empty;
 
+    private bool _isApiTested;
+
     // FIREBASE
 
     private bool _useCustomFirebase;
@@ -54,6 +56,10 @@ public class CompanyServicesViewModel : ViewModelBase
             new AsyncRelayCommand(
                 CancelAsync,
                 () => !IsBusy);
+
+        TestApiCommand = new AsyncRelayCommand(TestApiAsync,
+        () => !IsBusy);
+
     }
 
     // API
@@ -71,12 +77,34 @@ public class CompanyServicesViewModel : ViewModelBase
                 return;
             }
 
+            IsApiTested = false;
+            StatusMessage = string.Empty;
+
             OnPropertyChanged(
                 nameof(ShowCustomApiFields));
 
             RaiseCommandStates();
         }
     }
+
+
+    public bool IsApiTested
+    {
+        get => _isApiTested;
+
+        private set
+        {
+            if (!SetProperty(
+                    ref _isApiTested,
+                    value))
+            {
+                return;
+            }
+
+            RaiseCommandStates();
+        }
+    }
+
     public bool IsOnboarding
     {
         get => _isOnboarding;
@@ -89,10 +117,22 @@ public class CompanyServicesViewModel : ViewModelBase
     {
         get => _apiBaseUrl;
 
-        set => SetProperty(
-            ref _apiBaseUrl,
-            value);
+        set
+        {
+            if (!SetProperty(
+                    ref _apiBaseUrl,
+                    value))
+            {
+                return;
+            }
+
+            IsApiTested = false;
+            StatusMessage = string.Empty;
+
+            RaiseCommandStates();
+        }
     }
+
 
     public bool ShowCustomApiFields =>
         UseCustomApi;
@@ -153,13 +193,16 @@ public class CompanyServicesViewModel : ViewModelBase
 
     public bool CanContinue =>
         !IsBusy &&
-        Session.CompanyId != Guid.Empty;
+        Session.CompanyId != Guid.Empty &&
+        IsApiTested;
 
     // COMMANDS
 
     public AsyncRelayCommand ContinueCommand { get; }
 
     public AsyncRelayCommand CancelCommand { get; }
+
+    public AsyncRelayCommand TestApiCommand { get; }
 
     // LOAD
 
@@ -186,6 +229,11 @@ public class CompanyServicesViewModel : ViewModelBase
 
             ErrorMessage = string.Empty;
             StatusMessage = string.Empty;
+
+            if (!await CheckApiAvailableAsync(cancellationToken))
+            {
+                return;
+            }
 
             var configuration =
                 await _apiClient
@@ -233,6 +281,48 @@ public class CompanyServicesViewModel : ViewModelBase
             RaiseCommandStates();
         }
     }
+
+    //Test API
+    private async Task TestApiAsync()
+    {
+        if (IsBusy)
+            return;
+
+        try
+        {
+            IsBusy = true;
+
+            ClearMessages();
+
+            IsApiTested = false;
+
+            if (!await CheckApiAvailableAsync())
+            {
+                StatusMessage = string.Empty;
+                return;
+            }
+
+            IsApiTested = true;
+
+            StatusMessage =
+                "SmartX API connection successful.";
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            IsApiTested = false;
+            ErrorMessage = ex.Message;
+        }
+        finally
+        {
+            IsBusy = false;
+            RaiseCommandStates();
+        }
+    }
+
 
     // SAVE + CONTINUE
     private void ResetConfiguration()
@@ -285,6 +375,11 @@ public class CompanyServicesViewModel : ViewModelBase
                             ? FirebaseApiKey.Trim()
                             : string.Empty
                 };
+
+            if (!await CheckApiAvailableAsync())
+            {
+                return;
+            }
 
             var success =
                 await _apiClient

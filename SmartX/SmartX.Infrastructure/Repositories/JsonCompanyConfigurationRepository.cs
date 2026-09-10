@@ -114,4 +114,40 @@ public class JsonCompanyConfigurationRepository
             json,
             cancellationToken);
     }
+
+    public async Task DeleteAsync(
+    Guid companyId,
+    CancellationToken cancellationToken = default)
+    {
+        var records = await GetAllAsync(cancellationToken);
+
+        var list =
+            records.ToList();
+
+        var configuration = list.FirstOrDefault(x => x.CompanyId == companyId);
+
+        if (configuration is null)
+            return;
+
+        list.Remove(configuration);
+
+        var directory =
+            Path.GetDirectoryName(_filePath);
+
+        if (!string.IsNullOrWhiteSpace(directory))
+            Directory.CreateDirectory(directory);
+
+        var json =
+            JsonSerializer.Serialize(
+                list,
+                new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                });
+
+        await File.WriteAllTextAsync(
+            _filePath,
+            json,
+            cancellationToken);
+    }
 }

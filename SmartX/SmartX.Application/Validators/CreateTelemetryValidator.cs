@@ -36,6 +36,12 @@ public class CreateTelemetryValidator
             .WithMessage(
                 "Power cannot be negative.");
 
+        RuleFor(x => x.Temperature)
+            .GreaterThanOrEqualTo(-100)
+            .When(x => x.Temperature.HasValue)
+            .WithMessage(
+                "Temperature is outside the valid range.");
+
         RuleFor(x => x)
             .Must(ValidateTelemetryReadings)
             .WithMessage(
@@ -46,12 +52,12 @@ public class CreateTelemetryValidator
         CreateTelemetryRequest request)
     {
         double?[] readings =
-        {
+        [
             request.Voltage,
             request.Current,
             request.Power,
             request.Temperature
-        };
+        ];
 
         return readings.All(reading =>
             !reading.HasValue ||
