@@ -40,6 +40,7 @@ public class SmartXApiClient(
                 "Bearer",
                 _session.IdToken);
     }
+    
     public async Task<bool> DeleteCompanyAsync(
     Guid companyId,
     CancellationToken cancellationToken = default)
@@ -1675,14 +1676,6 @@ public class SmartXApiClient(
             await response.Content.ReadAsStringAsync(
                 cancellationToken);
 
-        System.Diagnostics.Debug.WriteLine(
-            $"DELETE guest company: {companyId}");
-
-        System.Diagnostics.Debug.WriteLine(
-            $"Status: {(int)response.StatusCode} {response.StatusCode}");
-
-        System.Diagnostics.Debug.WriteLine(
-            $"Response: {body}");
 
         if (response.StatusCode == HttpStatusCode.NotFound)
             return false;
