@@ -78,10 +78,14 @@ public class FirebaseAuthHandler
             }
 
             var claims = new List<Claim>
-            {
+{
     new(
         ClaimTypes.NameIdentifier,
         decodedToken.Uid),
+
+    new(
+        "smartx_user_id",
+        user.Id.ToString()),
 
     new(
         ClaimTypes.Name,
@@ -94,7 +98,8 @@ public class FirebaseAuthHandler
     new(
         ClaimTypes.Role,
         user.Role.ToString())
-            };
+};
+
 
 
             var identity = new ClaimsIdentity(

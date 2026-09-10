@@ -6,6 +6,6 @@ public class SensorLogFileUploadResultDto
 
     public string? Error { get; set; }
 
-    public SensorLogFileDto? Data { get; set; }
+    public Guid Data { get; set; }
 }
 

@@ -8,7 +8,6 @@ using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.History;
 using SmartX.WPF.Views.Pages.Home;
 using SmartX.WPF.Views.Pages.Sensor;
-using SmartX.WPF.Views.Pages.SignUp;
 using SmartX.WPF.Views.Pages.Telemetry;
 using SmartX.WPF.Views.Pages.Users;
 using System.Windows;
