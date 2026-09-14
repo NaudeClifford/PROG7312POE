@@ -1,0 +1,1480 @@
+{
+  "info": {
+    "_postman_id": "686b1716-f360-40d0-9a1d-bb344dcd6711",
+    "name": "SmartX API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57783301",
+    "_collection_link": "https://go.postman.co/collection/57783301-686b1716-f360-40d0-9a1d-bb344dcd6711?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Companies",
+      "item": [
+        {
+          "name": "Create company",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();\r\n\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Company ID was returned\", function () {\r\n    pm.expect(response.data).to.be.a(\"string\");\r\n});\r\n\r\npm.environment.set(\"companyId\", response.data);\r\n\r\nconsole.log(\"Created company:\", response.data);\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"name\": \"Super Admin Company\",\r\n  \"description\": \"Created by Clifford\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/companies",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "companies"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst response = pm.response.json();\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Company list was returned\", function () {\r\n    pm.expect(response.data).to.be.an(\"array\");\r\n});\r\n\r\nconst companyId = pm.environment.get(\"companyId\");\r\n\r\npm.test(\"Company ID exists in environment\", function () {\r\n    pm.expect(companyId).to.be.a(\"string\");\r\n    pm.expect(companyId).to.not.be.empty;\r\n});\r\n\r\nconst company = response.data.find(\r\n    x => x.id &&\r\n         x.id.toLowerCase() === companyId.toLowerCase()\r\n);\r\n\r\npm.test(\"Created company exists\", function () {\r\n    pm.expect(company).to.exist;\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/companies",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "companies"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst response = pm.response.json();\r\nconst company = response.data;\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Correct company was returned\", function () {\r\n    const companyId = pm.environment.get(\"companyId\");\r\n\r\n    pm.expect(company.id.toLowerCase())\r\n        .to.eql(companyId.toLowerCase());\r\n});\r\n\r\npm.test(\"Company name is correct\", function () {\r\n    pm.expect(company.name)\r\n        .to.eql(\"Postman Test Company\");\r\n});\r\n\r\npm.test(\"CreatedAt exists\", function () {\r\n    pm.expect(company.createdAt).to.exist;\r\n});\r\n\r\npm.test(\"UpdatedAt exists\", function () {\r\n    pm.expect(company.updatedAt).to.exist;\r\n});\r\n\r\npm.environment.set(\r\n    \"createdAt\",\r\n    company.createdAt\r\n);\r\n\r\npm.environment.set(\r\n    \"updatedAt\",\r\n    company.updatedAt\r\n);\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/companies/{{companyId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "companies",
+                "{{companyId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst response = pm.response.json();\r\n\r\npm.test(\"Update was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Updated Postman Company\",\r\n    \"description\": \"Updated by automated API test\",\r\n    \"isActive\": true\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/companies/{{companyId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "companies",
+                "{{companyId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get updated",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst response = pm.response.json();\r\nconst company = response.data;\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Name was updated\", function () {\r\n    pm.expect(company.name)\r\n        .to.eql(\"Updated Postman Company\");\r\n});\r\n\r\npm.test(\"Description was updated\", function () {\r\n    pm.expect(company.description)\r\n        .to.eql(\"Updated by automated API test\");\r\n});\r\n\r\npm.test(\"Company is active\", function () {\r\n    pm.expect(company.isActive)\r\n        .to.eql(true);\r\n});\r\n\r\npm.test(\"CreatedAt did not change\", function () {\r\n    const originalCreatedAt =\r\n        pm.environment.get(\"createdAt\");\r\n\r\n    pm.expect(company.createdAt)\r\n        .to.eql(originalCreatedAt);\r\n});\r\n\r\npm.test(\"UpdatedAt exists\", function () {\r\n    pm.expect(company.updatedAt).to.exist;\r\n});\r\n\r\npm.test(\"UpdatedAt changed\", function () {\r\n    const originalUpdatedAt =\r\n        pm.environment.get(\"updatedAt\");\r\n\r\n    pm.expect(company.updatedAt)\r\n        .to.not.eql(originalUpdatedAt);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/companies/{{companyId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "companies",
+                "{{companyId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst response = pm.response.json();\r\n\r\npm.test(\"Delete was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Delete returned true\", function () {\r\n    pm.expect(response.data).to.eql(true);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/companies/{{companyId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "companies",
+                "{{companyId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify deletion",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\nconst response = pm.response.json();\r\n\r\npm.test(\"Company no longer exists\", function () {\r\n    pm.expect(response.success).to.eql(false);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/companies/{{companyId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "companies",
+                "{{companyId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Create User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst response = pm.response.json();\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"User ID was returned\", function () {\r\n    pm.expect(response.data).to.be.a(\"string\");\r\n});\r\n\r\npm.environment.set(\"userId\", response.data);\r\n\r\nconsole.log(\"Create User response:\", response);\r\nconsole.log(\"User ID:\", pm.environment.get(\"userId\"));\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"companyId\": \"{{companyId}}\",\r\n    \"firebaseUid\": \"postman-test-firebase-001\",\r\n    \"email\": \"postman.user@example.com\",\r\n    \"displayName\": \"Postman Test User\",\r\n    \"role\": 0,\r\n    \"isActive\": true\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst response = pm.response.json();\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Users list was returned\", function () {\r\n    pm.expect(response.data).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Created user exists\", function () {\r\n    const userId = pm.environment.get(\"userId\");\r\n\r\n    pm.expect(userId).to.be.a(\"string\");\r\n\r\n    const user = response.data.find(\r\n        x => x.id.toLowerCase() === userId.toLowerCase()\r\n    );\r\n\r\n    pm.expect(user).to.not.be.undefined;\r\n});\r\n\r\nconsole.log(\"Users:\", response.data);\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User By Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst response = pm.response.json();\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Correct user was returned\", function () {\r\n    const userId = pm.environment.get(\"userId\");\r\n\r\n    pm.expect(response.data.id.toLowerCase())\r\n        .to.eql(userId.toLowerCase());\r\n});\r\n\r\npm.test(\"User email is correct\", function () {\r\n    pm.expect(response.data.email)\r\n        .to.eql(\"postman.user@example.com\");\r\n});\r\n\r\npm.test(\"Display name is correct\", function () {\r\n    pm.expect(response.data.displayName)\r\n        .to.eql(\"Postman Test User\");\r\n});\r\n\r\npm.test(\"Firebase UID is correct\", function () {\r\n    pm.expect(response.data.firebaseUid)\r\n        .to.eql(\"postman-test-firebase-001\");\r\n});\r\n\r\npm.test(\"CreatedAt exists\", function () {\r\n    pm.expect(response.data.createdAt).to.exist;\r\n});\r\n\r\npm.test(\"UpdatedAt exists\", function () {\r\n    pm.expect(response.data.updatedAt).to.exist;\r\n});\r\n\r\nconsole.log(\"Get User By ID:\", response);\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{userId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User By Firebase UId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst response = pm.response.json();\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Correct Firebase UID was returned\", function () {\r\n    pm.expect(response.data.firebaseUid)\r\n        .to.eql(\"postman-test-firebase-001\");\r\n});\r\n\r\npm.test(\"Correct user was returned\", function () {\r\n    const userId = pm.environment.get(\"userId\");\r\n\r\n    pm.expect(response.data.id.toLowerCase())\r\n        .to.eql(userId.toLowerCase());\r\n});\r\n\r\nconsole.log(\"Get User By Firebase UID:\", response);\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/firebase/postman-test-firebase-001",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "firebase",
+                "postman-test-firebase-001"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Users By Company Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst response = pm.response.json();\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Users list was returned\", function () {\r\n    pm.expect(response.data).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Created user exists for company\", function () {\r\n    const userId = pm.environment.get(\"userId\");\r\n\r\n    const user = response.data.find(\r\n        x => x.id.toLowerCase() === userId.toLowerCase()\r\n    );\r\n\r\n    pm.expect(user).to.not.be.undefined;\r\n});\r\n\r\npm.test(\"Users belong to correct company\", function () {\r\n    const companyId = pm.environment.get(\"companyId\");\r\n\r\n    response.data.forEach(user => {\r\n        pm.expect(user.companyId.toLowerCase())\r\n            .to.eql(companyId.toLowerCase());\r\n    });\r\n});\r\n\r\nconsole.log(\"Users by company:\", response.data);\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/company/{{companyId}}\n",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "company",
+                "{{companyId}}\n"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst response = pm.response.json();\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Update returned true\", function () {\r\n    pm.expect(response.data).to.eql(true);\r\n});\r\n\r\nconsole.log(\"Update User response:\", response);\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"companyId\": \"{{companyId}}\",\r\n    \"firebaseUid\": \"postman-test-firebase-001\",\r\n    \"email\": \"postman.updated@example.com\",\r\n    \"displayName\": \"Updated Postman User\",\r\n    \"role\": 0,\r\n    \"isActive\": true\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}\n",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{userId}}\n"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst response = pm.response.json();\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Correct user was returned\", function () {\r\n    const userId = pm.environment.get(\"userId\");\r\n\r\n    pm.expect(response.data.id.toLowerCase())\r\n        .to.eql(userId.toLowerCase());\r\n});\r\n\r\npm.test(\"Email was updated\", function () {\r\n    pm.expect(response.data.email)\r\n        .to.eql(\"postman.updated@example.com\");\r\n});\r\n\r\npm.test(\"Display name was updated\", function () {\r\n    pm.expect(response.data.displayName)\r\n        .to.eql(\"Updated Postman User\");\r\n});\r\n\r\npm.test(\"UpdatedAt exists\", function () {\r\n    pm.expect(response.data.updatedAt).to.exist;\r\n});\r\n\r\nconsole.log(\"Updated User:\", response);\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}\n",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{userId}}\n"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst response = pm.response.json();\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Delete returned true\", function () {\r\n    pm.expect(response.data).to.eql(true);\r\n});\r\n\r\nconsole.log(\"Delete User response:\", response);\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}\n",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{userId}}\n"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Delete",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\nconst response = pm.response.json();\r\n\r\npm.test(\"Request was unsuccessful\", function () {\r\n    pm.expect(response.success).to.eql(false);\r\n});\r\n\r\npm.test(\"User not found\", function () {\r\n    pm.expect(response.error)\r\n        .to.eql(\"User not found.\");\r\n});\r\n\r\nconsole.log(\"Deleted user verification:\", response);\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}\n",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{userId}}\n"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Gateway",
+      "item": [
+        {
+          "name": "Create gateway",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();\r\n\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Gateway ID was returned\", function () {\r\n    pm.expect(response.data).to.be.a(\"string\");\r\n    pm.expect(response.data).to.not.be.empty;\r\n});\r\n\r\npm.environment.set(\"gatewayId\", response.data);\r\n\r\nconsole.log(\r\n    \"Saved gatewayId:\",\r\n    pm.environment.get(\"gatewayId\")\r\n);\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"companyId\": \"{{companyId}}\",\r\n    \"name\": \"Postman Test Gateway\",\r\n    \"description\": \"Created by automated API test\",\r\n    \"serialNumber\": \"POSTMAN-GW-001\",\r\n    \"ipAddress\": \"192.168.1.100\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/gateways",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "gateways"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all gateways",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();\r\n\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Gateway list was returned\", function () {\r\n    pm.expect(response.data).to.be.an(\"array\");\r\n});\r\n\r\nconst gatewayId = pm.environment.get(\"gatewayId\");\r\n\r\npm.test(\"Gateway ID exists in environment\", function () {\r\n    pm.expect(gatewayId).to.be.a(\"string\");\r\n    pm.expect(gatewayId).to.not.be.empty;\r\n});\r\n\r\nconst gateway = response.data.find(\r\n    x => x &&\r\n         x.id &&\r\n         x.id.toLowerCase() === gatewayId.toLowerCase()\r\n);\r\n\r\npm.test(\"Created gateway exists\", function () {\r\n    pm.expect(gateway).to.exist;\r\n});\r\n\r\nif (gateway) {\r\n    pm.test(\"Gateway name is correct\", function () {\r\n        pm.expect(gateway.name)\r\n            .to.eql(\"Postman Test Gateway\");\r\n    });\r\n\r\n    pm.test(\"Gateway belongs to correct company\", function () {\r\n        pm.expect(gateway.companyId.toLowerCase())\r\n            .to.eql(\r\n                pm.environment\r\n                    .get(\"companyId\")\r\n                    .toLowerCase()\r\n            );\r\n    });\r\n}\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/gateways",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "gateways"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get gateway by Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();\r\n\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Gateway was returned\", function () {\r\n    pm.expect(response.data).to.be.an(\"object\");\r\n});\r\n\r\nconst gatewayId = pm.environment.get(\"gatewayId\");\r\n\r\npm.test(\"Correct gateway was returned\", function () {\r\n    pm.expect(response.data.id.toLowerCase())\r\n        .to.eql(gatewayId.toLowerCase());\r\n});\r\n\r\npm.test(\"Gateway name is correct\", function () {\r\n    pm.expect(response.data.name)\r\n        .to.eql(\"Postman Test Gateway\");\r\n});\r\n\r\npm.test(\"Company ID is correct\", function () {\r\n    pm.expect(response.data.companyId.toLowerCase())\r\n        .to.eql(\r\n            pm.environment\r\n                .get(\"companyId\")\r\n                .toLowerCase()\r\n        );\r\n});\r\n\r\npm.test(\"CreatedAt exists\", function () {\r\n    pm.expect(response.data.createdAt).to.exist;\r\n});\r\n\r\npm.test(\"UpdatedAt exists\", function () {\r\n    pm.expect(response.data.updatedAt).to.exist;\r\n});\r\n\r\npm.environment.set(\r\n    \"createdAt\",\r\n    response.data.createdAt\r\n);\r\n\r\npm.environment.set(\r\n    \"updatedAt\",\r\n    response.data.updatedAt\r\n);\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/gateways/{{gatewayId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "gateways",
+                "{{gatewayId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by Company Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();\r\n\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Gateway list was returned\", function () {\r\n    pm.expect(response.data).to.be.an(\"array\");\r\n});\r\n\r\nconst gatewayId = pm.environment.get(\"gatewayId\");\r\n\r\nconst gateway = response.data.find(\r\n    x => x &&\r\n         x.id &&\r\n         x.id.toLowerCase() === gatewayId.toLowerCase()\r\n);\r\n\r\npm.test(\"Created gateway belongs to company\", function () {\r\n    pm.expect(gateway).to.exist;\r\n});\r\n\r\nif (gateway) {\r\n    pm.test(\"Gateway has correct company ID\", function () {\r\n        pm.expect(gateway.companyId.toLowerCase())\r\n            .to.eql(\r\n                pm.environment\r\n                    .get(\"companyId\")\r\n                    .toLowerCase()\r\n            );\r\n    });\r\n}\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/gateways/company/{{companyId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "gateways",
+                "company",
+                "{{companyId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Gateway",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();\r\n\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Update returned true\", function () {\r\n    pm.expect(response.data).to.eql(true);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"companyId\": \"{{companyId}}\",\r\n    \"name\": \"Updated Postman Gateway\",\r\n    \"description\": \"Updated by automated API test\",\r\n    \"serialNumber\": \"POSTMAN-GW-UPDATED\",\r\n    \"ipAddress\": \"192.168.1.101\",\r\n    \"isActive\": true\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/gateways/{{gatewayId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "gateways",
+                "{{gatewayId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get gateway after Update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();\r\n\r\npm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\nconst gateway = response.data;\r\n\r\npm.test(\"Gateway name was updated\", function () {\r\n    pm.expect(gateway.name)\r\n        .to.eql(\"Updated Postman Gateway\");\r\n});\r\n\r\npm.test(\"Description was updated\", function () {\r\n    pm.expect(gateway.description)\r\n        .to.eql(\"Updated by automated API test\");\r\n});\r\n\r\npm.test(\"Serial number was updated\", function () {\r\n    pm.expect(gateway.serialNumber)\r\n        .to.eql(\"POSTMAN-GW-UPDATED\");\r\n});\r\n\r\npm.test(\"IP address was updated\", function () {\r\n    pm.expect(gateway.ipAddress)\r\n        .to.eql(\"192.168.1.101\");\r\n});\r\n\r\npm.test(\"CreatedAt was preserved\", function () {\r\n    pm.expect(gateway.createdAt)\r\n        .to.eql(\r\n            pm.environment.get(\"createdAt\")\r\n        );\r\n});\r\n\r\npm.test(\"UpdatedAt exists\", function () {\r\n    pm.expect(gateway.updatedAt).to.exist;\r\n});\r\n\r\npm.test(\"UpdatedAt changed\", function () {\r\n    pm.expect(gateway.updatedAt)\r\n        .to.not.eql(\r\n            pm.environment.get(\"updatedAt\")\r\n        );\r\n});\r\n\r\npm.environment.set(\r\n    \"updatedAt\",\r\n    gateway.updatedAt\r\n);\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/gateways/{{gatewayId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "gateways",
+                "{{gatewayId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete gateway",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nif (pm.response.code === 200) {\r\n    const response = pm.response.json();\r\n\r\n    pm.test(\"Delete was successful\", function () {\r\n        pm.expect(response.success).to.eql(true);\r\n    });\r\n\r\n    pm.test(\"Delete returned true\", function () {\r\n        pm.expect(response.data).to.eql(true);\r\n    });\r\n}\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/gateways/{{gatewayId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "gateways",
+                "{{gatewayId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Gateway deletion",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/gateways/{{gatewayId}}\n",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "gateways",
+                "{{gatewayId}}\n"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "SensorLogFiles",
+      "item": [
+        {
+          "name": "Get all sensor log files",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Response is successful\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Data is an array\", function () {\r\n    pm.expect(json.data).to.be.an(\"array\");\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/SensorLogFiles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "SensorLogFiles"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get log files by sensor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Response is successful\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Data is an array\", function () {\r\n    pm.expect(json.data).to.be.an(\"array\");\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/SensorLogFiles/sensor/{{sensorId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "SensorLogFiles",
+                "sensor",
+                "{{sensorId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload sensor log file",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Response is successful\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Log ID was returned\", function () {\r\n    pm.expect(json.data).to.be.a(\"string\");\r\n});\r\n\r\nif (json.success && json.data) {\r\n    pm.environment.set(\"sensorLogFileId\", json.data);\r\n}\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "SensorId",
+                  "value": "{{sensorId}}",
+                  "type": "text"
+                },
+                {
+                  "key": "File",
+                  "type": "file",
+                  "src": [
+                    "postman-cloud:///1f1a3074-e600-4450-8610-3dc8dabb5de6"
+                  ]
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/SensorLogFiles",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "SensorLogFiles"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Upload log file",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Response is successful\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Correct log file returned\", function () {\r\n    pm.expect(json.data.id).to.eql(\r\n        pm.environment.get(\"sensorLogFileId\")\r\n    );\r\n});\r\n\r\npm.test(\"Sensor ID is correct\", function () {\r\n    pm.expect(json.data.sensorId).to.eql(\r\n        pm.environment.get(\"sensorId\")\r\n    );\r\n});\r\n\r\npm.test(\"Content type is text/plain\", function () {\r\n    pm.expect(json.data.contentType).to.eql(\"text/plain\");\r\n});\r\n\r\npm.test(\"File name exists\", function () {\r\n    pm.expect(json.data.fileName).to.not.be.empty;\r\n});\r\n\r\npm.test(\"File size is greater than zero\", function () {\r\n    pm.expect(json.data.fileSize).to.be.above(0);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/SensorLogFiles/{{sensorLogFileId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "SensorLogFiles",
+                "{{sensorLogFileId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get by sensor again",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Response is successful\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Data is an array\", function () {\r\n    pm.expect(json.data).to.be.an(\"array\");\r\n});\r\n\r\nconst logId = pm.environment.get(\"sensorLogFileId\");\r\n\r\npm.test(\"Uploaded log exists for sensor\", function () {\r\n    const found = json.data.some(\r\n        x => x.id === logId\r\n    );\r\n\r\n    pm.expect(found).to.eql(true);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/SensorLogFiles/sensor/{{sensorId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "SensorLogFiles",
+                "sensor",
+                "{{sensorId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete log file",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Response is successful\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Delete returned true\", function () {\r\n    pm.expect(json.data).to.eql(true);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/SensorLogFiles/{{sensorLogFileId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "SensorLogFiles",
+                "{{sensorLogFileId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Confirm deletion",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Response is unsuccessful\", function () {\r\n    pm.expect(json.success).to.eql(false);\r\n});\r\n\r\npm.test(\"Correct error returned\", function () {\r\n    pm.expect(json.error).to.eql(\r\n        \"Sensor log file not found.\"\r\n    );\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/SensorLogFiles/{{sensorLogFileId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "SensorLogFiles",
+                "{{sensorLogFileId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Sensor",
+      "item": [
+        {
+          "name": "Get all sensors",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Response is successful\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Data is an array\", function () {\r\n    pm.expect(json.data).to.be.an(\"array\");\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/Sensors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Sensors"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create sensor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Response is successful\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Sensor ID was returned\", function () {\r\n    pm.expect(json.data).to.be.a(\"string\");\r\n});\r\n\r\nif (json.success && json.data) {\r\n    pm.environment.set(\"sensorId\", json.data);\r\n}\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Temperature Sensor 01\",\r\n    \"deviceIdentifier\": \"AA:BB:CC:DD:EE:01\",\r\n    \"category\": 0,\r\n    \"location\": \"Server Room A\",\r\n    \"description\": \"Primary temperature monitoring sensor.\",\r\n    \"gatewayId\": \"{{gatewayId}}\"\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/Sensors",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Sensors"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get sensor by Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Response is successful\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Correct sensor returned\", function () {\r\n    pm.expect(json.data.id).to.eql(\r\n        pm.environment.get(\"sensorId\")\r\n    );\r\n});\r\n\r\npm.test(\"Sensor has a name\", function () {\r\n    pm.expect(json.data.name).to.not.be.empty;\r\n});\r\n\r\npm.test(\"Sensor has a device identifier\", function () {\r\n    pm.expect(json.data.deviceIdentifier).to.not.be.empty;\r\n});\r\n\r\npm.test(\"Sensor has a gateway\", function () {\r\n    pm.expect(json.data.gatewayId).to.not.be.null;\r\n});\r\n\r\npm.test(\"Sensor is active\", function () {\r\n    pm.expect(json.data.isActive).to.eql(true);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/Sensors/{{sensorId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Sensors",
+                "{{sensorId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Sensor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Response is successful\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Update returned true\", function () {\r\n    pm.expect(json.data).to.eql(true);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Temperature Sensor 01 - Updated\",\r\n    \"deviceIdentifier\": \"AA:BB:CC:DD:EE:01\",\r\n    \"category\": 0,\r\n    \"location\": \"Server Room B\",\r\n    \"description\": \"Updated temperature monitoring sensor.\",\r\n    \"gatewayId\": \"{{gatewayId}}\",\r\n    \"isActive\": true\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/Sensors/{{sensorId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Sensors",
+                "{{sensorId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get sensor again",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Response is successful\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Name was updated\", function () {\r\n    pm.expect(json.data.name).to.eql(\r\n        \"Temperature Sensor 01 - Updated\"\r\n    );\r\n});\r\n\r\npm.test(\"Location was updated\", function () {\r\n    pm.expect(json.data.location).to.eql(\r\n        \"Server Room B\"\r\n    );\r\n});\r\n\r\npm.test(\"Description was updated\", function () {\r\n    pm.expect(json.data.description).to.eql(\r\n        \"Updated temperature monitoring sensor.\"\r\n    );\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/Sensors/{{sensorId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Sensors",
+                "{{sensorId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete sensor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Response is successful\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Delete returned true\", function () {\r\n    pm.expect(json.data).to.eql(true);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/Sensors/{{sensorId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Sensors",
+                "{{sensorId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Confirm sensor deletion",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {\r\n    pm.response.to.have.status(404);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Response is unsuccessful\", function () {\r\n    pm.expect(json.success).to.eql(false);\r\n});\r\n\r\npm.test(\"Correct error returned\", function () {\r\n    pm.expect(json.error).to.eql(\r\n        \"Sensor not found.\"\r\n    );\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/Sensors/{{sensorId}}\n",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Sensors",
+                "{{sensorId}}\n"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Telemetry",
+      "item": [
+        {
+          "name": "Create Telemetry",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Request succeeded\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Telemetry ID was returned\", function () {\r\n    pm.expect(json.data).to.be.a(\"string\");\r\n});\r\n\r\nif (json.data) {\r\n    pm.environment.set(\"telemetryId\", json.data);\r\n}\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"sensorId\": \"{{sensorId}}\",\r\n    \"timeStamp\": \"2026-08-28T10:30:00Z\",\r\n    \"voltage\": 230.5,\r\n    \"current\": 2.4,\r\n    \"power\": 553.2,\r\n    \"temperature\": -5.7\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/Telemetry",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Telemetry"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get TelemetryById",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Request succeeded\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Correct telemetry ID\", function () {\r\n    pm.expect(json.data.id).to.eql(pm.environment.get(\"telemetryId\"));\r\n});\r\n\r\npm.test(\"Sensor ID is correct\", function () {\r\n    pm.expect(json.data.sensorId).to.eql(pm.environment.get(\"sensorId\"));\r\n});\r\n\r\npm.test(\"Negative temperature is preserved\", function () {\r\n    pm.expect(json.data.temperature).to.eql(-5.7);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/Telemetry/{{telemetryId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Telemetry",
+                "{{telemetryId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Telemetry By Sensor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Request succeeded\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Telemetry list was returned\", function () {\r\n    pm.expect(json.data).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"All records belong to the sensor\", function () {\r\n    json.data.forEach(function (telemetry) {\r\n        pm.expect(telemetry.sensorId)\r\n            .to.eql(pm.environment.get(\"sensorId\"));\r\n    });\r\n});\r\n\r\npm.test(\"Created telemetry exists\", function () {\r\n    const telemetryId =\r\n        pm.environment.get(\"telemetryId\");\r\n\r\n    const found = json.data.some(\r\n        x => x.id === telemetryId\r\n    );\r\n\r\n    pm.expect(found).to.eql(true);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/Telemetry/sensor/{{sensorId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Telemetry",
+                "sensor",
+                "{{sensorId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Latest Telemetry",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Request succeeded\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Latest telemetry was returned\", function () {\r\n    pm.expect(json.data).to.not.be.null;\r\n});\r\n\r\npm.test(\"Correct sensor\", function () {\r\n    pm.expect(json.data.sensorId)\r\n        .to.eql(pm.environment.get(\"sensorId\"));\r\n});\r\n\r\npm.test(\"Temperature is preserved\", function () {\r\n    pm.expect(json.data.temperature).to.eql(-5.7);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/Telemetry/sensor/{{sensorId}}/latest\n",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Telemetry",
+                "sensor",
+                "{{sensorId}}",
+                "latest\n"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Telemetry History",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Request succeeded\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Telemetry list was returned\", function () {\r\n    pm.expect(json.data).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"All records belong to the sensor\", function () {\r\n    json.data.forEach(function (telemetry) {\r\n        pm.expect(telemetry.sensorId)\r\n            .to.eql(pm.environment.get(\"sensorId\"));\r\n    });\r\n});\r\n\r\npm.test(\"Created telemetry is in history\", function () {\r\n    const telemetryId =\r\n        pm.environment.get(\"telemetryId\");\r\n\r\n    const found = json.data.some(\r\n        x => x.id === telemetryId\r\n    );\r\n\r\n    pm.expect(found).to.eql(true);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Validation Test- Negative Volatage",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {\r\n    pm.response.to.have.status(400);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Request failed validation\", function () {\r\n    pm.expect(json.success).to.eql(false);\r\n});\r\n\r\npm.test(\"Validation error exists\", function () {\r\n    pm.expect(json.error).to.be.a(\"string\");\r\n});\r\n"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"sensorId\": \"{{sensorId}}\",\r\n    \"timeStamp\": \"2026-08-28T11:00:00Z\",\r\n    \"voltage\": -230.5,\r\n    \"current\": 2.4,\r\n    \"power\": 553.2,\r\n    \"temperature\": -5.7\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/Telemetry",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "Telemetry"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "CompanyConfiguration",
+      "item": [
+        {
+          "name": "Get Company Configuration",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
