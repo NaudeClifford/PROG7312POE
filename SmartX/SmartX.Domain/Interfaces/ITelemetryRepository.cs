@@ -28,4 +28,10 @@ public interface ITelemetryRepository
     Task DeleteAsync(
         Guid id,
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<Telemetry>> GetByGatewayIdAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
+
 }

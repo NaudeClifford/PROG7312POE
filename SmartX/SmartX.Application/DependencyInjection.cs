@@ -6,6 +6,7 @@ using SmartX.Application.Queries.Users;
 using SmartX.Application.Services;
 using SmartX.Application.Services.CRUD;
 using SmartX.Application.Services.Registration;
+using SmartX.Application.Services.Telemetry;
 using SmartX.Application.Validators;
 using SmartX.Application.Validators.Company;
 using SmartX.Application.Validators.Sensor;
@@ -34,6 +35,9 @@ public static class DependencyInjection
         services.AddScoped<CompanyCrudService>();
         services.AddScoped<UserCrudService>();
         services.AddScoped<SensorLogFileCrudService>();
+
+        //Telemetry stream
+        services.AddSingleton<ITelemetryStream, TelemetryStream>();
 
         //Telemetry handlers
         services.AddScoped<GetTelemetryBySensorHandler>();

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartX.Application.Requests.Sensor;
 using SmartX.Application.Services.CRUD;
+using SmartX.Application.Services.Sensors;
 
 namespace SmartX.API.Controllers;
 
@@ -12,10 +13,14 @@ public class SensorsController : ControllerBase
 {
     private readonly SensorCrudService _crud;
 
+    private readonly ISensorCommandService _sensorCommandService;
+
     public SensorsController(
+        ISensorCommandService sensorCommandService,
         SensorCrudService crud)
     {
         _crud = crud;
+        _sensorCommandService = sensorCommandService;
     }
 
     // GET ALL
@@ -154,4 +159,43 @@ public class SensorsController : ControllerBase
         };
     }
 
+    // SEND COMMAND
+    [HttpPost("{id:guid}/command")]
+    public async Task<IActionResult> SendCommand(
+        Guid id,
+        SendSensorCommandRequest request,
+        CancellationToken cancellationToken)
+    {
+        if (id == Guid.Empty)
+            return BadRequest("Sensor ID is required.");
+
+        if (request is null)
+            return BadRequest("Request is required.");
+
+        request.SensorId = id;
+
+        var result =
+            await _sensorCommandService.SendCommandAsync(
+                request.SensorId,
+                request.Command,
+                cancellationToken);
+
+        if (result.Success)
+            return Ok(result);
+        
+        return result.ErrorMessage switch
+        {
+            "Sensor not found." =>
+                NotFound(result),
+
+            "Gateway not found." =>
+                NotFound(result),
+
+            "Sensor is not associated with a gateway." =>
+                BadRequest(result),
+
+            _ =>
+                BadRequest(result)
+        };
+    }
 }

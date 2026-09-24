@@ -2,18 +2,20 @@
 using SmartX.Shared.Mapping;
 using FluentValidation;
 using SmartX.Application.Requests.Telemetry;
-using SmartX.Domain.Entities;
+using DomainTelemetry = SmartX.Domain.Entities.Telemetry;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.DTOs.Telemetry;
 using SmartX.Shared.Models;
 
-namespace SmartX.Application.Services;
+namespace SmartX.Application.Services.Telemetry;
 
 public class TelemetryService
 {
     private readonly ITelemetryRepository _repository;
     private readonly ISensorRepository _sensorRepository;
     private readonly IGatewayRepository _gatewayRepository;
+    private readonly ITelemetryStream _telemetryStream;
+
 
     private readonly IValidator<CreateTelemetryRequest>
         _validator;
@@ -22,12 +24,14 @@ public class TelemetryService
         ITelemetryRepository repository,
         ISensorRepository sensorRepository,
         IGatewayRepository gatewayRepository,
-        IValidator<CreateTelemetryRequest> validator)
+        IValidator<CreateTelemetryRequest> validator,
+        ITelemetryStream telemetryStream)
     {
         _repository = repository;
         _sensorRepository = sensorRepository;
         _gatewayRepository = gatewayRepository;
         _validator = validator;
+        _telemetryStream = telemetryStream;
     }
 
     // CREATE
@@ -89,7 +93,7 @@ public class TelemetryService
 
         var now = DateTime.UtcNow;
 
-        var telemetry = new Telemetry
+        var telemetry = new DomainTelemetry
         {
             Id = Guid.NewGuid(),
 
@@ -109,6 +113,9 @@ public class TelemetryService
         await _repository.AddAsync(
             telemetry,
             cancellationToken);
+
+
+        _telemetryStream.Enqueue(telemetry);
 
         return Result<Guid>.Ok(
             telemetry.Id);

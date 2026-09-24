@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\Sensors\" />
     <Folder Include="Queries\Company\" />
     <Folder Include="Queries\Gateway\" />
     <Folder Include="Queries\Sensors\" />

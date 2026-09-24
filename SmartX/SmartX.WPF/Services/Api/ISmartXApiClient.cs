@@ -1,9 +1,11 @@
-﻿using SmartX.Application.Requests.Company;
+﻿using SmartX.Application.Commands.Sensors;
+using SmartX.Application.Requests.Company;
 using SmartX.Application.Requests.Gateway;
 using SmartX.Application.Requests.Sensor;
 using SmartX.Application.Requests.Telemetry;
 using SmartX.Application.Requests.User;
 using SmartX.Application.Services.Registration;
+using SmartX.Application.Services.Sensors;
 using SmartX.Shared.DTOs;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
@@ -187,6 +189,12 @@ public interface ISmartXApiClient
 
     Task<IReadOnlyList<SensorDto>> GetSensorsByGatewayIdAsync(
         Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
+    // SENSOR COMMANDS
+    Task<SensorCommandResult> SendSensorCommandAsync(
+        Guid sensorId,
+        string command,
         CancellationToken cancellationToken = default);
 
 

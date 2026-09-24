@@ -7,12 +7,15 @@ namespace SmartX.Infrastructure.Repositories;
 public class JsonTelemetryRepository : ITelemetryRepository
 {
     private readonly string _filePath;
+    private readonly ISensorRepository _sensorRepository;
 
-    public JsonTelemetryRepository()
+
+    public JsonTelemetryRepository(ISensorRepository sensorRepository)
     {
         _filePath = Path.Combine(
             AppContext.BaseDirectory,
             "Data", "Local", "telemetry.json");
+        _sensorRepository = sensorRepository;
     }
 
     public async Task<Telemetry?> GetByIdAsync(
@@ -123,6 +126,40 @@ public class JsonTelemetryRepository : ITelemetryRepository
         if (telemetry is null)
             return;
 
+    }
+
+    public async Task<IReadOnlyList<Telemetry>> GetByGatewayIdAsync(
+    Guid gatewayId,
+    CancellationToken cancellationToken = default)
+    {
+        if (gatewayId == Guid.Empty)
+        {
+            return [];
+        }
+
+        var sensors =
+            await _sensorRepository.GetByGatewayIdAsync(
+                gatewayId,
+                cancellationToken);
+
+        if (sensors is null || sensors.Count == 0)
+        {
+            return [];
+        }
+
+        var sensorIds =
+            sensors
+                .Select(x => x.Id)
+                .ToHashSet();
+
+        var telemetryRecords =
+            await GetAllAsync(
+                cancellationToken);
+
+        return telemetryRecords
+            .Where(x => sensorIds.Contains(x.SensorId))
+            .OrderByDescending(x => x.Timestamp)
+            .ToList();
     }
 
 

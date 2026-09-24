@@ -4,6 +4,7 @@ using SmartX.Application.Requests.Sensor;
 using SmartX.Application.Requests.Telemetry;
 using SmartX.Application.Requests.User;
 using SmartX.Application.Services.Registration;
+using SmartX.Application.Services.Sensors;
 using SmartX.Shared.DTOs;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
@@ -1777,5 +1778,70 @@ public class SmartXApiClient(
         return result.Data ?? [];
     }
 
+    public async Task<SensorCommandResult>
+    SendSensorCommandAsync(
+        Guid sensorId,
+        string command,
+        CancellationToken cancellationToken = default)
+    {
+        if (sensorId == Guid.Empty)
+            throw new ArgumentException(
+                "Sensor ID is required.",
+                nameof(sensorId));
+
+        if (string.IsNullOrWhiteSpace(command))
+            throw new ArgumentException(
+                "Command is required.",
+                nameof(command));
+
+        AddAuthenticationHeader();
+
+        var request =
+            new SendSensorCommandRequest
+            {
+                SensorId = sensorId,
+                Command = command
+            };
+
+        var response =
+            await _httpClient.PostAsJsonAsync(
+                $"api/Sensors/{sensorId}/command",
+                request,
+                cancellationToken);
+
+        var body =
+            await response.Content.ReadAsStringAsync(
+                cancellationToken);
+
+        if (string.IsNullOrWhiteSpace(body))
+        {
+            throw new InvalidOperationException(
+                "The API returned an empty response.");
+        }
+
+        var result =
+            JsonSerializer.Deserialize<SensorCommandResult>(
+                body,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+        if (result is null)
+        {
+            throw new InvalidOperationException(
+                "The API returned an invalid command response.");
+        }
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new InvalidOperationException(
+                result.ErrorMessage ??
+                $"Sensor command failed " +
+                $"({(int)response.StatusCode} {response.StatusCode}).");
+        }
+
+        return result;
+    }
 
 }

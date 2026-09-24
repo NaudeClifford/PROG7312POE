@@ -9,7 +9,7 @@ namespace SmartX.Infrastructure.Repositories
     {
         private readonly string _filePath;
 
-        public JsonSensorRepository() 
+        public JsonSensorRepository()
         {
             _filePath = Path.Combine(
                 AppContext.BaseDirectory,
@@ -116,5 +116,24 @@ namespace SmartX.Infrastructure.Repositories
                 json,
                 cancellationToken);
         }
-    }
+
+    public async Task<IReadOnlyList<Sensor>> GetByGatewayIdAsync(
+    Guid gatewayId,
+    CancellationToken cancellationToken = default)
+        {
+            if (gatewayId == Guid.Empty)
+            {
+                return [];
+            }
+
+            var sensors =
+                await GetAllAsync(
+                    cancellationToken);
+
+            return sensors
+                .Where(x => x.GatewayId == gatewayId)
+                .ToList();
+        }
+
+    } 
 }

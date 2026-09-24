@@ -3,6 +3,206 @@
   "WorkspaceRootPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\requests\\sensor\\sendsensorcommandrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\requests\\sensor\\sendsensorcommandrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\commands\\telemetry\\createtelemetryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\telemetry\\createtelemetryhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\commands\\sensorlog\\uploadsensorlogfileresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\sensorlog\\uploadsensorlogfileresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\commands\\history\\devicecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\history\\devicecommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\services\\sensors\\sensorcommandservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\services\\sensors\\sensorcommandservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\commands\\sensors\\setsensorpowercommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\sensors\\setsensorpowercommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\services\\sensors\\isensorcommandservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\services\\sensors\\isensorcommandservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\services\\sensors\\sensorcommandresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\services\\sensors\\sensorcommandresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\services\\crud\\sensorcrudservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\services\\crud\\sensorcrudservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FC033E8-F118-24ED-0DDC-C7AEE228B8D8}|SmartX.API\\SmartX.API.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.api\\controllers\\sensorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FC033E8-F118-24ED-0DDC-C7AEE228B8D8}|SmartX.API\\SmartX.API.csproj|solutionrelative:smartx.api\\controllers\\sensorscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\history\\historyviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\history\\historyviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.domain\\entities\\auditlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|solutionrelative:smartx.domain\\entities\\auditlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.infrastructure\\repositories\\jsonauditlogrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|solutionrelative:smartx.infrastructure\\repositories\\jsonauditlogrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.infrastructure\\repositories\\jsonsensorlogrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|solutionrelative:smartx.infrastructure\\repositories\\jsonsensorlogrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FC033E8-F118-24ED-0DDC-C7AEE228B8D8}|SmartX.API\\SmartX.API.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.api\\controllers\\sensorlogfilescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2FC033E8-F118-24ED-0DDC-C7AEE228B8D8}|SmartX.API\\SmartX.API.csproj|solutionrelative:smartx.api\\controllers\\sensorlogfilescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\smartx.wpf.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\smartx.wpf.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\history\\sensorcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\history\\sensorcommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\views\\pages\\history\\historypage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\views\\pages\\history\\historypage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.domain\\enums\\telemetrygraphmetric.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|solutionrelative:smartx.domain\\enums\\telemetrygraphmetric.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.domain\\enums\\commandpriority.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|solutionrelative:smartx.domain\\enums\\commandpriority.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\history\\telemetrygraphpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\history\\telemetrygraphpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\history\\telemetryhistoryitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\history\\telemetryhistoryitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\telemetry\\telemetryviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\telemetry\\telemetryviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.infrastructure\\repositories\\jsonsensorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|solutionrelative:smartx.infrastructure\\repositories\\jsonsensorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.domain\\interfaces\\itelemetryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|solutionrelative:smartx.domain\\interfaces\\itelemetryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.domain\\interfaces\\isensorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|solutionrelative:smartx.domain\\interfaces\\isensorrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.infrastructure\\repositories\\jsontelemetryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|solutionrelative:smartx.infrastructure\\repositories\\jsontelemetryrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\queries\\telemetry\\gettelemetrybygatewayhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\queries\\telemetry\\gettelemetrybygatewayhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\services\\crud\\icrudservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\services\\crud\\icrudservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\queries\\telemetry\\gettelemetrybysensorquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\queries\\telemetry\\gettelemetrybysensorquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\queries\\telemetry\\gettelemetrybysensorhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\queries\\telemetry\\gettelemetrybysensorhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\queries\\telemetry\\gettelemetrybygatewayquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\queries\\telemetry\\gettelemetrybygatewayquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\queries\\query.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\queries\\query.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\base\\asyncrelaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\base\\asyncrelaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\base\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\base\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\base\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\base\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\services\\telemetry\\telemetrystream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\services\\telemetry\\telemetrystream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\services\\telemetry\\itelemetrystream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\services\\telemetry\\itelemetrystream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\services\\telemetry\\telemetryhistorystore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\services\\telemetry\\telemetryhistorystore.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.domain\\entities\\telemetry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|solutionrelative:smartx.domain\\entities\\telemetry.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\telemetry\\telemetrycollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\telemetry\\telemetrycollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\telemetry\\telemetryreading.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\telemetry\\telemetryreading.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\telemetry\\telemetrydisplaymodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\telemetry\\telemetrydisplaymodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\services\\telemetry\\telemetryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\services\\telemetry\\telemetryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\dependencyinjection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.domain\\enums\\sensorstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|solutionrelative:smartx.domain\\enums\\sensorstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.domain\\enums\\sensorcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|solutionrelative:smartx.domain\\enums\\sensorcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2FC033E8-F118-24ED-0DDC-C7AEE228B8D8}|SmartX.API\\SmartX.API.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{2FC033E8-F118-24ED-0DDC-C7AEE228B8D8}|SmartX.API\\SmartX.API.csproj|solutionrelative:smartx.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.infrastructure\\authentication\\firebase\\firebaseauthhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BE3B05B1-91E2-4680-A2C5-B3A69B3DAD76}|SmartX.Infrastructure\\SmartX.Infrastructure.csproj|solutionrelative:smartx.infrastructure\\authentication\\firebase\\firebaseauthhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\validators\\createtelemetryvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\validators\\createtelemetryvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\sync\\cachesyncservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\sync\\cachesyncservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -19,32 +219,12 @@
       "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\api\\smartxapiclient.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\telemetry\\telemetryviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\telemetry\\telemetryviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\telemetry\\telemetrycollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\telemetry\\telemetrycollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\telemetry\\telemetryreading.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\telemetry\\telemetryreading.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{99D9586E-11EE-9F77-CF80-FB8604540D9E}|SmartX.Shared\\SmartX.Shared.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.shared\\models\\result.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{99D9586E-11EE-9F77-CF80-FB8604540D9E}|SmartX.Shared\\SmartX.Shared.csproj|solutionrelative:smartx.shared\\models\\result.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\telemetry\\telemetrydisplaymodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\telemetry\\telemetrydisplaymodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\session\\smartxsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\session\\smartxsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.application\\commands\\sensorlog\\uploadsensorlogfileresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1F8AB15A-C9AD-4292-ACC9-FC2EB629F8D1}|SmartX.Application\\SmartX.Application.csproj|solutionrelative:smartx.application\\commands\\sensorlog\\uploadsensorlogfileresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\views\\pages\\telemetry\\telemetrypage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -75,14 +255,6 @@
       "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\gateway\\gatewayviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\base\\asyncrelaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\base\\asyncrelaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\base\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\base\\viewmodelbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\cache\\cachemetadata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\cache\\cachemetadata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -93,10 +265,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{99D9586E-11EE-9F77-CF80-FB8604540D9E}|SmartX.Shared\\SmartX.Shared.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.shared\\models\\telemetrypacket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{99D9586E-11EE-9F77-CF80-FB8604540D9E}|SmartX.Shared\\SmartX.Shared.csproj|solutionrelative:smartx.shared\\models\\telemetrypacket.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\base\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\base\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -115,251 +283,436 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "CacheSyncService.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
-              "RelativeToolTip": "SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
-              "ViewState": "AgIAAAwBAAAAAAAAAAAqwAAAAAAAAAAAAAAAAA==",
+              "Title": "SendSensorCommandRequest.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Requests\\Sensor\\SendSensorCommandRequest.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Requests\\Sensor\\SendSensorCommandRequest.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Requests\\Sensor\\SendSensorCommandRequest.cs*",
+              "RelativeToolTip": "SmartX.Application\\Requests\\Sensor\\SendSensorCommandRequest.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T15:01:51.953Z",
+              "WhenOpened": "2026-09-24T18:20:43.93Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "SmartXCreditialStore.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Session\\SmartXCreditialStore.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Session\\SmartXCreditialStore.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Session\\SmartXCreditialStore.cs",
-              "RelativeToolTip": "SmartX.WPF\\Services\\Session\\SmartXCreditialStore.cs",
-              "ViewState": "AgIAAEMAAAAAAAAAAAAkwAAAAAAAAAAAAAAAAA==",
+              "Title": "CreateTelemetryHandler.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Telemetry\\CreateTelemetryHandler.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Telemetry\\CreateTelemetryHandler.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Telemetry\\CreateTelemetryHandler.cs",
+              "RelativeToolTip": "SmartX.Application\\Commands\\Telemetry\\CreateTelemetryHandler.cs",
+              "ViewState": "AgIAAE4AAAAAAAAAAAAiwFoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T15:01:43.194Z",
+              "WhenOpened": "2026-09-24T18:18:18.746Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DeviceCommand.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\History\\DeviceCommand.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\History\\DeviceCommand.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\History\\DeviceCommand.cs",
+              "RelativeToolTip": "SmartX.Application\\Commands\\History\\DeviceCommand.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAswBUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-23T11:40:45.558Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "SmartXAuthenticationService.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Session\\SmartXAuthenticationService.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Session\\SmartXAuthenticationService.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Session\\SmartXAuthenticationService.cs",
-              "RelativeToolTip": "SmartX.WPF\\Services\\Session\\SmartXAuthenticationService.cs",
-              "ViewState": "AgIAADQAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T15:01:36.473Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
               "Title": "UploadSensorLogFileResult.cs",
               "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\SensorLog\\UploadSensorLogFileResult.cs",
               "RelativeDocumentMoniker": "SmartX.Application\\Commands\\SensorLog\\UploadSensorLogFileResult.cs",
               "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\SensorLog\\UploadSensorLogFileResult.cs",
               "RelativeToolTip": "SmartX.Application\\Commands\\SensorLog\\UploadSensorLogFileResult.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAiAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-09-10T14:51:36.563Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "TelemetryPage.xaml.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml.cs",
-              "RelativeToolTip": "SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAgwBUAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 4,
+              "Title": "SensorCommandService.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\Sensors\\SensorCommandService.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Services\\Sensors\\SensorCommandService.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\Sensors\\SensorCommandService.cs*",
+              "RelativeToolTip": "SmartX.Application\\Services\\Sensors\\SensorCommandService.cs*",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAcwHUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:50:29.248Z",
+              "WhenOpened": "2026-09-24T18:14:28.933Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "SetSensorPowerCommand.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Sensors\\SetSensorPowerCommand.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Commands\\Sensors\\SetSensorPowerCommand.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Commands\\Sensors\\SetSensorPowerCommand.cs*",
+              "RelativeToolTip": "SmartX.Application\\Commands\\Sensors\\SetSensorPowerCommand.cs*",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAxwAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-24T18:15:24.447Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "SensorCommandResult.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\Sensors\\SensorCommandResult.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Services\\Sensors\\SensorCommandResult.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\Sensors\\SensorCommandResult.cs*",
+              "RelativeToolTip": "SmartX.Application\\Services\\Sensors\\SensorCommandResult.cs*",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAowCIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-24T17:57:45.675Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ISensorCommandService.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\Sensors\\ISensorCommandService.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Services\\Sensors\\ISensorCommandService.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\Sensors\\ISensorCommandService.cs",
+              "RelativeToolTip": "SmartX.Application\\Services\\Sensors\\ISensorCommandService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAQAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-24T17:57:02.39Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "SensorCrudService.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\CRUD\\SensorCrudService.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Services\\CRUD\\SensorCrudService.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\CRUD\\SensorCrudService.cs",
+              "RelativeToolTip": "SmartX.Application\\Services\\CRUD\\SensorCrudService.cs",
+              "ViewState": "AgIAAMQBAAAAAAAAAAAcwNgBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-24T18:12:38.705Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "SensorsController.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\Controllers\\SensorsController.cs",
+              "RelativeDocumentMoniker": "SmartX.API\\Controllers\\SensorsController.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\Controllers\\SensorsController.cs",
+              "RelativeToolTip": "SmartX.API\\Controllers\\SensorsController.cs",
+              "ViewState": "AgIAAIcAAAAAAAAAAAAiwJwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-24T18:12:09.942Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "HistoryViewModel.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\History\\HistoryViewModel.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\History\\HistoryViewModel.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\History\\HistoryViewModel.cs*",
+              "RelativeToolTip": "SmartX.WPF\\ViewModels\\History\\HistoryViewModel.cs*",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAKkBAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-23T11:31:11.939Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 11,
-              "Title": "TelemetryPage.xaml",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml",
-              "RelativeDocumentMoniker": "SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml",
-              "RelativeToolTip": "SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-09-10T14:50:27.868Z",
+              "Title": "AuditLog.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Entities\\AuditLog.cs",
+              "RelativeDocumentMoniker": "SmartX.Domain\\Entities\\AuditLog.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Entities\\AuditLog.cs",
+              "RelativeToolTip": "SmartX.Domain\\Entities\\AuditLog.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAowBgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-24T18:07:33.202Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "JsonAuditLogRepository.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Repositories\\JsonAuditLogRepository.cs",
+              "RelativeDocumentMoniker": "SmartX.Infrastructure\\Repositories\\JsonAuditLogRepository.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Repositories\\JsonAuditLogRepository.cs",
+              "RelativeToolTip": "SmartX.Infrastructure\\Repositories\\JsonAuditLogRepository.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAiwD8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-24T18:06:41.191Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 13,
-              "Title": "users.json",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\bin\\Debug\\net10.0\\Data\\Local\\users.json",
-              "RelativeDocumentMoniker": "SmartX.API\\bin\\Debug\\net10.0\\Data\\Local\\users.json",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\bin\\Debug\\net10.0\\Data\\Local\\users.json",
-              "RelativeToolTip": "SmartX.API\\bin\\Debug\\net10.0\\Data\\Local\\users.json",
-              "ViewState": "AgIAACIAAAAAAAAAAAAAACEAAAADAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-09-10T14:46:24.251Z",
+              "Title": "JsonSensorLogRepository.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Repositories\\JsonSensorLogRepository.cs",
+              "RelativeDocumentMoniker": "SmartX.Infrastructure\\Repositories\\JsonSensorLogRepository.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Repositories\\JsonSensorLogRepository.cs",
+              "RelativeToolTip": "SmartX.Infrastructure\\Repositories\\JsonSensorLogRepository.cs",
+              "ViewState": "AgIAAHEAAAAAAAAAAAAiwIYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-24T18:06:26.526Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 14,
+              "Title": "SensorLogFilesController.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\Controllers\\SensorLogFilesController.cs",
+              "RelativeDocumentMoniker": "SmartX.API\\Controllers\\SensorLogFilesController.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\Controllers\\SensorLogFilesController.cs",
+              "RelativeToolTip": "SmartX.API\\Controllers\\SensorLogFilesController.cs",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAowBYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-24T18:06:08.191Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "SmartX.WPF",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\SmartX.WPF.csproj",
+              "RelativeDocumentMoniker": "SmartX.WPF\\SmartX.WPF.csproj",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\SmartX.WPF.csproj",
+              "RelativeToolTip": "SmartX.WPF\\SmartX.WPF.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-09-24T17:57:58.1Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "SensorCommand.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\History\\SensorCommand.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\History\\SensorCommand.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\History\\SensorCommand.cs",
+              "RelativeToolTip": "SmartX.WPF\\ViewModels\\History\\SensorCommand.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAA3AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-24T16:44:25.469Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "HistoryPage.xaml",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Pages\\History\\HistoryPage.xaml",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Views\\Pages\\History\\HistoryPage.xaml",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Pages\\History\\HistoryPage.xaml",
+              "RelativeToolTip": "SmartX.WPF\\Views\\Pages\\History\\HistoryPage.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-09-24T16:47:05.173Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "TelemetryGraphMetric.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Enums\\TelemetryGraphMetric.cs",
+              "RelativeDocumentMoniker": "SmartX.Domain\\Enums\\TelemetryGraphMetric.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Enums\\TelemetryGraphMetric.cs",
+              "RelativeToolTip": "SmartX.Domain\\Enums\\TelemetryGraphMetric.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-24T16:26:26.665Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "CommandPriority.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Enums\\CommandPriority.cs",
+              "RelativeDocumentMoniker": "SmartX.Domain\\Enums\\CommandPriority.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Enums\\CommandPriority.cs",
+              "RelativeToolTip": "SmartX.Domain\\Enums\\CommandPriority.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-23T11:39:26.989Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "TelemetryGraphPoint.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\History\\TelemetryGraphPoint.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\History\\TelemetryGraphPoint.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\History\\TelemetryGraphPoint.cs",
+              "RelativeToolTip": "SmartX.WPF\\ViewModels\\History\\TelemetryGraphPoint.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-23T11:37:02.562Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "TelemetryHistoryItem.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\History\\TelemetryHistoryItem.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\History\\TelemetryHistoryItem.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\History\\TelemetryHistoryItem.cs",
+              "RelativeToolTip": "SmartX.WPF\\ViewModels\\History\\TelemetryHistoryItem.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAkwBgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-23T11:31:44.327Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
               "Title": "TelemetryViewModel.cs",
               "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryViewModel.cs",
               "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryViewModel.cs",
               "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryViewModel.cs",
               "RelativeToolTip": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryViewModel.cs",
-              "ViewState": "AgIAAGICAAAAAAAAAAAqwH0CAAAkAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAMABAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-09-10T14:13:51.876Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "SmartXApiClient.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Api\\SmartXApiClient.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Api\\SmartXApiClient.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Api\\SmartXApiClient.cs",
-              "RelativeToolTip": "SmartX.WPF\\Services\\Api\\SmartXApiClient.cs",
-              "ViewState": "AgIAAFUGAAAAAAAAAAAmwHIGAAAcAAAAAAAAAA==",
+              "DocumentIndex": 23,
+              "Title": "JsonSensorRepository.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Repositories\\JsonSensorRepository.cs",
+              "RelativeDocumentMoniker": "SmartX.Infrastructure\\Repositories\\JsonSensorRepository.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Repositories\\JsonSensorRepository.cs",
+              "RelativeToolTip": "SmartX.Infrastructure\\Repositories\\JsonSensorRepository.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAkwHUAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:15:05.095Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-23T12:32:25.852Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "GatewayPage.xaml",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Pages\\Gateway\\GatewayPage.xaml",
-              "RelativeDocumentMoniker": "SmartX.WPF\\Views\\Pages\\Gateway\\GatewayPage.xaml",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Pages\\Gateway\\GatewayPage.xaml",
-              "RelativeToolTip": "SmartX.WPF\\Views\\Pages\\Gateway\\GatewayPage.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-09-10T14:42:28.547Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "GatewayViewModel.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Gateway\\GatewayViewModel.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Gateway\\GatewayViewModel.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Gateway\\GatewayViewModel.cs",
-              "RelativeToolTip": "SmartX.WPF\\ViewModels\\Gateway\\GatewayViewModel.cs",
-              "ViewState": "AgIAABkAAAAAAAAAAAAQwCoAAAAnAAAAAAAAAA==",
+              "DocumentIndex": 24,
+              "Title": "ITelemetryRepository.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Interfaces\\ITelemetryRepository.cs",
+              "RelativeDocumentMoniker": "SmartX.Domain\\Interfaces\\ITelemetryRepository.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Interfaces\\ITelemetryRepository.cs",
+              "RelativeToolTip": "SmartX.Domain\\Interfaces\\ITelemetryRepository.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwCIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:42:15.809Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-23T12:31:32.213Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "CacheMetadata.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Cache\\CacheMetadata.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\Cache\\CacheMetadata.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Cache\\CacheMetadata.cs",
-              "RelativeToolTip": "SmartX.WPF\\Cache\\CacheMetadata.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "DocumentIndex": 25,
+              "Title": "ISensorRepository.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Interfaces\\ISensorRepository.cs",
+              "RelativeDocumentMoniker": "SmartX.Domain\\Interfaces\\ISensorRepository.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Interfaces\\ISensorRepository.cs",
+              "RelativeToolTip": "SmartX.Domain\\Interfaces\\ISensorRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:39:41.057Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-23T12:34:18.048Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "ApiResponse.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\Responses\\ApiResponse.cs",
-              "RelativeDocumentMoniker": "SmartX.Shared\\Responses\\ApiResponse.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\Responses\\ApiResponse.cs",
-              "RelativeToolTip": "SmartX.Shared\\Responses\\ApiResponse.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAtAAAAAAAAAA==",
+              "DocumentIndex": 26,
+              "Title": "JsonTelemetryRepository.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Repositories\\JsonTelemetryRepository.cs",
+              "RelativeDocumentMoniker": "SmartX.Infrastructure\\Repositories\\JsonTelemetryRepository.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Repositories\\JsonTelemetryRepository.cs",
+              "RelativeToolTip": "SmartX.Infrastructure\\Repositories\\JsonTelemetryRepository.cs",
+              "ViewState": "AgIAAH8AAAAAAAAAAAAswKMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:39:15.304Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-22T22:27:49.715Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Result.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\Models\\Result.cs",
-              "RelativeDocumentMoniker": "SmartX.Shared\\Models\\Result.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\Models\\Result.cs",
-              "RelativeToolTip": "SmartX.Shared\\Models\\Result.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAAABcAAAAcAAAAAAAAAA==",
+              "DocumentIndex": 27,
+              "Title": "GetTelemetryByGatewayHandler.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Telemetry\\GetTelemetryByGatewayHandler.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Queries\\Telemetry\\GetTelemetryByGatewayHandler.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Telemetry\\GetTelemetryByGatewayHandler.cs",
+              "RelativeToolTip": "SmartX.Application\\Queries\\Telemetry\\GetTelemetryByGatewayHandler.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAAAswFsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:34:15.625Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-23T12:29:37.668Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "TelemetryReading.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryReading.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryReading.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryReading.cs",
-              "RelativeToolTip": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryReading.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAkAAAAAAAAAA==",
+              "DocumentIndex": 28,
+              "Title": "ICrudService.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\CRUD\\ICrudService.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Services\\CRUD\\ICrudService.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\CRUD\\ICrudService.cs",
+              "RelativeToolTip": "SmartX.Application\\Services\\CRUD\\ICrudService.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:13:55.296Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-23T12:28:53.588Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "TelemetryPacket.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\Models\\TelemetryPacket.cs",
-              "RelativeDocumentMoniker": "SmartX.Shared\\Models\\TelemetryPacket.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\Models\\TelemetryPacket.cs",
-              "RelativeToolTip": "SmartX.Shared\\Models\\TelemetryPacket.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAtAAAAAAAAAA==",
+              "DocumentIndex": 29,
+              "Title": "GetTelemetryBySensorQuery.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Telemetry\\GetTelemetryBySensorQuery.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Queries\\Telemetry\\GetTelemetryBySensorQuery.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Telemetry\\GetTelemetryBySensorQuery.cs",
+              "RelativeToolTip": "SmartX.Application\\Queries\\Telemetry\\GetTelemetryBySensorQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:38:33.2Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-23T12:25:51.868Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "SmartXSession.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Session\\SmartXSession.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Session\\SmartXSession.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Session\\SmartXSession.cs",
-              "RelativeToolTip": "SmartX.WPF\\Services\\Session\\SmartXSession.cs",
-              "ViewState": "AgIAAOYAAAAAAAAAAAAwwLgAAAAaAAAAAAAAAA==",
+              "DocumentIndex": 30,
+              "Title": "GetTelemetryBySensorHandler.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Telemetry\\GetTelemetryBySensorHandler.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Queries\\Telemetry\\GetTelemetryBySensorHandler.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Telemetry\\GetTelemetryBySensorHandler.cs",
+              "RelativeToolTip": "SmartX.Application\\Queries\\Telemetry\\GetTelemetryBySensorHandler.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAowGsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:20:39.424Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-23T12:25:55.404Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "MainWindow.xaml.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Windows\\MainWindow.xaml.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\Views\\Windows\\MainWindow.xaml.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Windows\\MainWindow.xaml.cs",
-              "RelativeToolTip": "SmartX.WPF\\Views\\Windows\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAMECAAAAAAAAAAAiwCsAAAAQAAAAAAAAAA==",
+              "DocumentIndex": 31,
+              "Title": "GetTelemetryByGatewayQuery.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Telemetry\\GetTelemetryByGatewayQuery.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Queries\\Telemetry\\GetTelemetryByGatewayQuery.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Telemetry\\GetTelemetryByGatewayQuery.cs",
+              "RelativeToolTip": "SmartX.Application\\Queries\\Telemetry\\GetTelemetryByGatewayQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:20:26.04Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-23T12:28:05.195Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 32,
+              "Title": "Query.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Query.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Queries\\Query.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Queries\\Query.cs",
+              "RelativeToolTip": "SmartX.Application\\Queries\\Query.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-23T12:24:59.72Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
               "Title": "ViewModelBase.cs",
               "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Base\\ViewModelBase.cs",
               "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Base\\ViewModelBase.cs",
               "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Base\\ViewModelBase.cs",
               "RelativeToolTip": "SmartX.WPF\\ViewModels\\Base\\ViewModelBase.cs",
-              "ViewState": "AgIAAAUBAAAAAAAAAAA2wCIBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAPAAAAAAAAAAAAAwwCIBAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:19:20.663Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-10T14:19:20.663Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 34,
               "Title": "RelayCommand.cs",
               "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Base\\RelayCommand.cs",
               "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Base\\RelayCommand.cs",
@@ -367,25 +720,369 @@
               "RelativeToolTip": "SmartX.WPF\\ViewModels\\Base\\RelayCommand.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAAACMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:19:09.679Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-10T14:19:09.679Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 33,
               "Title": "AsyncRelayCommand.cs",
               "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Base\\AsyncRelayCommand.cs",
               "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Base\\AsyncRelayCommand.cs",
               "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Base\\AsyncRelayCommand.cs",
               "RelativeToolTip": "SmartX.WPF\\ViewModels\\Base\\AsyncRelayCommand.cs",
-              "ViewState": "AgIAAB0AAAAAAAAAAAAswDkAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADkAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:19:06.383Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-10T14:19:06.383Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 36,
+              "Title": "TelemetryStream.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\Telemetry\\TelemetryStream.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Services\\Telemetry\\TelemetryStream.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\Telemetry\\TelemetryStream.cs",
+              "RelativeToolTip": "SmartX.Application\\Services\\Telemetry\\TelemetryStream.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAA9wBcAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-22T22:32:48.048Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "ITelemetryStream.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\Telemetry\\ITelemetryStream.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Services\\Telemetry\\ITelemetryStream.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\Telemetry\\ITelemetryStream.cs",
+              "RelativeToolTip": "SmartX.Application\\Services\\Telemetry\\ITelemetryStream.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-22T22:31:24.389Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "TelemetryHistoryStore.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\Telemetry\\TelemetryHistoryStore.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Services\\Telemetry\\TelemetryHistoryStore.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\Telemetry\\TelemetryHistoryStore.cs",
+              "RelativeToolTip": "SmartX.Application\\Services\\Telemetry\\TelemetryHistoryStore.cs",
+              "ViewState": "AgIAAF8AAAAAAAAAAABRwHYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-23T11:22:17.967Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "TelemetryCollection.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryCollection.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryCollection.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryCollection.cs",
+              "RelativeToolTip": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryCollection.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAiwB8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T14:14:01.154Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "TelemetryReading.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryReading.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryReading.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryReading.cs",
+              "RelativeToolTip": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryReading.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAqwBwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T14:13:55.296Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "Telemetry.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Entities\\Telemetry.cs",
+              "RelativeDocumentMoniker": "SmartX.Domain\\Entities\\Telemetry.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Entities\\Telemetry.cs",
+              "RelativeToolTip": "SmartX.Domain\\Entities\\Telemetry.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAywBYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-22T22:26:49.146Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "TelemetryDisplayModel.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryDisplayModel.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryDisplayModel.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryDisplayModel.cs",
+              "RelativeToolTip": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryDisplayModel.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAA0wBQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T14:13:58.415Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "TelemetryService.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\Telemetry\\TelemetryService.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Services\\Telemetry\\TelemetryService.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Services\\Telemetry\\TelemetryService.cs",
+              "RelativeToolTip": "SmartX.Application\\Services\\Telemetry\\TelemetryService.cs",
+              "ViewState": "AgIAAIMAAAAAAAAAAAAAAJYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-22T22:29:51.49Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "DependencyInjection.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\DependencyInjection.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\DependencyInjection.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\DependencyInjection.cs",
+              "RelativeToolTip": "SmartX.Application\\DependencyInjection.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAYwCcAAABDAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-22T22:34:02.247Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "SensorStatus.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Enums\\SensorStatus.cs",
+              "RelativeDocumentMoniker": "SmartX.Domain\\Enums\\SensorStatus.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Enums\\SensorStatus.cs",
+              "RelativeToolTip": "SmartX.Domain\\Enums\\SensorStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-22T22:25:28.841Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "SensorCategory.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Enums\\SensorCategory.cs",
+              "RelativeDocumentMoniker": "SmartX.Domain\\Enums\\SensorCategory.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Enums\\SensorCategory.cs",
+              "RelativeToolTip": "SmartX.Domain\\Enums\\SensorCategory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-22T22:25:03.754Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\appsettings.json",
+              "RelativeDocumentMoniker": "SmartX.API\\appsettings.json",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\appsettings.json",
+              "RelativeToolTip": "SmartX.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-09-22T09:44:37.477Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "FirebaseAuthHandler.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Authentication\\Firebase\\FirebaseAuthHandler.cs",
+              "RelativeDocumentMoniker": "SmartX.Infrastructure\\Authentication\\Firebase\\FirebaseAuthHandler.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\Authentication\\Firebase\\FirebaseAuthHandler.cs",
+              "RelativeToolTip": "SmartX.Infrastructure\\Authentication\\Firebase\\FirebaseAuthHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFkAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-21T16:33:14.478Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "CreateTelemetryValidator.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Validators\\CreateTelemetryValidator.cs",
+              "RelativeDocumentMoniker": "SmartX.Application\\Validators\\CreateTelemetryValidator.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\Validators\\CreateTelemetryValidator.cs",
+              "RelativeToolTip": "SmartX.Application\\Validators\\CreateTelemetryValidator.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAowEMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-11T08:11:34.717Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 50,
+              "Title": "CacheSyncService.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
+              "RelativeToolTip": "SmartX.WPF\\Services\\Sync\\CacheSyncService.cs",
+              "ViewState": "AgIAAAwBAAAAAAAAAAAqwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T15:01:51.953Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 57,
+              "Title": "TelemetryPage.xaml.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml.cs",
+              "RelativeToolTip": "SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAgwBUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T14:50:29.248Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 56,
+              "Title": "TelemetryPage.xaml",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml",
+              "RelativeToolTip": "SmartX.WPF\\Views\\Pages\\Telemetry\\TelemetryPage.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-09-10T14:50:27.868Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 52,
+              "Title": "SmartXAuthenticationService.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Session\\SmartXAuthenticationService.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Session\\SmartXAuthenticationService.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Session\\SmartXAuthenticationService.cs",
+              "RelativeToolTip": "SmartX.WPF\\Services\\Session\\SmartXAuthenticationService.cs",
+              "ViewState": "AgIAADQAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T15:01:36.473Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 51,
+              "Title": "SmartXCreditialStore.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Session\\SmartXCreditialStore.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Session\\SmartXCreditialStore.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Session\\SmartXCreditialStore.cs",
+              "RelativeToolTip": "SmartX.WPF\\Services\\Session\\SmartXCreditialStore.cs",
+              "ViewState": "AgIAAEMAAAAAAAAAAAAkwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T15:01:43.194Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 58,
+              "Title": "users.json",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\bin\\Debug\\net10.0\\Data\\Local\\users.json",
+              "RelativeDocumentMoniker": "SmartX.API\\bin\\Debug\\net10.0\\Data\\Local\\users.json",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\bin\\Debug\\net10.0\\Data\\Local\\users.json",
+              "RelativeToolTip": "SmartX.API\\bin\\Debug\\net10.0\\Data\\Local\\users.json",
+              "ViewState": "AgIAACIAAAAAAAAAAAAAACEAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-09-10T14:46:24.251Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 53,
+              "Title": "SmartXApiClient.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Api\\SmartXApiClient.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Api\\SmartXApiClient.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Api\\SmartXApiClient.cs",
+              "RelativeToolTip": "SmartX.WPF\\Services\\Api\\SmartXApiClient.cs",
+              "ViewState": "AgIAAFUGAAAAAAAAAAAmwHIGAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T14:15:05.095Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 61,
+              "Title": "GatewayPage.xaml",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Pages\\Gateway\\GatewayPage.xaml",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Views\\Pages\\Gateway\\GatewayPage.xaml",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Pages\\Gateway\\GatewayPage.xaml",
+              "RelativeToolTip": "SmartX.WPF\\Views\\Pages\\Gateway\\GatewayPage.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-09-10T14:42:28.547Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 62,
+              "Title": "GatewayViewModel.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Gateway\\GatewayViewModel.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Gateway\\GatewayViewModel.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Gateway\\GatewayViewModel.cs",
+              "RelativeToolTip": "SmartX.WPF\\ViewModels\\Gateway\\GatewayViewModel.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAQwCoAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T14:42:15.809Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 63,
+              "Title": "CacheMetadata.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Cache\\CacheMetadata.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Cache\\CacheMetadata.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Cache\\CacheMetadata.cs",
+              "RelativeToolTip": "SmartX.WPF\\Cache\\CacheMetadata.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T14:39:41.057Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 64,
+              "Title": "ApiResponse.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\Responses\\ApiResponse.cs",
+              "RelativeDocumentMoniker": "SmartX.Shared\\Responses\\ApiResponse.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\Responses\\ApiResponse.cs",
+              "RelativeToolTip": "SmartX.Shared\\Responses\\ApiResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T14:39:15.304Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 54,
+              "Title": "Result.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\Models\\Result.cs",
+              "RelativeDocumentMoniker": "SmartX.Shared\\Models\\Result.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\Models\\Result.cs",
+              "RelativeToolTip": "SmartX.Shared\\Models\\Result.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAAABcAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T14:34:15.625Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 65,
+              "Title": "TelemetryPacket.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\Models\\TelemetryPacket.cs",
+              "RelativeDocumentMoniker": "SmartX.Shared\\Models\\TelemetryPacket.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\Models\\TelemetryPacket.cs",
+              "RelativeToolTip": "SmartX.Shared\\Models\\TelemetryPacket.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T14:38:33.2Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 55,
+              "Title": "SmartXSession.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Session\\SmartXSession.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Session\\SmartXSession.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Session\\SmartXSession.cs",
+              "RelativeToolTip": "SmartX.WPF\\Services\\Session\\SmartXSession.cs",
+              "ViewState": "AgIAAOYAAAAAAAAAAAAwwLgAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T14:20:39.424Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 60,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Windows\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Views\\Windows\\MainWindow.xaml.cs",
+              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Windows\\MainWindow.xaml.cs",
+              "RelativeToolTip": "SmartX.WPF\\Views\\Windows\\MainWindow.xaml.cs",
+              "ViewState": "AgIAAMECAAAAAAAAAAAiwCsAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-09-10T14:20:26.04Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 59,
               "Title": "ISmartXApiClient.cs",
               "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\Api\\ISmartXApiClient.cs",
               "RelativeDocumentMoniker": "SmartX.WPF\\Services\\Api\\ISmartXApiClient.cs",
@@ -393,34 +1090,7 @@
               "RelativeToolTip": "SmartX.WPF\\Services\\Api\\ISmartXApiClient.cs",
               "ViewState": "AgIAAGEAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:15:06.059Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "TelemetryCollection.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryCollection.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryCollection.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryCollection.cs",
-              "RelativeToolTip": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryCollection.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAAwB0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:14:01.154Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "TelemetryDisplayModel.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryDisplayModel.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryDisplayModel.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryDisplayModel.cs",
-              "RelativeToolTip": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryDisplayModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAApAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-09-10T14:13:58.415Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-09-10T14:15:06.059Z"
             }
           ]
         },

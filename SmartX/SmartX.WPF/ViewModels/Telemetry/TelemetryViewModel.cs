@@ -1,4 +1,5 @@
 ﻿using SmartX.Application.Requests.Telemetry;
+using SmartX.Application.Services.Telemetry;
 using SmartX.Shared.Mapping;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Repositories.Local;
@@ -24,7 +25,6 @@ public class TelemetryViewModel : ViewModelBase
     private readonly ISmartXApiClient _apiClient;
     private readonly IMapper _mapper;
 
-
     private Guid? _selectedSensorId;
 
     private string _selectedSensorFilter = "All";
@@ -35,11 +35,15 @@ public class TelemetryViewModel : ViewModelBase
     // COLLECTIONS
     private readonly TelemetryCollection _telemetryCollection = new();
 
+    private readonly ITelemetryStream _telemetryStream;
+
     private DomainTelemetry[] _telemetryArray = [];
 
     public ObservableCollection<TelemetryDisplayModel> Telemetry { get; } = [];
 
     public ObservableCollection<TelemetryDisplayModel> FilteredTelemetry { get; } = [];
+
+    public ObservableCollection<TelemetryDisplayModel> PowerHistory { get; } = [];
 
     public ObservableCollection<DomainSensor> Sensors { get; } = [];
 
@@ -226,7 +230,6 @@ public class TelemetryViewModel : ViewModelBase
                 x => x.Timestamp)
             .FirstOrDefault();
 
-
     public double? Temperature =>
         LatestTelemetry?.Temperature;
 
@@ -261,7 +264,9 @@ public class TelemetryViewModel : ViewModelBase
         IConnectivityService connectivityService,
         SmartXSession session,
         IMapper mapper,
-        ISmartXApiClient apiClient) : base(
+        ISmartXApiClient apiClient,
+        ITelemetryStream telemetryStream
+        ) : base(
             connectivityService,
             session)
     {
@@ -270,6 +275,7 @@ public class TelemetryViewModel : ViewModelBase
         _apiClient = apiClient;
         _navigationService = navigationService;
         _mapper = mapper;
+        _telemetryStream = telemetryStream;
 
         BackToSensorsCommand =
             new AsyncRelayCommand(
@@ -434,8 +440,13 @@ public class TelemetryViewModel : ViewModelBase
         {
             Telemetry.Clear();
             FilteredTelemetry.Clear();
+            PowerHistory.Clear();
+
 
             _telemetryCollection.Clear();
+
+            _telemetryStream.Clear();
+
             _telemetryArray = [];
 
             TotalPower = 0;
@@ -474,11 +485,6 @@ public class TelemetryViewModel : ViewModelBase
         _telemetryArray =
             _telemetryCollection.ToArray();
 
-        TotalPower =
-            CalculateTotalPower(
-                _telemetryArray,
-                0);
-
         OnPropertyChanged(
             nameof(TotalPower));
 
@@ -499,6 +505,7 @@ public class TelemetryViewModel : ViewModelBase
     private void ApplyFilters()
     {
         FilteredTelemetry.Clear();
+        PowerHistory.Clear();
 
         IEnumerable<TelemetryDisplayModel> filtered =
             Telemetry;
@@ -536,12 +543,16 @@ public class TelemetryViewModel : ViewModelBase
         foreach (var telemetry in filtered)
         {
             FilteredTelemetry.Add(telemetry);
+            PowerHistory.Add(telemetry);
         }
+
+        TotalPower =
+    CalculateTotalPower(
+        PowerHistory.ToArray(),
+        0);
 
         RaiseTelemetryProperties();
     }
-
-
 
     // ADD TELEMETRY
     // DEVELOPMENT ONLY
@@ -625,29 +636,13 @@ public class TelemetryViewModel : ViewModelBase
                 telemetry,
                 CancellationToken.None);
 
-            // ADD TO WRAPPER
-            _telemetryCollection.Add(
+            // ADD TO TELEMETRY STREAM
+            _telemetryStream.Enqueue(
                 telemetry);
 
-            // REBUILD ARRAY
-            _telemetryArray =
-                _telemetryCollection.ToArray();
+            // PROCESS STREAM
+            ProcessTelemetryStream();
 
-            // RUN RECURSION AGAIN
-            TotalPower =
-                CalculateTotalPower(
-                    _telemetryArray,
-                    0);
-
-            OnPropertyChanged(
-                nameof(TotalPower));
-
-            // ADD TO UI COLLECTION
-            Telemetry.Add(
-                CreateDisplayModel(telemetry));
-
-            // REAPPLY FILTERS
-            ApplyFilters();
         }
         catch (Exception ex)
         {
@@ -775,8 +770,8 @@ public class TelemetryViewModel : ViewModelBase
     }
 
     private double CalculateTotalPower(
-    DomainTelemetry[] telemetry,
-    int index)
+        TelemetryDisplayModel[] telemetry,
+        int index)
     {
         // BASE CASE
         if (index >= telemetry.Length)
@@ -874,5 +869,41 @@ public class TelemetryViewModel : ViewModelBase
 
         await LoadAsync();
     }
+
+    private void ProcessTelemetryStream()
+    {
+        var telemetryAdded = false;
+
+        while (_telemetryStream.TryDequeue(
+                   out var telemetry))
+        {
+            if (telemetry is null)
+            {
+                continue;
+            }
+
+            _telemetryCollection.Add(
+                telemetry);
+
+            Telemetry.Add(
+                CreateDisplayModel(
+                    telemetry));
+
+            telemetryAdded = true;
+        }
+
+        if (!telemetryAdded)
+        {
+            return;
+        }
+
+        _telemetryArray =
+            _telemetryCollection.ToArray();
+
+        ApplyFilters();
+    }
+
+
+
 
 }

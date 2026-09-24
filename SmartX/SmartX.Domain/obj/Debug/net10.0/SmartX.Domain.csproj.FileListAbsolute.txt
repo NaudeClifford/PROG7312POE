@@ -22,3 +22,4 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\SmartX.
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\refint\SmartX.Domain.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\SmartX.Domain.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\ref\SmartX.Domain.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.Domain\obj\Debug\net10.0\SmartX.D.E3B49676.Up2Date

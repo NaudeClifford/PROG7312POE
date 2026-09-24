@@ -22,4 +22,9 @@ public interface ISensorRepository
     Task DeleteAsync(
         Guid id,
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<Sensor>> GetByGatewayIdAsync(
+    Guid gatewayId,
+    CancellationToken cancellationToken = default);
+
 }
