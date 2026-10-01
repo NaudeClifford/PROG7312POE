@@ -62,7 +62,7 @@
 
                     <StackPanel Orientation="Horizontal">
 
-                        <Image Source="/Assets/Logo/Logo.jpg"
+                        <Image Source="/Assets/Logo/Logo.ico"
                        Width="50"
                        Height="30"
                        Margin="0,0,10,0"/>

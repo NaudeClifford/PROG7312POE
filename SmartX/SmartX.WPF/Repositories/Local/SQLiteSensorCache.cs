@@ -9,9 +9,7 @@ public class SQLiteSensorCache(
 {
     private readonly SmartXCacheDatabase _database = database;
 
-    // =========================================================
     // GET BY ID
-    // =========================================================
 
     public async Task<Sensor?> GetByIdAsync(
         Guid id,
@@ -53,9 +51,7 @@ public class SQLiteSensorCache(
         return SensorMapper.Map(reader);
     }
 
-    // =========================================================
     // GET ALL
-    // =========================================================
 
     public async Task<IReadOnlyList<Sensor>> GetAllAsync(
         CancellationToken cancellationToken = default)
@@ -97,9 +93,7 @@ public class SQLiteSensorCache(
         return sensors;
     }
 
-    // =========================================================
     // GET BY COMPANY
-    // =========================================================
 
     public async Task<IReadOnlyList<Sensor>> GetByCompanyIdAsync(
         Guid companyId,
@@ -149,9 +143,7 @@ public class SQLiteSensorCache(
         return sensors;
     }
 
-    // =========================================================
     // UPDATE / INSERT
-    // =========================================================
 
     public async Task UpdateAsync(
         Sensor sensor,
@@ -227,9 +219,7 @@ public class SQLiteSensorCache(
         if (rowsAffected > 0)
             return;
 
-        // =====================================================
         // INSERT
-        // =====================================================
 
         command.CommandText = """
             INSERT INTO Sensors
@@ -264,9 +254,7 @@ public class SQLiteSensorCache(
             cancellationToken);
     }
 
-    // =========================================================
     // DELETE
-    // =========================================================
 
     public async Task DeleteAsync(
         Guid id,
@@ -291,9 +279,7 @@ public class SQLiteSensorCache(
             cancellationToken);
     }
 
-    // =========================================================
     // GET BY GATEWAY
-    // =========================================================
 
     public async Task<IReadOnlyList<Sensor>> GetByGatewayIdAsync(
         Guid gatewayId,

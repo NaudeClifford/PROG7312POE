@@ -78,41 +78,45 @@
 
 
     <!-- PAGE -->
+    <ScrollViewer
+        x:Name="HistoryScrollViewer"
+    VerticalScrollBarVisibility="Auto"
+    HorizontalScrollBarVisibility="Disabled">
 
-    <Grid Margin="35">
+        <Grid Margin="35">
 
-        <Grid.RowDefinitions>
+            <Grid.RowDefinitions>
 
-            <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
 
-            <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
 
-            <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
 
-        </Grid.RowDefinitions>
+            </Grid.RowDefinitions>
 
-        <!-- HEADER -->
+            <!-- HEADER -->
 
-        <Grid Grid.Row="0">
+            <Grid Grid.Row="0">
 
-            <StackPanel>
+                <StackPanel>
 
-                <TextBlock Text="History"
+                    <TextBlock Text="History"
                            FontSize="32"
                            FontWeight="Bold"
                            Foreground="{StaticResource DarkBrush}"/>
 
-                <TextBlock Text="Review historical sensor readings and telemetry."
+                    <TextBlock Text="Review historical sensor readings and telemetry."
                            FontSize="14"
                            Foreground="#737A82"
                            Margin="0,6,0,0"/>
 
-            </StackPanel>
+                </StackPanel>
 
 
-            <!-- Refresh -->
+                <!-- Refresh -->
 
-            <Button Content="Refresh"
+                <Button Content="Refresh"
                     HorizontalAlignment="Right"
                     Width="95"
                     Height="38"
@@ -120,51 +124,51 @@
                     Style="{StaticResource BaseButtonStyle}"
                     Command="{Binding LoadCommand}"/>
 
-        </Grid>
+            </Grid>
 
-        <!-- FILTER BAR -->
+            <!-- FILTER BAR -->
 
-        <Border Grid.Row="1"
+            <Border Grid.Row="1"
                 Style="{StaticResource HistoryCardStyle}"
                 Margin="0,30,0,25">
 
-            <Grid>
+                <Grid>
 
-                <Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
 
-                    <ColumnDefinition Width="2.2*"/>
+                        <ColumnDefinition Width="2.2*"/>
 
-                    <ColumnDefinition Width="1.2*"/>
+                        <ColumnDefinition Width="1.2*"/>
 
-                    <ColumnDefinition Width="1.2*"/>
+                        <ColumnDefinition Width="1.2*"/>
 
-                    <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
 
-                </Grid.ColumnDefinitions>
+                    </Grid.ColumnDefinitions>
 
 
-                <!-- SENSOR -->
+                    <!-- SENSOR -->
 
-                <StackPanel Grid.Column="0"
+                    <StackPanel Grid.Column="0"
                             Margin="0,0,20,0">
 
-                    <TextBlock Text="Sensor"
+                        <TextBlock Text="Sensor"
                                Style="{StaticResource HistoryLabelStyle}"/>
 
-                    <Grid>
+                        <Grid>
 
-                        <Grid.ColumnDefinitions>
+                            <Grid.ColumnDefinitions>
 
-                            <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
 
-                            <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="220"/>
 
-                        </Grid.ColumnDefinitions>
+                            </Grid.ColumnDefinitions>
 
 
-                        <!-- Sensor search -->
+                            <!-- Sensor search -->
 
-                        <TextBox Grid.Column="0"
+                            <TextBox Grid.Column="0"
                                  Height="38"
                                  Padding="12,0"
                                  VerticalContentAlignment="Center"
@@ -174,9 +178,9 @@
                                  ToolTip="Search sensors"/>
 
 
-                        <!-- Sensor selector -->
+                            <!-- Sensor selector -->
 
-                        <ComboBox Grid.Column="1"
+                            <ComboBox Grid.Column="1"
                                   Height="38"
                                   Margin="8,0,0,0"
                                   ItemsSource="{Binding FilteredSensors}"
@@ -186,176 +190,176 @@
                                   DisplayMemberPath="Name"
                                   ToolTip="Select sensor"/>
 
-                    </Grid>
+                        </Grid>
 
-                </StackPanel>
+                    </StackPanel>
 
 
-                <!-- FROM -->
+                    <!-- FROM -->
 
-                <StackPanel Grid.Column="1"
+                    <StackPanel Grid.Column="1"
                             Margin="0,0,15,0">
 
-                    <TextBlock Text="From"
+                        <TextBlock Text="From"
                                Style="{StaticResource HistoryLabelStyle}"/>
 
-                    <DatePicker Height="38"
+                        <DatePicker Height="38"
                                 SelectedDate="{Binding FromDate,
                                                        Mode=TwoWay}"/>
 
-                </StackPanel>
+                    </StackPanel>
 
 
-                <!-- TO -->
+                    <!-- TO -->
 
-                <StackPanel Grid.Column="2"
+                    <StackPanel Grid.Column="2"
                             Margin="0,0,15,0">
 
-                    <TextBlock Text="To"
+                        <TextBlock Text="To"
                                Style="{StaticResource HistoryLabelStyle}"/>
 
-                    <DatePicker Height="38"
+                        <DatePicker Height="38"
                                 SelectedDate="{Binding ToDate,
                                                        Mode=TwoWay}"/>
 
-                </StackPanel>
+                    </StackPanel>
 
 
-                <!-- CLEAR -->
+                    <!-- CLEAR -->
 
-                <StackPanel Grid.Column="3"
+                    <StackPanel Grid.Column="3"
                             VerticalAlignment="Bottom">
 
-                    <Button Content="Clear"
+                        <Button Content="Clear"
                             Height="38"
                             Width="85"
                             Cursor="Hand"
                             Style="{StaticResource BaseButtonStyle}"
                             Command="{Binding ClearFiltersCommand}"/>
 
-                </StackPanel>
+                    </StackPanel>
 
-            </Grid>
+                </Grid>
 
-        </Border>
-
-
-        <!-- MAIN CONTENT -->
-
-        <Grid Grid.Row="2">
-
-            <Grid.ColumnDefinitions>
-
-                <ColumnDefinition Width="2.2*"/>
-
-                <ColumnDefinition Width="20"/>
-
-                <ColumnDefinition Width="1*"/>
-
-            </Grid.ColumnDefinitions>
+            </Border>
 
 
-            <!-- LEFT SIDE -->
+            <!-- MAIN CONTENT -->
 
-            <Grid Grid.Column="0">
+            <Grid Grid.Row="2">
 
-                <Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
 
-                    <RowDefinition Height="Auto"/>
+                    <ColumnDefinition Width="2.2*"/>
 
-                    <RowDefinition Height="330"/>
+                    <ColumnDefinition Width="20"/>
 
-                    <RowDefinition Height="15"/>
+                    <ColumnDefinition Width="1*"/>
 
-                    <RowDefinition Height="Auto"/>
-
-                    <RowDefinition Height="15"/>
-
-                    <RowDefinition Height="*"/>
-
-                </Grid.RowDefinitions>
+                </Grid.ColumnDefinitions>
 
 
-                <!-- TELEMETRY HEADER -->
+                <!-- LEFT SIDE -->
 
-                <Border Grid.Row="0"
+                <Grid Grid.Column="0">
+
+                    <Grid.RowDefinitions>
+
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition Height="330"/>
+
+                        <RowDefinition Height="15"/>
+
+                        <RowDefinition Height="Auto"/>
+
+                        <RowDefinition Height="15"/>
+
+                        <RowDefinition Height="*"/>
+
+                    </Grid.RowDefinitions>
+
+
+                    <!-- TELEMETRY HEADER -->
+
+                    <Border Grid.Row="0"
         Style="{StaticResource HistoryCardStyle}"
         Padding="20">
 
-                    <Grid>
+                        <Grid>
 
-                        <StackPanel>
+                            <StackPanel>
 
-                            <TextBlock Text="Telemetry"
+                                <TextBlock Text="Telemetry"
                        FontSize="19"
                        FontWeight="SemiBold"
                        Foreground="{StaticResource DarkBrush}"/>
 
-                            <TextBlock Text="Select a measurement to view its history."
+                                <TextBlock Text="Select a measurement to view its history."
                        FontSize="12"
                        Foreground="#8A929A"
                        Margin="0,4,0,0"/>
 
-                        </StackPanel>
+                            </StackPanel>
 
-                        <StackPanel Orientation="Horizontal"
+                            <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Center">
 
-                        </StackPanel>
+                            </StackPanel>
 
-                    </Grid>
+                        </Grid>
 
-                </Border>
+                    </Border>
 
 
 
-                <!-- GRAPH -->
+                    <!-- GRAPH -->
 
-                <Border Grid.Row="1"
+                    <Border Grid.Row="1"
                     Style="{StaticResource HistoryCardStyle}"
                     Padding="18">
 
-                    <Grid>
+                        <Grid>
 
-                        <Grid.RowDefinitions>
+                            <Grid.RowDefinitions>
 
-                            <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
 
-                            <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
 
-                        </Grid.RowDefinitions>
+                            </Grid.RowDefinitions>
 
 
-                        <!-- GRAPH HEADER -->
+                            <!-- GRAPH HEADER -->
 
-                        <Grid Grid.Row="0"
+                            <Grid Grid.Row="0"
                             Margin="0,0,0,12">
 
-                            <StackPanel>
+                                <StackPanel>
 
-                                <TextBlock Text="{Binding GraphMetricName}"
+                                    <TextBlock Text="{Binding GraphMetricName}"
                            FontSize="15"
                            FontWeight="SemiBold"
                            Foreground="{StaticResource DarkBrush}"/>
 
-                                <TextBlock Text="{Binding GraphUnit,
+                                    <TextBlock Text="{Binding GraphUnit,
                                            StringFormat=Unit: {0}}"
                            FontSize="11"
                            Foreground="#8A929A"
                            Margin="0,3,0,0"/>
 
-                            </StackPanel>
+                                </StackPanel>
 
 
-                            <!-- Graph controls -->
+                                <!-- Graph controls -->
 
-                            <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Right">
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Right">
 
-                                <!-- Power -->
+                                    <!-- Power -->
 
-                                <RadioButton Content="Power"
+                                    <RadioButton Content="Power"
                              GroupName="TelemetryMetric"
                              Margin="0,0,6,0"
                              Padding="14,7"
@@ -363,9 +367,9 @@
                              Style="{StaticResource MetricButtonStyle}"/>
 
 
-                                <!-- Temperature -->
+                                    <!-- Temperature -->
 
-                                <RadioButton Content="Temperature"
+                                    <RadioButton Content="Temperature"
                              GroupName="TelemetryMetric"
                              Margin="0,0,6,0"
                              Padding="14,7"
@@ -373,9 +377,9 @@
                              Style="{StaticResource MetricButtonStyle}"/>
 
 
-                                <!-- Voltage -->
+                                    <!-- Voltage -->
 
-                                <RadioButton Content="Voltage"
+                                    <RadioButton Content="Voltage"
                              GroupName="TelemetryMetric"
                              Margin="0,0,6,0"
                              Padding="14,7"
@@ -383,152 +387,290 @@
                              Style="{StaticResource MetricButtonStyle}"/>
 
 
-                                <!-- Current -->
+                                    <!-- Current -->
 
-                                <RadioButton Content="Current"
+                                    <RadioButton Content="Current"
                              GroupName="TelemetryMetric"
                              Padding="14,7"
                              IsChecked="{Binding IsCurrentSelected}"
                              Style="{StaticResource MetricButtonStyle}"/>
 
-                            </StackPanel>
+
+                                    <!-- Zoom Out -->
+
+                                    <Button Content="−"
+            Width="35"
+            Height="32"
+            Margin="0,0,4,0"
+            FontSize="18"
+            ToolTip="Zoom out"
+            Click="ZoomOut_Click"/>
+
+                                    <!-- Zoom In -->
+
+                                    <Button Content="+"
+            Width="35"
+            Height="32"
+            Margin="0,0,4,0"
+            FontSize="18"
+            ToolTip="Zoom in"
+            Click="ZoomIn_Click"/>
+
+                                    <!-- Reset -->
+
+                                    <Button Content="Reset"
+            Width="55"
+            Height="32"
+            ToolTip="Reset zoom"
+            Click="ResetZoom_Click"/>
+
+                                </StackPanel>
+
+                            </Grid>
+
+
+                            <!-- ACTUAL CHART -->
+
+                            <lvc:CartesianChart
+    x:Name="HistoryChart"
+    Grid.Row="1"
+    Series="{Binding GraphSeries}"
+    XAxes="{Binding GraphXAxes}"
+    YAxes="{Binding GraphYAxes}"
+    ZoomMode="X"
+    PreviewMouseWheel="HistoryChart_PreviewMouseWheel"
+    PreviewMouseLeftButtonDown="HistoryChart_PreviewMouseLeftButtonDown"
+    PreviewMouseMove="HistoryChart_PreviewMouseMove"
+    PreviewMouseLeftButtonUp="HistoryChart_PreviewMouseLeftButtonUp"
+    TooltipPosition="Top"
+    LegendPosition="Hidden"
+    AnimationsSpeed="00:00:00.200"
+    Background="Transparent"/>
 
                         </Grid>
 
+                    </Border>
 
-                        <!-- ACTUAL CHART -->
 
-                        <lvc:CartesianChart
-                            Grid.Row="1"
+                    <!-- STATISTICS -->
 
-                            Series="{Binding GraphSeries}"
+                    <Grid Grid.Row="3">
 
-                            XAxes="{Binding GraphXAxes}"
+                        <Grid.ColumnDefinitions>
 
-                            YAxes="{Binding GraphYAxes}"
+                            <ColumnDefinition Width="*"/>
 
-                            ZoomMode="X"
+                            <ColumnDefinition Width="12"/>
 
-                            TooltipPosition="Top"
+                            <ColumnDefinition Width="*"/>
 
-                            LegendPosition="Hidden"
+                            <ColumnDefinition Width="12"/>
 
-                            AnimationsSpeed="00:00:00.200"
+                            <ColumnDefinition Width="*"/>
 
-                            Background="Transparent"/>
+                        </Grid.ColumnDefinitions>
+
+
+                        <!-- Average -->
+
+                        <Border Grid.Column="0"
+                         Style="{StaticResource HistoryCardStyle}">
+
+                            <StackPanel>
+
+                                <TextBlock Text="Average"
+                       FontSize="12"
+                       Foreground="#8A929A"/>
+
+                                <TextBlock Text="{Binding AverageDisplay}"
+                       FontSize="23"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource DarkBrush}"
+                       Margin="0,6,0,0"/>
+
+                                <TextBlock Text="{Binding GraphMetricName}"
+                       FontSize="11"
+                       Foreground="#A0A7AE"
+                       Margin="0,3,0,0"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+
+                        <!-- Maximum -->
+
+                        <Border Grid.Column="2"
+            Style="{StaticResource HistoryCardStyle}">
+
+                            <StackPanel>
+
+                                <TextBlock Text="Maximum"
+                       FontSize="12"
+                       Foreground="#8A929A"/>
+
+                                <TextBlock Text="{Binding MaximumDisplay}"
+                       FontSize="23"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource DarkBrush}"
+                       Margin="0,6,0,0"/>
+
+                                <TextBlock Text="{Binding GraphMetricName}"
+                       FontSize="11"
+                       Foreground="#A0A7AE"
+                       Margin="0,3,0,0"/>
+
+                            </StackPanel>
+
+                        </Border>
+
+
+                        <!-- Minimum -->
+
+                        <Border Grid.Column="4"
+            Style="{StaticResource HistoryCardStyle}">
+
+                            <StackPanel>
+
+                                <TextBlock Text="Minimum"
+                       FontSize="12"
+                       Foreground="#8A929A"/>
+
+                                <TextBlock Text="{Binding MinimumDisplay}"
+                       FontSize="23"
+                       FontWeight="Bold"
+                       Foreground="{StaticResource DarkBrush}"
+                       Margin="0,6,0,0"/>
+
+                                <TextBlock Text="{Binding GraphMetricName}"
+                       FontSize="11"
+                       Foreground="#A0A7AE"
+                       Margin="0,3,0,0"/>
+
+                            </StackPanel>
+
+                        </Border>
 
                     </Grid>
 
-                </Border>
+
+                    <!-- HISTORY TABLE -->
+
+                    <Border Grid.Row="5"
+                        Style="{StaticResource HistoryCardStyle}"
+                        Padding="20">
+
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+
+                                <RowDefinition Height="Auto"/>
+
+                                <RowDefinition Height="*"/>
+
+                            </Grid.RowDefinitions>
 
 
-                <!-- STATISTICS -->
+                            <!-- Table header -->
 
-                <Grid Grid.Row="3">
+                            <Grid Grid.Row="0">
 
-                    <Grid.ColumnDefinitions>
+                                <StackPanel>
 
-                        <ColumnDefinition Width="*"/>
+                                    <TextBlock Text="Historical Readings"
+                                           FontSize="19"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource DarkBrush}"/>
 
-                        <ColumnDefinition Width="12"/>
+                                    <TextBlock Text="Sensor measurements recorded by SmartX."
+                                           FontSize="12"
+                                           Foreground="#8A929A"
+                                           Margin="0,4,0,0"/>
 
-                        <ColumnDefinition Width="*"/>
-
-                        <ColumnDefinition Width="12"/>
-
-                        <ColumnDefinition Width="*"/>
-
-                    </Grid.ColumnDefinitions>
-
-
-                    <!-- Average -->
-
-                    <Border Grid.Column="0"
-                         Style="{StaticResource HistoryCardStyle}">
-
-                        <StackPanel>
-
-                            <TextBlock Text="Average"
-                       FontSize="12"
-                       Foreground="#8A929A"/>
-
-                            <TextBlock Text="{Binding AverageDisplay}"
-                       FontSize="23"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource DarkBrush}"
-                       Margin="0,6,0,0"/>
-
-                            <TextBlock Text="{Binding GraphMetricName}"
-                       FontSize="11"
-                       Foreground="#A0A7AE"
-                       Margin="0,3,0,0"/>
-
-                        </StackPanel>
-
-                    </Border>
+                                </StackPanel>
 
 
-                    <!-- Maximum -->
+                                <Button Content="Export"
+                                    HorizontalAlignment="Right"
+                                    Width="90"
+                                    Height="36"
+                                    Cursor="Hand"
+                                    Style="{StaticResource BaseButtonStyle}"/>
 
-                    <Border Grid.Column="2"
-            Style="{StaticResource HistoryCardStyle}">
-
-                        <StackPanel>
-
-                            <TextBlock Text="Maximum"
-                       FontSize="12"
-                       Foreground="#8A929A"/>
-
-                            <TextBlock Text="{Binding MaximumDisplay}"
-                       FontSize="23"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource DarkBrush}"
-                       Margin="0,6,0,0"/>
-
-                            <TextBlock Text="{Binding GraphMetricName}"
-                       FontSize="11"
-                       Foreground="#A0A7AE"
-                       Margin="0,3,0,0"/>
-
-                        </StackPanel>
-
-                    </Border>
+                            </Grid>
 
 
-                    <!-- Minimum -->
+                            <!-- Data -->
 
-                    <Border Grid.Column="4"
-            Style="{StaticResource HistoryCardStyle}">
+                            <DataGrid Grid.Row="1"
+          Height="300"
+          Margin="0,18,0,0"
+          ItemsSource="{Binding History}"
+          AutoGenerateColumns="False"
+          IsReadOnly="True"
+          CanUserAddRows="False"
+          BorderThickness="1"
+          BorderBrush="#E1E5E8"
+          GridLinesVisibility="Horizontal"
+          HeadersVisibility="Column">
 
-                        <StackPanel>
+                                <DataGrid.Columns>
 
-                            <TextBlock Text="Minimum"
-                       FontSize="12"
-                       Foreground="#8A929A"/>
+                                    <DataGridTextColumn
+            Header="Date"
+            Binding="{Binding Timestamp,
+                              StringFormat={}{0:yyyy-MM-dd}}"
+            Width="1.2*"/>
 
-                            <TextBlock Text="{Binding MinimumDisplay}"
-                       FontSize="23"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource DarkBrush}"
-                       Margin="0,6,0,0"/>
+                                    <DataGridTextColumn
+            Header="Time"
+            Binding="{Binding Timestamp,
+                              StringFormat={}{0:HH:mm:ss}}"
+            Width="1.2*"/>
 
-                            <TextBlock Text="{Binding GraphMetricName}"
-                       FontSize="11"
-                       Foreground="#A0A7AE"
-                       Margin="0,3,0,0"/>
+                                    <DataGridTextColumn
+            Header="Sensor"
+            Binding="{Binding SensorName}"
+            Width="1.5*"/>
 
-                        </StackPanel>
+                                    <DataGridTextColumn
+            Header="Voltage"
+            Binding="{Binding Voltage,
+                              StringFormat={}{0:F2} V}"
+            Width="*"/>
+
+                                    <DataGridTextColumn
+            Header="Current"
+            Binding="{Binding Current,
+                              StringFormat={}{0:F2} A}"
+            Width="*"/>
+
+                                    <DataGridTextColumn
+            Header="Power"
+            Binding="{Binding Power,
+                              StringFormat={}{0:F2} W}"
+            Width="*"/>
+
+                                    <DataGridTextColumn
+            Header="Temperature"
+            Binding="{Binding Temperature,
+                              StringFormat={}{0:F2} °C}"
+            Width="*"/>
+
+                                </DataGrid.Columns>
+
+                            </DataGrid>
+
+                        </Grid>
 
                     </Border>
 
                 </Grid>
 
+                <!-- RIGHT SIDE -->
 
-                <!-- HISTORY TABLE -->
-
-                <Border Grid.Row="5"
-                        Style="{StaticResource HistoryCardStyle}"
-                        Padding="20">
+                <Border Grid.Column="2"
+                    Style="{StaticResource HistoryCardStyle}">
 
                     <Grid>
 
@@ -536,172 +678,70 @@
 
                             <RowDefinition Height="Auto"/>
 
+                            <RowDefinition Height="Auto"/>
+
+                            <RowDefinition Height="20"/>
+
                             <RowDefinition Height="*"/>
 
                         </Grid.RowDefinitions>
 
-
-                        <!-- Table header -->
+                        <!-- COMMAND HEADER -->
 
                         <Grid Grid.Row="0">
 
                             <StackPanel>
 
-                                <TextBlock Text="Historical Readings"
-                                           FontSize="19"
-                                           FontWeight="SemiBold"
-                                           Foreground="{StaticResource DarkBrush}"/>
-
-                                <TextBlock Text="Sensor measurements recorded by SmartX."
-                                           FontSize="12"
-                                           Foreground="#8A929A"
-                                           Margin="0,4,0,0"/>
-
-                            </StackPanel>
-
-
-                            <Button Content="Export"
-                                    HorizontalAlignment="Right"
-                                    Width="90"
-                                    Height="36"
-                                    Cursor="Hand"
-                                    Style="{StaticResource BaseButtonStyle}"/>
-
-                        </Grid>
-
-
-                        <!-- Data -->
-
-                        <DataGrid Grid.Row="1"
-                                  Margin="0,18,0,0"
-                                  ItemsSource="{Binding History}"
-                                  AutoGenerateColumns="False"
-                                  IsReadOnly="True"
-                                  BorderThickness="0"
-                                  GridLinesVisibility="Horizontal"
-                                  HeadersVisibility="Column">
-
-                            <DataGrid.Columns>
-
-                                <DataGridTextColumn Header="Date"
-                                                    Binding="{Binding Timestamp,
-                                                              StringFormat={}{0:yyyy-MM-dd}}"
-                                                    Width="1.2*"/>
-
-                                <DataGridTextColumn Header="Time"
-                                                    Binding="{Binding Timestamp,
-                                                              StringFormat={}{0:HH:mm:ss}}"
-                                                    Width="1.2*"/>
-
-                                <DataGridTextColumn Header="Sensor"
-                                                    Binding="{Binding SensorName}"
-                                                    Width="1.5*"/>
-
-                                <DataGridTextColumn Header="Voltage"
-                                                    Binding="{Binding Voltage,
-                                                              StringFormat={}{0:F2} V}"
-                                                    Width="*"/>
-
-                                <DataGridTextColumn Header="Current"
-                                                    Binding="{Binding Current,
-                                                              StringFormat={}{0:F2} A}"
-                                                    Width="*"/>
-
-                                <DataGridTextColumn Header="Power"
-                                                    Binding="{Binding Power,
-                                                              StringFormat={}{0:F2} W}"
-                                                    Width="*"/>
-
-                                <DataGridTextColumn Header="Temperature"
-                                                    Binding="{Binding Temperature,
-                                                              StringFormat={}{0:F2} °C}"
-                                                    Width="*"/>
-
-                            </DataGrid.Columns>
-
-                        </DataGrid>
-
-                    </Grid>
-
-                </Border>
-
-            </Grid>
-
-            <!-- RIGHT SIDE -->
-
-            <Border Grid.Column="2"
-                    Style="{StaticResource HistoryCardStyle}">
-
-                <Grid>
-
-                    <Grid.RowDefinitions>
-
-                        <RowDefinition Height="Auto"/>
-
-                        <RowDefinition Height="Auto"/>
-
-                        <RowDefinition Height="20"/>
-
-                        <RowDefinition Height="*"/>
-
-                    </Grid.RowDefinitions>
-
-                    <!-- COMMAND HEADER -->
-
-                    <Grid Grid.Row="0">
-
-                        <StackPanel>
-
-                            <TextBlock Text="Manual Command Stream"
+                                <TextBlock Text="Manual Command Stream"
                                        FontSize="19"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource DarkBrush}"/>
 
-                            <TextBlock Text="Send commands directly to the selected sensor."
+                                <TextBlock Text="Send commands directly to the selected sensor."
                                        FontSize="12"
                                        Foreground="#8A929A"
                                        Margin="0,4,0,0"/>
 
-                        </StackPanel>
+                            </StackPanel>
 
 
-                        <Border HorizontalAlignment="Right"
+                            <Border HorizontalAlignment="Right"
                                 VerticalAlignment="Top"
                                 Background="#EEF4FF"
                                 CornerRadius="6"
                                 Padding="9,5">
 
-                            <TextBlock Text="MANUAL"
+                                <TextBlock Text="MANUAL"
                                        FontSize="10"
                                        FontWeight="Bold"
                                        Foreground="#356AE6"/>
 
-                        </Border>
+                            </Border>
 
-                    </Grid>
+                        </Grid>
 
-                    <!-- COMMAND INPUT -->
+                        <!-- COMMAND INPUT -->
 
-                    <Grid Grid.Row="1"
+                        <Grid Grid.Row="1"
                           Margin="0,22,0,0">
 
-                        <Grid.RowDefinitions>
+                            <Grid.RowDefinitions>
 
-                            <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
 
-                            <RowDefinition Height="85"/>
+                                <RowDefinition Height="85"/>
 
-                            <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
 
-                        </Grid.RowDefinitions>
+                            </Grid.RowDefinitions>
 
 
-                        <TextBlock Grid.Row="0"
+                            <TextBlock Grid.Row="0"
                                    Text="Command"
                                    Style="{StaticResource HistoryLabelStyle}"/>
 
 
-                        <TextBox Grid.Row="1"
+                            <TextBox Grid.Row="1"
                                  Text="{Binding ManualCommand,
                                                 UpdateSourceTrigger=PropertyChanged}"
                                  AcceptsReturn="True"
@@ -715,16 +755,16 @@
                                  ToolTip="Enter command for the selected sensor"/>
 
 
-                        <Grid Grid.Row="2"
+                            <Grid Grid.Row="2"
                               Margin="0,12,0,0">
 
-                            <TextBlock Text="Command will be sent immediately."
+                                <TextBlock Text="Command will be sent immediately."
                                        VerticalAlignment="Center"
                                        FontSize="11"
                                        Foreground="#8A929A"/>
 
 
-                            <Button Content="Send Command"
+                                <Button Content="Send Command"
                                     HorizontalAlignment="Right"
                                     Width="125"
                                     Height="38"
@@ -732,51 +772,51 @@
                                     Style="{StaticResource BaseButtonStyle}"
                                     Command="{Binding SendManualCommandCommand}"/>
 
+                            </Grid>
+
                         </Grid>
 
-                    </Grid>
+                        <!-- COMMAND HISTORY -->
 
-                    <!-- COMMAND HISTORY -->
-
-                    <Border Grid.Row="3"
+                        <Border Grid.Row="3"
                             BorderBrush="#E6E9EC"
                             BorderThickness="1"
                             CornerRadius="10"
                             Padding="14">
 
-                        <Grid>
+                            <Grid>
 
-                            <Grid.RowDefinitions>
+                                <Grid.RowDefinitions>
 
-                                <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
 
-                                <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
 
-                                <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
 
-                            </Grid.RowDefinitions>
+                                </Grid.RowDefinitions>
 
 
-                            <!-- History title -->
+                                <!-- History title -->
 
-                            <Grid Grid.Row="0">
+                                <Grid Grid.Row="0">
 
-                                <StackPanel>
+                                    <StackPanel>
 
-                                    <TextBlock Text="Command History"
+                                        <TextBlock Text="Command History"
                                                FontSize="14"
                                                FontWeight="SemiBold"
                                                Foreground="{StaticResource DarkBrush}"/>
 
-                                    <TextBlock Text="Previously sent commands."
+                                        <TextBlock Text="Previously sent commands."
                                                FontSize="11"
                                                Foreground="#8A929A"
                                                Margin="0,3,0,0"/>
 
-                                </StackPanel>
+                                    </StackPanel>
 
 
-                                <Button Content="Undo Last"
+                                    <Button Content="Undo Last"
                                         HorizontalAlignment="Right"
                                         Height="32"
                                         Width="90"
@@ -785,81 +825,81 @@
                                         Command="{Binding UndoLastCommandCommand}"
                                         IsEnabled="{Binding CanUndoCommand}"/>
 
-                            </Grid>
+                                </Grid>
 
 
-                            <!-- Command list -->
+                                <!-- Command list -->
 
-                            <ListBox Grid.Row="1"
+                                <ListBox Grid.Row="1"
                                      Margin="0,15,0,10"
                                      ItemsSource="{Binding CommandHistory}"
                                      BorderThickness="0"
                                      Background="Transparent">
 
-                                <ListBox.ItemTemplate>
+                                    <ListBox.ItemTemplate>
 
-                                    <DataTemplate>
+                                        <DataTemplate>
 
-                                        <Border Padding="10"
+                                            <Border Padding="10"
                                                 Margin="0,0,0,8"
                                                 Background="#F8F9FA"
                                                 CornerRadius="8">
 
-                                            <Grid>
+                                                <Grid>
 
-                                                <Grid.RowDefinitions>
+                                                    <Grid.RowDefinitions>
 
-                                                    <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
 
-                                                    <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
 
-                                                </Grid.RowDefinitions>
+                                                    </Grid.RowDefinitions>
 
 
-                                                <!-- Command -->
+                                                    <!-- Command -->
 
-                                                <Grid Grid.Row="0">
+                                                    <Grid Grid.Row="0">
 
-                                                    <TextBlock Text="{Binding Command}"
+                                                        <TextBlock Text="{Binding Command}"
                                                                FontFamily="Consolas"
                                                                FontSize="12"
                                                                Foreground="{StaticResource DarkBrush}"
                                                                TextWrapping="Wrap"
                                                                Margin="0,0,55,0"/>
 
-                                                    <TextBlock Text="{Binding Timestamp,
+                                                        <TextBlock Text="{Binding Timestamp,
                                                                   StringFormat={}{0:HH:mm:ss}}"
                                                                HorizontalAlignment="Right"
                                                                VerticalAlignment="Top"
                                                                FontSize="10"
                                                                Foreground="#9299A0"/>
 
-                                                </Grid>
+                                                    </Grid>
 
 
-                                                <!-- Response -->
+                                                    <!-- Response -->
 
-                                                <TextBlock Grid.Row="1"
+                                                    <TextBlock Grid.Row="1"
                                                            Text="{Binding Response}"
                                                            FontSize="11"
                                                            Foreground="#737A82"
                                                            TextWrapping="Wrap"
                                                            Margin="0,6,0,0"/>
 
-                                            </Grid>
+                                                </Grid>
 
-                                        </Border>
+                                            </Border>
 
-                                    </DataTemplate>
+                                        </DataTemplate>
 
-                                </ListBox.ItemTemplate>
+                                    </ListBox.ItemTemplate>
 
-                            </ListBox>
+                                </ListBox>
 
 
-                            <!-- Empty state -->
+                                <!-- Empty state -->
 
-                            <TextBlock Grid.Row="1"
+                                <TextBlock Grid.Row="1"
                                        Text="No commands sent yet."
                                        HorizontalAlignment="Center"
                                        VerticalAlignment="Center"
@@ -868,30 +908,32 @@
                                        IsHitTestVisible="False"/>
 
 
-                            <!-- Bottom information -->
+                                <!-- Bottom information -->
 
-                            <Border Grid.Row="2"
+                                <Border Grid.Row="2"
                                     Background="#FFF8E8"
                                     CornerRadius="7"
                                     Padding="10">
+                                    
 
-                                <TextBlock Text="Manual commands are sent directly to the selected sensor. Use Undo Last to revert the most recent command."
+                                    <TextBlock Text="Manual commands are sent directly to the selected sensor. Use Undo Last to revert the most recent command."
                                            FontSize="11"
                                            Foreground="#856404"
                                            TextWrapping="Wrap"/>
 
-                            </Border>
+                                </Border>
 
-                        </Grid>
+                            </Grid>
 
-                    </Border>
+                        </Border>
 
-                </Grid>
+                    </Grid>
 
-            </Border>
+                </Border>
+
+            </Grid>
 
         </Grid>
-
-    </Grid>
+    </ScrollViewer>
 
 </Page>

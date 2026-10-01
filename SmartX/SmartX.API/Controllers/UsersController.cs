@@ -33,7 +33,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    [Authorize(Roles = "SuperAdmin,Administrator")]
+    [Authorize]
     public async Task<IActionResult> GetById(
         Guid id,
         CancellationToken cancellationToken)

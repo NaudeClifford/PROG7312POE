@@ -1719,12 +1719,7 @@ public class SmartXApiClient(
         return result.Data;
     }
 
-
-
-
-
-    public async Task<IReadOnlyList<SensorDto>>
-     GetSensorsByGatewayIdAsync(
+    public async Task<IReadOnlyList<SensorDto>> GetSensorsByGatewayIdAsync(
          Guid gatewayId,
          CancellationToken cancellationToken = default)
     {
@@ -1778,8 +1773,7 @@ public class SmartXApiClient(
         return result.Data ?? [];
     }
 
-    public async Task<SensorCommandResult>
-    SendSensorCommandAsync(
+    public async Task<SensorCommandResult> SendSensorCommandAsync(
         Guid sensorId,
         string command,
         CancellationToken cancellationToken = default)

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartX.Application.Authentication;
+using SmartX.Application.Commands.Sensor;
 using SmartX.Application.Services;
 using SmartX.Domain.Interfaces;
 using SmartX.Infrastructure.Authentication.Firebase;
@@ -38,7 +39,7 @@ public static class DependencyInjection
         services.AddScoped<IAuditLogRepository, JsonAuditLogRepository>();
         services.AddScoped<ICompanyConfigurationRepository, JsonCompanyConfigurationRepository>();
 
-
+        services.AddScoped<SendSensorCommandHandler>();
         return services;
     }
 }

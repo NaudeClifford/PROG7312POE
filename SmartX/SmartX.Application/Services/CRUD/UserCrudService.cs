@@ -405,6 +405,11 @@ public class UserCrudService :
         if (IsSuperAdmin(user))
             return true;
 
+        var currentUserId = GetUserId(user);
+
+        if (currentUserId == targetUser.Id)
+            return true;
+
         if (!IsAdministrator(user))
             return false;
 
@@ -419,5 +424,19 @@ public class UserCrudService :
         User targetUser)
     {
         return CanAccessUser(user, targetUser);
+    }
+
+    private static Guid? GetUserId(
+    ClaimsPrincipal user)
+    {
+        var claim =
+            user.FindFirst("smartx_user_id")?.Value;
+
+        if (!Guid.TryParse(claim, out var userId))
+            return null;
+
+        return userId == Guid.Empty
+            ? null
+            : userId;
     }
 }

@@ -2,8 +2,12 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartX.Application.Authentication;
+using SmartX.Application.Commands.Sensor;
 using SmartX.Application.Requests.Gateway;
+using SmartX.Application.Services.Sensors;
+using SmartX.Application.Services.Telemetry;
 using SmartX.Application.Validators;
+using SmartX.Shared.Mapping;
 using SmartX.WPF.Authentication;
 using SmartX.WPF.Data;
 using SmartX.WPF.Navigation;
@@ -32,7 +36,6 @@ using SmartX.WPF.Views.Pages.SignUp;
 using SmartX.WPF.Views.Pages.Telemetry;
 using SmartX.WPF.Views.Pages.Users;
 using System.Windows;
-using SmartX.Shared.Mapping;
 
 namespace SmartX.WPF;
 
@@ -105,17 +108,17 @@ public partial class App
         client.BaseAddress = new Uri(apiOptions.BaseUrl);
     });
 
-
-
+        //Services
+        services.AddSingleton<ITelemetryStream, TelemetryStream>();
+        services.AddScoped<ISensorCommandService, SensorCommandService>();
+        services.AddScoped<SendSensorCommandHandler>();
         //Session
         services.AddSingleton<SmartXSession>();
 
         // SQLite Cache
         services.AddSingleton<SmartXCacheDatabase>();
 
-
         services.AddScoped< IValidator<CreateGatewayRequest>, CreateGatewayValidator>();
-
 
         services.AddSingleton<ILocalSensorCache, SQLiteSensorCache>();
         services.AddSingleton<ILocalTelemetryCache, SQLiteTelemetryCache>();

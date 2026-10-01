@@ -8,10 +8,12 @@ namespace SmartX.Infrastructure.Repositories;
 public class TelemetryRepository : ITelemetryRepository
 {
     private readonly IMongoCollection<Telemetry> _collection;
+    private readonly IMongoCollection<Sensor> _sensorCollection;
 
     public TelemetryRepository(MongoContext context)
     {
         _collection = context.GetCollection<Telemetry>("Telemetry");
+        _sensorCollection = context.GetCollection<Sensor>("sensors");
     }
 
     public async Task AddAsync(
@@ -29,6 +31,25 @@ public class TelemetryRepository : ITelemetryRepository
         return await _collection
             .Find(x => x.Id == id)
             .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<Telemetry>> GetByGatewayIdAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default)
+    {
+        var sensorIds = await _sensorCollection
+            .Find(x => x.GatewayId == gatewayId)
+            .Project(x => x.Id)
+            .ToListAsync(cancellationToken);
+
+        if (sensorIds.Count == 0)
+        {
+            return [];
+        }
+
+        return await _collection
+            .Find(x => sensorIds.Contains(x.SensorId))
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<IReadOnlyList<Telemetry>> GetBySensorIdAsync(

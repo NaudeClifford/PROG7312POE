@@ -478,6 +478,27 @@
   },
   {
     "ContainingType": "SmartX.API.Controllers.SensorsController",
+    "Method": "SendCommand",
+    "RelativePath": "api/Sensors/{id}/command",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SmartX.Application.Requests.Sensor.SendSensorCommandRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.SensorsController",
     "Method": "GetByGatewayId",
     "RelativePath": "api/Sensors/gateway/{gatewayId}",
     "HttpMethod": "GET",

@@ -194,7 +194,7 @@
                                 Height="45"
                                 Command="{Binding ViewCommandHistoryCommand}"
                                 Style="{StaticResource BaseButtonStyle}"
-                                IsEnabled="False"/>
+                                IsEnabled="true"/>
 
                     </StackPanel>
 

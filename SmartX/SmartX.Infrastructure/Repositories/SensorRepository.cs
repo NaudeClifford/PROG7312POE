@@ -23,6 +23,15 @@ public class SensorRepository : ISensorRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
+    public async Task<IReadOnlyList<Sensor>> GetByGatewayIdAsync(
+    Guid gatewayId,
+    CancellationToken cancellationToken = default)
+    {
+        return await _collection
+            .Find(x => x.GatewayId == gatewayId)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<IReadOnlyList<Sensor>> GetAllAsync(
         CancellationToken cancellationToken = default)
     {

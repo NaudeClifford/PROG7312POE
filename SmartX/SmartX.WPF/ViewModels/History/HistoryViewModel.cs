@@ -11,6 +11,7 @@ using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.ViewModels.Base;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using DomainSensor = SmartX.Domain.Entities.Sensor;
 using DomainTelemetry = SmartX.Domain.Entities.Telemetry;
 
@@ -30,6 +31,24 @@ public sealed class HistoryViewModel : ViewModelBase
     private DateTime? _fromDate;
 
     private DateTime? _toDate;
+
+
+    private readonly AsyncRelayCommand _loadCommand;
+    private readonly AsyncRelayCommand _clearFiltersCommand;
+    private readonly AsyncRelayCommand _sendManualCommandCommand;
+    private readonly AsyncRelayCommand _undoLastCommandCommand;
+
+    public ICommand LoadCommand =>
+    _loadCommand;
+
+    public ICommand ClearFiltersCommand =>
+        _clearFiltersCommand;
+
+    public ICommand SendManualCommandCommand =>
+        _sendManualCommandCommand;
+
+    public ICommand UndoLastCommandCommand =>
+        _undoLastCommandCommand;
 
     private TelemetryGraphMetric _selectedMetric =
      TelemetryGraphMetric.Power;
@@ -246,18 +265,39 @@ public sealed class HistoryViewModel : ViewModelBase
 
 
     public HistoryViewModel(
-        ILocalTelemetryCache telemetryCache,
-        ILocalSensorCache sensorCache,
-        IConnectivityService connectivityService,
-        ISensorCommandService sensorService,
-        SmartXSession session)
-        : base(
-            connectivityService,
-            session)
+    ILocalTelemetryCache telemetryCache,
+    ILocalSensorCache sensorCache,
+    IConnectivityService connectivityService,
+    ISensorCommandService sensorService,
+    SmartXSession session)
+    : base(
+        connectivityService,
+        session)
     {
         _telemetryCache = telemetryCache;
         _sensorService = sensorService;
         _sensorCache = sensorCache;
+
+        _loadCommand =
+            new AsyncRelayCommand(
+                () => LoadAsync());
+
+        _clearFiltersCommand =
+            new AsyncRelayCommand(
+                () =>
+                {
+                    ClearFilters();
+                    return Task.CompletedTask;
+                });
+
+        _sendManualCommandCommand =
+            new AsyncRelayCommand(
+                () => SendManualCommandAsync());
+
+        _undoLastCommandCommand =
+            new AsyncRelayCommand(
+                () => UndoLastCommandAsync(),
+                () => CanUndoCommand);
     }
 
     public async Task LoadAsync(
@@ -426,11 +466,13 @@ public sealed class HistoryViewModel : ViewModelBase
             };
 
             _commandStack.Push(command);
+
             CommandHistory.Insert(0, command);
 
             ManualCommand = string.Empty;
 
             OnPropertyChanged(nameof(CanUndoCommand));
+            _undoLastCommandCommand.RaiseCanExecuteChanged();
         }
         catch (OperationCanceledException)
         {
@@ -485,6 +527,7 @@ public sealed class HistoryViewModel : ViewModelBase
             CommandHistory.Remove(command);
 
             OnPropertyChanged(nameof(CanUndoCommand));
+            _undoLastCommandCommand.RaiseCanExecuteChanged();
         }
         catch (OperationCanceledException)
         {
@@ -623,43 +666,54 @@ public sealed class HistoryViewModel : ViewModelBase
         ];
 
         GraphXAxes =
-        [
-            new Axis
-        {
-            Name = "Time",
+[
+    new Axis
+    {
+        Name = "Time",
 
-            Labeler =
-                value =>
+        Labeler =
+            value =>
+            {
+                if (double.IsNaN(value) ||
+                    double.IsInfinity(value))
                 {
-                    var date =
-                        new DateTime(
-                            (long)value);
-
-                    return date.TimeOfDay ==
-                           TimeSpan.Zero
-                        ? date.ToString("dd MMM")
-                        : date.ToString("HH:mm");
-                },
-
-            UnitWidth =
-                TimeSpan.FromHours(1).Ticks,
-
-            MinStep =
-                TimeSpan.FromHours(1).Ticks,
-
-            LabelsRotation = 0,
-
-            SeparatorsPaint =
-                new SolidColorPaint(
-                    new SKColor(
-                        225,
-                        229,
-                        233))
-                {
-                    StrokeThickness = 1
+                    return string.Empty;
                 }
-        }
-        ];
+
+                if (value < DateTime.MinValue.Ticks ||
+                    value > DateTime.MaxValue.Ticks)
+                {
+                    return string.Empty;
+                }
+
+                var date =
+                    new DateTime((long)value);
+
+                return date.TimeOfDay ==
+                       TimeSpan.Zero
+                    ? date.ToString("dd MMM")
+                    : date.ToString("HH:mm");
+            },
+
+        UnitWidth =
+            TimeSpan.FromHours(1).Ticks,
+
+        MinStep =
+            TimeSpan.FromHours(1).Ticks,
+
+        LabelsRotation = 0,
+
+        SeparatorsPaint =
+            new SolidColorPaint(
+                new SKColor(
+                    225,
+                    229,
+                    233))
+            {
+                StrokeThickness = 1
+            }
+    }
+];
 
         GraphYAxes =
         [
@@ -761,6 +815,14 @@ public sealed class HistoryViewModel : ViewModelBase
         SelectedSensorId = null;
         FromDate = null;
         ToDate = null;
+    }
+
+    protected override void RaiseCommandStates()
+    {
+        _loadCommand.RaiseCanExecuteChanged();
+        _clearFiltersCommand.RaiseCanExecuteChanged();
+        _sendManualCommandCommand.RaiseCanExecuteChanged();
+        _undoLastCommandCommand.RaiseCanExecuteChanged();
     }
 
 }

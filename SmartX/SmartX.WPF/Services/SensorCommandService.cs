@@ -1,24 +1,24 @@
 ﻿using SmartX.Application.Commands.Sensor;
 using SmartX.Application.Requests.Sensor;
 using SmartX.Application.Services.Sensors;
-using SmartX.Domain.Interfaces;
+using SmartX.WPF.Repositories.Local;
 
-namespace SmartX.API.Services.Sensors;
+namespace SmartX.WPF.Services;
 
 public sealed class SensorCommandService : ISensorCommandService
 {
     private readonly SendSensorCommandHandler _handler;
-    private readonly ISensorRepository _sensorRepository;
-    private readonly IGatewayRepository _gatewayRepository;
+    private readonly ILocalSensorCache _sensorCache;
+    private readonly ILocalGatewayCache _gatewayCache;
 
     public SensorCommandService(
         SendSensorCommandHandler handler,
-        ISensorRepository sensorRepository,
-        IGatewayRepository gatewayRepository)
+        ILocalSensorCache sensorCache,
+        ILocalGatewayCache gatewayCache)
     {
         _handler = handler;
-        _sensorRepository = sensorRepository;
-        _gatewayRepository = gatewayRepository;
+        _sensorCache = sensorCache;
+        _gatewayCache = gatewayCache;
     }
 
     public async Task<SensorCommandResult> SendCommandAsync(
@@ -39,7 +39,7 @@ public sealed class SensorCommandService : ISensorCommandService
         }
 
         var sensor =
-            await _sensorRepository.GetByIdAsync(
+            await _sensorCache.GetByIdAsync(
                 sensorId,
                 cancellationToken);
 
@@ -56,7 +56,7 @@ public sealed class SensorCommandService : ISensorCommandService
         }
 
         var gateway =
-            await _gatewayRepository.GetByIdAsync(
+            await _gatewayCache.GetByIdAsync(
                 sensor.GatewayId.Value,
                 cancellationToken);
 

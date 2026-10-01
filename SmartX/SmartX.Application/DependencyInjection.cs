@@ -1,11 +1,14 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using SmartX.API.Services.Sensors;
+using SmartX.Application.Commands.Sensor;
 using SmartX.Application.Commands.Telemetry;
 using SmartX.Application.Queries.Telemetry;
 using SmartX.Application.Queries.Users;
 using SmartX.Application.Services;
 using SmartX.Application.Services.CRUD;
 using SmartX.Application.Services.Registration;
+using SmartX.Application.Services.Sensors;
 using SmartX.Application.Services.Telemetry;
 using SmartX.Application.Validators;
 using SmartX.Application.Validators.Company;
@@ -45,6 +48,8 @@ public static class DependencyInjection
         services.AddScoped<GetTelemetryByDateRangeHandler>();
         services.AddScoped<GetTelemetryByIdHandler>();
         services.AddScoped<CreateTelemetryHandler>();
+        services.AddScoped<TelemetryHistoryStore>();
+        services.AddScoped<ITelemetryStream, TelemetryStream>();
 
 
         //User handlers
@@ -54,6 +59,8 @@ public static class DependencyInjection
         //Services
         services.AddScoped<AuditLogService>();
         services.AddScoped<RegistrationService>();
+        services.AddScoped<ISensorCommandService, SensorCommandService>();
+        services.AddScoped<SendSensorCommandHandler>();
 
         services.AddSmartXMapping();
 

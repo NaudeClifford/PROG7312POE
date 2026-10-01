@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authentication;
-using SmartX.Domain.Interfaces;
-using SmartX.Infrastructure.Authentication.Firebase;
 using SmartX.Application;
+using SmartX.Application.Commands.Sensor;
+using SmartX.Application.Services.Telemetry;
+using SmartX.Domain.Interfaces;
 using SmartX.Infrastructure;
+using SmartX.Infrastructure.Authentication.Firebase;
 
 namespace SmartX.API
 {
@@ -18,6 +20,10 @@ namespace SmartX.API
                             .AddApplication()
                             .AddInfrastructure(builder.Configuration)
                             .AddControllers();
+
+            builder.Services.AddScoped<SendSensorCommandHandler>();
+            builder.Services.AddScoped<TelemetryHistoryStore>();
+            builder.Services.AddScoped<TelemetryStream>();
 
             builder.Services
                 .AddAuthentication(options =>
