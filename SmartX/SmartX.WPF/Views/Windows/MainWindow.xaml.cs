@@ -24,7 +24,6 @@ public partial class MainWindow : Window
     private readonly SmartXAuthenticationService _authenticationService;
     private readonly INavigationService _navigationService;
     private readonly ISmartXApiClient _apiClient;
-    private readonly DispatcherTimer _connectivityTimer;
     private bool _isClosing;
 
     private bool _isInitializingNavigation;
@@ -70,13 +69,6 @@ public partial class MainWindow : Window
         MainFrame.Navigated += MainFrame_Navigated;
 
         Loaded += MainWindow_Loaded;
-
-        _connectivityTimer = new DispatcherTimer
-        {
-            Interval = TimeSpan.FromSeconds(60)
-        };
-
-        _connectivityTimer.Tick += ConnectivityTimer_Tick;
     }
 
     private async void MainWindow_Loaded(
@@ -85,11 +77,9 @@ public partial class MainWindow : Window
     {
         Loaded -= MainWindow_Loaded;
 
-        _connectivityTimer.Start();
 
         try
         {
-            await UpdateConnectionStatusAsync();
             await InitializeNavigationAsync();
         }
         catch (Exception ex)
@@ -627,49 +617,6 @@ public partial class MainWindow : Window
         MainFrame.Navigate(_homePage);
     }
 
-    private async void ConnectivityTimer_Tick(
-        object? sender,
-        EventArgs e)
-    {
-        await UpdateConnectionStatusAsync();
-    }
-
-    private async Task UpdateConnectionStatusAsync()
-    {
-        try
-        {
-            var isOnline =
-                await _apiClient.IsAvailableAsync();
-
-            if (isOnline)
-            {
-                ConnectionStatusIndicator.Fill =
-                    new System.Windows.Media.SolidColorBrush(
-                        System.Windows.Media.Color.FromRgb(
-                            0x28,
-                            0xA7,
-                            0x45));
-
-                ConnectionStatusText.Text = "Live";
-
-                ConnectionStatusText.Foreground =
-                    new System.Windows.Media.SolidColorBrush(
-                        System.Windows.Media.Color.FromRgb(
-                            0x21,
-                            0x88,
-                            0x38));
-            }
-            else
-            {
-                SetOfflineStatus();
-            }
-        }
-        catch
-        {
-            SetOfflineStatus();
-        }
-    }
-
     private void SetOfflineStatus()
     {
         ConnectionStatusIndicator.Fill =
@@ -870,7 +817,6 @@ public partial class MainWindow : Window
 
     protected override void OnClosed(EventArgs e)
     {
-        _connectivityTimer.Stop();
 
         _session.PropertyChanged -=
             Session_PropertyChanged;

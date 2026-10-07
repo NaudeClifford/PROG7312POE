@@ -32,7 +32,6 @@ public sealed class HistoryViewModel : ViewModelBase
 
     private DateTime? _toDate;
 
-
     private readonly AsyncRelayCommand _loadCommand;
     private readonly AsyncRelayCommand _clearFiltersCommand;
     private readonly AsyncRelayCommand _sendManualCommandCommand;
@@ -47,8 +46,7 @@ public sealed class HistoryViewModel : ViewModelBase
     public ICommand SendManualCommandCommand =>
         _sendManualCommandCommand;
 
-    public ICommand UndoLastCommandCommand =>
-        _undoLastCommandCommand;
+    public ICommand UndoLastCommandCommand => _undoLastCommandCommand;
 
     private TelemetryGraphMetric _selectedMetric =
      TelemetryGraphMetric.Power;
@@ -74,10 +72,6 @@ public sealed class HistoryViewModel : ViewModelBase
             ApplyFilters();
         }
     }
-
-
-
-
 
     public ISeries[] GraphSeries { get; private set; } = [];
 
@@ -427,7 +421,6 @@ public sealed class HistoryViewModel : ViewModelBase
         UpdateGraph();
     }
 
-
     public async Task SendManualCommandAsync(
      CancellationToken cancellationToken = default)
     {
@@ -460,6 +453,7 @@ public sealed class HistoryViewModel : ViewModelBase
 
             var command = new SensorCommand
             {
+                SensorId = SelectedSensorId.Value,
                 Command = commandText,
                 InverseCommand = result.InverseCommand ?? string.Empty,
                 Response = result.Response
@@ -483,7 +477,6 @@ public sealed class HistoryViewModel : ViewModelBase
             ErrorMessage = ex.Message;
         }
     }
-
 
     public async Task UndoLastCommandAsync(
     CancellationToken cancellationToken = default)
@@ -510,7 +503,7 @@ public sealed class HistoryViewModel : ViewModelBase
 
             var result =
                 await _sensorService.SendCommandAsync(
-                    SelectedSensorId.Value,
+                    command.SensorId,
                     command.InverseCommand,
                     cancellationToken);
 

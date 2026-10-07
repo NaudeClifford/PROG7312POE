@@ -825,6 +825,10 @@
                                         Command="{Binding UndoLastCommandCommand}"
                                         IsEnabled="{Binding CanUndoCommand}"/>
 
+                                    <TextBlock Text="{Binding ErrorMessage}"
+                                        Foreground="Red"
+                                        Margin="0,5,0,10"
+                                        TextWrapping="Wrap"/>
                                 </Grid>
 
 

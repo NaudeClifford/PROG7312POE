@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SmartX.Application.Authentication;
 using SmartX.Application.Commands.Sensor;
 using SmartX.Application.Requests.Gateway;
+using SmartX.Application.Services.Alerts;
 using SmartX.Application.Services.Sensors;
 using SmartX.Application.Services.Telemetry;
 using SmartX.Application.Validators;
@@ -112,6 +113,7 @@ public partial class App
         services.AddSingleton<ITelemetryStream, TelemetryStream>();
         services.AddScoped<ISensorCommandService, SensorCommandService>();
         services.AddScoped<SendSensorCommandHandler>();
+        services.AddSingleton<AlertQueue>();
         //Session
         services.AddSingleton<SmartXSession>();
 

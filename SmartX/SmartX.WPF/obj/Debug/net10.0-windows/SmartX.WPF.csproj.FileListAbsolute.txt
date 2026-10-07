@@ -145,3 +145,5 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\ru
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\runtimes\win-arm64\native\libSkiaSharp.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\runtimes\win-x64\native\libSkiaSharp.dll
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\runtimes\win-x86\native\libSkiaSharp.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Alerts\AlertsPage.baml
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Alerts\AlertsPage.g.cs

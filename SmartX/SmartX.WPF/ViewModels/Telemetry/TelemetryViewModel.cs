@@ -1,17 +1,20 @@
 ﻿using SmartX.Application.Requests.Telemetry;
+using SmartX.Application.Services.Alerts;
 using SmartX.Application.Services.Telemetry;
+using SmartX.Domain.Entities;
+using SmartX.Domain.Enums;
 using SmartX.Shared.Mapping;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Repositories.Local;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
+using SmartX.WPF.Services.PredictiveEngine;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.Sensor;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-
 using DomainSensor = SmartX.Domain.Entities.Sensor;
 using DomainTelemetry = SmartX.Domain.Entities.Telemetry;
 
@@ -24,8 +27,12 @@ public class TelemetryViewModel : ViewModelBase
     private readonly INavigationService _navigationService;
     private readonly ISmartXApiClient _apiClient;
     private readonly IMapper _mapper;
-
+    private readonly AlertQueue _alertQueue;
     private Guid? _selectedSensorId;
+    private readonly HashSet<string> _activeErrorStates = new();
+    private readonly IPredictiveEngine _predictiveEngine;
+    
+    public ObservableCollection<PredictiveSuggestion> Suggestions { get; } = [];
 
     private string _selectedSensorFilter = "All";
 
@@ -36,6 +43,10 @@ public class TelemetryViewModel : ViewModelBase
     private readonly TelemetryCollection _telemetryCollection = new();
 
     private readonly ITelemetryStream _telemetryStream;
+
+    private readonly Dictionary<string, DomainSensor> _devices = new();
+
+    private readonly Dictionary<Guid, DomainSensor> _devicesById = new();
 
     private DomainTelemetry[] _telemetryArray = [];
 
@@ -265,7 +276,9 @@ public class TelemetryViewModel : ViewModelBase
         SmartXSession session,
         IMapper mapper,
         ISmartXApiClient apiClient,
-        ITelemetryStream telemetryStream
+        ITelemetryStream telemetryStream,
+        AlertQueue alertQueue,
+        IPredictiveEngine predictiveEngine
         ) : base(
             connectivityService,
             session)
@@ -276,6 +289,8 @@ public class TelemetryViewModel : ViewModelBase
         _navigationService = navigationService;
         _mapper = mapper;
         _telemetryStream = telemetryStream;
+        _alertQueue = alertQueue;
+        _predictiveEngine = predictiveEngine;
 
         BackToSensorsCommand =
             new AsyncRelayCommand(
@@ -392,6 +407,9 @@ public class TelemetryViewModel : ViewModelBase
         SensorFilters.Clear();
         SensorFilters.Add("All");
 
+        _devices.Clear();
+        _devicesById.Clear();
+
         var sensors =
             await _sensorCache.GetByGatewayIdAsync(
                 gatewayId,
@@ -417,6 +435,15 @@ public class TelemetryViewModel : ViewModelBase
 
                 Sensors.Add(sensor);
                 SensorFilters.Add(sensor.Name);
+
+                _devicesById[sensor.Id] = sensor;
+
+                if (!string.IsNullOrWhiteSpace(
+                    sensor.DeviceIdentifier))
+                {
+                    _devices[sensor.DeviceIdentifier] = sensor;
+                }
+
             }
 
             return;
@@ -428,6 +455,15 @@ public class TelemetryViewModel : ViewModelBase
 
             Sensors.Add(sensor);
             SensorFilters.Add(sensor.Name);
+
+            _devicesById[sensor.Id] = sensor;
+
+            if (!string.IsNullOrWhiteSpace(
+                sensor.DeviceIdentifier))
+            {
+                _devices[sensor.DeviceIdentifier] = sensor;
+            }
+
         }
     }
 
@@ -660,9 +696,9 @@ public class TelemetryViewModel : ViewModelBase
     private TelemetryDisplayModel CreateDisplayModel(
     DomainTelemetry telemetry)
     {
-        var sensor =
-            Sensors.FirstOrDefault(
-                x => x.Id == telemetry.SensorId);
+        _devicesById.TryGetValue(
+            telemetry.SensorId,
+            out var sensor);
 
         return new TelemetryDisplayModel
         {
@@ -881,6 +917,25 @@ public class TelemetryViewModel : ViewModelBase
             {
                 continue;
             }
+            if (!_devicesById.TryGetValue(
+                    telemetry.SensorId,
+                    out var sensor))
+            {
+                continue;
+            }
+
+            if (string.IsNullOrWhiteSpace(
+                    sensor.DeviceIdentifier))
+            {
+                continue;
+            }
+
+            if (!_devices.TryGetValue(
+                    sensor.DeviceIdentifier,
+                    out var device))
+            {
+                continue;
+            }
 
             _telemetryCollection.Add(
                 telemetry);
@@ -888,6 +943,8 @@ public class TelemetryViewModel : ViewModelBase
             Telemetry.Add(
                 CreateDisplayModel(
                     telemetry));
+
+            CheckForAlerts(telemetry);
 
             telemetryAdded = true;
         }
@@ -903,7 +960,82 @@ public class TelemetryViewModel : ViewModelBase
         ApplyFilters();
     }
 
+    private void CheckForAlerts(
+    DomainTelemetry telemetry)
+    {
+        if (telemetry.Temperature >= 35)
+        {
+            _activeErrorStates.Add($"{telemetry.SensorId}:HighTemperature");
+
+            _alertQueue.Enqueue(
+                new SensorAlert
+                {
+                    SensorId = telemetry.SensorId,
+                    Message =
+                        $"Temperature is critically high: " +
+                        $"{telemetry.Temperature:F1}°C.",
+                    Severity =
+                        AlertSeverity.Critical,
+                    Timestamp =
+                        telemetry.Timestamp
+                });
+
+            return;
+        }
+
+        if (telemetry.Voltage >= 240)
+        {
+            _activeErrorStates.Add($"{telemetry.SensorId}:HighVoltage");
+
+            _alertQueue.Enqueue(
+                new SensorAlert
+                {
+                    SensorId = telemetry.SensorId,
+                    Message =
+                        $"High voltage detected: " +
+                        $"{telemetry.Voltage:F1}V.",
+                    Severity =
+                        AlertSeverity.High,
+                    Timestamp =
+                        telemetry.Timestamp
+                });
+
+            return;
+        }
+
+        if (telemetry.Current >= 5)
+        {
+            _activeErrorStates.Add($"{telemetry.SensorId}:HighCurrent");
+
+            _alertQueue.Enqueue(
+                new SensorAlert
+                {
+                    SensorId = telemetry.SensorId,
+                    Message =
+                        $"High current detected: " +
+                        $"{telemetry.Current:F1}A.",
+                    Severity =
+                        AlertSeverity.Medium,
+                    Timestamp =
+                        telemetry.Timestamp
+                });
+        }
 
 
+    }
+    private void GeneratePredictiveSuggestions()
+    {
+        Suggestions.Clear();
+
+        var suggestions =
+            _predictiveEngine.GenerateSuggestions(
+                _telemetryCollection.Items,
+                _alertQueue.Items);
+
+        foreach (var suggestion in suggestions)
+        {
+            Suggestions.Add(suggestion);
+        }
+    }
 
 }
