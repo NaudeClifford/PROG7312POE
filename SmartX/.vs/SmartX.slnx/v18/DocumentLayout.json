@@ -1,58 +1,42 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\",
+  "WorkspaceRootPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\telemetry\\telemetryviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\predictiveengine\\livepredictivesuggestionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\predictiveengine\\livepredictivesuggestionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\telemetry\\telemetryviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\telemetry\\telemetryviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\predictiveengine\\predictiveengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\predictiveengine\\predictiveengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\company\\companyviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\company\\companyviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\gateway\\gatewayviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\gateway\\gatewayviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\telemetry\\telemetrycollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\telemetry\\telemetrycollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\telemetry\\telemetrycollection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\signup\\signupviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\signup\\signupviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\signup\\companyservicesviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\signup\\companyservicesviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\signin\\signinviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\signin\\signinviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\sensor\\sensorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\sensor\\sensorviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\history\\historyviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\history\\historyviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\predictiveengine\\ipredictiveengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\predictiveengine\\ipredictiveengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\predictiveengine\\ipredictiveengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.domain\\entities\\predictivesuggestion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\services\\predictiveengine\\predictiveengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\services\\predictiveengine\\predictiveengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\viewmodels\\history\\historyviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\viewmodels\\history\\historyviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.domain\\entities\\predictivesuggestion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|solutionrelative:smartx.domain\\entities\\predictivesuggestion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|d:\\programdata\\github\\prog7312poe\\smartx\\smartx.domain\\enums\\suggestiontype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F4451769-2F9E-41FF-84F6-94F59C20D8FF}|SmartX.Domain\\SmartX.Domain.csproj|solutionrelative:smartx.domain\\enums\\suggestiontype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|c:\\users\\emeris\\onedrive - advtech ltd\\documents\\github\\prog7312poe\\smartx\\smartx.wpf\\views\\controls\\predictivesuggestionsview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{056AA708-8108-A3E0-3241-5955835EFEBD}|SmartX.WPF\\SmartX.WPF.csproj|solutionrelative:smartx.wpf\\views\\controls\\predictivesuggestionsview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -62,169 +46,127 @@
       "DocumentGroups": [
         {
           "DockedHeight": 18,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 5,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IPredictiveEngine.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\PredictiveEngine\\IPredictiveEngine.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\PredictiveEngine\\IPredictiveEngine.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\PredictiveEngine\\IPredictiveEngine.cs",
+              "RelativeToolTip": "SmartX.WPF\\Services\\PredictiveEngine\\IPredictiveEngine.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-12T09:40:31.755Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "PredictiveEngine.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\PredictiveEngine\\PredictiveEngine.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\PredictiveEngine\\PredictiveEngine.cs",
               "RelativeDocumentMoniker": "SmartX.WPF\\Services\\PredictiveEngine\\PredictiveEngine.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\PredictiveEngine\\PredictiveEngine.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\PredictiveEngine\\PredictiveEngine.cs",
               "RelativeToolTip": "SmartX.WPF\\Services\\PredictiveEngine\\PredictiveEngine.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAQwCEAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAKIAAAAAAAAAAAAqwK4AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-06T15:02:30.097Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "GatewayViewModel.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Gateway\\GatewayViewModel.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Gateway\\GatewayViewModel.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Gateway\\GatewayViewModel.cs",
-              "RelativeToolTip": "SmartX.WPF\\ViewModels\\Gateway\\GatewayViewModel.cs",
-              "ViewState": "AgIAAAMFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-06T18:02:59.392Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "TelemetryViewModel.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryViewModel.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryViewModel.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryViewModel.cs",
-              "RelativeToolTip": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryViewModel.cs",
-              "ViewState": "AgIAAPQDAAAAAAAAAAAwwA0EAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-06T14:12:04.488Z",
+              "WhenOpened": "2026-10-12T10:09:21.201Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "CompanyViewModel.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Company\\CompanyViewModel.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Company\\CompanyViewModel.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Company\\CompanyViewModel.cs",
-              "RelativeToolTip": "SmartX.WPF\\ViewModels\\Company\\CompanyViewModel.cs",
-              "ViewState": "AgIAAPsCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-06T18:03:05.153Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
               "Title": "TelemetryCollection.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryCollection.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryCollection.cs",
               "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryCollection.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryCollection.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryCollection.cs",
               "RelativeToolTip": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryCollection.cs",
-              "ViewState": "AgIAAAcAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABsAAAAAAAAAAAAmwCwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-06T18:02:48.284Z"
+              "WhenOpened": "2026-10-12T09:58:41.072Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "SignUpViewModel.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\SignUp\\SignUpViewModel.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\SignUp\\SignUpViewModel.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\SignUp\\SignUpViewModel.cs",
-              "RelativeToolTip": "SmartX.WPF\\ViewModels\\SignUp\\SignUpViewModel.cs",
-              "ViewState": "AgIAALsBAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "App.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\App.xaml.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\App.xaml.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\App.xaml.cs",
+              "RelativeToolTip": "SmartX.WPF\\App.xaml.cs",
+              "ViewState": "AgIAAJ8AAAAAAAAAAAAwwK0AAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-06T18:02:38.323Z"
+              "WhenOpened": "2026-10-12T09:40:49.404Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "LivePredictiveSuggestionService.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\PredictiveEngine\\LivePredictiveSuggestionService.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\PredictiveEngine\\LivePredictiveSuggestionService.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\PredictiveEngine\\LivePredictiveSuggestionService.cs",
+              "RelativeToolTip": "SmartX.WPF\\Services\\PredictiveEngine\\LivePredictiveSuggestionService.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAowDMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-12T09:39:41.999Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "CompanyServicesViewModel.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\SignUp\\CompanyServicesViewModel.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\SignUp\\CompanyServicesViewModel.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\SignUp\\CompanyServicesViewModel.cs",
-              "RelativeToolTip": "SmartX.WPF\\ViewModels\\SignUp\\CompanyServicesViewModel.cs",
-              "ViewState": "AgIAALUAAAAAAAAAAAAQwFgAAAAAAAAAAAAAAA==",
+              "Title": "HistoryViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\History\\HistoryViewModel.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\History\\HistoryViewModel.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\History\\HistoryViewModel.cs",
+              "RelativeToolTip": "SmartX.WPF\\ViewModels\\History\\HistoryViewModel.cs",
+              "ViewState": "AgIAAKUBAAAAAAAAAAAgwLgBAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-06T18:02:07.527Z"
+              "WhenOpened": "2026-10-12T09:34:25.817Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TelemetryViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryViewModel.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryViewModel.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Telemetry\\TelemetryViewModel.cs",
+              "RelativeToolTip": "SmartX.WPF\\ViewModels\\Telemetry\\TelemetryViewModel.cs",
+              "ViewState": "AgIAAJQDAAAAAAAAAAAUwA0EAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-12T09:21:27.721Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "SigninViewModel.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Signin\\SigninViewModel.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Signin\\SigninViewModel.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Signin\\SigninViewModel.cs",
-              "RelativeToolTip": "SmartX.WPF\\ViewModels\\Signin\\SigninViewModel.cs",
-              "ViewState": "AgIAAPYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "PredictiveSuggestion.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\Entities\\PredictiveSuggestion.cs",
+              "RelativeDocumentMoniker": "SmartX.Domain\\Entities\\PredictiveSuggestion.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\Entities\\PredictiveSuggestion.cs",
+              "RelativeToolTip": "SmartX.Domain\\Entities\\PredictiveSuggestion.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAQwBIAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-06T18:02:01.745Z"
+              "WhenOpened": "2026-10-12T09:21:48.402Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "SensorViewModel.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Sensor\\SensorViewModel.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\Sensor\\SensorViewModel.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\Sensor\\SensorViewModel.cs",
-              "RelativeToolTip": "SmartX.WPF\\ViewModels\\Sensor\\SensorViewModel.cs",
-              "ViewState": "AgIAACkFAAAAAAAAAAA+wAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-06T18:01:53.927Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "HistoryViewModel.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\History\\HistoryViewModel.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\ViewModels\\History\\HistoryViewModel.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\ViewModels\\History\\HistoryViewModel.cs",
-              "RelativeToolTip": "SmartX.WPF\\ViewModels\\History\\HistoryViewModel.cs",
-              "ViewState": "AgIAAFcCAAAAAAAAAAA4wAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-06T18:01:44.183Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "IPredictiveEngine.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\PredictiveEngine\\IPredictiveEngine.cs",
-              "RelativeDocumentMoniker": "SmartX.WPF\\Services\\PredictiveEngine\\IPredictiveEngine.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\Services\\PredictiveEngine\\IPredictiveEngine.cs",
-              "RelativeToolTip": "SmartX.WPF\\Services\\PredictiveEngine\\IPredictiveEngine.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-06T15:01:23.318Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "PredictiveSuggestion.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Entities\\PredictiveSuggestion.cs",
-              "RelativeDocumentMoniker": "SmartX.Domain\\Entities\\PredictiveSuggestion.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Entities\\PredictiveSuggestion.cs",
-              "RelativeToolTip": "SmartX.Domain\\Entities\\PredictiveSuggestion.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-06T14:57:34.538Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "SuggestionType.cs",
-              "DocumentMoniker": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Enums\\SuggestionType.cs",
-              "RelativeDocumentMoniker": "SmartX.Domain\\Enums\\SuggestionType.cs",
-              "ToolTip": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\Enums\\SuggestionType.cs",
-              "RelativeToolTip": "SmartX.Domain\\Enums\\SuggestionType.cs",
+              "Title": "PredictiveSuggestionsView.cs",
+              "DocumentMoniker": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Controls\\PredictiveSuggestionsView.cs",
+              "RelativeDocumentMoniker": "SmartX.WPF\\Views\\Controls\\PredictiveSuggestionsView.cs",
+              "ToolTip": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.WPF\\Views\\Controls\\PredictiveSuggestionsView.cs",
+              "RelativeToolTip": "SmartX.WPF\\Views\\Controls\\PredictiveSuggestionsView.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-06T14:56:20.558Z"
+              "WhenOpened": "2026-10-12T09:19:58.984Z"
             }
           ]
         },

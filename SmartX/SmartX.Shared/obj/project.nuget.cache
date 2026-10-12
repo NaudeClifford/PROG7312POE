@@ -1,13 +1,23 @@
 {
   "version": 2,
-  "dgSpecHash": "HCWj7fgCMb8=",
+  "dgSpecHash": "1usI6J23A5Y=",
   "success": true,
-  "projectFilePath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj",
+  "projectFilePath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\cliff\\.nuget\\packages\\mapster\\10.0.12\\mapster.10.0.12.nupkg.sha512",
-    "C:\\Users\\cliff\\.nuget\\packages\\mapster.core\\10.0.12\\mapster.core.10.0.12.nupkg.sha512",
-    "C:\\Users\\cliff\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.11\\microsoft.extensions.dependencyinjection.abstractions.10.0.11.nupkg.sha512",
-    "C:\\Users\\cliff\\.nuget\\packages\\mongodb.bson\\3.11.0\\mongodb.bson.3.11.0.nupkg.sha512"
+    "C:\\Users\\emeris\\.nuget\\packages\\mapster\\10.0.12\\mapster.10.0.12.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\mapster.core\\10.0.12\\mapster.core.10.0.12.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.11\\microsoft.extensions.dependencyinjection.abstractions.10.0.11.nupkg.sha512",
+    "C:\\Users\\emeris\\.nuget\\packages\\mongodb.bson\\3.11.0\\mongodb.bson.3.11.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "message": "Problem reading the cache file C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj",
+      "targetGraphs": []
+    }
+  ]
 }

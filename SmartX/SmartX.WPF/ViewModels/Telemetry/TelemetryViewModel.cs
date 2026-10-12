@@ -3,6 +3,7 @@ using SmartX.Application.Services.Alerts;
 using SmartX.Application.Services.Telemetry;
 using SmartX.Domain.Entities;
 using SmartX.Domain.Enums;
+using SmartX.Shared.DTOs.Telemetry;
 using SmartX.Shared.Mapping;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Repositories.Local;
@@ -32,15 +33,17 @@ public class TelemetryViewModel : ViewModelBase
     private readonly HashSet<string> _activeErrorStates = new();
     private readonly IPredictiveEngine _predictiveEngine;
     
-    public ObservableCollection<PredictiveSuggestion> Suggestions { get; } = [];
-
     private string _selectedSensorFilter = "All";
 
     private DateTime? _fromDate;
     private DateTime? _toDate;
 
+    private readonly LivePredictiveSuggestionService _predictiveSuggestions;
+
+
+        public ObservableCollection<PredictiveSuggestion> Suggestions => _predictiveSuggestions.Suggestions;
     // COLLECTIONS
-    private readonly TelemetryCollection _telemetryCollection = new();
+    private readonly TelemetryCollection _telemetryCollection;
 
     private readonly ITelemetryStream _telemetryStream;
 
@@ -278,19 +281,23 @@ public class TelemetryViewModel : ViewModelBase
         ISmartXApiClient apiClient,
         ITelemetryStream telemetryStream,
         AlertQueue alertQueue,
-        IPredictiveEngine predictiveEngine
+        IPredictiveEngine predictiveEngine,
+        TelemetryCollection telemetryCollection,
+        LivePredictiveSuggestionService livePredictiveSuggestionService
         ) : base(
             connectivityService,
             session)
     {
         _telemetryCache = telemetryCache;
         _sensorCache = sensorCache;
+        _telemetryCollection = telemetryCollection;
         _apiClient = apiClient;
         _navigationService = navigationService;
         _mapper = mapper;
         _telemetryStream = telemetryStream;
         _alertQueue = alertQueue;
         _predictiveEngine = predictiveEngine;
+        _predictiveSuggestions = livePredictiveSuggestionService;
 
         BackToSensorsCommand =
             new AsyncRelayCommand(
@@ -535,6 +542,8 @@ public class TelemetryViewModel : ViewModelBase
         }
 
         ApplyFilters();
+
+        GeneratePredictiveSuggestions();
     }
 
     // FILTERING
@@ -958,6 +967,9 @@ public class TelemetryViewModel : ViewModelBase
             _telemetryCollection.ToArray();
 
         ApplyFilters();
+
+        GeneratePredictiveSuggestions();
+
     }
 
     private void CheckForAlerts(
@@ -1020,22 +1032,9 @@ public class TelemetryViewModel : ViewModelBase
                         telemetry.Timestamp
                 });
         }
-
-
+           
     }
-    private void GeneratePredictiveSuggestions()
-    {
-        Suggestions.Clear();
 
-        var suggestions =
-            _predictiveEngine.GenerateSuggestions(
-                _telemetryCollection.Items,
-                _alertQueue.Items);
 
-        foreach (var suggestion in suggestions)
-        {
-            Suggestions.Add(suggestion);
-        }
-    }
 
 }

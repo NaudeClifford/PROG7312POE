@@ -1,8 +1,18 @@
 {
   "version": 2,
-  "dgSpecHash": "5GrMgCohYrk=",
+  "dgSpecHash": "+nb/w+cdXM8=",
   "success": true,
-  "projectFilePath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj",
+  "projectFilePath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj",
   "expectedPackageFiles": [],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "message": "Problem reading the cache file C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj",
+      "targetGraphs": []
+    }
+  ]
 }

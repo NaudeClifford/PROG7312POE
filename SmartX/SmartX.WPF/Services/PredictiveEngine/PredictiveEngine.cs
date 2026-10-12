@@ -2,12 +2,14 @@
 using SmartX.Domain.Entities;
 using SmartX.Domain.Enums;
 using SmartX.Shared.DTOs.Telemetry;
+using SmartX.Shared.Mapping;
 using System.Windows.Ink;
 
 namespace SmartX.WPF.Services.PredictiveEngine
 {
     public class PredictiveEngine : IPredictiveEngine
     {
+
         public IReadOnlyList<PredictiveSuggestion> GenerateSuggestions(
                 IEnumerable<TelemetryDto> telemetryDto,
                 IEnumerable<SensorAlert> alerts)
@@ -17,9 +19,9 @@ namespace SmartX.WPF.Services.PredictiveEngine
             var telemetryBySensor = telemetryDto.GroupBy(t => t.SensorId)
                 .ToDictionary(g => g.Key, g => g.ToList());
 
-            foreach (var sensorTelemetry in telemetryBySensor)
+            foreach (var (sensorId, readingsForSensor) in telemetryBySensor)
             {
-                var readings = sensorTelemetry.OrderByDescending(x => x.Timestamp).ToList();
+                var readings = readingsForSensor.OrderByDescending(x => x.Timestamp).ToList();
 
                 if (readings.Count == 0)
                 {
@@ -40,7 +42,7 @@ namespace SmartX.WPF.Services.PredictiveEngine
                     SensorId = latest.SensorId,
                     Title = "Potential device problem",
                     Description = BuildDescription(readings, score),
-                    Type = SuggestionType.Telemetry,
+                    Type = SuggestionType.DeviceWarning,
                     Severity = DetermineSeverity(score),
                     Score = score,
                 };

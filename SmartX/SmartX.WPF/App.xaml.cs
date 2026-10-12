@@ -17,6 +17,7 @@ using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.Demo;
+using SmartX.WPF.Services.PredictiveEngine;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels;
@@ -175,6 +176,12 @@ public partial class App
 
         //Guest
         services.AddSingleton<IGuestDemoService, GuestDemoService>();
+
+        //Services Predictive
+        services.AddSingleton<LivePredictiveSuggestionService>();
+        services.AddSingleton<IPredictiveEngine, PredictiveEngine>();
+        services.AddSingleton<TelemetryCollection>();
+
 
         services.AddSmartXMapping();
 

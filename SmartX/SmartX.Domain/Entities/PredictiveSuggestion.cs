@@ -4,18 +4,24 @@ namespace SmartX.Domain.Entities
 {
     public class PredictiveSuggestion
     {
-        public Guid? SensorId { get; set; }
+        public Guid Id { get; init; } = Guid.NewGuid();
 
-        public string Title { get; set; } = string.Empty;
+        public Guid SensorId { get; init; }
 
-        public string Description { get; set; } = string.Empty;
+        public string SensorName { get; set; } = "Unknown Sensor";
 
-        public SuggestionType Type{ get; set; }
+        public string Title { get; init; } = string.Empty;
 
-        public AlertSeverity Severity { get; set; }
+        public string Description { get; init; } = string.Empty;
 
-        public int Score { get; set; }
+        public SuggestionType Type { get; init; }
 
-        public string? SuggestedCommand { get; set; }
+        public AlertSeverity Severity { get; init; }
+
+        public int Score { get; init; }
+
+        public string RecommendedAction { get; init; } = string.Empty;
+
+        public DateTime GeneratedAt { get; init; } = DateTime.UtcNow;
     }
 }

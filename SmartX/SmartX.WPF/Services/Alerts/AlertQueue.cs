@@ -5,6 +5,11 @@ public sealed class AlertQueue
     private readonly PriorityQueue<SensorAlert, int> _queue = new();
 
     public int Count => _queue.Count;
+    
+    public IEnumerable<SensorAlert> GetAlerts()
+    {
+        return _queue.UnorderedItems.Select(item => item.Element);
+    }
 
     public void Enqueue(SensorAlert alert)
     {

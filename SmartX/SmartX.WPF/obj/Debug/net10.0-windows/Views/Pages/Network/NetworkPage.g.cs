@@ -53,7 +53,7 @@ namespace SmartX.WPF.Views.Pages.Network {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;component/views/pages/network/networkpage.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;V1.0.0.0;component/views/pages/network/networkpage.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Views\Pages\Network\NetworkPage.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

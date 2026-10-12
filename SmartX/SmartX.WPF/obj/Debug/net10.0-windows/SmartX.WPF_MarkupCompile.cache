@@ -1,20 +1,20 @@
 ﻿SmartX.WPF
-
+1.0.0.0
 
 winexe
 C#
 .cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\
 SmartX.WPF
 none
 false
 TRACE;DEBUG;NET;NET10_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NET10_0_OR_GREATER;NETCOREAPP1_0_OR_GREATER;NETCOREAPP1_1_OR_GREATER;NETCOREAPP2_0_OR_GREATER;NETCOREAPP2_1_OR_GREATER;NETCOREAPP2_2_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\App.xaml
+C:\Users\emeris\OneDrive - ADvTECH Ltd\Documents\GitHub\PROG7312POE\SmartX\SmartX.WPF\App.xaml
 22881847296
 11413424753
-85-726084943
-2571782639654
+891002425877
+257-1422882805
 Resources\Styles\ButtonStyles.xaml;Resources\Styles\CardStyles.xaml;Resources\Styles\Colors.xaml;Resources\Styles\ComboBoxStyle.xaml;Views\Pages\Alerts\AlertsPage.xaml;Views\Pages\Company\CompaniesPage.xaml;Views\Pages\Company\CurrentCompanyPage.xaml;Views\Pages\Gateway\GatewayEditPage.xaml;Views\Pages\Gateway\GatewayPage.xaml;Views\Pages\Gateway\GatewaySetupPage.xaml;Views\Pages\History\HistoryPage.xaml;Views\Pages\Home\HomePage.xaml;Views\Pages\Network\NetworkPage.xaml;Views\Pages\Sensor\SensorEditPage.xaml;Views\Pages\Sensor\SensorSetupPage.xaml;Views\Pages\Sensor\SensorsPage.xaml;Views\Pages\Signin\SigninPage.xaml;Views\Pages\SignUp\CompanyServicesPage.xaml;Views\Pages\SignUp\SignUpPage.xaml;Views\Pages\Telemetry\TelemetryPage.xaml;Views\Pages\Users\UsersPage.xaml;Views\Windows\MainWindow.xaml;
 
-False
+True
 
