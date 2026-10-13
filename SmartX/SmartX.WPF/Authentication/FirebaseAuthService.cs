@@ -242,4 +242,4 @@ public class FirebaseAuthService : IAuthenticationService
         public string ProjectId { get; set; } = string.Empty;
     }
 
-} 
+}

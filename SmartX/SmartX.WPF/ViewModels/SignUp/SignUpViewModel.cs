@@ -261,7 +261,7 @@ public class SignUpViewModel : ViewModelBase
                     ? "SmartX Demo Company"
                     : CompanyName.Trim();
 
-            if(Session.FirebaseUid == null || Session.IdToken == null || Session.RefreshToken == null)
+            if (Session.FirebaseUid == null || Session.IdToken == null || Session.RefreshToken == null)
             {
                 throw new InvalidOperationException(
                     "Session information is incomplete.");

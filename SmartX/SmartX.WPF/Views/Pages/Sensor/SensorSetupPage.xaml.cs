@@ -1,8 +1,7 @@
-﻿using System.Windows;
+﻿using SmartX.WPF.Navigation;
+using SmartX.WPF.ViewModels.Pages.Sensor;
 using System.Windows.Controls;
 using System.Windows.Input;
-using SmartX.WPF.Navigation;
-using SmartX.WPF.ViewModels.Pages.Sensor;
 
 namespace SmartX.WPF.Views.Pages.Sensor;
 

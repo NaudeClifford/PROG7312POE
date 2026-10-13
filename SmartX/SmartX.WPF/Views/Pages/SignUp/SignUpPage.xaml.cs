@@ -1,5 +1,4 @@
-﻿using SmartX.WPF.ViewModels;
-using SmartX.WPF.ViewModels.SignUp;
+﻿using SmartX.WPF.ViewModels.SignUp;
 using System.Windows;
 using System.Windows.Controls;
 

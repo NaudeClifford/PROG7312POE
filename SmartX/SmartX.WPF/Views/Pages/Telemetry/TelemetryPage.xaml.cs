@@ -1,6 +1,5 @@
 ﻿using SmartX.WPF.Navigation;
 using SmartX.WPF.ViewModels.Telemetry;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 

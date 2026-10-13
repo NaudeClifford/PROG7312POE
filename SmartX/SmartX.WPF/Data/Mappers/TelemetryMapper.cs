@@ -39,9 +39,9 @@ namespace SmartX.WPF.Data.Mappers
                     ? null
                     : reader.GetDouble(temperature),
 
-                    CreatedAt = DateTime.Parse(reader.GetString(CreatedAt)),
+                CreatedAt = DateTime.Parse(reader.GetString(CreatedAt)),
 
-                                UpdatedAt = DateTime.Parse(
+                UpdatedAt = DateTime.Parse(
                 reader.GetString(updatedAt))
             };
         }

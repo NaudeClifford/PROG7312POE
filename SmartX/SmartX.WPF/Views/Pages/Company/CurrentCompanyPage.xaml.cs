@@ -1,5 +1,4 @@
 ﻿using SmartX.WPF.ViewModels.Pages.Company;
-using System;
 using System.Windows;
 using System.Windows.Controls;
 

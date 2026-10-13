@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
-using SmartX.Shared.DTOs;
+﻿using SmartX.Shared.DTOs;
 using SmartX.WPF.Data;
 using SmartX.WPF.Data.Mappers;
 

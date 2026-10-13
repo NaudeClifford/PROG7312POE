@@ -33,16 +33,19 @@
                TargetType="TextBlock">
 
             <Setter Property="FontSize"
-                    Value="12"/>
+                    Value="15"/>
 
             <Setter Property="FontWeight"
                     Value="SemiBold"/>
 
             <Setter Property="Foreground"
-                    Value="#50565C"/>
+                    Value="{StaticResource DarkBrush}"/>
 
             <Setter Property="Margin"
                     Value="0,0,0,6"/>
+
+            <Setter Property="HorizontalAlignment"
+                    Value="Center"/>
 
         </Style>
 
@@ -56,7 +59,7 @@
                     Value="#F3F5F7"/>
 
             <Setter Property="Foreground"
-                    Value="#50565C"/>
+                    Value="{StaticResource DarkBrush}"/>
 
             <Setter Property="BorderBrush"
                     Value="#E1E5E8"/>
@@ -103,13 +106,15 @@
                 <StackPanel>
 
                     <TextBlock Text="History"
-                           FontSize="32"
+                           FontSize="40"
                            FontWeight="Bold"
-                           Foreground="{StaticResource DarkBrush}"/>
+                           Foreground="{StaticResource LightTextBrush}"
+                           HorizontalAlignment="Center"/>
 
                     <TextBlock Text="Review historical sensor readings and telemetry."
-                           FontSize="14"
-                           Foreground="#737A82"
+                           FontSize="18"
+                           Foreground="{StaticResource LightTextBrush}"
+                           HorizontalAlignment="Center"
                            Margin="0,6,0,0"/>
 
                 </StackPanel>
@@ -273,7 +278,7 @@
                         <RowDefinition Height="15"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="15"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
 
                     </Grid.RowDefinitions>
 
@@ -289,13 +294,15 @@
                             <StackPanel>
 
                                 <TextBlock Text="Telemetry"
-                       FontSize="19"
+                       FontSize="22"
                        FontWeight="SemiBold"
+                       HorizontalAlignment="Center"
                        Foreground="{StaticResource DarkBrush}"/>
 
                                 <TextBlock Text="Select a measurement to view its history."
                        FontSize="12"
-                       Foreground="#8A929A"
+                       Foreground="{StaticResource DarkBrush}"
+                       HorizontalAlignment="Center"
                        Margin="0,4,0,0"/>
 
                             </StackPanel>
@@ -337,15 +344,15 @@
                                 <StackPanel>
 
                                     <TextBlock Text="{Binding GraphMetricName}"
-                           FontSize="15"
-                           FontWeight="SemiBold"
-                           Foreground="{StaticResource DarkBrush}"/>
+                                        FontSize="15"
+                                        FontWeight="SemiBold"
+                                        Foreground="{StaticResource DarkBrush}"/>
 
                                     <TextBlock Text="{Binding GraphUnit,
                                            StringFormat=Unit: {0}}"
-                           FontSize="11"
-                           Foreground="#8A929A"
-                           Margin="0,3,0,0"/>
+                                        FontSize="14"
+                                        Foreground="{StaticResource DarkBrush}"
+                                        Margin="0,3,0,0"/>
 
                                 </StackPanel>
 
@@ -361,6 +368,8 @@
                              GroupName="TelemetryMetric"
                              Margin="0,0,6,0"
                              Padding="14,7"
+                             FontSize="14"
+                             Foreground="{StaticResource DarkBrush}"
                              IsChecked="{Binding IsPowerSelected}"
                              Style="{StaticResource MetricButtonStyle}"/>
 
@@ -371,6 +380,8 @@
                              GroupName="TelemetryMetric"
                              Margin="0,0,6,0"
                              Padding="14,7"
+                             FontSize="14"
+                             Foreground="{StaticResource DarkBrush}"
                              IsChecked="{Binding IsTemperatureSelected}"
                              Style="{StaticResource MetricButtonStyle}"/>
 
@@ -381,6 +392,8 @@
                              GroupName="TelemetryMetric"
                              Margin="0,0,6,0"
                              Padding="14,7"
+                             FontSize="14"
+                             Foreground="{StaticResource DarkBrush}"
                              IsChecked="{Binding IsVoltageSelected}"
                              Style="{StaticResource MetricButtonStyle}"/>
 
@@ -390,6 +403,8 @@
                                     <RadioButton Content="Current"
                              GroupName="TelemetryMetric"
                              Padding="14,7"
+                             FontSize="14"
+                             Foreground="{StaticResource DarkBrush}"
                              IsChecked="{Binding IsCurrentSelected}"
                              Style="{StaticResource MetricButtonStyle}"/>
 
@@ -477,19 +492,22 @@
                             <StackPanel>
 
                                 <TextBlock Text="Average"
-                       FontSize="12"
-                       Foreground="#8A929A"/>
+                                    FontSize="14"
+                                    HorizontalAlignment="Center"
+                                    Foreground="{StaticResource DarkBrush}"/>
 
                                 <TextBlock Text="{Binding AverageDisplay}"
-                       FontSize="23"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource DarkBrush}"
-                       Margin="0,6,0,0"/>
+                                    FontSize="23"
+                                    FontWeight="Bold"
+                                    HorizontalAlignment="Center"
+                                    Foreground="{StaticResource DarkBrush}"
+                                    Margin="0,6,0,0"/>
 
                                 <TextBlock Text="{Binding GraphMetricName}"
-                       FontSize="11"
-                       Foreground="#A0A7AE"
-                       Margin="0,3,0,0"/>
+                                    FontSize="12"
+                                    HorizontalAlignment="Center"
+                                    Foreground="{StaticResource DarkBrush}"
+                                    Margin="0,3,0,0"/>
 
                             </StackPanel>
 
@@ -499,24 +517,27 @@
                         <!-- Maximum -->
 
                         <Border Grid.Column="2"
-            Style="{StaticResource HistoryCardStyle}">
+                             Style="{StaticResource HistoryCardStyle}">
 
                             <StackPanel>
 
                                 <TextBlock Text="Maximum"
-                       FontSize="12"
-                       Foreground="#8A929A"/>
+                                    FontSize="14"
+                                    HorizontalAlignment="Center"
+                                    Foreground="{StaticResource DarkBrush}"/>
 
                                 <TextBlock Text="{Binding MaximumDisplay}"
-                       FontSize="23"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource DarkBrush}"
-                       Margin="0,6,0,0"/>
+                                    FontSize="23"
+                                    HorizontalAlignment="Center"
+                                    FontWeight="Bold"
+                                    Foreground="{StaticResource DarkBrush}"
+                                    Margin="0,6,0,0"/>
 
                                 <TextBlock Text="{Binding GraphMetricName}"
-                       FontSize="11"
-                       Foreground="#A0A7AE"
-                       Margin="0,3,0,0"/>
+                                    FontSize="12"
+                                    Foreground="{StaticResource DarkBrush}"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,3,0,0"/>
 
                             </StackPanel>
 
@@ -526,24 +547,27 @@
                         <!-- Minimum -->
 
                         <Border Grid.Column="4"
-            Style="{StaticResource HistoryCardStyle}">
+                            Style="{StaticResource HistoryCardStyle}">
 
                             <StackPanel>
 
                                 <TextBlock Text="Minimum"
-                       FontSize="12"
-                       Foreground="#8A929A"/>
+                                    FontSize="14"
+                                    HorizontalAlignment="Center"
+                                    Foreground="{StaticResource DarkBrush}"/>
 
                                 <TextBlock Text="{Binding MinimumDisplay}"
-                       FontSize="23"
-                       FontWeight="Bold"
-                       Foreground="{StaticResource DarkBrush}"
-                       Margin="0,6,0,0"/>
+                                    FontSize="23"
+                                    FontWeight="Bold"
+                                    HorizontalAlignment="Center"
+                                    Foreground="{StaticResource DarkBrush}"
+                                    Margin="0,6,0,0"/>
 
                                 <TextBlock Text="{Binding GraphMetricName}"
-                       FontSize="11"
-                       Foreground="#A0A7AE"
-                       Margin="0,3,0,0"/>
+                                    FontSize="12"
+                                    HorizontalAlignment="Center"
+                                    Foreground="{StaticResource DarkBrush}"
+                                    Margin="0,3,0,0"/>
 
                             </StackPanel>
 
@@ -552,13 +576,11 @@
                     </Grid>
 
                     <!-- PREDICTIVE INSIGHTS -->
-                    <controls:PredictiveSuggestionsView
-    Grid.Row="5"
-    DataContext="{Binding}"/>
+                    
 
                     <!-- HISTORY TABLE -->
 
-                    <Border Grid.Row="6"
+                    <Border Grid.Row="7"
                         Style="{StaticResource HistoryCardStyle}"
                         Padding="20">
 
@@ -580,13 +602,15 @@
                                 <StackPanel>
 
                                     <TextBlock Text="Historical Readings"
-                                           FontSize="19"
+                                           FontSize="24"
                                            FontWeight="SemiBold"
+                                           HorizontalAlignment="Center"
                                            Foreground="{StaticResource DarkBrush}"/>
 
-                                    <TextBlock Text="Sensor measurements recorded by SmartX."
-                                           FontSize="12"
-                                           Foreground="#8A929A"
+                                    <TextBlock Text="Sensor measurements recorded by SmartX"
+                                           FontSize="16"
+                                           HorizontalAlignment="Center"
+                                           Foreground="{StaticResource DarkBrush}"
                                            Margin="0,4,0,0"/>
 
                                 </StackPanel>
@@ -605,41 +629,41 @@
                             <!-- Data -->
 
                             <DataGrid Grid.Row="1"
-          Height="300"
-          Margin="0,18,0,0"
-          ItemsSource="{Binding History}"
-          AutoGenerateColumns="False"
-          IsReadOnly="True"
-          CanUserAddRows="False"
-          BorderThickness="1"
-          BorderBrush="#E1E5E8"
-          GridLinesVisibility="Horizontal"
-          HeadersVisibility="Column">
+                                Height="300"
+                                Margin="0,18,0,0"
+                                ItemsSource="{Binding History}"
+                                AutoGenerateColumns="False"
+                                IsReadOnly="True"
+                                CanUserAddRows="False"
+                                BorderThickness="1"
+                                BorderBrush="#E1E5E8"
+                                GridLinesVisibility="Horizontal"
+                                HeadersVisibility="Column">
 
                                 <DataGrid.Columns>
 
                                     <DataGridTextColumn
-            Header="Date"
-            Binding="{Binding Timestamp,
-                              StringFormat={}{0:yyyy-MM-dd}}"
-            Width="1.2*"/>
+                                        Header="Date"
+                                        Binding="{Binding Timestamp,
+                                            StringFormat={}{0:yyyy-MM-dd}}"
+                                        Width="1.2*"/>
 
                                     <DataGridTextColumn
-            Header="Time"
-            Binding="{Binding Timestamp,
-                              StringFormat={}{0:HH:mm:ss}}"
-            Width="1.2*"/>
+                                        Header="Time"
+                                        Binding="{Binding Timestamp,
+                                            StringFormat={}{0:HH:mm:ss}}"
+                                        Width="1.2*"/>
 
                                     <DataGridTextColumn
-            Header="Sensor"
-            Binding="{Binding SensorName}"
-            Width="1.5*"/>
+                                        Header="Sensor"
+                                        Binding="{Binding SensorName}"
+                                        Width="1.5*"/>
 
                                     <DataGridTextColumn
-            Header="Voltage"
-            Binding="{Binding Voltage,
+                                        Header="Voltage"
+                                        Binding="{Binding Voltage,
                               StringFormat={}{0:F2} V}"
-            Width="*"/>
+                Width="*"/>
 
                                     <DataGridTextColumn
             Header="Current"

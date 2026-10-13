@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using SmartX.WPF.ViewModels.Gateway;
+﻿using SmartX.WPF.ViewModels.Gateway;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,7 +11,7 @@ public partial class GatewayPage : Page
     public GatewayPage(
         GatewayViewModel viewModel)
     {
-        
+
         InitializeComponent();
 
         _viewModel = viewModel;

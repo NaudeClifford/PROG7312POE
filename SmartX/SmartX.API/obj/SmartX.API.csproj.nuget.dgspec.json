@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\SmartX.API.csproj": {}
+    "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\SmartX.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\SmartX.API.csproj": {
+    "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\SmartX.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\SmartX.API.csproj",
+        "projectUniqueName": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\SmartX.API.csproj",
         "projectName": "SmartX.API",
-        "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\SmartX.API.csproj",
-        "packagesPath": "C:\\Users\\emeris\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.API\\obj\\",
+        "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\SmartX.API.csproj",
+        "packagesPath": "C:\\Users\\cliff\\.nuget\\packages\\",
+        "outputPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\emeris\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\cliff\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -33,14 +34,14 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj": {
-                "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj"
+              "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj": {
+                "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj"
               },
-              "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj"
+              "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj": {
+                "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj"
               },
-              "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj": {
-                "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj"
+              "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj": {
+                "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj"
               }
             }
           }
@@ -524,20 +525,20 @@
         }
       }
     },
-    "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj": {
+    "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj",
+        "projectUniqueName": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj",
         "projectName": "SmartX.Application",
-        "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj",
-        "packagesPath": "C:\\Users\\emeris\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\obj\\",
+        "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj",
+        "packagesPath": "C:\\Users\\cliff\\.nuget\\packages\\",
+        "outputPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\emeris\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\cliff\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -546,6 +547,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -553,11 +555,11 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj": {
-                "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj"
+              "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj": {
+                "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj"
               },
-              "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj": {
-                "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj"
+              "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj": {
+                "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj"
               }
             }
           }
@@ -898,20 +900,20 @@
         }
       }
     },
-    "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj": {
+    "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj",
+        "projectUniqueName": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj",
         "projectName": "SmartX.Domain",
-        "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj",
-        "packagesPath": "C:\\Users\\emeris\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\obj\\",
+        "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj",
+        "packagesPath": "C:\\Users\\cliff\\.nuget\\packages\\",
+        "outputPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\emeris\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\cliff\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -920,6 +922,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -1239,20 +1242,20 @@
         }
       }
     },
-    "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj": {
+    "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
+        "projectUniqueName": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
         "projectName": "SmartX.Infrastructure",
-        "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\emeris\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\obj\\",
+        "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\SmartX.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\cliff\\.nuget\\packages\\",
+        "outputPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\emeris\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\cliff\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -1261,6 +1264,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -1268,14 +1272,14 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj": {
-                "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj"
+              "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj": {
+                "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Application\\SmartX.Application.csproj"
               },
-              "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj": {
-                "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj"
+              "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj": {
+                "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj"
               },
-              "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj": {
-                "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj"
+              "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj": {
+                "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj"
               }
             }
           }
@@ -1616,20 +1620,20 @@
         }
       }
     },
-    "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj": {
+    "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj",
+        "projectUniqueName": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj",
         "projectName": "SmartX.Shared",
-        "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj",
-        "packagesPath": "C:\\Users\\emeris\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Shared\\obj\\",
+        "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\SmartX.Shared.csproj",
+        "packagesPath": "C:\\Users\\cliff\\.nuget\\packages\\",
+        "outputPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\emeris\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\cliff\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -1638,6 +1642,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -1645,8 +1650,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj": {
-                "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj"
+              "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj": {
+                "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj"
               }
             }
           }

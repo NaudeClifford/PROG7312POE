@@ -3,6 +3,7 @@ using SmartX.Domain.Enums;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Session;
+using SmartX.WPF.Views.Pages.Alerts;
 using SmartX.WPF.Views.Pages.Company;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.History;
@@ -13,7 +14,6 @@ using SmartX.WPF.Views.Pages.Users;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace SmartX.WPF;
 
@@ -41,6 +41,8 @@ public partial class MainWindow : Window
         Sensors,
         Telemetry,
         History,
+
+        Alert,
         NetworkMesh,
         CommandHistory
     }
@@ -495,8 +497,13 @@ public partial class MainWindow : Window
                 break;
 
             case NavigationStage.History:
-                GatewayButton.Visibility =
-                    Visibility.Visible;
+                GatewayButton.Visibility = Visibility.Visible;
+                HistoryButton.Visibility = Visibility.Visible;
+                break;
+
+            case NavigationStage.Alert:
+                HistoryButton.Visibility = Visibility.Visible;
+                GatewayButton.Visibility = Visibility.Visible;
                 break;
 
             case NavigationStage.NetworkMesh:
@@ -724,6 +731,17 @@ public partial class MainWindow : Window
 
         NavigateTo<HistoryPage>(
             NavigationStage.History);
+    }
+
+    private void Alerts_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (!CanAccessGatewayArea())
+            return;
+
+        NavigateTo<AlertsPage>(
+            NavigationStage.Alert);
     }
 
     private bool CanAccessGatewayArea()

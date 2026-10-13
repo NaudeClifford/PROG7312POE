@@ -6,8 +6,10 @@ using SmartX.WPF.Navigation;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.Demo;
+using SmartX.WPF.Services.PredictiveEngine;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.Services.Sync;
+using SmartX.WPF.ViewModels.Alerts;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.History;
@@ -50,6 +52,10 @@ public class GatewayViewModel : ViewModelBase
     private bool _isActive = true;
     private string? _statusMessage;
 
+    private readonly LivePredictiveWarningService _warningService;
+
+    public PredictiveWarningViewModel PredictiveWarnings { get; }
+
     public GatewayViewModel(
         ISmartXApiClient apiClient,
         INavigationService navigationService,
@@ -57,6 +63,8 @@ public class GatewayViewModel : ViewModelBase
         IConnectivityService connectivityService,
         IValidator<CreateGatewayRequest> createGatewayValidator,
         IGuestDemoService guestDemoService,
+        PredictiveWarningViewModel predictiveWarningViewModel,
+        LivePredictiveWarningService livePredictiveWarningService,
         SmartXSession session)
         : base(connectivityService, session)
     {
@@ -65,6 +73,8 @@ public class GatewayViewModel : ViewModelBase
         _cacheSyncService = cacheSyncService;
         _createGatewayValidator = createGatewayValidator;
         _guestDemoService = guestDemoService;
+        PredictiveWarnings = predictiveWarningViewModel;
+        _warningService = livePredictiveWarningService;
 
         AddGatewayCommand =
             new AsyncRelayCommand(
@@ -460,6 +470,15 @@ public class GatewayViewModel : ViewModelBase
 
             await LoadGatewaysAsync(
                 cancellationToken);
+
+            if (Session.GatewayId is Guid gatewayId &&
+            gatewayId != Guid.Empty &&
+            !_warningService.IsLoadedFor(gatewayId))
+            {
+                await _warningService.LoadAsync(
+                    gatewayId,
+                    cancellationToken);
+            }
         }
         catch (OperationCanceledException)
         {
@@ -1280,4 +1299,6 @@ public class GatewayViewModel : ViewModelBase
             RaiseCommandStates();
         }
     }
+
+
 }

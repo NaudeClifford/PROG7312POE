@@ -32,7 +32,7 @@ public class SmartXCredentialStore
     {
         if (string.IsNullOrWhiteSpace(refreshToken))
             throw new ArgumentException(
-                "Refresh token is required.",nameof(refreshToken));
+                "Refresh token is required.", nameof(refreshToken));
 
         var bytes =
             Encoding.UTF8.GetBytes(refreshToken);

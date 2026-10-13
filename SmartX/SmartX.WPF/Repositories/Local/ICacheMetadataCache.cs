@@ -1,7 +1,4 @@
 ﻿using SmartX.WPF.Cache;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SmartX.WPF.Repositories.Local
 {

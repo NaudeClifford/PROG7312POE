@@ -1,5 +1,4 @@
 ﻿using SmartX.WPF.ViewModels.Alerts;
-using SmartX.WPF.ViewModels.Pages.Company;
 using System.Windows.Controls;
 
 namespace SmartX.WPF.Views.Pages.Alerts;

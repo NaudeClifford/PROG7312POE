@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SmartX.WPF.ViewModels.History
+﻿namespace SmartX.WPF.ViewModels.History
 {
     public sealed class SensorCommand
     {

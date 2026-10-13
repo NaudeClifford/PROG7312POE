@@ -471,7 +471,7 @@ public class UsersViewModel :
             RaiseCounts();
 
             if (Session.Role == UserRole.SuperAdmin)
-            {           
+            {
                 await LoadCompaniesAsync(cancellationToken);
 
                 await LoadSuperAdminAsync(cancellationToken);

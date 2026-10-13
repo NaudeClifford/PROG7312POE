@@ -6,7 +6,10 @@
       xmlns:controls="clr-namespace:SmartX.WPF.Views.Controls"
       mc:Ignorable="d"
       Title="Telemetry"
-      Background="{StaticResource BackgroundBrush}">
+      Background="{StaticResource BackgroundBrush}"
+      Loaded="TelemetryPage_Loaded">
+      
+    <ScrollViewer>
 
 
     <Grid Margin="35">
@@ -14,7 +17,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="400"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
 
@@ -26,7 +30,7 @@
 
                 <TextBlock
                     Text="Telemetry"
-                    FontSize="32"
+                    FontSize="40"
                     FontWeight="Bold"
                     Foreground="{StaticResource LightTextBrush}"/>
 
@@ -408,7 +412,7 @@
 
                 <!-- TABLE HEADER -->
 
-                <Grid>
+                <Grid Grid.Row="0">
 
                     <StackPanel>
 
@@ -525,9 +529,13 @@
             </Grid>
 
         </Border>
-
-        <controls:PredictiveSuggestionsView DataContext="{Binding}" />
+                <!-- PREDICTIVE WARNINGS -->
+                <controls:PredictiveWarningView
+                    Grid.Row="3"
+                    Margin="0,20,0,0"
+                    DataContext="{Binding PredictiveWarnings}" />
 
     </Grid>
+    </ScrollViewer>
 
 </Page>

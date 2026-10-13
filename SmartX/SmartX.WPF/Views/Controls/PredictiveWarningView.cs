@@ -2,9 +2,9 @@
 
 namespace SmartX.WPF.Views.Controls;
 
-public partial class PredictiveSuggestionsView : UserControl
+public partial class PredictiveWarningView : UserControl
 {
-    public PredictiveSuggestionsView()
+    public PredictiveWarningView()
     {
         InitializeComponent();
     }

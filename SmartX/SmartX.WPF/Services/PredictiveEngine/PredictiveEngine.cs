@@ -1,178 +1,110 @@
-﻿using SmartX.Application.Services.Alerts;
-using SmartX.Domain.Entities;
+﻿using SmartX.Domain.Entities;
 using SmartX.Domain.Enums;
 using SmartX.Shared.DTOs.Telemetry;
-using SmartX.Shared.Mapping;
-using System.Windows.Ink;
 
-namespace SmartX.WPF.Services.PredictiveEngine
+namespace SmartX.WPF.Services.PredictiveEngine;
+
+public sealed class PredictiveEngine : IPredictiveEngine
 {
-    public class PredictiveEngine : IPredictiveEngine
+    public IReadOnlyList<PredictiveSuggestion> GenerateWarnings(
+        IEnumerable<TelemetryDto> telemetry)
     {
+        var warnings = new PriorityQueue<PredictiveSuggestion, int>();
 
-        public IReadOnlyList<PredictiveSuggestion> GenerateSuggestions(
-                IEnumerable<TelemetryDto> telemetryDto,
-                IEnumerable<SensorAlert> alerts)
+        var telemetryBySensor = telemetry.GroupBy(reading => reading.SensorId);
+
+        foreach (var sensorReadings in telemetryBySensor)
         {
-            var suggestions = new PriorityQueue<PredictiveSuggestion, int>();
+            var latest = sensorReadings
+                .MaxBy(reading => reading.Timestamp);
 
-            var telemetryBySensor = telemetryDto.GroupBy(t => t.SensorId)
-                .ToDictionary(g => g.Key, g => g.ToList());
+            if (latest is null)
+                continue;
 
-            foreach (var (sensorId, readingsForSensor) in telemetryBySensor)
+            var score = CalculateTelemetryScore(latest);
+
+            if (score == 0)
+                continue;
+
+            var warning = new PredictiveSuggestion
             {
-                var readings = readingsForSensor.OrderByDescending(x => x.Timestamp).ToList();
-
-                if (readings.Count == 0)
-                {
-                    continue;
-                }
-
-                var latest = readings[0];
-
-                var score = CalculateTelemetryScore(readings);
-
-                if (score <= 0)
-                {
-                    continue;
-                }
-
-                var suggestion = new PredictiveSuggestion
-                {
-                    SensorId = latest.SensorId,
-                    Title = "Potential device problem",
-                    Description = BuildDescription(readings, score),
-                    Type = SuggestionType.DeviceWarning,
-                    Severity = DetermineSeverity(score),
-                    Score = score,
-                };
-
-                suggestions.Enqueue(suggestion, -score);
-            }
-            foreach (var alert in alerts)
-            {
-                var suggestion = CreateAlertSuggestion(alert);
-
-                suggestions.Enqueue(suggestion, -suggestion.Score);
-            }
-
-            var result = new List<PredictiveSuggestion>();
-
-            while (suggestions.Count > 0 && result.Count < 5)
-            {
-                result.Add(suggestions.Dequeue());
-            }
-            return result;
-
-        }
-
-        private static int CalculateTelemetryScore(IReadOnlyList<TelemetryDto> readings)
-        {
-            var score = 0;
-
-            var recentReadings = readings.Take(10).ToList();
-
-            foreach (var reading in recentReadings)
-            {
-                if (reading.Temperature >= 35)
-                {
-                    score += 30;
-                }
-                else if (reading.Temperature >= 32)
-                {
-                    score += 15;
-                }
-
-                if (reading.Voltage >= 240)
-                {
-                    score += 30;
-                }
-                else if (reading.Voltage >= 235)
-                {
-                    score += 15;
-                }
-
-                if (reading.Current >= 5)
-                {
-                    score += 30;
-                }
-                else if (reading.Current >= 4.5)
-                {
-                    score += 15;
-                }
-            }
-
-            return score;
-        }
-
-        private static AlertSeverity DetermineSeverity(int score)
-        {
-            return score switch {
-
-                >= 100 => AlertSeverity.Critical,
-                >= 60 => AlertSeverity.High,
-                >= 30 => AlertSeverity.Medium,
-                _ => AlertSeverity.Low
-            };
-        }
-
-        private static string BuildDescription(IReadOnlyList<TelemetryDto> readings, int score)
-        {
-            var latest = readings[0];
-
-            var problems = new List<string>();
-
-            if(latest.Temperature >= 35)
-            {
-                problems.Add($"High temperature detected: ({latest.Temperature:F1}^C)");
-            }
-
-            if (latest.Voltage >= 240)
-            {
-                problems.Add($"High Voltage detected: ({latest.Voltage:F1}V)");
-            }
-
-            if (latest.Current   >= 5)
-            {
-                problems.Add($"High Current detected: ({latest.Current:F1}A)");
-            }
-
-
-            if (problems.Count == 0)
-            {
-                problems.Add("No significant issues detected.");
-            }
-
-            return $"Recent readings say: {string.Join(", ", problems)}";
-        }
-
-        private static PredictiveSuggestion CreateAlertSuggestion(SensorAlert alert)
-        {
-
-            var score = alert.Severity switch
-            {
-                AlertSeverity.Critical => 100,
-                AlertSeverity.High => 75,
-                AlertSeverity.Medium => 50,
-                AlertSeverity.Low => 25,
-                _ => 0
-            };
-
-            return new PredictiveSuggestion
-            {
-                SensorId = alert.SensorId,
-
-                Title = $"Alert: {alert.Message}",
-
-                Description = $"Alert generated at {alert.Timestamp:G}. Severity: {alert.Severity}.",
-
+                SensorId = latest.SensorId,
+                Title = "Potential device problem",
+                Description = BuildDescription(latest),
                 Type = SuggestionType.DeviceWarning,
-
-                Severity = alert.Severity,
-
+                Severity = DetermineSeverity(score),
                 Score = score
             };
+
+            // Negative priority means higher scores come out first.
+            warnings.Enqueue(warning, -score);
         }
 
+        var result = new List<PredictiveSuggestion>();
+
+        while (warnings.Count > 0 && result.Count < 5)
+        {
+            result.Add(warnings.Dequeue());
+        }
+
+        return result;
+    }
+
+    private static int CalculateTelemetryScore(
+        TelemetryDto reading)
+    {
+        var score = 0;
+
+        if (reading.Temperature >= 35)
+            score += 30;
+        else if (reading.Temperature >= 32)
+            score += 15;
+
+        if (reading.Voltage >= 240)
+            score += 30;
+        else if (reading.Voltage >= 235)
+            score += 15;
+
+        if (reading.Current >= 5)
+            score += 30;
+        else if (reading.Current >= 4.5)
+            score += 15;
+
+        return score;
+    }
+
+    private static AlertSeverity DetermineSeverity(int score)
+    {
+        return score switch
+        {
+            >= 90 => AlertSeverity.Critical,
+            >= 60 => AlertSeverity.High,
+            >= 30 => AlertSeverity.Medium,
+            _ => AlertSeverity.Low
+        };
+    }
+
+    private static string BuildDescription(TelemetryDto reading)
+    {
+        var problems = new List<string>();
+
+        if (reading.Temperature >= 35)
+            problems.Add(
+                $"High temperature: {reading.Temperature:F1}°C");
+        else if (reading.Temperature >= 32)
+            problems.Add(
+                $"Elevated temperature: {reading.Temperature:F1}°C");
+
+        if (reading.Voltage >= 240)
+            problems.Add($"High voltage: {reading.Voltage:F1}V");
+        else if (reading.Voltage >= 235)
+            problems.Add($"Elevated voltage: {reading.Voltage:F1}V");
+
+        if (reading.Current >= 5)
+            problems.Add($"High current: {reading.Current:F1}A");
+        else if (reading.Current >= 4.5)
+            problems.Add($"Elevated current: {reading.Current:F1}A");
+
+        return string.Join(". ", problems);
     }
 }

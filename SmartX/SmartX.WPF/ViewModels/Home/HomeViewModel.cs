@@ -2,7 +2,6 @@
 using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.ViewModels.Base;
-using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.Signin;
 using SmartX.WPF.Views.Pages.SignUp;
 using System.Windows.Input;
@@ -43,7 +42,7 @@ namespace SmartX.WPF.ViewModels
             GuestCommand = new RelayCommand(
                 _ => EnterGuestMode());
 
-            
+
         }
 
         private void NavigateToSignIn(object? parameter)

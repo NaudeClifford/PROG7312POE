@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj": {}
+    "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj": {
+    "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj",
+        "projectUniqueName": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj",
         "projectName": "SmartX.Domain",
-        "projectPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj",
-        "packagesPath": "C:\\Users\\emeris\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\emeris\\OneDrive - ADvTECH Ltd\\Documents\\GitHub\\PROG7312POE\\SmartX\\SmartX.Domain\\obj\\",
+        "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\SmartX.Domain.csproj",
+        "packagesPath": "C:\\Users\\cliff\\.nuget\\packages\\",
+        "outputPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\emeris\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\cliff\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

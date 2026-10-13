@@ -22,4 +22,3 @@ public sealed class TelemetryHistoryItem
         Timestamp.ToLocalTime()
             .ToString("yyyy-MM-dd HH:mm:ss");
 }
- 

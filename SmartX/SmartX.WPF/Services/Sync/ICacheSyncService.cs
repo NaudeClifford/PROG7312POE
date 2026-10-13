@@ -1,7 +1,4 @@
 ﻿using SmartX.Shared.DTOs;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SmartX.WPF.Services.Sync;
 

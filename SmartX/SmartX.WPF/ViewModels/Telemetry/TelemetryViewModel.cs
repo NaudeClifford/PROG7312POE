@@ -1,9 +1,7 @@
 ﻿using SmartX.Application.Requests.Telemetry;
 using SmartX.Application.Services.Alerts;
 using SmartX.Application.Services.Telemetry;
-using SmartX.Domain.Entities;
 using SmartX.Domain.Enums;
-using SmartX.Shared.DTOs.Telemetry;
 using SmartX.Shared.Mapping;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Repositories.Local;
@@ -11,6 +9,7 @@ using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.PredictiveEngine;
 using SmartX.WPF.Services.Session;
+using SmartX.WPF.ViewModels.Alerts;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.Sensor;
@@ -31,17 +30,15 @@ public class TelemetryViewModel : ViewModelBase
     private readonly AlertQueue _alertQueue;
     private Guid? _selectedSensorId;
     private readonly HashSet<string> _activeErrorStates = new();
-    private readonly IPredictiveEngine _predictiveEngine;
-    
     private string _selectedSensorFilter = "All";
 
     private DateTime? _fromDate;
     private DateTime? _toDate;
 
-    private readonly LivePredictiveSuggestionService _predictiveSuggestions;
+    private readonly LivePredictiveWarningService _warningService;
 
+    public PredictiveWarningViewModel PredictiveWarnings { get; }
 
-        public ObservableCollection<PredictiveSuggestion> Suggestions => _predictiveSuggestions.Suggestions;
     // COLLECTIONS
     private readonly TelemetryCollection _telemetryCollection;
 
@@ -280,10 +277,10 @@ public class TelemetryViewModel : ViewModelBase
         IMapper mapper,
         ISmartXApiClient apiClient,
         ITelemetryStream telemetryStream,
+        PredictiveWarningViewModel predictiveWarningViewModel,
         AlertQueue alertQueue,
-        IPredictiveEngine predictiveEngine,
         TelemetryCollection telemetryCollection,
-        LivePredictiveSuggestionService livePredictiveSuggestionService
+        LivePredictiveWarningService livePredictiveWarningService
         ) : base(
             connectivityService,
             session)
@@ -296,8 +293,8 @@ public class TelemetryViewModel : ViewModelBase
         _mapper = mapper;
         _telemetryStream = telemetryStream;
         _alertQueue = alertQueue;
-        _predictiveEngine = predictiveEngine;
-        _predictiveSuggestions = livePredictiveSuggestionService;
+        _warningService = livePredictiveWarningService;
+        PredictiveWarnings = predictiveWarningViewModel;
 
         BackToSensorsCommand =
             new AsyncRelayCommand(
@@ -350,6 +347,7 @@ public class TelemetryViewModel : ViewModelBase
 
                 Telemetry.Clear();
                 FilteredTelemetry.Clear();
+                _warningService.Clear();
 
                 ErrorMessage = "No gateway selected.";
 
@@ -489,6 +487,7 @@ public class TelemetryViewModel : ViewModelBase
             _telemetryCollection.Clear();
 
             _telemetryStream.Clear();
+            _warningService.Clear();
 
             _telemetryArray = [];
 
@@ -498,38 +497,11 @@ public class TelemetryViewModel : ViewModelBase
 
             return;
         }
+        await _warningService.LoadAsync(
+        Session.GatewayId.Value,
+        cancellationToken);
 
-        IEnumerable<DomainTelemetry> telemetry;
-
-        if (_selectedSensorId.HasValue)
-        {
-            telemetry =
-                await _telemetryCache.GetBySensorIdAsync(
-                    _selectedSensorId.Value,
-                    cancellationToken);
-        }
-        else
-        {
-            telemetry =
-                await _telemetryCache.GetByGatewayIdAsync(
-                    Session.GatewayId.Value,
-                    cancellationToken);
-        }
-
-        _telemetryCollection.Clear();
-
-        foreach (var item in telemetry)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            _telemetryCollection.Add(item);
-        }
-
-        _telemetryArray =
-            _telemetryCollection.ToArray();
-
-        OnPropertyChanged(
-            nameof(TotalPower));
+        _telemetryArray = _telemetryCollection.ToArray();
 
         Telemetry.Clear();
 
@@ -537,13 +509,10 @@ public class TelemetryViewModel : ViewModelBase
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            Telemetry.Add(
-                CreateDisplayModel(item));
+            Telemetry.Add(CreateDisplayModel(item));
         }
 
         ApplyFilters();
-
-        GeneratePredictiveSuggestions();
     }
 
     // FILTERING
@@ -752,7 +721,6 @@ public class TelemetryViewModel : ViewModelBase
 
 
     // BACK TO SENSORS
-
     private async Task BackToSensorsAsync()
     {
         _navigationService
@@ -814,9 +782,7 @@ public class TelemetryViewModel : ViewModelBase
         }
     }
 
-    private double CalculateTotalPower(
-        TelemetryDisplayModel[] telemetry,
-        int index)
+    private double CalculateTotalPower(TelemetryDisplayModel[] telemetry, int index)
     {
         // BASE CASE
         if (index >= telemetry.Length)
@@ -963,13 +929,11 @@ public class TelemetryViewModel : ViewModelBase
             return;
         }
 
-        _telemetryArray =
-            _telemetryCollection.ToArray();
+        _telemetryArray = _telemetryCollection.ToArray();
 
         ApplyFilters();
 
-        GeneratePredictiveSuggestions();
-
+        _warningService.Refresh();
     }
 
     private void CheckForAlerts(
@@ -1032,9 +996,6 @@ public class TelemetryViewModel : ViewModelBase
                         telemetry.Timestamp
                 });
         }
-           
+
     }
-
-
-
 }

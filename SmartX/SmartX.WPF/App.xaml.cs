@@ -21,6 +21,7 @@ using SmartX.WPF.Services.PredictiveEngine;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels;
+using SmartX.WPF.ViewModels.Alerts;
 using SmartX.WPF.ViewModels.Gateway;
 using SmartX.WPF.ViewModels.History;
 using SmartX.WPF.ViewModels.Pages.Company;
@@ -77,7 +78,7 @@ public partial class App
         }
 
         services.AddSingleton(firebaseOptions);
-        
+
 
         // API configuration
         var apiOptions = configuration
@@ -98,7 +99,7 @@ public partial class App
             client =>
             {
 
-                client.BaseAddress = new Uri(apiOptions.BaseUrl);                
+                client.BaseAddress = new Uri(apiOptions.BaseUrl);
                 Console.WriteLine($"REGISTERED HTTP CLIENT: {client.BaseAddress}");
 
 
@@ -121,7 +122,7 @@ public partial class App
         // SQLite Cache
         services.AddSingleton<SmartXCacheDatabase>();
 
-        services.AddScoped< IValidator<CreateGatewayRequest>, CreateGatewayValidator>();
+        services.AddScoped<IValidator<CreateGatewayRequest>, CreateGatewayValidator>();
 
         services.AddSingleton<ILocalSensorCache, SQLiteSensorCache>();
         services.AddSingleton<ILocalTelemetryCache, SQLiteTelemetryCache>();
@@ -143,6 +144,7 @@ public partial class App
         services.AddTransient<CompanyViewModel>();
         services.AddTransient<UsersViewModel>();
         services.AddTransient<CompanyServicesViewModel>();
+
 
         // Pages
         services.AddTransient<HomePage>();
@@ -168,7 +170,7 @@ public partial class App
         services.AddSingleton<INavigationService, NavigationService>();
 
         //Authentication
-        services.AddHttpClient<IAuthenticationService,FirebaseAuthService>();
+        services.AddHttpClient<IAuthenticationService, FirebaseAuthService>();
 
         // Remembered login
         services.AddSingleton<SmartXCredentialStore>();
@@ -178,12 +180,13 @@ public partial class App
         services.AddSingleton<IGuestDemoService, GuestDemoService>();
 
         //Services Predictive
-        services.AddSingleton<LivePredictiveSuggestionService>();
+        services.AddSingleton<LivePredictiveWarningService>();
         services.AddSingleton<IPredictiveEngine, PredictiveEngine>();
         services.AddSingleton<TelemetryCollection>();
-
+        services.AddSingleton<PredictiveWarningViewModel>();
 
         services.AddSmartXMapping();
+
 
     }
 

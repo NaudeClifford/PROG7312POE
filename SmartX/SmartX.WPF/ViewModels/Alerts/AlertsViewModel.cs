@@ -16,18 +16,22 @@ public sealed class AlertsViewModel : ViewModelBase
     public AsyncRelayCommand ClearAlertsCommand { get; }
     public ObservableCollection<SensorAlert> Alerts { get; } = [];
 
+    public PredictiveWarningViewModel PredictiveWarnings { get; }
+
     public int PendingAlertCount =>
         _alertQueue.Count;
 
     public AlertsViewModel(
         AlertQueue alertQueue,
         IConnectivityService connectivityService,
+        PredictiveWarningViewModel predictiveWarningViewModel,
         SmartXSession session)
         : base(
             connectivityService,
             session)
     {
         _alertQueue = alertQueue;
+        PredictiveWarnings = predictiveWarningViewModel;
 
         ProcessNextAlertCommand =
        new AsyncRelayCommand(
@@ -106,7 +110,7 @@ public sealed class AlertsViewModel : ViewModelBase
 
     public async Task ProcessAllAlertsAsync()
     {
-    
+
 
         while (_alertQueue.TryDequeue(
                    out var alert))

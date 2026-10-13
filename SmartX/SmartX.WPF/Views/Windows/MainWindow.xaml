@@ -230,6 +230,14 @@
                 Visibility="Collapsed"
                 Style="{StaticResource BaseButtonStyle}"/>
 
+                    <!-- Alerts -->
+
+                    <Button
+                x:Name="AlertsButton"
+                Content="Alerts"
+                Click="Alerts_Click"
+                Visibility="Collapsed"
+                Style="{StaticResource BaseButtonStyle}"/>
 
                     <!-- USERS -->
 

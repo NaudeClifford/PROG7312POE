@@ -2,20 +2,14 @@
 using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
-using MapsterMapper;
 using SkiaSharp;
-using SmartX.Application.Services.Alerts;
 using SmartX.Application.Services.Sensors;
-using SmartX.Application.Services.Telemetry;
 using SmartX.Domain.Entities;
 using SmartX.Domain.Enums;
-using SmartX.Shared.DTOs.Telemetry;
 using SmartX.WPF.Repositories.Local;
 using SmartX.WPF.Services.Connectivity;
-using SmartX.WPF.Services.PredictiveEngine;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.ViewModels.Base;
-using SmartX.WPF.ViewModels.Telemetry;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using DomainSensor = SmartX.Domain.Entities.Sensor;
@@ -30,19 +24,13 @@ public sealed class HistoryViewModel : ViewModelBase
 
     private readonly ISensorCommandService _sensorService;
 
-
-    private readonly TelemetryCollection _telemetryCollection;
-    private readonly AlertQueue _alertQueue;
-
-    private readonly IMapper _mapper;
-    private readonly TelemetryHistoryStore _historyStore;
+    private List<DomainTelemetry> _loadedTelemetry = [];
 
     private Guid? _selectedSensorId;
 
     private DateTime? _fromDate;
 
     private DateTime? _toDate;
-    private readonly LivePredictiveSuggestionService _predictiveSuggestions;
     private readonly AsyncRelayCommand _loadCommand;
     private readonly AsyncRelayCommand _clearFiltersCommand;
     private readonly AsyncRelayCommand _sendManualCommandCommand;
@@ -121,7 +109,6 @@ public sealed class HistoryViewModel : ViewModelBase
             _ => "W"
         };
 
-
     public bool IsPowerSelected
     {
         get => SelectedMetric == TelemetryGraphMetric.Power;
@@ -162,7 +149,6 @@ public sealed class HistoryViewModel : ViewModelBase
         }
     }
 
-    private readonly IPredictiveEngine _predictiveEngine;
 
     private string _sensorSearchText = string.Empty;
 
@@ -265,32 +251,18 @@ public sealed class HistoryViewModel : ViewModelBase
     public string MinimumDisplay =>
         $"{MinimumValue:F2} {StatisticsUnit}";
 
-    public ObservableCollection<PredictiveSuggestion> Suggestions =>
-    _predictiveSuggestions.Suggestions;
-
     public HistoryViewModel(
     ILocalTelemetryCache telemetryCache,
     ILocalSensorCache sensorCache,
     IConnectivityService connectivityService,
     ISensorCommandService sensorService,
-    SmartXSession session,
-    TelemetryCollection telemetryCollection,
-    LivePredictiveSuggestionService livePredictiveSuggestionService,
-    PredictiveEngine predictiveEngine,
-    IMapper mapper,
-    AlertQueue alertQueue)
-    : base(
-        connectivityService,
+    SmartXSession session)
+    : base(connectivityService,
         session)
     {
         _telemetryCache = telemetryCache;
         _sensorService = sensorService;
         _sensorCache = sensorCache;
-        _telemetryCollection = telemetryCollection;
-        _predictiveSuggestions = livePredictiveSuggestionService;
-        _predictiveEngine = predictiveEngine;
-        _mapper = mapper;
-        _alertQueue = alertQueue;
 
         _loadCommand =
             new AsyncRelayCommand(
@@ -324,7 +296,10 @@ public sealed class HistoryViewModel : ViewModelBase
 
         if (!Session.GatewayId.HasValue)
         {
+            _loadedTelemetry.Clear();
             History.Clear();
+            UpdateGraph();
+            CalculateStatistics(_loadedTelemetry);
             return;
         }
 
@@ -355,7 +330,7 @@ public sealed class HistoryViewModel : ViewModelBase
                     gatewayId,
                     cancellationToken);
 
-            _historyStore.AddRange(telemetry);
+            _loadedTelemetry = telemetry.ToList();
 
             ApplyFilters();
         }
@@ -375,16 +350,12 @@ public sealed class HistoryViewModel : ViewModelBase
 
     private void ApplyFilters()
     {
-        History.Clear();
+        IEnumerable<DomainTelemetry> query = _loadedTelemetry;
 
-        IEnumerable<DomainTelemetry> query =
-            _telemetryCollection.GetNewestFirst();
 
         if (_selectedSensorId.HasValue)
         {
-            query =
-                query.Where(
-                    x => x.SensorId ==
+            query = query.Where(x => x.SensorId ==
                          _selectedSensorId.Value);
         }
 
@@ -406,8 +377,10 @@ public sealed class HistoryViewModel : ViewModelBase
                     x => x.Timestamp < end);
         }
 
-        var telemetry =
-            query.ToArray();
+        var telemetry = query.OrderByDescending(x => x.Timestamp)
+            .ToArray();
+
+        History.Clear();
 
         foreach (var item in telemetry)
         {
@@ -437,8 +410,6 @@ public sealed class HistoryViewModel : ViewModelBase
         CalculateStatistics(telemetry);
 
         UpdateGraph();
-
-        GeneratePredictiveSuggestions();
 
     }
 
@@ -837,27 +808,6 @@ public sealed class HistoryViewModel : ViewModelBase
         _clearFiltersCommand.RaiseCanExecuteChanged();
         _sendManualCommandCommand.RaiseCanExecuteChanged();
         _undoLastCommandCommand.RaiseCanExecuteChanged();
-    }
-
-    private void GeneratePredictiveSuggestions()
-    {
-        Suggestions.Clear();
-
-        var telemetryDtos = _mapper.Map<List<TelemetryDto>>
-            (_telemetryCollection.Items);
-
-        var suggestions =
-            _predictiveEngine.GenerateSuggestions(
-                telemetryDtos,
-                _alertQueue.GetAlerts());
-
-        foreach (var suggestion in suggestions)
-        {
-            suggestion.SensorName = Sensors.FirstOrDefault(
-                    x => x.Id == suggestion.SensorId)?.Name ?? "Unknown Sensor";
-            
-            Suggestions.Add(suggestion);
-        }
     }
 
 }

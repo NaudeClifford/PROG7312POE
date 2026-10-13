@@ -1,5 +1,4 @@
-﻿using SmartX.Application.Commands.Sensors;
-using SmartX.Application.Requests.Company;
+﻿using SmartX.Application.Requests.Company;
 using SmartX.Application.Requests.Gateway;
 using SmartX.Application.Requests.Sensor;
 using SmartX.Application.Requests.Telemetry;

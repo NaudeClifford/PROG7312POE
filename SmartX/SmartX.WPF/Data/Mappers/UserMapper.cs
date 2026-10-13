@@ -1,5 +1,4 @@
 ﻿using Microsoft.Data.Sqlite;
-using SmartX.Domain.Entities;
 using SmartX.Domain.Enums;
 using SmartX.Shared.DTOs;
 
