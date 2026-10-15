@@ -2,7 +2,7 @@
   "version": 4,
   "targets": {
     "net10.0": {
-      "FirebaseAdmin/3.6.0": {
+      "FirebaseAdmin/3.7.0": {
         "type": "package",
         "dependencies": {
           "Google.Api.Gax.Rest": "4.13.1",
@@ -19,7 +19,7 @@
           }
         }
       },
-      "FluentValidation/12.1.1": {
+      "FluentValidation/12.2.0": {
         "type": "package",
         "compile": {
           "lib/net8.0/FluentValidation.dll": {
@@ -32,10 +32,10 @@
           }
         }
       },
-      "FluentValidation.DependencyInjectionExtensions/12.1.1": {
+      "FluentValidation.DependencyInjectionExtensions/12.2.0": {
         "type": "package",
         "dependencies": {
-          "FluentValidation": "12.1.1",
+          "FluentValidation": "12.2.0",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "2.1.0"
         },
         "compile": {
@@ -134,10 +134,10 @@
           }
         }
       },
-      "Mapster/10.0.12": {
+      "Mapster/10.0.13": {
         "type": "package",
         "dependencies": {
-          "Mapster.Core": "10.0.12"
+          "Mapster.Core": "10.0.13"
         },
         "compile": {
           "lib/net10.0/Mapster.dll": {}
@@ -146,7 +146,7 @@
           "lib/net10.0/Mapster.dll": {}
         }
       },
-      "Mapster.Core/10.0.12": {
+      "Mapster.Core/10.0.13": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Mapster.Core.dll": {}
@@ -155,10 +155,10 @@
           "lib/netstandard2.0/Mapster.Core.dll": {}
         }
       },
-      "Microsoft.AspNetCore.Http.Abstractions/2.3.10": {
+      "Microsoft.AspNetCore.Http.Abstractions/2.3.13": {
         "type": "package",
         "dependencies": {
-          "Microsoft.AspNetCore.Http.Features": "2.3.9"
+          "Microsoft.AspNetCore.Http.Features": "2.3.12"
         },
         "compile": {
           "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.dll": {
@@ -200,7 +200,7 @@
           }
         }
       },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.11": {
+      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.13": {
         "type": "package",
         "compile": {
           "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
@@ -229,7 +229,7 @@
           }
         }
       },
-      "MongoDB.Bson/3.11.0": {
+      "MongoDB.Bson/3.12.0": {
         "type": "package",
         "compile": {
           "lib/net6.0/MongoDB.Bson.dll": {
@@ -310,9 +310,9 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
-          "Mapster": "10.0.12",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.11",
-          "MongoDB.Bson": "3.11.0",
+          "Mapster": "10.0.13",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.13",
+          "MongoDB.Bson": "3.12.0",
           "SmartX.Domain": "1.0.0"
         },
         "compile": {
@@ -325,15 +325,15 @@
     }
   },
   "libraries": {
-    "FirebaseAdmin/3.6.0": {
-      "sha512": "aP8UWyQYACDOZqnHN9WB77TS0DlB8kVj8/HB7evUaAhAgPJQ9y4NmISJ3kkYkWBG5va3PHvYN5H+ZDBhABSEFQ==",
+    "FirebaseAdmin/3.7.0": {
+      "sha512": "9XRXSMGmEBarZm1ojMDqRUDUvWGKwDiJh52D19TqUDOdNu43ZMnGg5k8Az6A758rZu5rV7qo2sLofH0J+OEcyg==",
       "type": "package",
-      "path": "firebaseadmin/3.6.0",
+      "path": "firebaseadmin/3.7.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "firebaseadmin.3.6.0.nupkg.sha512",
+        "firebaseadmin.3.7.0.nupkg.sha512",
         "firebaseadmin.nuspec",
         "lib/net462/FirebaseAdmin.dll",
         "lib/net462/FirebaseAdmin.xml",
@@ -343,31 +343,31 @@
         "lib/netstandard2.0/FirebaseAdmin.xml"
       ]
     },
-    "FluentValidation/12.1.1": {
-      "sha512": "EPpkIe1yh1a0OXyC100oOA8WMbZvqUu5plwhvYcb7oSELfyUZzfxV48BLhvs3kKo4NwG7MGLNgy1RJiYtT8Dpw==",
+    "FluentValidation/12.2.0": {
+      "sha512": "DR3lFbdnKucaaj1/8zMNOACMz/64igzox1yVZSFVsLxYB5mxAB+wFP1WZ8fjwrZnbU1KA1DoMzHKYKxUfuZ4wQ==",
       "type": "package",
-      "path": "fluentvalidation/12.1.1",
+      "path": "fluentvalidation/12.2.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
         "fluent-validation-icon.png",
-        "fluentvalidation.12.1.1.nupkg.sha512",
+        "fluentvalidation.12.2.0.nupkg.sha512",
         "fluentvalidation.nuspec",
         "lib/net8.0/FluentValidation.dll",
         "lib/net8.0/FluentValidation.xml"
       ]
     },
-    "FluentValidation.DependencyInjectionExtensions/12.1.1": {
-      "sha512": "D0VXh4dtjjX2aQizuaa0g6R8X3U1JaVqJPfGCvLwZX9t/O2h7tkpbitbadQMfwcgSPdDbI2vDxuwRMv/Uf9dHA==",
+    "FluentValidation.DependencyInjectionExtensions/12.2.0": {
+      "sha512": "QpKXgiO9E6wXCh19X2Musn8MZM0xt7KQt/QrD6GDBn3MCUfy8a+rkhCzrYJNCfoxTsTRQ7bpKP8T3geTnJNNeQ==",
       "type": "package",
-      "path": "fluentvalidation.dependencyinjectionextensions/12.1.1",
+      "path": "fluentvalidation.dependencyinjectionextensions/12.2.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
         "fluent-validation-icon.png",
-        "fluentvalidation.dependencyinjectionextensions.12.1.1.nupkg.sha512",
+        "fluentvalidation.dependencyinjectionextensions.12.2.0.nupkg.sha512",
         "fluentvalidation.dependencyinjectionextensions.nuspec",
         "lib/net8.0/FluentValidation.DependencyInjectionExtensions.dll",
         "lib/net8.0/FluentValidation.DependencyInjectionExtensions.xml"
@@ -477,10 +477,10 @@
         "lib/netstandard2.0/Google.Apis.Core.xml"
       ]
     },
-    "Mapster/10.0.12": {
-      "sha512": "ap0sVf4YxqYVSj2wafyrknuj2hWkWhpSm+SXTvrOQlc2vLG7u51dJ8GazaSHLLG6saHN5uPCBeP+YIqXS0a1vg==",
+    "Mapster/10.0.13": {
+      "sha512": "/FaFSm4W6rQp5kEZa7yTtvHH2yGmuC1p22Bg2zi83+W8SMJ+5RBTEWgRK0JS2S8jIdXj2hm2s4z1egjkE2azoQ==",
       "type": "package",
-      "path": "mapster/10.0.12",
+      "path": "mapster/10.0.13",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -489,33 +489,33 @@
         "lib/net8.0/Mapster.dll",
         "lib/net9.0/Mapster.dll",
         "lib/netstandard2.0/Mapster.dll",
-        "mapster.10.0.12.nupkg.sha512",
+        "mapster.10.0.13.nupkg.sha512",
         "mapster.nuspec"
       ]
     },
-    "Mapster.Core/10.0.12": {
-      "sha512": "iLPB0xAzxMWKhbBjWb4ZdQMV/TNEuZafDOoONhtDjBD4bEmf6BwcZt2v0MHhS7xbjwi1JUR266XMarfEs9BUIw==",
+    "Mapster.Core/10.0.13": {
+      "sha512": "fLj/MDJy16QiL7IULC0+e2YXh9nNDhtzdNl13R6CI0Qh6181eadA6EHykWkJWgTHdMjC5Ured3fq5x1QV7U9vg==",
       "type": "package",
-      "path": "mapster.core/10.0.12",
+      "path": "mapster.core/10.0.13",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "icon.png",
         "lib/netstandard2.0/Mapster.Core.dll",
-        "mapster.core.10.0.12.nupkg.sha512",
+        "mapster.core.10.0.13.nupkg.sha512",
         "mapster.core.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Http.Abstractions/2.3.10": {
-      "sha512": "FD6mE5v3qB/sEcnLNni1oHsATuLHIFzsKHCulUZS7iaJez8+TkD432L89DQtU9PfjCkaPO0JOQjB4tS4L8oZXQ==",
+    "Microsoft.AspNetCore.Http.Abstractions/2.3.13": {
+      "sha512": "V40/i3RzwjOpC7aUXkWYac45lD5o/HH/BF6KDgWpto/YWGHW9oHd4OSYg+WkaZxZYXxF4t2fRUWA4KyyABxw8g==",
       "type": "package",
-      "path": "microsoft.aspnetcore.http.abstractions/2.3.10",
+      "path": "microsoft.aspnetcore.http.abstractions/2.3.13",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.dll",
         "lib/netstandard2.0/Microsoft.AspNetCore.Http.Abstractions.xml",
-        "microsoft.aspnetcore.http.abstractions.2.3.10.nupkg.sha512",
+        "microsoft.aspnetcore.http.abstractions.2.3.13.nupkg.sha512",
         "microsoft.aspnetcore.http.abstractions.nuspec"
       ]
     },
@@ -559,10 +559,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.11": {
-      "sha512": "/a1aJz4m7ylhEDf25ugQChLQoN5XwoGjWw/BoR/ZWWKsO1v4DdJElS1uyngahz4B/eOzjFk1KNTkarRLE5wsIg==",
+    "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.13": {
+      "sha512": "G2GrGWNAPZBsii2F6AU8n+JT2tC1/I0Ml/e9ZyNCgPjf3hZqronP7o0X91aAynCmVeae8KkSIUNXXeXCNRmdVQ==",
       "type": "package",
-      "path": "microsoft.extensions.dependencyinjection.abstractions/10.0.11",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/10.0.13",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -585,7 +585,7 @@
         "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
         "lib/netstandard2.1/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
         "lib/netstandard2.1/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
-        "microsoft.extensions.dependencyinjection.abstractions.10.0.11.nupkg.sha512",
+        "microsoft.extensions.dependencyinjection.abstractions.10.0.13.nupkg.sha512",
         "microsoft.extensions.dependencyinjection.abstractions.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -612,10 +612,10 @@
         "version.txt"
       ]
     },
-    "MongoDB.Bson/3.11.0": {
-      "sha512": "M3yEubl7SbOl6N+m0L4geRejb3jZTXTs4J77fZUeXgireOPzFTT7taZpVSVOVXAMmS2deb6aS1HPe52oxX/Vyg==",
+    "MongoDB.Bson/3.12.0": {
+      "sha512": "2iYGykWDl6Wkx2GHjWaPEGAS49lxQN5YFFT1a7l/pKraMo1gqT4aZckhwu53WMinQTc10R4FxUHoo7X9M20GFg==",
       "type": "package",
-      "path": "mongodb.bson/3.11.0",
+      "path": "mongodb.bson/3.12.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -626,7 +626,7 @@
         "lib/net6.0/MongoDB.Bson.xml",
         "lib/netstandard2.1/MongoDB.Bson.dll",
         "lib/netstandard2.1/MongoDB.Bson.xml",
-        "mongodb.bson.3.11.0.nupkg.sha512",
+        "mongodb.bson.3.12.0.nupkg.sha512",
         "mongodb.bson.nuspec",
         "packageIcon.png"
       ]
@@ -729,12 +729,12 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "FirebaseAdmin >= 3.6.0",
-      "FluentValidation >= 12.1.1",
-      "FluentValidation.DependencyInjectionExtensions >= 12.1.1",
-      "Microsoft.AspNetCore.Http.Abstractions >= 2.3.10",
+      "FirebaseAdmin >= 3.7.0",
+      "FluentValidation >= 12.2.0",
+      "FluentValidation.DependencyInjectionExtensions >= 12.2.0",
+      "Microsoft.AspNetCore.Http.Abstractions >= 2.3.13",
       "Microsoft.AspNetCore.Http.Features >= 5.0.17",
-      "Microsoft.Extensions.DependencyInjection.Abstractions >= 10.0.11",
+      "Microsoft.Extensions.DependencyInjection.Abstractions >= 10.0.13",
       "SmartX.Domain >= 1.0.0",
       "SmartX.Shared >= 1.0.0"
     ]
@@ -801,19 +801,19 @@
         "dependencies": {
           "FirebaseAdmin": {
             "target": "Package",
-            "version": "[3.6.0, )"
+            "version": "[3.7.0, )"
           },
           "FluentValidation": {
             "target": "Package",
-            "version": "[12.1.1, )"
+            "version": "[12.2.0, )"
           },
           "FluentValidation.DependencyInjectionExtensions": {
             "target": "Package",
-            "version": "[12.1.1, )"
+            "version": "[12.2.0, )"
           },
           "Microsoft.AspNetCore.Http.Abstractions": {
             "target": "Package",
-            "version": "[2.3.10, )"
+            "version": "[2.3.13, )"
           },
           "Microsoft.AspNetCore.Http.Features": {
             "target": "Package",
@@ -821,7 +821,7 @@
           },
           "Microsoft.Extensions.DependencyInjection.Abstractions": {
             "target": "Package",
-            "version": "[10.0.11, )"
+            "version": "[10.0.13, )"
           }
         },
         "imports": [

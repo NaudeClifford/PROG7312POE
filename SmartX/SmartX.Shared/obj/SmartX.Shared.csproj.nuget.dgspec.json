@@ -401,15 +401,15 @@
           "dependencies": {
             "Mapster": {
               "target": "Package",
-              "version": "[10.0.12, )"
+              "version": "[10.0.13, )"
             },
             "Microsoft.Extensions.DependencyInjection.Abstractions": {
               "target": "Package",
-              "version": "[10.0.11, )"
+              "version": "[10.0.13, )"
             },
             "MongoDB.Bson": {
               "target": "Package",
-              "version": "[3.11.0, )"
+              "version": "[3.12.0, )"
             }
           },
           "imports": [

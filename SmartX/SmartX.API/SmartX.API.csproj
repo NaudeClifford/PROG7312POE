@@ -7,6 +7,17 @@
     <UserSecretsId>2c8955d8-c8bb-4375-95cb-837d87680abb</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Middleware\**" />
+    <Compile Remove="Services\**" />
+    <Content Remove="Middleware\**" />
+    <Content Remove="Services\**" />
+    <EmbeddedResource Remove="Middleware\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Middleware\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<None Update="firebase-service-account.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14,12 +25,12 @@
 	</ItemGroup>
 	
   <ItemGroup>
-    <PackageReference Include="FirebaseAdmin" Version="3.6.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.11" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
-    <PackageReference Include="MongoDB.Driver" Version="3.11.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.2.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.3" />
+    <PackageReference Include="FirebaseAdmin" Version="3.7.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.13" />
+    <PackageReference Include="MongoDB.Driver" Version="3.12.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.3.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.3.0" />
   </ItemGroup>
 
 	<ItemGroup>
@@ -27,11 +38,6 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
-	
-  <ItemGroup>
-    <Folder Include="Middleware\" />
-    <Folder Include="Services\" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SmartX.Application\SmartX.Application.csproj" />

@@ -301,6 +301,9 @@ public partial class MainWindow : Window
         HistoryButton.Visibility =
             Visibility.Collapsed;
 
+        AlertsButton.Visibility =
+            Visibility.Collapsed;
+
         LogOutButton.Visibility =
             Visibility.Collapsed;
     }
@@ -351,8 +354,7 @@ public partial class MainWindow : Window
 
         if (page is GatewaySetupPage)
         {
-            _navigationStage =
-                NavigationStage.Gateway;
+            _navigationStage = NavigationStage.Gateway;
 
             ShowNavigation();
             HideAllNavigationButtons();
@@ -366,45 +368,37 @@ public partial class MainWindow : Window
         switch (page)
         {
             case HomePage:
-                _navigationStage =
-                    NavigationStage.Home;
+                _navigationStage = NavigationStage.Home;
                 break;
 
             case UsersPage:
-                _navigationStage =
-                    NavigationStage.Users;
+                _navigationStage = NavigationStage.Users;
                 break;
 
             case CurrentCompanyPage:
-                _navigationStage =
-                    NavigationStage.CurrentCompany;
+                _navigationStage = NavigationStage.CurrentCompany;
                 break;
 
             case CompaniesPage:
-                _navigationStage =
-                    NavigationStage.Companies;
+                _navigationStage = NavigationStage.Companies;
                 break;
 
             case GatewayPage:
-                _navigationStage =
-                    NavigationStage.Gateway;
+                _navigationStage = NavigationStage.Gateway;
                 break;
 
             case SensorsPage:
             case SensorEditPage:
             case SensorSetupPage:
-                _navigationStage =
-                    NavigationStage.Sensors;
+                _navigationStage = NavigationStage.Sensors;
                 break;
 
             case TelemetryPage:
-                _navigationStage =
-                    NavigationStage.Telemetry;
+                _navigationStage = NavigationStage.Telemetry;
                 break;
 
             case HistoryPage:
-                _navigationStage =
-                    NavigationStage.History;
+                _navigationStage = NavigationStage.History;
                 break;
         }
 
@@ -499,6 +493,7 @@ public partial class MainWindow : Window
             case NavigationStage.History:
                 GatewayButton.Visibility = Visibility.Visible;
                 HistoryButton.Visibility = Visibility.Visible;
+                AlertsButton.Visibility = Visibility.Visible;
                 break;
 
             case NavigationStage.Alert:

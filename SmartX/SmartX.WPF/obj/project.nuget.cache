@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "Lx5KGe+MlTs=",
+  "dgSpecHash": "Slg4At2UBzg=",
   "success": true,
   "projectFilePath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\SmartX.WPF.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\cliff\\.nuget\\packages\\firebaseadmin\\3.6.0\\firebaseadmin.3.6.0.nupkg.sha512",
-    "C:\\Users\\cliff\\.nuget\\packages\\fluentvalidation\\12.1.1\\fluentvalidation.12.1.1.nupkg.sha512",
-    "C:\\Users\\cliff\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\12.1.1\\fluentvalidation.dependencyinjectionextensions.12.1.1.nupkg.sha512",
+    "C:\\Users\\cliff\\.nuget\\packages\\firebaseadmin\\3.7.0\\firebaseadmin.3.7.0.nupkg.sha512",
+    "C:\\Users\\cliff\\.nuget\\packages\\fluentvalidation\\12.2.0\\fluentvalidation.12.2.0.nupkg.sha512",
+    "C:\\Users\\cliff\\.nuget\\packages\\fluentvalidation.dependencyinjectionextensions\\12.2.0\\fluentvalidation.dependencyinjectionextensions.12.2.0.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\google.api.gax\\4.13.1\\google.api.gax.4.13.1.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\google.api.gax.rest\\4.13.1\\google.api.gax.rest.4.13.1.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\google.apis\\1.73.0\\google.apis.1.73.0.nupkg.sha512",
@@ -18,9 +18,9 @@
     "C:\\Users\\cliff\\.nuget\\packages\\livechartscore\\2.0.5\\livechartscore.2.0.5.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\livechartscore.skiasharpview\\2.0.5\\livechartscore.skiasharpview.2.0.5.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\livechartscore.skiasharpview.wpf\\2.0.5\\livechartscore.skiasharpview.wpf.2.0.5.nupkg.sha512",
-    "C:\\Users\\cliff\\.nuget\\packages\\mapster\\10.0.12\\mapster.10.0.12.nupkg.sha512",
-    "C:\\Users\\cliff\\.nuget\\packages\\mapster.core\\10.0.12\\mapster.core.10.0.12.nupkg.sha512",
-    "C:\\Users\\cliff\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.3.10\\microsoft.aspnetcore.http.abstractions.2.3.10.nupkg.sha512",
+    "C:\\Users\\cliff\\.nuget\\packages\\mapster\\10.0.13\\mapster.10.0.13.nupkg.sha512",
+    "C:\\Users\\cliff\\.nuget\\packages\\mapster.core\\10.0.13\\mapster.core.10.0.13.nupkg.sha512",
+    "C:\\Users\\cliff\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.3.13\\microsoft.aspnetcore.http.abstractions.2.3.13.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.17\\microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.data.sqlite\\10.0.12\\microsoft.data.sqlite.10.0.12.nupkg.sha512",
@@ -31,7 +31,7 @@
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.extensions.configuration.fileextensions\\10.0.12\\microsoft.extensions.configuration.fileextensions.10.0.12.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.extensions.configuration.json\\10.0.12\\microsoft.extensions.configuration.json.10.0.12.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\10.0.12\\microsoft.extensions.dependencyinjection.10.0.12.nupkg.sha512",
-    "C:\\Users\\cliff\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.12\\microsoft.extensions.dependencyinjection.abstractions.10.0.12.nupkg.sha512",
+    "C:\\Users\\cliff\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.13\\microsoft.extensions.dependencyinjection.abstractions.10.0.13.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.extensions.diagnostics\\10.0.12\\microsoft.extensions.diagnostics.10.0.12.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.extensions.diagnostics.abstractions\\10.0.12\\microsoft.extensions.diagnostics.abstractions.10.0.12.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\10.0.12\\microsoft.extensions.fileproviders.abstractions.10.0.12.nupkg.sha512",
@@ -43,7 +43,7 @@
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.extensions.options\\10.0.12\\microsoft.extensions.options.10.0.12.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.extensions.options.configurationextensions\\10.0.12\\microsoft.extensions.options.configurationextensions.10.0.12.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.12\\microsoft.extensions.primitives.10.0.12.nupkg.sha512",
-    "C:\\Users\\cliff\\.nuget\\packages\\mongodb.bson\\3.11.0\\mongodb.bson.3.11.0.nupkg.sha512",
+    "C:\\Users\\cliff\\.nuget\\packages\\mongodb.bson\\3.12.0\\mongodb.bson.3.12.0.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\newtonsoft.json\\13.0.4\\newtonsoft.json.13.0.4.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\opentk\\3.3.1\\opentk.3.3.1.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\opentk.glwpfcontrol\\3.3.0\\opentk.glwpfcontrol.3.3.0.nupkg.sha512",
@@ -59,42 +59,5 @@
     "C:\\Users\\cliff\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.12\\sqlitepclraw.provider.e_sqlite3.2.1.12.nupkg.sha512",
     "C:\\Users\\cliff\\.nuget\\packages\\system.management\\7.0.2\\system.management.7.0.2.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "message": "Package 'OpenTK 3.3.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0-windows7.0'. This package may not be fully compatible with your project.",
-      "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\SmartX.WPF.csproj",
-      "warningLevel": 1,
-      "filePath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\SmartX.WPF.csproj",
-      "libraryId": "OpenTK",
-      "targetGraphs": [
-        "net10.0-windows"
-      ]
-    },
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "message": "Package 'OpenTK.GLWpfControl 3.3.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0-windows7.0'. This package may not be fully compatible with your project.",
-      "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\SmartX.WPF.csproj",
-      "warningLevel": 1,
-      "filePath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\SmartX.WPF.csproj",
-      "libraryId": "OpenTK.GLWpfControl",
-      "targetGraphs": [
-        "net10.0-windows"
-      ]
-    },
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "message": "Package 'SkiaSharp.Views.WPF 3.119.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0-windows7.0'. This package may not be fully compatible with your project.",
-      "projectPath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\SmartX.WPF.csproj",
-      "warningLevel": 1,
-      "filePath": "D:\\ProgramData\\Github\\PROG7312POE\\SmartX\\SmartX.WPF\\SmartX.WPF.csproj",
-      "libraryId": "SkiaSharp.Views.WPF",
-      "targetGraphs": [
-        "net10.0-windows"
-      ]
-    }
-  ]
+  "logs": []
 }

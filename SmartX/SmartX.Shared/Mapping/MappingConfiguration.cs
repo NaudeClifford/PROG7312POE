@@ -18,31 +18,30 @@ public static class MappingConfiguration
                 src => (int)src.Category);
 
         // Telemetry
-        TypeAdapterConfig<Telemetry, TelemetryDto>
-            .NewConfig();
+        TypeAdapterConfig<Telemetry, TelemetryDto>.NewConfig();
 
         // User
-        TypeAdapterConfig<User, UserDto>
-            .NewConfig();
+        TypeAdapterConfig<User, UserDto>.NewConfig();
 
         // Company
-        TypeAdapterConfig<Company, CompanyDto>
-            .NewConfig();
+        TypeAdapterConfig<Company, CompanyDto>.NewConfig();
 
         // Gateway
-        TypeAdapterConfig<Gateway, GatewayDto>
-            .NewConfig();
+        TypeAdapterConfig<Gateway, GatewayDto>.NewConfig();
 
         // Sensor log file
-        TypeAdapterConfig<SensorLogFile, SensorLogFileDto>
-            .NewConfig();
+        TypeAdapterConfig<SensorLogFile, SensorLogFileDto>.NewConfig();
 
         // Company DTO -> Entity
-        TypeAdapterConfig<CompanyDto, Company>
-            .NewConfig();
+        TypeAdapterConfig<CompanyDto, Company>.NewConfig();
 
         // Company configuration
-        TypeAdapterConfig<CompanyConfiguration, CompanyConfigurationDto>
-            .NewConfig();
+        TypeAdapterConfig<CompanyConfiguration, CompanyConfigurationDto>.NewConfig();
+
+        // User behavior DTO -> Entity
+        TypeAdapterConfig<UserBehaviorDto, UserBehavior>.NewConfig();
+
+        // User behavior Entity -> DTO
+        TypeAdapterConfig<UserBehavior, UserBehaviorDto>.NewConfig();
     }
 }

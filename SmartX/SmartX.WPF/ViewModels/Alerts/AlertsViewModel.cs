@@ -20,6 +20,8 @@ public sealed class AlertsViewModel : ViewModelBase
 
     public int PendingAlertCount =>
         _alertQueue.Count;
+    public int PredictiveWarningCount =>
+        PredictiveWarnings.Suggestions.Count;
 
     public AlertsViewModel(
         AlertQueue alertQueue,
@@ -32,6 +34,11 @@ public sealed class AlertsViewModel : ViewModelBase
     {
         _alertQueue = alertQueue;
         PredictiveWarnings = predictiveWarningViewModel;
+
+        PredictiveWarnings.Suggestions.CollectionChanged += (_, _) =>
+        {
+            OnPropertyChanged(nameof(PredictiveWarningCount));
+        };
 
         ProcessNextAlertCommand =
        new AsyncRelayCommand(
@@ -129,7 +136,7 @@ public sealed class AlertsViewModel : ViewModelBase
         await Task.CompletedTask;
     }
 
-    public async Task ClearAlertsAsync()
+    public Task ClearAlertsAsync()
     {
         _alertQueue.Clear();
         Alerts.Clear();
@@ -137,7 +144,7 @@ public sealed class AlertsViewModel : ViewModelBase
         OnPropertyChanged(
             nameof(PendingAlertCount));
 
-        await Task.CompletedTask;
+        return Task.CompletedTask;
 
     }
 

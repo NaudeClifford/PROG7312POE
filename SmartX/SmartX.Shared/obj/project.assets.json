@@ -2,10 +2,10 @@
   "version": 4,
   "targets": {
     "net10.0": {
-      "Mapster/10.0.12": {
+      "Mapster/10.0.13": {
         "type": "package",
         "dependencies": {
-          "Mapster.Core": "10.0.12"
+          "Mapster.Core": "10.0.13"
         },
         "compile": {
           "lib/net10.0/Mapster.dll": {}
@@ -14,7 +14,7 @@
           "lib/net10.0/Mapster.dll": {}
         }
       },
-      "Mapster.Core/10.0.12": {
+      "Mapster.Core/10.0.13": {
         "type": "package",
         "compile": {
           "lib/netstandard2.0/Mapster.Core.dll": {}
@@ -23,7 +23,7 @@
           "lib/netstandard2.0/Mapster.Core.dll": {}
         }
       },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.11": {
+      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.13": {
         "type": "package",
         "compile": {
           "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
@@ -39,7 +39,7 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "MongoDB.Bson/3.11.0": {
+      "MongoDB.Bson/3.12.0": {
         "type": "package",
         "compile": {
           "lib/net6.0/MongoDB.Bson.dll": {
@@ -65,10 +65,10 @@
     }
   },
   "libraries": {
-    "Mapster/10.0.12": {
-      "sha512": "ap0sVf4YxqYVSj2wafyrknuj2hWkWhpSm+SXTvrOQlc2vLG7u51dJ8GazaSHLLG6saHN5uPCBeP+YIqXS0a1vg==",
+    "Mapster/10.0.13": {
+      "sha512": "/FaFSm4W6rQp5kEZa7yTtvHH2yGmuC1p22Bg2zi83+W8SMJ+5RBTEWgRK0JS2S8jIdXj2hm2s4z1egjkE2azoQ==",
       "type": "package",
-      "path": "mapster/10.0.12",
+      "path": "mapster/10.0.13",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -77,27 +77,27 @@
         "lib/net8.0/Mapster.dll",
         "lib/net9.0/Mapster.dll",
         "lib/netstandard2.0/Mapster.dll",
-        "mapster.10.0.12.nupkg.sha512",
+        "mapster.10.0.13.nupkg.sha512",
         "mapster.nuspec"
       ]
     },
-    "Mapster.Core/10.0.12": {
-      "sha512": "iLPB0xAzxMWKhbBjWb4ZdQMV/TNEuZafDOoONhtDjBD4bEmf6BwcZt2v0MHhS7xbjwi1JUR266XMarfEs9BUIw==",
+    "Mapster.Core/10.0.13": {
+      "sha512": "fLj/MDJy16QiL7IULC0+e2YXh9nNDhtzdNl13R6CI0Qh6181eadA6EHykWkJWgTHdMjC5Ured3fq5x1QV7U9vg==",
       "type": "package",
-      "path": "mapster.core/10.0.12",
+      "path": "mapster.core/10.0.13",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "icon.png",
         "lib/netstandard2.0/Mapster.Core.dll",
-        "mapster.core.10.0.12.nupkg.sha512",
+        "mapster.core.10.0.13.nupkg.sha512",
         "mapster.core.nuspec"
       ]
     },
-    "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.11": {
-      "sha512": "/a1aJz4m7ylhEDf25ugQChLQoN5XwoGjWw/BoR/ZWWKsO1v4DdJElS1uyngahz4B/eOzjFk1KNTkarRLE5wsIg==",
+    "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.13": {
+      "sha512": "G2GrGWNAPZBsii2F6AU8n+JT2tC1/I0Ml/e9ZyNCgPjf3hZqronP7o0X91aAynCmVeae8KkSIUNXXeXCNRmdVQ==",
       "type": "package",
-      "path": "microsoft.extensions.dependencyinjection.abstractions/10.0.11",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/10.0.13",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -120,15 +120,15 @@
         "lib/netstandard2.0/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
         "lib/netstandard2.1/Microsoft.Extensions.DependencyInjection.Abstractions.dll",
         "lib/netstandard2.1/Microsoft.Extensions.DependencyInjection.Abstractions.xml",
-        "microsoft.extensions.dependencyinjection.abstractions.10.0.11.nupkg.sha512",
+        "microsoft.extensions.dependencyinjection.abstractions.10.0.13.nupkg.sha512",
         "microsoft.extensions.dependencyinjection.abstractions.nuspec",
         "useSharedDesignerContext.txt"
       ]
     },
-    "MongoDB.Bson/3.11.0": {
-      "sha512": "M3yEubl7SbOl6N+m0L4geRejb3jZTXTs4J77fZUeXgireOPzFTT7taZpVSVOVXAMmS2deb6aS1HPe52oxX/Vyg==",
+    "MongoDB.Bson/3.12.0": {
+      "sha512": "2iYGykWDl6Wkx2GHjWaPEGAS49lxQN5YFFT1a7l/pKraMo1gqT4aZckhwu53WMinQTc10R4FxUHoo7X9M20GFg==",
       "type": "package",
-      "path": "mongodb.bson/3.11.0",
+      "path": "mongodb.bson/3.12.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -139,7 +139,7 @@
         "lib/net6.0/MongoDB.Bson.xml",
         "lib/netstandard2.1/MongoDB.Bson.dll",
         "lib/netstandard2.1/MongoDB.Bson.xml",
-        "mongodb.bson.3.11.0.nupkg.sha512",
+        "mongodb.bson.3.12.0.nupkg.sha512",
         "mongodb.bson.nuspec",
         "packageIcon.png"
       ]
@@ -152,9 +152,9 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "Mapster >= 10.0.12",
-      "Microsoft.Extensions.DependencyInjection.Abstractions >= 10.0.11",
-      "MongoDB.Bson >= 3.11.0",
+      "Mapster >= 10.0.13",
+      "Microsoft.Extensions.DependencyInjection.Abstractions >= 10.0.13",
+      "MongoDB.Bson >= 3.12.0",
       "SmartX.Domain >= 1.0.0"
     ]
   },
@@ -217,15 +217,15 @@
         "dependencies": {
           "Mapster": {
             "target": "Package",
-            "version": "[10.0.12, )"
+            "version": "[10.0.13, )"
           },
           "Microsoft.Extensions.DependencyInjection.Abstractions": {
             "target": "Package",
-            "version": "[10.0.11, )"
+            "version": "[10.0.13, )"
           },
           "MongoDB.Bson": {
             "target": "Package",
-            "version": "[3.11.0, )"
+            "version": "[3.12.0, )"
           }
         },
         "imports": [

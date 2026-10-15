@@ -121,6 +121,18 @@
 
         <Setter Property="BorderThickness"
             Value="0"/>
+        </Style>
 
+        <!-- Predictive Warning Card -->
+    <Style x:Key="PredictiveWarningCardStyle"
+           TargetType="Border"
+           BasedOn="{StaticResource BaseCardStyle}">
+
+        <Setter Property="Padding" Value="12"/>
+        <Setter Property="Margin" Value="4"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Background" Value="{StaticResource LightTextBrush}"/>
     </Style>
+
+
 </ResourceDictionary>

@@ -29,6 +29,7 @@ using SmartX.WPF.ViewModels.Pages.Sensor;
 using SmartX.WPF.ViewModels.Pages.Users;
 using SmartX.WPF.ViewModels.SignUp;
 using SmartX.WPF.ViewModels.Telemetry;
+using SmartX.WPF.Views.Pages.Alerts;
 using SmartX.WPF.Views.Pages.Company;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.History;
@@ -116,6 +117,7 @@ public partial class App
         services.AddScoped<ISensorCommandService, SensorCommandService>();
         services.AddScoped<SendSensorCommandHandler>();
         services.AddSingleton<AlertQueue>();
+        services.AddSingleton <{ PredictiveSuggestionService}> ();
         //Session
         services.AddSingleton<SmartXSession>();
 
@@ -144,6 +146,7 @@ public partial class App
         services.AddTransient<CompanyViewModel>();
         services.AddTransient<UsersViewModel>();
         services.AddTransient<CompanyServicesViewModel>();
+        services.AddTransient<AlertsViewModel>();
 
 
         // Pages
@@ -162,6 +165,7 @@ public partial class App
         services.AddTransient<UsersPage>();
         services.AddTransient<CompaniesPage>();
         services.AddTransient<CompanyServicesPage>();
+        services.AddTransient<AlertsPage>();
 
         //Main window
         services.AddSingleton<MainWindow>();

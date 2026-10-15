@@ -26,27 +26,19 @@
 
             <StackPanel>
 
-                <TextBlock Text="Alerts"
-                           FontSize="28"
-                           FontWeight="SemiBold"/>
+                <TextBlock Text="Alerts" Style="{StaticResource PageTitleStyle}"/>
 
-                <TextBlock Text="Sensor alerts requiring attention"
-                           Margin="0,5,0,0"
-                           Opacity="0.7"/>
+                <TextBlock Text="Sensor alerts requiring attention" Style="{StaticResource SectionTitleStyle}"/>
 
             </StackPanel>
 
-            <Border Grid.Column="1"
-                    Padding="15,8"
-                    CornerRadius="6"
-                    Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+            <Border Grid.Column="1" MaxWidth="150" Width="150" Style="{StaticResource ElevatedCardStyle}">
 
                 <StackPanel Orientation="Horizontal">
 
-                    <TextBlock Text="Pending:"
-                               FontWeight="SemiBold"/>
+                    <TextBlock Text="Pending:" Style="{StaticResource BodyTextStyleBlack}"/>
 
-                    <TextBlock Text="{Binding PendingAlertCount}"
+                    <TextBlock Text="{Binding PendingAlertCount}" Style="{StaticResource BodyTextStyleBlack}"
                                Margin="6,0,0,0"/>
 
                 </StackPanel>
@@ -62,36 +54,27 @@
                     Margin="0,20,0,15">
 
             <Button Content="Process Next"
-                    Width="120"
-                    Height="34"
                     Margin="0,0,10,0"
                     Cursor="Hand"
-                    Style="{StaticResource BaseButtonStyle}"
+                    Style="{StaticResource PrimaryButtonStyle}"
                     Command="{Binding ProcessNextAlertCommand}"/>
 
             <Button Content="Process All"
-                    Width="120"
-                    Height="34"
                     Margin="0,0,10,0"
                     Cursor="Hand"
-                    Style="{StaticResource BaseButtonStyle}"
+                    Style="{StaticResource PrimaryButtonStyle}"
                     Command="{Binding ProcessAllAlertsCommand}"/>
 
             <Button Content="Clear"
-                    Width="90"
-                    Height="34"
                     Cursor="Hand"
-                    Style="{StaticResource BaseButtonStyle}"
+                    Style="{StaticResource PrimaryButtonStyle}"
                     Command="{Binding ClearAlertsCommand}"/>
 
         </StackPanel>
 
 
         <!-- ALERT LIST -->
-        <Border Grid.Row="2"
-                BorderThickness="1"
-                CornerRadius="8"
-                Padding="10">
+        <Border Grid.Row="2" Style="{StaticResource ElevatedCardStyle}">
 
             <Grid>
 
@@ -103,7 +86,7 @@
 
                 <!-- COLUMN HEADERS -->
                 <Grid Grid.Row="0"
-                      Margin="10,5,10,10">
+                      Margin="10,5,10,0">
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="140"/>
@@ -112,21 +95,13 @@
                         <ColumnDefinition Width="180"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0"
-                               Text="Severity"
-                               FontWeight="SemiBold"/>
+                    <TextBlock Grid.Column="0" Text="Severity" Style="{StaticResource BodyTextStyleBlack}"/>
 
-                    <TextBlock Grid.Column="1"
-                               Text="Message"
-                               FontWeight="SemiBold"/>
+                    <TextBlock Grid.Column="1" Text="Message" Style="{StaticResource BodyTextStyleBlack}"/>
 
-                    <TextBlock Grid.Column="2"
-                               Text="Sensor"
-                               FontWeight="SemiBold"/>
+                    <TextBlock Grid.Column="2" Text="Sensor" Style="{StaticResource BodyTextStyleBlack}"/>
 
-                    <TextBlock Grid.Column="3"
-                               Text="Time"
-                               FontWeight="SemiBold"/>
+                    <TextBlock Grid.Column="3" Text="Time" Style="{StaticResource BodyTextStyleBlack}"/>
 
                 </Grid>
 

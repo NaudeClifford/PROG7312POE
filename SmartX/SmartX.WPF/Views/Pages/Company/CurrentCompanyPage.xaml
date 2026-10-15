@@ -245,6 +245,7 @@
                             Content="Cancel"
                             Command="{Binding CancelEditCommand}"
                             Style="{StaticResource BaseButtonStyle}"
+                            Margin="0,0,10,0"
                             Width="100"
                             Height="42"/>
 
@@ -254,7 +255,7 @@
     Command="{Binding CompanyConfigurationCommand}"
     Width="190"
     Height="42"
-    Margin="0,0,0,12"
+    Margin="0,0,10,0"
     HorizontalAlignment="Left"
     FontWeight="SemiBold"
     Style="{StaticResource BaseButtonStyle}"/>
@@ -265,7 +266,7 @@
     Command="{Binding ContinueToGatewaySetupCommand}"
     Width="220"
     Height="42"
-    Margin="0,15,0,0"
+    Margin="0,0,10,0"
     HorizontalAlignment="Left"
     FontWeight="SemiBold"
     Style="{StaticResource BaseButtonStyle}"/>
