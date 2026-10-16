@@ -1,7 +1,9 @@
 ﻿using SmartX.Application.Commands.Sensor;
 using SmartX.Application.Requests.Sensor;
 using SmartX.Application.Services.Sensors;
+using SmartX.Shared.DTOs;
 using SmartX.WPF.Repositories.Local;
+using SmartX.WPF.Services.Session;
 
 namespace SmartX.WPF.Services;
 
@@ -10,15 +12,21 @@ public sealed class SensorCommandService : ISensorCommandService
     private readonly SendSensorCommandHandler _handler;
     private readonly ILocalSensorCache _sensorCache;
     private readonly ILocalGatewayCache _gatewayCache;
+    private readonly ILocalUserBehaviorCache _behaviorCache;
+    private readonly SmartXSession _session;
 
     public SensorCommandService(
         SendSensorCommandHandler handler,
         ILocalSensorCache sensorCache,
-        ILocalGatewayCache gatewayCache)
+        ILocalGatewayCache gatewayCache,
+        ILocalUserBehaviorCache behaviorCache,
+        SmartXSession session)
     {
         _handler = handler;
         _sensorCache = sensorCache;
         _gatewayCache = gatewayCache;
+        _behaviorCache = behaviorCache;
+        _session = session;
     }
 
     public async Task<SensorCommandResult> SendCommandAsync(
@@ -74,6 +82,22 @@ public sealed class SensorCommandService : ISensorCommandService
                     Command = command.Trim()
                 },
                 cancellationToken);
+
+        var succeeded = result.Success;
+
+        await _behaviorCache.AddAsync(
+            new UserBehaviorDto
+            {
+                UserId = _session.UserId,
+                SensorId = sensorId,
+                Command = command.Trim(),
+                Timestamp = DateTime.UtcNow,
+                Succeeded = succeeded,
+                Outcome = succeeded
+                    ? result.Data?.Response
+                    : result.Error ?? "Command execution failed."
+            },
+            cancellationToken);
 
         if (!result.Success)
         {

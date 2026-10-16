@@ -1,8 +1,10 @@
 ﻿
 using SmartX.Domain.Entities;
+using SmartX.Shared.DTOs;
 using SmartX.Shared.DTOs.Telemetry;
 using SmartX.Shared.Mapping;
 using SmartX.WPF.Repositories.Local;
+using SmartX.WPF.Services.Session;
 using SmartX.WPF.ViewModels.Telemetry;
 using System.Collections.ObjectModel;
 
@@ -17,8 +19,12 @@ public sealed class LivePredictiveWarningService
     private readonly ILocalSensorCache _sensorCache;
     private Dictionary<Guid, string> _sensorNames = new();
 
+    private readonly ILocalUserBehaviorCache _behaviorCache;
+    private readonly SmartXSession _session;
+
     public ObservableCollection<PredictiveSuggestion> Warnings { get; }
         = new();
+    private List<UserBehaviorDto> _loadedBehaviors = [];
 
     private Guid? _loadedGatewayId;
     private readonly SemaphoreSlim _loadLock = new(1, 1);
@@ -27,7 +33,9 @@ public sealed class LivePredictiveWarningService
         IMapper mapper,
         TelemetryCollection telemetryCollection,
         ILocalTelemetryCache telemetryCache,
-        ILocalSensorCache sensorCache
+        ILocalSensorCache sensorCache,
+        ILocalUserBehaviorCache behaviorCache,
+        SmartXSession session
         )
     {
         _predictiveEngine = predictiveEngine;
@@ -35,6 +43,8 @@ public sealed class LivePredictiveWarningService
         _telemetryCollection = telemetryCollection;
         _telemetryCache = telemetryCache;
         _sensorCache = sensorCache;
+        _behaviorCache = behaviorCache;
+        _session = session;
     }
 
     public async Task LoadAsync(
@@ -88,6 +98,27 @@ public sealed class LivePredictiveWarningService
 
             _loadedGatewayId = gatewayId;
 
+            var sensorIds = telemetry.Select(item => item.SensorId)
+                .Distinct().ToList();
+
+            var behaviors = new List<UserBehaviorDto>();
+
+            foreach (var sensorId in sensorIds)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var sensorBehaviors =
+                    await _behaviorCache.GetBySensorIdAsync(
+                        sensorId,
+                        cancellationToken);
+
+                behaviors.AddRange(
+                    sensorBehaviors.Where(
+                        behavior => behavior.UserId == _session.UserId));
+            }
+
+            _loadedBehaviors = behaviors;
+
             Refresh();
         }
         finally
@@ -104,8 +135,18 @@ public sealed class LivePredictiveWarningService
         var telemetryDtos = _mapper.Map<List<TelemetryDto>>(
             _telemetryCollection.GetNewestFirst());
 
-        var generated = _predictiveEngine.GenerateWarnings(
-            telemetryDtos);
+        var userBehaviors = _telemetryCollection
+            .GetNewestFirst()
+            .Select(reading => reading.SensorId)
+            .Distinct()
+            .SelectMany(sensorId =>
+                _behaviorCache.GetBySensorIdAsync(sensorId)
+                    .GetAwaiter()
+                    .GetResult())
+            .Where(behavior => behavior.UserId == _session.UserId)
+            .ToList();
+
+        var generated = _predictiveEngine.GenerateWarnings(telemetryDtos, userBehaviors);
 
         Warnings.Clear();
 
@@ -128,6 +169,7 @@ public sealed class LivePredictiveWarningService
 
     public void Clear()
     {
+        _loadedBehaviors.Clear();
         Warnings.Clear();
     }
 }

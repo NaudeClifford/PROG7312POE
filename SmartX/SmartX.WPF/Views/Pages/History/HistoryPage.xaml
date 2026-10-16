@@ -84,8 +84,8 @@
     <!-- PAGE -->
     <ScrollViewer
         x:Name="HistoryScrollViewer"
-    VerticalScrollBarVisibility="Auto"
-    HorizontalScrollBarVisibility="Disabled">
+        VerticalScrollBarVisibility="Auto"
+        HorizontalScrollBarVisibility="Disabled">
 
         <Grid Margin="35">
 
@@ -286,30 +286,30 @@
                     <!-- TELEMETRY HEADER -->
 
                     <Border Grid.Row="0"
-        Style="{StaticResource HistoryCardStyle}"
-        Padding="20">
+                        Style="{StaticResource HistoryCardStyle}"
+                        Padding="20">
 
                         <Grid>
 
                             <StackPanel>
 
                                 <TextBlock Text="Telemetry"
-                       FontSize="22"
-                       FontWeight="SemiBold"
-                       HorizontalAlignment="Center"
-                       Foreground="{StaticResource DarkBrush}"/>
+                                    FontSize="22"
+                                    FontWeight="SemiBold"
+                                    HorizontalAlignment="Center"
+                                    Foreground="{StaticResource DarkBrush}"/>
 
                                 <TextBlock Text="Select a measurement to view its history."
-                       FontSize="12"
-                       Foreground="{StaticResource DarkBrush}"
-                       HorizontalAlignment="Center"
-                       Margin="0,4,0,0"/>
+                                    FontSize="12"
+                                     Foreground="{StaticResource DarkBrush}"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,4,0,0"/>
 
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center">
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center">
 
                             </StackPanel>
 
@@ -365,77 +365,77 @@
                                     <!-- Power -->
 
                                     <RadioButton Content="Power"
-                             GroupName="TelemetryMetric"
-                             Margin="0,0,6,0"
-                             Padding="14,7"
-                             FontSize="14"
-                             Foreground="{StaticResource DarkBrush}"
-                             IsChecked="{Binding IsPowerSelected}"
-                             Style="{StaticResource MetricButtonStyle}"/>
+                                        GroupName="TelemetryMetric"
+                                        Margin="0,0,6,0"
+                                        Padding="14,7"
+                                        FontSize="14"
+                                        Foreground="{StaticResource DarkBrush}"
+                                        IsChecked="{Binding IsPowerSelected}"
+                                        Style="{StaticResource MetricButtonStyle}"/>
 
 
                                     <!-- Temperature -->
 
                                     <RadioButton Content="Temperature"
-                             GroupName="TelemetryMetric"
-                             Margin="0,0,6,0"
-                             Padding="14,7"
-                             FontSize="14"
-                             Foreground="{StaticResource DarkBrush}"
-                             IsChecked="{Binding IsTemperatureSelected}"
-                             Style="{StaticResource MetricButtonStyle}"/>
+                                        GroupName="TelemetryMetric"
+                                        Margin="0,0,6,0"
+                                        Padding="14,7"
+                                        FontSize="14"
+                                        Foreground="{StaticResource DarkBrush}"
+                                        IsChecked="{Binding IsTemperatureSelected}"
+                                        Style="{StaticResource MetricButtonStyle}"/>
 
 
                                     <!-- Voltage -->
 
                                     <RadioButton Content="Voltage"
-                             GroupName="TelemetryMetric"
-                             Margin="0,0,6,0"
-                             Padding="14,7"
-                             FontSize="14"
-                             Foreground="{StaticResource DarkBrush}"
-                             IsChecked="{Binding IsVoltageSelected}"
-                             Style="{StaticResource MetricButtonStyle}"/>
+                                        GroupName="TelemetryMetric"
+                                        Margin="0,0,6,0"
+                                        Padding="14,7"
+                                        FontSize="14"
+                                        Foreground="{StaticResource DarkBrush}"
+                                        IsChecked="{Binding IsVoltageSelected}"
+                                        Style="{StaticResource MetricButtonStyle}"/>
 
 
                                     <!-- Current -->
 
                                     <RadioButton Content="Current"
-                             GroupName="TelemetryMetric"
-                             Padding="14,7"
-                             FontSize="14"
-                             Foreground="{StaticResource DarkBrush}"
-                             IsChecked="{Binding IsCurrentSelected}"
-                             Style="{StaticResource MetricButtonStyle}"/>
+                                        GroupName="TelemetryMetric"
+                                        Padding="14,7"
+                                        FontSize="14"
+                                        Foreground="{StaticResource DarkBrush}"
+                                        IsChecked="{Binding IsCurrentSelected}"
+                                        Style="{StaticResource MetricButtonStyle}"/>
 
 
                                     <!-- Zoom Out -->
 
                                     <Button Content="−"
-            Width="35"
-            Height="32"
-            Margin="0,0,4,0"
-            FontSize="18"
-            ToolTip="Zoom out"
-            Click="ZoomOut_Click"/>
+                                        Width="35"
+                                        Height="32"
+                                        Margin="0,0,4,0"
+                                        FontSize="18"
+                                        ToolTip="Zoom out"
+                                        Click="ZoomOut_Click"/>
 
                                     <!-- Zoom In -->
 
                                     <Button Content="+"
-            Width="35"
-            Height="32"
-            Margin="0,0,4,0"
-            FontSize="18"
-            ToolTip="Zoom in"
-            Click="ZoomIn_Click"/>
+                                        Width="35"
+                                        Height="32"
+                                        Margin="0,0,4,0"
+                                        FontSize="18"
+                                        ToolTip="Zoom in"
+                                        Click="ZoomIn_Click"/>
 
                                     <!-- Reset -->
 
                                     <Button Content="Reset"
-            Width="55"
-            Height="32"
-            ToolTip="Reset zoom"
-            Click="ResetZoom_Click"/>
+                                        Width="55"
+                                        Height="32"
+                                        ToolTip="Reset zoom"
+                                        Click="ResetZoom_Click"/>
 
                                 </StackPanel>
 
@@ -445,20 +445,20 @@
                             <!-- ACTUAL CHART -->
 
                             <lvc:CartesianChart
-    x:Name="HistoryChart"
-    Grid.Row="1"
-    Series="{Binding GraphSeries}"
-    XAxes="{Binding GraphXAxes}"
-    YAxes="{Binding GraphYAxes}"
-    ZoomMode="X"
-    PreviewMouseWheel="HistoryChart_PreviewMouseWheel"
-    PreviewMouseLeftButtonDown="HistoryChart_PreviewMouseLeftButtonDown"
-    PreviewMouseMove="HistoryChart_PreviewMouseMove"
-    PreviewMouseLeftButtonUp="HistoryChart_PreviewMouseLeftButtonUp"
-    TooltipPosition="Top"
-    LegendPosition="Hidden"
-    AnimationsSpeed="00:00:00.200"
-    Background="Transparent"/>
+                                x:Name="HistoryChart"
+                                Grid.Row="1"
+                                Series="{Binding GraphSeries}"
+                                XAxes="{Binding GraphXAxes}"
+                                YAxes="{Binding GraphYAxes}"
+                                ZoomMode="X"
+                                PreviewMouseWheel="HistoryChart_PreviewMouseWheel"
+                                PreviewMouseLeftButtonDown="HistoryChart_PreviewMouseLeftButtonDown"
+                                PreviewMouseMove="HistoryChart_PreviewMouseMove"
+                                PreviewMouseLeftButtonUp="HistoryChart_PreviewMouseLeftButtonUp"
+                                TooltipPosition="Top"
+                                LegendPosition="Hidden"
+                                AnimationsSpeed="00:00:00.200"
+                                Background="Transparent"/>
 
                         </Grid>
 
@@ -662,26 +662,26 @@
                                     <DataGridTextColumn
                                         Header="Voltage"
                                         Binding="{Binding Voltage,
-                              StringFormat={}{0:F2} V}"
-                Width="*"/>
+                                        StringFormat={}{0:F2} V}"
+                                        Width="*"/>
 
                                     <DataGridTextColumn
-            Header="Current"
-            Binding="{Binding Current,
-                              StringFormat={}{0:F2} A}"
-            Width="*"/>
+                                        Header="Current"
+                                        Binding="{Binding Current,
+                                        StringFormat={}{0:F2} A}"
+                                        Width="*"/>
 
                                     <DataGridTextColumn
-            Header="Power"
-            Binding="{Binding Power,
-                              StringFormat={}{0:F2} W}"
-            Width="*"/>
+                                        Header="Power"
+                                        Binding="{Binding Power,
+                                        StringFormat={}{0:F2} W}"
+                                        Width="*"/>
 
                                     <DataGridTextColumn
-            Header="Temperature"
-            Binding="{Binding Temperature,
-                              StringFormat={}{0:F2} °C}"
-            Width="*"/>
+                                        Header="Temperature"
+                                        Binding="{Binding Temperature,
+                                        StringFormat={}{0:F2} °C}"
+                                        Width="*"/>
 
                                 </DataGrid.Columns>
 
@@ -712,38 +712,33 @@
 
                         </Grid.RowDefinitions>
 
-                        <!-- COMMAND HEADER -->
-
+                        <!-- Command history header -->
                         <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
-                            <StackPanel>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Command History"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                Foreground="{StaticResource DarkBrush}"/>
 
-                                <TextBlock Text="Manual Command Stream"
-                                       FontSize="19"
-                                       FontWeight="SemiBold"
-                                       Foreground="{StaticResource DarkBrush}"/>
-
-                                <TextBlock Text="Send commands directly to the selected sensor."
-                                       FontSize="12"
-                                       Foreground="#8A929A"
-                                       Margin="0,4,0,0"/>
-
+                                <TextBlock Text="Previously sent commands."
+                                    FontSize="11"
+                                    Foreground="#8A929A"
+                                    Margin="0,3,0,0"/>
                             </StackPanel>
 
-
-                            <Border HorizontalAlignment="Right"
-                                VerticalAlignment="Top"
-                                Background="#EEF4FF"
-                                CornerRadius="6"
-                                Padding="9,5">
-
-                                <TextBlock Text="MANUAL"
-                                       FontSize="10"
-                                       FontWeight="Bold"
-                                       Foreground="#356AE6"/>
-
-                            </Border>
-
+                            <Button Grid.Column="1"
+                                Content="Undo Last"
+                                MinWidth="90"
+                                Margin="10,0,0,0"
+                                Cursor="Hand"
+                                Style="{StaticResource BaseButtonStyle}"
+                                Command="{Binding UndoLastCommandCommand}"
+                                IsEnabled="{Binding CanUndoCommand}"/>
                         </Grid>
 
                         <!-- COMMAND INPUT -->
@@ -811,150 +806,140 @@
                             Padding="14">
 
                             <Grid>
-
                                 <Grid.RowDefinitions>
-
                                     <RowDefinition Height="Auto"/>
-
+                                    <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
-
                                     <RowDefinition Height="Auto"/>
-
                                 </Grid.RowDefinitions>
 
-
-                                <!-- History title -->
-
+                                <!-- Header: title and undo button -->
                                 <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
 
-                                    <StackPanel>
-
+                                    <StackPanel Grid.Column="0">
                                         <TextBlock Text="Command History"
-                                               FontSize="14"
-                                               FontWeight="SemiBold"
-                                               Foreground="{StaticResource DarkBrush}"/>
+                                            FontSize="14"
+                                            FontWeight="SemiBold"
+                                            Foreground="{StaticResource DarkBrush}"/>
 
                                         <TextBlock Text="Previously sent commands."
-                                               FontSize="11"
-                                               Foreground="#8A929A"
-                                               Margin="0,3,0,0"/>
-
+                                            FontSize="11"
+                                            Foreground="#8A929A"
+                                            Margin="0,3,0,0"/>
                                     </StackPanel>
 
-
-                                    <Button Content="Undo Last"
-                                        HorizontalAlignment="Right"
-                                        Height="32"
-                                        Width="90"
+                                    <Button Grid.Column="1"
+                                        Content="Undo Last"
+                                        MinWidth="90"
+                                        Margin="10,0,0,0"
+                                        VerticalAlignment="Center"
                                         Cursor="Hand"
                                         Style="{StaticResource BaseButtonStyle}"
                                         Command="{Binding UndoLastCommandCommand}"
                                         IsEnabled="{Binding CanUndoCommand}"/>
-
-                                    <TextBlock Text="{Binding ErrorMessage}"
-                                        Foreground="Red"
-                                        Margin="0,5,0,10"
-                                        TextWrapping="Wrap"/>
                                 </Grid>
 
+                                <!-- Error message -->
+                                <TextBlock Grid.Row="1"
+                                    Text="{Binding ErrorMessage}"
+                                    Foreground="Red"
+                                    TextWrapping="Wrap"
+                                    Margin="0,8,0,0"/>
 
                                 <!-- Command list -->
-
-                                <ListBox Grid.Row="1"
-                                     Margin="0,15,0,10"
-                                     ItemsSource="{Binding CommandHistory}"
-                                     BorderThickness="0"
-                                     Background="Transparent">
+                                <ListBox Grid.Row="2"
+                                    Margin="0,12,0,10"
+                                    ItemsSource="{Binding CommandHistory}"
+                                    BorderThickness="0"
+                                    Background="Transparent"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto">
 
                                     <ListBox.ItemTemplate>
-
                                         <DataTemplate>
-
                                             <Border Padding="10"
                                                 Margin="0,0,0,8"
                                                 Background="#F8F9FA"
                                                 CornerRadius="8">
 
                                                 <Grid>
-
                                                     <Grid.RowDefinitions>
-
                                                         <RowDefinition Height="Auto"/>
-
                                                         <RowDefinition Height="Auto"/>
-
                                                     </Grid.RowDefinitions>
 
-
-                                                    <!-- Command -->
-
+                                                    <!-- Command and timestamp -->
                                                     <Grid Grid.Row="0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
 
-                                                        <TextBlock Text="{Binding Command}"
-                                                               FontFamily="Consolas"
-                                                               FontSize="12"
-                                                               Foreground="{StaticResource DarkBrush}"
-                                                               TextWrapping="Wrap"
-                                                               Margin="0,0,55,0"/>
+                                                        <TextBlock Grid.Column="0"
+                                           Text="{Binding Command}"
+                                           FontFamily="Consolas"
+                                           FontSize="12"
+                                           Foreground="{StaticResource DarkBrush}"
+                                           TextWrapping="Wrap"
+                                           Margin="0,0,8,0"/>
 
-                                                        <TextBlock Text="{Binding Timestamp,
-                                                                  StringFormat={}{0:HH:mm:ss}}"
-                                                               HorizontalAlignment="Right"
-                                                               VerticalAlignment="Top"
-                                                               FontSize="10"
-                                                               Foreground="#9299A0"/>
-
+                                                        <TextBlock Grid.Column="1"
+                                           Text="{Binding Timestamp,
+                                               StringFormat={}{0:HH:mm:ss}}"
+                                           VerticalAlignment="Top"
+                                           FontSize="10"
+                                           Foreground="#9299A0"/>
                                                     </Grid>
 
-
                                                     <!-- Response -->
-
                                                     <TextBlock Grid.Row="1"
-                                                           Text="{Binding Response}"
-                                                           FontSize="11"
-                                                           Foreground="#737A82"
-                                                           TextWrapping="Wrap"
-                                                           Margin="0,6,0,0"/>
-
+                                       Text="{Binding Response}"
+                                       FontSize="11"
+                                       Foreground="#737A82"
+                                       TextWrapping="Wrap"
+                                       Margin="0,6,0,0"/>
                                                 </Grid>
-
                                             </Border>
-
                                         </DataTemplate>
-
                                     </ListBox.ItemTemplate>
-
                                 </ListBox>
 
-
                                 <!-- Empty state -->
-
-                                <TextBlock Grid.Row="1"
-                                       Text="No commands sent yet."
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       FontSize="12"
-                                       Foreground="#A0A7AE"
-                                       IsHitTestVisible="False"/>
-
+                                <TextBlock Grid.Row="2"
+                                    Text="No commands sent yet."
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="12"
+                                    Foreground="#A0A7AE"
+                                    IsHitTestVisible="False">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding CommandHistory.Count}"
+                                     Value="0">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
 
                                 <!-- Bottom information -->
-
-                                <Border Grid.Row="2"
+                                <Border Grid.Row="3"
                                     Background="#FFF8E8"
                                     CornerRadius="7"
                                     Padding="10">
-                                    
 
                                     <TextBlock Text="Manual commands are sent directly to the selected sensor. Use Undo Last to revert the most recent command."
-                                           FontSize="11"
-                                           Foreground="#856404"
-                                           TextWrapping="Wrap"/>
-
+                                        FontSize="11"
+                                        Foreground="#856404"
+                                        TextWrapping="Wrap"/>
                                 </Border>
-
                             </Grid>
-
                         </Border>
 
                     </Grid>

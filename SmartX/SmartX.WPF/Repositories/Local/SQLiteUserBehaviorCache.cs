@@ -135,6 +135,61 @@ namespace SmartX.WPF.Repositories.Local
             return results;
         }
 
+        //Add
+        public async Task AddAsync(
+            UserBehaviorDto userBehavior,
+            CancellationToken cancellationToken = default)
+        {
+            ArgumentNullException.ThrowIfNull(userBehavior);
+
+            var entity = _mapper.Map<UserBehavior>(userBehavior);
+
+            using var connection = _database.CreateConnection();
+
+            await connection.OpenAsync(cancellationToken);
+
+            using var command = connection.CreateCommand();
+
+            command.CommandText = """
+                INSERT INTO UserBehaviors
+                (
+                    Id,
+                    UserId,
+                    SensorId,
+                    Command,
+                    Timestamp,
+                    Succeeded,
+                    Outcome,
+                    CreatedAt,
+                    UpdatedAt
+                )
+                VALUES
+                (
+                    $id,
+                    $userId,
+                    $sensorId,
+                    $command,
+                    $timestamp,
+                    $succeeded,
+                    $outcome,
+                    $createdAt,
+                    $updatedAt
+                );
+                """;
+
+            command.Parameters.AddWithValue("$id", entity.Id.ToString());
+            command.Parameters.AddWithValue("$userId", entity.UserId.ToString());
+            command.Parameters.AddWithValue("$sensorId", entity.SensorId.ToString());
+            command.Parameters.AddWithValue("$command", entity.Command);
+            command.Parameters.AddWithValue("$timestamp", entity.Timestamp.ToString("O"));
+            command.Parameters.AddWithValue("$succeeded", entity.Succeeded);
+            command.Parameters.AddWithValue("$outcome", (object?)entity.Outcome ?? DBNull.Value);
+            command.Parameters.AddWithValue("$createdAt", entity.CreatedAt.ToString("O"));
+            command.Parameters.AddWithValue("$updatedAt", entity.UpdatedAt.ToString("O"));
+
+            await command.ExecuteNonQueryAsync(cancellationToken);
+        }
+
         // UPDATE / INSERT
 
         public async Task UpdateAsync(
@@ -277,7 +332,7 @@ namespace SmartX.WPF.Repositories.Local
 
                 Succeeded = reader.GetBoolean(reader.GetOrdinal("Succeeded")),
 
-                Outcome = reader.GetString(reader.GetOrdinal("Outcome")),
+                Outcome = reader.IsDBNull(reader.GetOrdinal("Outcome")) ? null : reader.GetString(reader.GetOrdinal("Outcome")),
 
                 CreatedAt = DateTime.Parse(reader.GetString(reader.GetOrdinal("CreatedAt")),
                     System.Globalization.CultureInfo.InvariantCulture,

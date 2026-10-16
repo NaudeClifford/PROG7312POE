@@ -2,22 +2,23 @@
 
 public sealed class AlertQueue
 {
-    private readonly PriorityQueue<SensorAlert, int> _queue = new();
+    private readonly List<SensorAlert> _queue = new();
 
     public int Count => _queue.Count;
-    
+
     public IEnumerable<SensorAlert> GetAlerts()
     {
-        return _queue.UnorderedItems.Select(item => item.Element);
+        return _queue.ToList();
     }
 
     public void Enqueue(SensorAlert alert)
     {
         ArgumentNullException.ThrowIfNull(alert);
+        //Added alert to end of heap
+        _queue.Add(alert);
 
-        _queue.Enqueue(
-            alert,
-            (int)alert.Severity);
+        //Restore heap property by bubbling up the newly added alert
+        SiftUp(_queue.Count - 1);
     }
 
     public bool TryDequeue(out SensorAlert? alert)
@@ -28,7 +29,22 @@ public sealed class AlertQueue
             return false;
         }
 
-        alert = _queue.Dequeue();
+        alert = _queue[0];
+
+        //remove root and restore heap
+        int lastIndex = _queue.Count - 1;
+
+        if (lastIndex == 0)
+        {
+            _queue.RemoveAt(0);
+            return true;
+        }
+        else
+        {
+            _queue[0] = _queue[lastIndex];
+            _queue.RemoveAt(lastIndex);
+            SiftDown(0);
+        }
 
         return true;
     }
@@ -41,7 +57,7 @@ public sealed class AlertQueue
             return false;
         }
 
-        alert = _queue.Peek();
+        alert = _queue[0];
 
         return true;
     }
@@ -49,5 +65,43 @@ public sealed class AlertQueue
     public void Clear()
     {
         _queue.Clear();
+    }
+
+    private void SiftUp(int index)
+    {
+        while (index > 0)
+        {
+            int parentIndex = (index - 1) / 2;
+
+            if (_queue[index].Severity >= _queue[parentIndex].Severity) break;
+
+            Swap(parentIndex, index);
+            index = parentIndex;
+        }
+    }
+
+    private void SiftDown(int index)
+    {
+        int count = _queue.Count;
+
+        while (true)
+        {
+            int leftChildIndex = 2 * index + 1;
+            int rightChildIndex = 2 * index + 2;
+            int smallestIndex = index;
+
+            if (leftChildIndex < count && _queue[leftChildIndex].Severity < _queue[smallestIndex].Severity)
+                smallestIndex = leftChildIndex;
+
+            if (smallestIndex == index) break;
+
+            Swap(index, smallestIndex);
+            index = smallestIndex;
+        }
+    }
+
+    private void Swap(int first, int second)
+    {
+        (_queue[first], _queue[second]) = (_queue[second], _queue[first]);
     }
 }

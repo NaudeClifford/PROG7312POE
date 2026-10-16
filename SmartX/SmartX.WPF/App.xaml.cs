@@ -117,7 +117,8 @@ public partial class App
         services.AddScoped<ISensorCommandService, SensorCommandService>();
         services.AddScoped<SendSensorCommandHandler>();
         services.AddSingleton<AlertQueue>();
-        services.AddSingleton <{ PredictiveSuggestionService}> ();
+        services.AddSingleton<PredictiveSuggestionService>();
+
         //Session
         services.AddSingleton<SmartXSession>();
 
@@ -131,6 +132,7 @@ public partial class App
         services.AddSingleton<ILocalUserCache, SQLiteUserCache>();
         services.AddSingleton<ILocalCompanyCache, SQLiteCompanyCache>();
         services.AddSingleton<ILocalGatewayCache, SQLiteGatewayCache>();
+        services.AddSingleton<ILocalUserBehaviorCache, SQLiteUserBehaviorCache>();
 
         // Synchronization
         services.AddSingleton<ICacheSyncService, CacheSyncService>();

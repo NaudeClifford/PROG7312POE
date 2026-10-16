@@ -4,8 +4,8 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using SkiaSharp;
 using SmartX.Application.Services.Sensors;
-using SmartX.Domain.Entities;
 using SmartX.Domain.Enums;
+using SmartX.Shared.DTOs;
 using SmartX.WPF.Repositories.Local;
 using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.Session;
@@ -21,7 +21,8 @@ public sealed class HistoryViewModel : ViewModelBase
 {
     private readonly ILocalTelemetryCache _telemetryCache;
     private readonly ILocalSensorCache _sensorCache;
-
+    private readonly ILocalUserBehaviorCache _userBehaviorCache;
+    private readonly SmartXSession _session;
     private readonly ISensorCommandService _sensorService;
 
     private List<DomainTelemetry> _loadedTelemetry = [];
@@ -154,7 +155,7 @@ public sealed class HistoryViewModel : ViewModelBase
 
     public ObservableCollection<DomainSensor> FilteredSensors { get; } = [];
 
-    private readonly Stack<SensorCommand> _commandStack = new();
+    private readonly ManualStack<SensorCommand> _commandStack = new();
 
     private string _manualCommand = string.Empty;
 
@@ -166,13 +167,13 @@ public sealed class HistoryViewModel : ViewModelBase
 
     public ObservableCollection<SensorCommand> CommandHistory { get; } = [];
 
-    public bool CanUndoCommand =>
-        _commandStack.Count > 0;
+    public bool CanUndoCommand => _commandStack.Count > 0 &&
+        !string.IsNullOrWhiteSpace(GetInverseCommand(_commandStack.Peek()!.Command));
 
-    public ObservableCollection< DomainSensor> Sensors
+    public ObservableCollection<DomainSensor> Sensors
     { get; } = [];
 
-    public ObservableCollection< TelemetryHistoryItem> History
+    public ObservableCollection<TelemetryHistoryItem> History
     { get; } = [];
 
     public Guid? SelectedSensorId
@@ -181,14 +182,34 @@ public sealed class HistoryViewModel : ViewModelBase
 
         set
         {
-            if (!SetProperty(
-                    ref _selectedSensorId,
-                    value))
-            {
-                return;
-            }
+            if (!SetProperty(ref _selectedSensorId, value)) return;
+
 
             ApplyFilters();
+
+            _ = LoadSelectedSensorCommandHistoryAsync();
+        }
+    }
+
+    private async Task LoadSelectedSensorCommandHistoryAsync()
+    {
+        if (!SelectedSensorId.HasValue)
+        {
+            CommandHistory.Clear();
+            _commandStack.Clear();
+
+            OnPropertyChanged(nameof(CanUndoCommand));
+            _undoLastCommandCommand.RaiseCanExecuteChanged();
+            return;
+        }
+
+        try
+        {
+            await LoadCommandHistoryAsync(SelectedSensorId.Value);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
         }
     }
 
@@ -256,6 +277,7 @@ public sealed class HistoryViewModel : ViewModelBase
     ILocalSensorCache sensorCache,
     IConnectivityService connectivityService,
     ISensorCommandService sensorService,
+    ILocalUserBehaviorCache localUserBehaviorCache,
     SmartXSession session)
     : base(connectivityService,
         session)
@@ -263,6 +285,9 @@ public sealed class HistoryViewModel : ViewModelBase
         _telemetryCache = telemetryCache;
         _sensorService = sensorService;
         _sensorCache = sensorCache;
+        _sensorCache = sensorCache;
+        _userBehaviorCache = localUserBehaviorCache;
+        _session = session;
 
         _loadCommand =
             new AsyncRelayCommand(
@@ -318,12 +343,21 @@ public sealed class HistoryViewModel : ViewModelBase
 
             Sensors.Clear();
 
+
             foreach (var sensor in sensors)
             {
                 Sensors.Add(sensor);
             }
 
             ApplySensorFilter();
+
+            if (SelectedSensorId.HasValue &&
+                Sensors.Any(x => x.Id == SelectedSensorId.Value))
+            {
+                await LoadCommandHistoryAsync(
+                    SelectedSensorId.Value,
+                    cancellationToken);
+            }
 
             var telemetry =
                 await _telemetryCache.GetByGatewayIdAsync(
@@ -420,25 +454,39 @@ public sealed class HistoryViewModel : ViewModelBase
             return;
 
         if (!SelectedSensorId.HasValue)
+        {
+            ErrorMessage = "Please select a sensor first.";
+
             return;
+        }
+
 
         try
         {
+            var sensorId = SelectedSensorId.Value;
+
             ErrorMessage = string.Empty;
 
             var commandText = ManualCommand.Trim();
 
             var result =
                 await _sensorService.SendCommandAsync(
-                    SelectedSensorId.Value,
+                    sensorId,
                     commandText,
                     cancellationToken);
+
+            await RecordUserBehaviorAsync(
+                sensorId, commandText, result.Success,
+                result.Success ? result.Response
+                : result.ErrorMessage ?? "Command failed.", cancellationToken);
 
             if (!result.Success)
             {
                 ErrorMessage =
                     result.ErrorMessage ??
                     "The command could not be sent.";
+
+                await LoadCommandHistoryAsync(sensorId, cancellationToken);
 
                 return;
             }
@@ -458,6 +506,7 @@ public sealed class HistoryViewModel : ViewModelBase
             ManualCommand = string.Empty;
 
             OnPropertyChanged(nameof(CanUndoCommand));
+
             _undoLastCommandCommand.RaiseCanExecuteChanged();
         }
         catch (OperationCanceledException)
@@ -473,18 +522,24 @@ public sealed class HistoryViewModel : ViewModelBase
     public async Task UndoLastCommandAsync(
     CancellationToken cancellationToken = default)
     {
-        if (_commandStack.Count == 0)
-            return;
-
-        if (!SelectedSensorId.HasValue)
-            return;
+        if (_commandStack.Count == 0) return;
 
         var command = _commandStack.Peek();
 
+        var inverseCommand = GetInverseCommand(command.Command);
+
+        if (string.IsNullOrWhiteSpace(inverseCommand))
+        {
+            ErrorMessage = "This command cannot be undone.";
+            OnPropertyChanged(nameof(ErrorMessage));
+
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(command.InverseCommand))
         {
-            ErrorMessage =
-                "This command cannot be undone.";
+            ErrorMessage = "This command cannot be undone.";
+            OnPropertyChanged(nameof(ErrorMessage));
 
             return;
         }
@@ -492,11 +547,11 @@ public sealed class HistoryViewModel : ViewModelBase
         try
         {
             ErrorMessage = string.Empty;
+            OnPropertyChanged(nameof(ErrorMessage));
 
-            var result =
-                await _sensorService.SendCommandAsync(
+            var result = await _sensorService.SendCommandAsync(
                     command.SensorId,
-                    command.InverseCommand,
+                    inverseCommand,
                     cancellationToken);
 
             if (!result.Success)
@@ -507,6 +562,9 @@ public sealed class HistoryViewModel : ViewModelBase
 
                 return;
             }
+
+            await RecordUserBehaviorAsync(
+                command.SensorId, command.InverseCommand, true, $"Undo executed for: {command.Command}", cancellationToken);
 
             _commandStack.Pop();
             CommandHistory.Remove(command);
@@ -520,7 +578,9 @@ public sealed class HistoryViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            ErrorMessage = ex.Message;
+            ErrorMessage = $"Undo failed: {ex.Message}";
+            OnPropertyChanged(nameof(ErrorMessage));
+
         }
     }
 
@@ -562,6 +622,27 @@ public sealed class HistoryViewModel : ViewModelBase
         }
     }
 
+    private async Task LoadCommandHistoryAsync(
+        Guid sensorId, CancellationToken cancellationToken = default)
+    {
+        var behaviors = await _userBehaviorCache.GetBySensorIdAsync(
+            sensorId, cancellationToken);
+
+        var ordered = behaviors.OrderByDescending(x => x.Timestamp).ToArray();
+
+        CommandHistory.Clear();
+
+        foreach (var behavior in ordered)
+        {
+            CommandHistory.Add(new SensorCommand
+            {
+                SensorId = behavior.SensorId,
+                Command = behavior.Command,
+                InverseCommand = string.Empty,
+                Response = behavior.Outcome
+            });
+        }
+    }
 
     private bool HasGraphValue(
     TelemetryHistoryItem item)
@@ -726,6 +807,34 @@ public sealed class HistoryViewModel : ViewModelBase
         OnPropertyChanged(nameof(GraphUnit));
     }
 
+    private async Task RecordUserBehaviorAsync(
+    Guid sensorId,
+    string command,
+    bool succeeded,
+    string? outcome,
+    CancellationToken cancellationToken)
+    {
+        if (_session.UserId == Guid.Empty)
+            return;
+
+        var now = DateTime.UtcNow;
+
+        var behavior = new UserBehaviorDto
+        {
+            UserId = _session.UserId,
+            SensorId = sensorId,
+            Command = command,
+            Timestamp = now,
+            Succeeded = succeeded,
+            Outcome = outcome,
+            CreatedAt = now,
+            UpdatedAt = now
+        };
+
+        await _userBehaviorCache.AddAsync(
+            behavior,
+            cancellationToken);
+    }
 
     private void CalculateStatistics(
      IEnumerable<DomainTelemetry> telemetry)
@@ -772,6 +881,20 @@ public sealed class HistoryViewModel : ViewModelBase
             nameof(MinimumDisplay));
     }
 
+    private static string? GetInverseCommand(string command)
+    {
+        if (string.IsNullOrWhiteSpace(command))
+            return null;
+
+        return command.Trim().ToUpperInvariant() switch
+        {
+            "ON" => "OFF",
+            "OFF" => "ON",
+            "START" => "STOP",
+            "STOP" => "START",
+            _ => null
+        };
+    }
 
     private double? GetTelemetryValue(
     DomainTelemetry telemetry)
