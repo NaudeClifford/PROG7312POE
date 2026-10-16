@@ -1,6 +1,6 @@
-﻿using MapsterMapper;
-using SmartX.Domain.Entities;
+﻿using SmartX.Domain.Entities;
 using SmartX.Shared.DTOs.Telemetry;
+using SmartX.Shared.Mapping;
 using SmartX.WPF.Repositories.Local;
 
 namespace SmartX.WPF.Services.PredictiveEngine

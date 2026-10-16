@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using MapsterMapper;
 using SmartX.Application.Requests.UserBehavior;
 using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.DTOs;
+using SmartX.Shared.Mapping;
 using SmartX.Shared.Models;
 using System.Security.Claims;
 

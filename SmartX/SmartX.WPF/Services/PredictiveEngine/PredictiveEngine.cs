@@ -90,6 +90,8 @@ public sealed class PredictiveEngine : IPredictiveEngine
             var title = currentScore > 0 ? "Active telemetry warning" : isRecurring
                     ? "Recurring anomaly detected" : "Rising telemetry trend";
 
+            var (recommendedCommand, recommendationReason) = BuildRecommendedCommand(latest);
+
             var warning = new PredictiveSuggestion
             {
                 SensorId = latest.SensorId,
@@ -98,7 +100,9 @@ public sealed class PredictiveEngine : IPredictiveEngine
                 Type = SuggestionType.DeviceWarning,
                 Severity = severity,
                 Score = score,
-                RecommendedAction = BuildRecommendedAction(latest, isRecurring, trend, sensorBehaviors, allReadings)
+                RecommendedAction = BuildRecommendedAction(latest, isRecurring, trend, sensorBehaviors, allReadings),
+                RecommendedCommand = recommendedCommand,
+                RecommendationReason = recommendationReason
             };
 
             // Lower queue priorities are dequeued first.
@@ -528,5 +532,80 @@ public sealed class PredictiveEngine : IPredictiveEngine
             .ToList();
 
         return (before, after);
+    }
+
+    private static (string? Command, string Reason)
+        BuildRecommendedCommand(TelemetryDto reading)
+    {
+        // Critical conditions take priority.
+        if (reading.Temperature >= TemperatureCritical)
+        {
+            return (
+                null,
+                $"Critical temperature detected ({reading.Temperature:F1} °C). " +
+                "Inspect the cooling system immediately. " +
+                "A device-specific shutdown command must be configured " +
+                "before a command can safely be recommended."
+            );
+        }
+
+        if (reading.Current >= CurrentCritical)
+        {
+            return (
+                null,
+                $"Critical current detected ({reading.Current:F1} A). " +
+                "Check the equipment load and rated current limits. " +
+                "Configure a device-supported shutdown command " +
+                "before recommending automatic execution."
+            );
+        }
+
+        if (reading.Voltage >= VoltageCritical)
+        {
+            return (
+                null,
+                $"Critical voltage detected ({reading.Voltage:F1} V). " +
+                "Inspect the electrical supply and follow the " +
+                "equipment manufacturer's safety procedure."
+            );
+        }
+
+        // Elevated temperature.
+        if (reading.Temperature >= TemperatureWarning)
+        {
+            return (
+                "INSPECT_COOLING",
+                $"Temperature is elevated at {reading.Temperature:F1} °C. " +
+                "Inspect ventilation and cooling. INSPECT_COOLING is an " +
+                "advisory identifier, not an executable device command."
+            );
+        }
+
+        // Elevated current.
+        if (reading.Current >= CurrentWarning)
+        {
+            return (
+                "INSPECT_LOAD",
+                $"Current is elevated at {reading.Current:F1} A. " +
+                "Inspect the equipment load and compare it with rated limits. " +
+                "INSPECT_LOAD is an advisory identifier, not an executable device command."
+            );
+        }
+
+        // Elevated voltage.
+        if (reading.Voltage >= VoltageWarning)
+        {
+            return (
+                "INSPECT_VOLTAGE",
+                $"Voltage is elevated at {reading.Voltage:F1} V. " +
+                "Verify the rated supply range. INSPECT_VOLTAGE is an " +
+                "advisory identifier, not an executable device command."
+            );
+        }
+
+        return (
+            null,
+            "No telemetry threshold currently requires a corrective recommendation."
+        );
     }
 }

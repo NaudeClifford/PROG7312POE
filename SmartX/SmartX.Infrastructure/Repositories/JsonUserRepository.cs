@@ -64,8 +64,8 @@ public class JsonUserRepository : IUserRepository
         try
         {
 
-            if (!File.Exists(_filePath))return [];
-            
+            if (!File.Exists(_filePath)) return [];
+
             var json = await File.ReadAllTextAsync(
                 _filePath,
                 cancellationToken);

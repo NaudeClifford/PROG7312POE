@@ -1,9 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\SmartX",
-    "\\SmartX\\SmartX.WPF"
+    "\\SmartX"
   ],
-  "SelectedNode": "\\SmartX\\SmartX.WPF\\SmartX.WPF.csproj",
+  "SelectedNode": "\\SmartX\\SmartX.WPF",
   "PreviewInSolutionExplorer": true
 }

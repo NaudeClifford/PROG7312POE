@@ -1,7 +1,7 @@
-﻿using MapsterMapper;
-using Microsoft.Data.Sqlite;
+﻿using Microsoft.Data.Sqlite;
 using SmartX.Domain.Entities;
 using SmartX.Shared.DTOs;
+using SmartX.Shared.Mapping;
 using SmartX.WPF.Data;
 
 namespace SmartX.WPF.Repositories.Local
@@ -153,7 +153,7 @@ namespace SmartX.WPF.Repositories.Local
             command.CommandText = """
                 INSERT INTO UserBehaviors
                 (
-                    Id,
+                    id,
                     UserId,
                     SensorId,
                     Command,
@@ -192,6 +192,7 @@ namespace SmartX.WPF.Repositories.Local
 
         // UPDATE / INSERT
 
+
         public async Task UpdateAsync(
             UserBehaviorDto userBehavior,
             CancellationToken cancellationToken = default)
@@ -207,93 +208,55 @@ namespace SmartX.WPF.Repositories.Local
             using var command = connection.CreateCommand();
 
             command.CommandText = """
-            UPDATE UserBehaviors
-            SET
-                UserId = $userId,
-                SensorId = $sensorId,
-                Command = $command,
-                Timestamp = $timestamp,
-                Succeeded = $succeeded,
-                Outcome = $outcome,
-                CreatedAt = $createdAt,
-                UpdatedAt = $updatedAt
-            WHERE Id = $id;
-            """;
+        INSERT INTO UserBehaviors
+        (
+            Id,
+            UserId,
+            SensorId,
+            Command,
+            Timestamp,
+            Succeeded,
+            Outcome,
+            CreatedAt,
+            UpdatedAt
+        )
+        VALUES
+        (
+            $id,
+            $userId,
+            $sensorId,
+            $command,
+            $timestamp,
+            $succeeded,
+            $outcome,
+            $createdAt,
+            $updatedAt
+        )
+        ON CONFLICT(Id) DO UPDATE SET
+            UserId = excluded.UserId,
+            SensorId = excluded.SensorId,
+            Command = excluded.Command,
+            Timestamp = excluded.Timestamp,
+            Succeeded = excluded.Succeeded,
+            Outcome = excluded.Outcome,
+            CreatedAt = excluded.CreatedAt,
+            UpdatedAt = excluded.UpdatedAt;
+        """;
 
+            command.Parameters.AddWithValue("$id", entity.Id.ToString());
+            command.Parameters.AddWithValue("$userId", entity.UserId.ToString());
+            command.Parameters.AddWithValue("$sensorId", entity.SensorId.ToString());
+            command.Parameters.AddWithValue("$command", entity.Command);
+            command.Parameters.AddWithValue("$timestamp", entity.Timestamp.ToString("O"));
+            command.Parameters.AddWithValue("$succeeded", entity.Succeeded);
             command.Parameters.AddWithValue(
-                "$id",
-                entity.Id.ToString());
+                "$outcome", (object?)entity.Outcome ?? DBNull.Value);
+            command.Parameters.AddWithValue("$createdAt", entity.CreatedAt.ToString("O"));
+            command.Parameters.AddWithValue("$updatedAt", entity.UpdatedAt.ToString("O"));
 
-            command.Parameters.AddWithValue(
-                "$userId",
-                entity.UserId.ToString());
-
-            command.Parameters.AddWithValue(
-                "$sensorId",
-                entity.SensorId.ToString());
-
-            command.Parameters.AddWithValue(
-                "$command",
-                entity.Command);
-
-            command.Parameters.AddWithValue(
-                "$timestamp",
-                entity.Timestamp.ToString("O"));
-
-            command.Parameters.AddWithValue(
-                "$succeeded",
-                entity.Succeeded);
-
-            command.Parameters.AddWithValue(
-                "$outcome",
-                entity.Outcome);
-
-            command.Parameters.AddWithValue(
-                "$createdAt",
-                entity.CreatedAt.ToString("O"));
-
-            command.Parameters.AddWithValue(
-                "$updatedAt",
-                entity.UpdatedAt.ToString("O"));
-
-            var rowsAffected =
-                await command.ExecuteNonQueryAsync(
-                    cancellationToken);
-
-            if (rowsAffected > 0)
-                return;
-
-            // INSERT
-            command.CommandText = """
-            INSERT INTO UserBehaviors
-            (
-                id,
-                userId,
-                sensorId,
-                command,
-                timestamp,
-                succeeded,
-                outcome,
-                createdAt,
-                updatedAt
-            )
-            VALUES
-            (
-                $id,
-                $userId,
-                $sensorId,
-                $command,
-                $timestamp,
-                $succeeded,
-                $outcome,
-                $createdAt,
-                $updatedAt
-            )
-            """;
-
-            await command.ExecuteNonQueryAsync(
-                cancellationToken);
+            await command.ExecuteNonQueryAsync(cancellationToken);
         }
+
 
         // DELETE
         public async Task DeleteAsync(

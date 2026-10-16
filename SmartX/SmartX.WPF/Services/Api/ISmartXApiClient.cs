@@ -196,5 +196,12 @@ public interface ISmartXApiClient
         string command,
         CancellationToken cancellationToken = default);
 
+    //Userbehavior
+    Task<IReadOnlyList<UserBehaviorDto>> GetUserBehaviorsAsync(
+CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<UserBehaviorDto>> GetUserBehaviorsBySensorIdAsync(
+        Guid sensorId,
+        CancellationToken cancellationToken = default);
 
 }

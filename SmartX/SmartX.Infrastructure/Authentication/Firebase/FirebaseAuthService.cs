@@ -1,5 +1,4 @@
-﻿using System.IO;
-using FirebaseAdmin;
+﻿using FirebaseAdmin;
 using FirebaseAdmin.Auth;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Options;
@@ -41,8 +40,7 @@ public class FirebaseAuthService : IFirebaseTokenService, IFirebaseUserService
                 serviceAccountPath);
         }
 
-        var credential = GoogleCredential.FromFile(
-            serviceAccountPath);
+        var credential = GoogleCredential.FromFile(serviceAccountPath);
 
         FirebaseApp.Create(new AppOptions
         {

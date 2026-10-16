@@ -1,10 +1,8 @@
-﻿using SmartX.Shared.Mapping;
-using SmartX.Domain.Entities;
-using SmartX.Domain.Enums;
+﻿using SmartX.Domain.Entities;
 using SmartX.Shared.DTOs;
+using SmartX.Shared.Mapping;
 using SmartX.WPF.Repositories.Local;
 using SmartX.WPF.Services.Api;
-using System.Net.Http;
 
 namespace SmartX.WPF.Services.Sync;
 
@@ -15,6 +13,7 @@ public class CacheSyncService(
     ILocalUserCache userCache,
     ILocalCompanyCache companyCache,
     ILocalGatewayCache gatewayCache,
+    ILocalUserBehaviorCache userBehaviorCache,
     IMapper mapper) : ICacheSyncService
 {
     private readonly ISmartXApiClient _apiClient = apiClient;
@@ -23,6 +22,8 @@ public class CacheSyncService(
     private readonly ILocalUserCache _userCache = userCache;
     private readonly ILocalCompanyCache _companyCache = companyCache;
     private readonly ILocalGatewayCache _gatewayCache = gatewayCache;
+    private readonly ILocalUserBehaviorCache _userBehaviorCache = userBehaviorCache;
+
     private readonly IMapper _mapper = mapper;
 
 
@@ -251,6 +252,61 @@ public class CacheSyncService(
             {
                 await _userCache.DeleteAsync(
                     cachedUser.Id,
+                    cancellationToken);
+            }
+        }
+    }
+
+    public async Task SyncUserBehaviorAsync(
+    Guid sensorId,
+    CancellationToken cancellationToken = default)
+    {
+        if (sensorId == Guid.Empty)
+            return;
+
+        var behaviors =
+            await _apiClient.GetUserBehaviorsBySensorIdAsync(
+                sensorId,
+                cancellationToken);
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var cachedBehaviors =
+            await _userBehaviorCache.GetBySensorIdAsync(
+                sensorId,
+                cancellationToken);
+
+        var cachedById = cachedBehaviors.ToDictionary(x => x.Id);
+
+        var apiBehaviorIds = behaviors
+            .Select(x => x.Id)
+            .ToHashSet();
+
+        foreach (var dto in behaviors)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (cachedById.TryGetValue(dto.Id, out var cached) &&
+                dto.UpdatedAt <= cached.UpdatedAt)
+            {
+                continue;
+            }
+
+            await _userBehaviorCache.UpdateAsync(
+                dto,
+                cancellationToken);
+
+            cachedById[dto.Id] = dto;
+        }
+
+        foreach (var cached in cachedBehaviors)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (!apiBehaviorIds.Contains(cached.Id))
+            {
+                await _userBehaviorCache.DeleteAsync(
+                    cached.Id,
                     cancellationToken);
             }
         }

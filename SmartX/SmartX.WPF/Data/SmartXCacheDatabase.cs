@@ -109,9 +109,7 @@ public class SmartXCacheDatabase
             cancellationToken);
 
 
-        // =====================================================
         // GATEWAYS
-        // =====================================================
 
         command.CommandText = """
             CREATE TABLE IF NOT EXISTS Gateways
@@ -131,10 +129,7 @@ public class SmartXCacheDatabase
         await command.ExecuteNonQueryAsync(
             cancellationToken);
 
-
-        // =====================================================
         // SENSOR LOG FILES
-        // =====================================================
 
         command.CommandText = """
             CREATE TABLE IF NOT EXISTS SensorLogFiles
@@ -154,10 +149,7 @@ public class SmartXCacheDatabase
         await command.ExecuteNonQueryAsync(
             cancellationToken);
 
-
-        // =====================================================
         // CACHE METADATA
-        // =====================================================
 
         command.CommandText = """
             CREATE TABLE IF NOT EXISTS CacheMetadata
@@ -170,5 +162,27 @@ public class SmartXCacheDatabase
 
         await command.ExecuteNonQueryAsync(
             cancellationToken);
+
+        // USER BEHAVIOR
+
+        command.CommandText = """
+    CREATE TABLE IF NOT EXISTS UserBehaviors
+    (
+        Id TEXT NOT NULL PRIMARY KEY,
+        UserId TEXT NOT NULL,
+        SensorId TEXT NOT NULL,
+        Command TEXT NOT NULL,
+        Timestamp TEXT NOT NULL,
+        Succeeded INTEGER NOT NULL,
+        Outcome TEXT NULL,
+        CreatedAt TEXT NOT NULL,
+        UpdatedAt TEXT NOT NULL
+    );
+
+    CREATE INDEX IF NOT EXISTS IX_UserBehaviors_SensorId
+    ON UserBehaviors (SensorId);
+    """;
+
+        await command.ExecuteNonQueryAsync(cancellationToken);
     }
 }

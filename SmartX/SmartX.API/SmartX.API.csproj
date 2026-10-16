@@ -33,12 +33,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.3.0" />
   </ItemGroup>
 
-	<ItemGroup>
-		<None Update="Data\Local\*.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\SmartX.Application\SmartX.Application.csproj" />
     <ProjectReference Include="..\SmartX.Infrastructure\SmartX.Infrastructure.csproj" />

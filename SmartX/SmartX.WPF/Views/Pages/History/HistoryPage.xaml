@@ -304,13 +304,6 @@
                                      Foreground="{StaticResource DarkBrush}"
                                     HorizontalAlignment="Center"
                                     Margin="0,4,0,0"/>
-
-                            </StackPanel>
-
-                            <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center">
-
                             </StackPanel>
 
                         </Grid>
@@ -621,7 +614,8 @@
                                     Width="90"
                                     Height="36"
                                     Cursor="Hand"
-                                    Style="{StaticResource BaseButtonStyle}"/>
+                                    Style="{StaticResource BaseButtonStyle}"
+                                    Command="{Binding ExportCommand}"/>
 
                             </Grid>
 
@@ -706,40 +700,53 @@
 
                             <RowDefinition Height="Auto"/>
 
-                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="16"/>
 
                             <RowDefinition Height="*"/>
+                            
+                            <RowDefinition Height="Auto"/>
 
                         </Grid.RowDefinitions>
+
 
                         <!-- Command history header -->
                         <Grid Grid.Row="0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Command History"
-                                FontSize="14"
-                                FontWeight="SemiBold"
-                                Foreground="{StaticResource DarkBrush}"/>
+                   FontSize="14"
+                   FontWeight="SemiBold"
+                   Foreground="{StaticResource DarkBrush}"/>
 
                                 <TextBlock Text="Previously sent commands."
-                                    FontSize="11"
-                                    Foreground="#8A929A"
-                                    Margin="0,3,0,0"/>
+                   FontSize="11"
+                   Foreground="#8A929A"
+                   Margin="0,3,0,0"/>
                             </StackPanel>
 
                             <Button Grid.Column="1"
-                                Content="Undo Last"
-                                MinWidth="90"
-                                Margin="10,0,0,0"
-                                Cursor="Hand"
-                                Style="{StaticResource BaseButtonStyle}"
-                                Command="{Binding UndoLastCommandCommand}"
-                                IsEnabled="{Binding CanUndoCommand}"/>
+            Content="Undo Last"
+            MinWidth="90"
+            Margin="10,0,6,0"
+            Cursor="Hand"
+            Style="{StaticResource BaseButtonStyle}"
+            Command="{Binding UndoLastCommandCommand}"
+            IsEnabled="{Binding CanUndoCommand}"/>
+
+                            <Button Grid.Column="2"
+            Content="Clear History"
+            MinWidth="100"
+            Margin="0,0,0,0"
+            Cursor="Hand"
+            Style="{StaticResource BaseButtonStyle}"
+            Command="{Binding ClearCommandHistoryCommand}"/>
                         </Grid>
+
 
                         <!-- COMMAND INPUT -->
 
@@ -807,56 +814,34 @@
 
                             <Grid>
                                 <Grid.RowDefinitions>
+                                    <!-- Error message -->
                                     <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
+
+                                    <!-- Command list and empty state -->
                                     <RowDefinition Height="*"/>
+
+                                    <!-- Bottom information -->
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
-                                <!-- Header: title and undo button -->
-                                <Grid Grid.Row="0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    <StackPanel Grid.Column="0">
-                                        <TextBlock Text="Command History"
-                                            FontSize="14"
-                                            FontWeight="SemiBold"
-                                            Foreground="{StaticResource DarkBrush}"/>
-
-                                        <TextBlock Text="Previously sent commands."
-                                            FontSize="11"
-                                            Foreground="#8A929A"
-                                            Margin="0,3,0,0"/>
-                                    </StackPanel>
-
-                                    <Button Grid.Column="1"
-                                        Content="Undo Last"
-                                        MinWidth="90"
-                                        Margin="10,0,0,0"
-                                        VerticalAlignment="Center"
-                                        Cursor="Hand"
-                                        Style="{StaticResource BaseButtonStyle}"
-                                        Command="{Binding UndoLastCommandCommand}"
-                                        IsEnabled="{Binding CanUndoCommand}"/>
-                                </Grid>
 
                                 <!-- Error message -->
-                                <TextBlock Grid.Row="1"
+                                <TextBlock Grid.Row="0"
                                     Text="{Binding ErrorMessage}"
                                     Foreground="Red"
                                     TextWrapping="Wrap"
                                     Margin="0,8,0,0"/>
 
                                 <!-- Command list -->
-                                <ListBox Grid.Row="2"
+                                <ListBox Grid.Row="1"
                                     Margin="0,12,0,10"
                                     ItemsSource="{Binding CommandHistory}"
                                     BorderThickness="0"
                                     Background="Transparent"
-                                    ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                    Height="300"
+                                    MaxHeight="300"
+                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
@@ -908,7 +893,7 @@
                                 </ListBox>
 
                                 <!-- Empty state -->
-                                <TextBlock Grid.Row="2"
+                                <TextBlock Grid.Row="1"
                                     Text="No commands sent yet."
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
@@ -929,7 +914,7 @@
                                 </TextBlock>
 
                                 <!-- Bottom information -->
-                                <Border Grid.Row="3"
+                                <Border Grid.Row="2"
                                     Background="#FFF8E8"
                                     CornerRadius="7"
                                     Padding="10">
@@ -941,7 +926,142 @@
                                 </Border>
                             </Grid>
                         </Border>
+ 
+                        <!-- PREDICTIVE ANOMALY RECOMMENDATIONS -->
+                        <Border Grid.Row="4"
+                    Margin="0,16,0,0"
+                    Padding="16"
+                    Background="#F4F8FF"
+                    BorderBrush="#D6E4FF"
+                    BorderThickness="1"
+                    CornerRadius="12">
 
+                            <StackPanel>
+
+                                <!-- Panel heading -->
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel>
+                                        <TextBlock Text="Predictive Insights"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource DarkBrush}"/>
+
+                                        <TextBlock Text="{Binding PredictionMessage,
+                                                      TargetNullValue=Select a sensor to analyse its telemetry.}"
+                                       Margin="0,6,0,0"
+                                       FontSize="12"
+                                       TextWrapping="Wrap"
+                                       Foreground="#737A82"/>
+                                    </StackPanel>
+
+                                    <Border Grid.Column="1"
+                                Background="#DCEBFF"
+                                CornerRadius="6"
+                                Padding="8,4"
+                                VerticalAlignment="Top">
+
+                                        <TextBlock Text="PREDICTIVE"
+                                       FontSize="10"
+                                       FontWeight="SemiBold"
+                                       Foreground="#2459A9"/>
+                                    </Border>
+                                </Grid>
+
+                                <Separator Margin="0,0,0,12"
+                               Background="#D6E4FF"/>
+
+                                <!-- Detected anomaly -->
+                                <TextBlock Text="Detected anomaly"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource DarkBrush}"/>
+
+                                <TextBlock Text="{Binding AnomalyDescription,
+                                              TargetNullValue=No anomaly analysis available.}"
+                               Margin="0,4,0,12"
+                               FontSize="12"
+                               Foreground="#535B65"
+                               TextWrapping="Wrap"/>
+
+                                <!-- Recommended action -->
+                                <TextBlock Text="Suggested course of action"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource DarkBrush}"/>
+
+                                <TextBlock Text="{Binding RecommendedAction,
+                                              TargetNullValue=No recommendation available.}"
+                               Margin="0,4,0,12"
+                               FontSize="12"
+                               Foreground="#535B65"
+                               TextWrapping="Wrap"/>
+
+                                <!-- Suggested command -->
+                                <TextBlock Text="Recommended command"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource DarkBrush}"/>
+
+                                <TextBox Text="{Binding RecommendedCommand,
+                                            Mode=OneWay,
+                                            TargetNullValue=''}"
+                             Margin="0,6,0,12"
+                             Padding="10,8"
+                             FontFamily="Consolas"
+                             FontSize="12"
+                             IsReadOnly="True"
+                             TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Auto"
+                             MinHeight="38"
+                             MaxHeight="90"
+                             BorderBrush="#D6E4FF"
+                             Background="White"/>
+
+                                <TextBlock Text="Available recommendations"
+           Margin="0,6,0,2"
+           FontSize="11"
+           FontWeight="SemiBold"
+           Foreground="#535B65"/>
+
+                                <TextBlock Margin="0,0,0,12"
+           FontSize="11"
+           Foreground="#737A82"
+           TextWrapping="Wrap"
+           Text="INSPECT_COOLING — inspect ventilation and cooling.
+INSPECT_LOAD — inspect equipment load.
+INSPECT_VOLTAGE — verify the electrical supply.
+These are advisory identifiers, not executable device commands. Only use commands supported by your device."
+           />
+
+                                <!-- Recommendation rationale -->
+                                <TextBlock Text="{Binding RecommendationReason}"
+                               Margin="0,0,0,12"
+                               FontSize="11"
+                               Foreground="#737A82"
+                               TextWrapping="Wrap"/>
+
+                                <!-- Explicit confirmation is handled by the command -->
+                                <Button Content="Review and Apply Recommendation"
+                            Height="38"
+                            HorizontalAlignment="Stretch"
+                            Cursor="Hand"
+                            Style="{StaticResource BaseButtonStyle}"
+                            Command="{Binding ApplyRecommendationCommand}"/>
+
+                                <!-- Execution result / status -->
+                                <TextBlock Text="{Binding RecommendationStatus}"
+                               Margin="0,8,0,0"
+                               FontSize="11"
+                               Foreground="#535B65"
+                               TextWrapping="Wrap"/>
+
+                            </StackPanel>
+                        </Border>
                     </Grid>
 
                 </Border>

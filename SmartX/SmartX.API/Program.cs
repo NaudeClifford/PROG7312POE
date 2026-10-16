@@ -5,12 +5,14 @@ using SmartX.Application.Services.Telemetry;
 using SmartX.Domain.Interfaces;
 using SmartX.Infrastructure;
 using SmartX.Infrastructure.Authentication.Firebase;
+using SmartX.Shared.Mapping;
+
 
 namespace SmartX.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +21,7 @@ namespace SmartX.API
                             .AddSwaggerGen()
                             .AddApplication()
                             .AddInfrastructure(builder.Configuration)
+                            .AddSmartXMapping()
                             .AddControllers();
 
             builder.Services.AddScoped<SendSensorCommandHandler>();
@@ -37,7 +40,7 @@ namespace SmartX.API
             builder.Services.AddScoped<IFirebaseUserService, FirebaseAuthService>();
 
             builder.Services.AddAuthorization();
-            
+
             builder.Services.AddHttpContextAccessor();
 
             var firebaseProjectId =
@@ -53,6 +56,7 @@ namespace SmartX.API
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+
                 app.MapOpenApi();
             }
 

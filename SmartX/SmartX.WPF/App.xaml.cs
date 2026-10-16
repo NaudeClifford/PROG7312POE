@@ -101,7 +101,6 @@ public partial class App
             {
 
                 client.BaseAddress = new Uri(apiOptions.BaseUrl);
-                Console.WriteLine($"REGISTERED HTTP CLIENT: {client.BaseAddress}");
 
 
             });
@@ -118,7 +117,7 @@ public partial class App
         services.AddScoped<SendSensorCommandHandler>();
         services.AddSingleton<AlertQueue>();
         services.AddSingleton<PredictiveSuggestionService>();
-
+        services.AddSingleton<IAnomalyRecommendationService, StatisticalAnomalyRecommendationService>();
         //Session
         services.AddSingleton<SmartXSession>();
 

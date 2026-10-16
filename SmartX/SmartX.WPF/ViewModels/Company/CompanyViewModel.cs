@@ -6,7 +6,6 @@ using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.ViewModels.Base;
-using SmartX.WPF.Views.Pages.Company;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.Home;
 using SmartX.WPF.Views.Pages.SignUp;
@@ -29,8 +28,8 @@ public class CompanyViewModel :
     private readonly ISmartXApiClient _apiClient;
     private readonly INavigationService _navigationService;
     private readonly IMapper _mapper;
-    
-    
+
+
     // FIELDS
 
     private DomainCompany.Company? _selectedCompany;
@@ -162,7 +161,7 @@ public class CompanyViewModel :
         IsActive
             ? Brushes.Green
             : Brushes.Red;
-    
+
     // COUNTS
 
     public int TotalCompanies =>
@@ -252,7 +251,7 @@ public class CompanyViewModel :
     new AsyncRelayCommand(
         CancelDeletionAsync,
         CanCancelDeletion);
-        
+
         ForceDeleteCompanyCommand =
     new AsyncRelayCommand(
         ForceDeleteCompanyAsync,
@@ -321,7 +320,7 @@ public class CompanyViewModel :
         }
         else
         {
-            companyId = Session.SelectedCompanyId;
+            companyId = Session.EffectiveCompanyId;
         }
 
         if (companyId == Guid.Empty)
@@ -372,7 +371,7 @@ public class CompanyViewModel :
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                Companies.Add( _mapper.Map<DomainCompany.Company>(companyDto));
+                Companies.Add(_mapper.Map<DomainCompany.Company>(companyDto));
 
             }
 
@@ -641,7 +640,7 @@ public class CompanyViewModel :
 
         RequestDeletionCommand?
     .RaiseCanExecuteChanged();
-        
+
         ForceDeleteCompanyCommand?
     .RaiseCanExecuteChanged();
 

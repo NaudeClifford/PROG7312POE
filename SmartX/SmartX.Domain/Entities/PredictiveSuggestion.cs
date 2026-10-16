@@ -22,6 +22,10 @@ namespace SmartX.Domain.Entities
 
         public string RecommendedAction { get; init; } = string.Empty;
 
+        public string? RecommendedCommand { get; init; }
+
+        public string RecommendationReason { get; init; } = string.Empty;
+
         public DateTime GeneratedAt { get; init; } = DateTime.UtcNow;
     }
 }

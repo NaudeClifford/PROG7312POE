@@ -1,10 +1,11 @@
 ﻿
 using SmartX.Domain.Entities;
+using SmartX.Domain.Interfaces;
 using System.Text.Json;
 
 namespace SmartX.Infrastructure.Repositories
 {
-    public class JsonUserBehaviorRepository
+    public class JsonUserBehaviorRepository : IUserBehaviorRepository
     {
         private readonly string _filePath;
 

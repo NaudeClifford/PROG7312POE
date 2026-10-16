@@ -41,7 +41,7 @@ public class SmartXApiClient(
                 "Bearer",
                 _session.IdToken);
     }
-    
+
     public async Task<bool> DeleteCompanyAsync(
     Guid companyId,
     CancellationToken cancellationToken = default)
@@ -723,10 +723,7 @@ public class SmartXApiClient(
                 idToken);
 
         var response =
-            await _httpClient.GetAsync(
-                $"api/Users/firebase/" +
-                $"{Uri.EscapeDataString(firebaseUid)}",
-                cancellationToken);
+            await _httpClient.GetAsync($"api/Users/firebase/" + $"{Uri.EscapeDataString(firebaseUid)}", cancellationToken);
 
         if (response.StatusCode ==
             HttpStatusCode.NotFound)
@@ -740,9 +737,8 @@ public class SmartXApiClient(
                 await response.Content.ReadAsStringAsync(
                     cancellationToken);
 
-            throw new InvalidOperationException(
-                $"API returned {(int)response.StatusCode} " +
-                $"{response.StatusCode}: {body}");
+            // C#
+            throw new InvalidOperationException($"API returned {(int)response.StatusCode} " + $"{response.StatusCode}: {body}");
         }
 
         var result =
@@ -1836,6 +1832,47 @@ public class SmartXApiClient(
         }
 
         return result;
+    }
+
+    //UserBehavior
+    public async Task<IReadOnlyList<UserBehaviorDto>>
+    GetUserBehaviorsAsync(
+        CancellationToken cancellationToken = default)
+    {
+        var result = await _httpClient.GetFromJsonAsync<
+            Result<IReadOnlyList<UserBehaviorDto>>>(
+            "api/UserBehavior",
+            cancellationToken);
+
+        if (result is null || !result.Success)
+        {
+            throw new HttpRequestException(
+                "Failed to retrieve user behaviors.");
+        }
+
+        return result.Data ?? Array.Empty<UserBehaviorDto>();
+    }
+
+    public async Task<IReadOnlyList<UserBehaviorDto>>
+        GetUserBehaviorsBySensorIdAsync(
+            Guid sensorId,
+            CancellationToken cancellationToken = default)
+    {
+        if (sensorId == Guid.Empty)
+            return Array.Empty<UserBehaviorDto>();
+
+        var result = await _httpClient.GetFromJsonAsync<
+            Result<IReadOnlyList<UserBehaviorDto>>>(
+            $"api/UserBehavior/sensor/{sensorId}",
+            cancellationToken);
+
+        if (result is null || !result.Success)
+        {
+            throw new HttpRequestException(
+                $"Failed to retrieve user behaviors for sensor {sensorId}.");
+        }
+
+        return result.Data ?? Array.Empty<UserBehaviorDto>();
     }
 
 }

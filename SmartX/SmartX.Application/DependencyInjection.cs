@@ -13,7 +13,6 @@ using SmartX.Application.Services.Telemetry;
 using SmartX.Application.Validators;
 using SmartX.Application.Validators.Company;
 using SmartX.Application.Validators.Sensor;
-using SmartX.Domain.Interfaces;
 using SmartX.Shared.Mapping;
 
 namespace SmartX.Application;
@@ -30,7 +29,7 @@ public static class DependencyInjection
         services.AddValidatorsFromAssemblyContaining<CreateGatewayValidator>();
         services.AddValidatorsFromAssemblyContaining<CreateUserValidator>();
         services.AddValidatorsFromAssemblyContaining<CreateTelemetryValidator>();
-
+        services.AddValidatorsFromAssemblyContaining<CreateUserBehaviorValidator>();
 
         // CRUD services
         services.AddScoped<SensorCrudService>();
@@ -38,6 +37,7 @@ public static class DependencyInjection
         services.AddScoped<CompanyCrudService>();
         services.AddScoped<UserCrudService>();
         services.AddScoped<SensorLogFileCrudService>();
+        services.AddScoped<UserBehaviorCrudService>();
 
         //Telemetry stream
         services.AddSingleton<ITelemetryStream, TelemetryStream>();
