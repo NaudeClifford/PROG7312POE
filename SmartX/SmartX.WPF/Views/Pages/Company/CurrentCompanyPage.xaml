@@ -86,14 +86,17 @@
 
                             <TextBlock
                         Text="Company Name"
-                        FontSize="12"
+                        FontSize="16"
+                        HorizontalAlignment="Center"
                         FontWeight="SemiBold"
                         Foreground="#6B7280"/>
 
                             <Border
                         Visibility="{Binding AdministratorEditVisibility}"
                         Height="44"
-                        Margin="0,6,0,0"
+                        Margin="0,6,0,0"                        
+                        Width="500"
+                        MaxWidth="1000"
                         Background="#FAFBFC"
                         BorderBrush="#D1D5DB"
                         BorderThickness="1"
@@ -103,6 +106,7 @@
                             Text="{Binding EditCompanyName, UpdateSourceTrigger=PropertyChanged}"
                             Margin="10,0"
                             BorderThickness="0"
+                            HorizontalAlignment="Center"
                             Background="Transparent"
                             FontSize="16"
                             VerticalContentAlignment="Center"/>
@@ -126,13 +130,16 @@
 
                             <TextBlock
                         Text="Description"
-                        FontSize="12"
+                        FontSize="16"
+                        HorizontalAlignment="Center"
                         FontWeight="SemiBold"
                         Foreground="#6B7280"/>
 
                             <Border
                         Visibility="{Binding AdministratorEditVisibility}"
                         MinHeight="80"
+                        Width="500"
+                        MaxWidth="1000"
                         Margin="0,6,0,0"
                         Background="#FAFBFC"
                         BorderBrush="#D1D5DB"
@@ -144,6 +151,7 @@
                             Margin="10"
                             BorderThickness="0"
                             Background="Transparent"
+                            HorizontalAlignment="Center"
                             FontSize="14"
                             TextWrapping="Wrap"
                             AcceptsReturn="True"
@@ -168,7 +176,8 @@
 
                             <TextBlock
                         Text="Status"
-                        FontSize="12"
+                        FontSize="16"
+                        HorizontalAlignment="Center"
                         FontWeight="SemiBold"
                         Foreground="#6B7280"/>
 
@@ -176,6 +185,7 @@
                         Text="{Binding StatusText}"
                         Margin="0,5,0,0"
                         FontSize="14"
+                        HorizontalAlignment="Center"
                         FontWeight="SemiBold"
                         Foreground="{Binding StatusColor}"/>
 
@@ -188,13 +198,15 @@
 
                             <TextBlock
                         Text="Company ID"
-                        FontSize="12"
+                        FontSize="16"
+                        HorizontalAlignment="Center"
                         FontWeight="SemiBold"
                         Foreground="#6B7280"/>
 
                             <TextBlock
                         Text="{Binding CompanyId}"
                         Margin="0,5,0,0"
+                        HorizontalAlignment="Center"
                         FontSize="13"
                         Foreground="#4B5563"/>
 
@@ -207,14 +219,16 @@
 
                             <TextBlock
                         Text="Last Updated"
-                        FontSize="12"
+                        FontSize="16"
                         FontWeight="SemiBold"
+                        HorizontalAlignment="Center"
                         Foreground="#6B7280"/>
 
                             <TextBlock
                         Text="{Binding UpdatedAt}"
                         Margin="0,5,0,0"
                         FontSize="13"
+                        HorizontalAlignment="Center"
                         Foreground="#4B5563"/>
 
                         </StackPanel>
@@ -282,6 +296,7 @@
                             <Border
                         Visibility="{Binding RequestDeletionVisibility}"
                         Margin="0,25,0,0"
+                        
                         Padding="15"
                         Background="#FEF2F2"
                         BorderBrush="#FECACA"
@@ -293,12 +308,14 @@
                                     <TextBlock
                                 Text="Danger Zone"
                                 FontSize="14"
+                                HorizontalAlignment="Center"
                                 FontWeight="SemiBold"
                                 Foreground="#991B1B"/>
 
                                     <TextBlock
                                 Text="If you no longer want to use this company, you can request that it be deleted. A SuperAdmin will review the request."
                                 Margin="0,5,0,12"
+                                HorizontalAlignment="Center"
                                 FontSize="12"
                                 Foreground="#7F1D1D"
                                 TextWrapping="Wrap"
@@ -310,7 +327,7 @@
                                 Command="{Binding RequestDeletionCommand}"
                                 Width="190"
                                 Height="38"
-                                HorizontalAlignment="Left"
+                                HorizontalAlignment="Center"
                                 Background="#DC2626"
                                 Foreground="White"
                                 BorderBrush="#B91C1C"

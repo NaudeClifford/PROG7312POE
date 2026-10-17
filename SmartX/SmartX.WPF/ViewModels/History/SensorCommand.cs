@@ -11,6 +11,8 @@
 
         public string? InverseCommand { get; init; } = string.Empty;
 
+        public string HistoryStatus { get; set; } = "CACHED";
+
 
         public string? Response { get; init; }
     }

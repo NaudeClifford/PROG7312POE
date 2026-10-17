@@ -532,6 +532,7 @@
                 <!-- PREDICTIVE WARNINGS -->
                 <controls:PredictiveWarningView
                     Grid.Row="3"
+                    MaxHeight="300"
                     Margin="0,20,0,0"
                     DataContext="{Binding PredictiveWarnings}" />
 

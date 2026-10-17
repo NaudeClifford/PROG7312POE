@@ -208,7 +208,8 @@ public sealed class HistoryViewModel : ViewModelBase
                 SelectedMetric = TelemetryGraphMetric.Current;
         }
     }
-
+    public bool CanApplyRecommendation => SelectedSensorId.HasValue &&
+        !string.IsNullOrWhiteSpace(RecommendedCommand) && !IsBusy;
 
     private string _sensorSearchText = string.Empty;
 
@@ -227,23 +228,23 @@ public sealed class HistoryViewModel : ViewModelBase
     public ObservableCollection<SensorCommand> CommandHistory { get; } = [];
 
 
+
     public bool CanUndoCommand
     {
         get
         {
             if (!SelectedSensorId.HasValue ||
-                _commandStack.Count == 0)
+                !_commandStack.TryPeek(out var command) ||
+                command is null)
             {
                 return false;
             }
 
-            var command = _commandStack.Peek();
-
-            return command is not null
-                && command.SensorId == SelectedSensorId.Value
+            return command.SensorId == SelectedSensorId.Value
                 && !string.IsNullOrWhiteSpace(command.InverseCommand);
         }
     }
+
 
     public ObservableCollection<DomainSensor> Sensors
     { get; } = [];
@@ -268,6 +269,9 @@ public sealed class HistoryViewModel : ViewModelBase
 
             _ = LoadSelectedSensorCommandHistoryAsync();
             _ = LoadPredictiveSuggestionsAsync();
+
+            OnPropertyChanged(nameof(CanApplyRecommendation));
+            _applyRecommendationCommand.RaiseCanExecuteChanged();
         }
     }
 
@@ -334,6 +338,7 @@ public sealed class HistoryViewModel : ViewModelBase
 
             var selectedSuggestion = filteredSuggestions.FirstOrDefault();
 
+
             if (selectedSuggestion is null)
             {
                 PredictionMessage =
@@ -350,26 +355,39 @@ public sealed class HistoryViewModel : ViewModelBase
                 RecommendationReason =
                     "No command is recommended because the engine found no warning.";
 
+                RecommendationStatus =
+                    "No recommendation is currently available.";
+
                 return;
             }
 
+
+            RecommendedCommand =
+                selectedSuggestion.RecommendedCommand ?? string.Empty;
+
+            RecommendationStatus =
+                string.IsNullOrWhiteSpace(RecommendedCommand)
+                    ? "No executable command is available. Review the suggested action."
+                    : "Command available for review.";
+
             // Populate the properties bound to the XAML panel.
-            AnomalyDescription = selectedSuggestion.Description;
-            RecommendedAction = selectedSuggestion.RecommendedAction;
+            AnomalyDescription = selectedSuggestion.Description
+                ?? "Anomaly detected.";
+
+            RecommendedAction = selectedSuggestion.RecommendedAction
+                ?? "Review the sensor before taking action.";
 
             RecommendationReason =
                 $"Severity: {selectedSuggestion.Severity} | " +
                 $"Risk score: {selectedSuggestion.Score}/100";
 
+
             PredictionMessage =
                 $"{filteredSuggestions.Count} recommendation(s) available.";
 
-            // Do not invent a hardware command. The current predictive
-            // engine returns an action description, not a validated command.
-            RecommendedCommand = string.Empty;
-
-            RecommendationStatus =
-                "Review the suggested action before sending a command.";
+            OnPropertyChanged(nameof(RecommendedCommand));
+            OnPropertyChanged(nameof(CanApplyRecommendation));
+            _applyRecommendationCommand.RaiseCanExecuteChanged();
         }
         catch (OperationCanceledException)
         {
@@ -466,7 +484,14 @@ public sealed class HistoryViewModel : ViewModelBase
     public string RecommendedCommand
     {
         get => _recommendedCommand;
-        set => SetProperty(ref _recommendedCommand, value);
+        set
+        {
+            if (!SetProperty(ref _recommendedCommand, value))
+                return;
+
+            OnPropertyChanged(nameof(CanApplyRecommendation));
+            _applyRecommendationCommand.RaiseCanExecuteChanged();
+        }
     }
 
     private string _recommendationReason = string.Empty;
@@ -545,8 +570,9 @@ public sealed class HistoryViewModel : ViewModelBase
                 () => UndoLastCommandAsync(),
                 () => CanUndoCommand);
 
-        _applyRecommendationCommand = new AsyncRelayCommand(() => ApplyRecommendationAsync(),
-            () => SelectedSensorId.HasValue && !string.IsNullOrWhiteSpace(RecommendedCommand));
+        _applyRecommendationCommand = new AsyncRelayCommand(
+            () => ApplyRecommendationAsync(),
+            () => CanApplyRecommendation);
     }
 
     public async Task LoadAsync(
@@ -728,24 +754,26 @@ public sealed class HistoryViewModel : ViewModelBase
 
                 return;
             }
-            var inverseCommand =
-    result.InverseCommand
-    ?? GetInverseCommand(commandText);
+            var inverseCommand = result.InverseCommand ?? GetInverseCommand(commandText);
 
             var command = new SensorCommand
             {
                 SensorId = sensorId,
                 Command = commandText,
-                InverseCommand = inverseCommand ?? string.Empty,
-                Response = result.Response
+                InverseCommand = result.InverseCommand
+                    ?? GetInverseCommand(commandText)
+                    ?? string.Empty,
+                Response = result.Response,
+                HistoryStatus = "IN STACK"
             };
+
+            CommandHistory.Insert(0, command);
 
             if (!string.IsNullOrWhiteSpace(command.InverseCommand))
             {
                 _commandStack.Push(command);
             }
 
-            CommandHistory.Insert(0, command);
             ManualCommand = string.Empty;
             ErrorMessage = string.Empty;
 
@@ -778,50 +806,70 @@ public sealed class HistoryViewModel : ViewModelBase
         _undoLastCommandCommand.RaiseCanExecuteChanged();
     }
 
+
+
     private async Task UndoLastCommandAsync(
         CancellationToken cancellationToken = default)
     {
-        if (_commandStack.Count == 0)
-        {
-            ErrorMessage = "There is no command to undo.";
-            return;
-        }
-
-        var command = _commandStack.Peek();
-
-        if (command is null ||
+        if (!SelectedSensorId.HasValue ||
+            !_commandStack.TryPeek(out var command) ||
+            command is null ||
+            command.SensorId != SelectedSensorId.Value ||
             string.IsNullOrWhiteSpace(command.InverseCommand))
         {
-            ErrorMessage = "No valid inverse command is available.";
+            ErrorMessage =
+                "No reversible command is available for the selected sensor.";
             RefreshUndoState();
             return;
         }
+
+        var sensorId = command.SensorId;
+        var originalCommand = command.Command;
+        var inverseCommand = command.InverseCommand.Trim();
 
         try
         {
             ErrorMessage = string.Empty;
 
+            // Send the inverse through the same service as normal commands.
             var result = await _sensorService.SendCommandAsync(
-                command.SensorId,
-                command.InverseCommand,
+                sensorId,
+                inverseCommand,
                 cancellationToken);
 
             if (!result.Success)
             {
                 ErrorMessage = result.ErrorMessage
-                    ?? "The undo command failed.";
+                    ?? $"Undo command '{inverseCommand}' failed.";
+
+                // Preserve the original command so the user can retry.
                 return;
             }
 
             await RecordUserBehaviorAsync(
-                command.SensorId,
-                command.InverseCommand,
+                sensorId,
+                inverseCommand,
                 true,
-                $"Undo executed for: {command.Command}",
+                $"Reversal of '{originalCommand}' executed. " +
+                $"Service response: {result.Response}",
                 cancellationToken);
 
+            // Remove the original only after successful execution.
             _commandStack.Pop();
             CommandHistory.Remove(command);
+
+            // Show the reversal explicitly in the history.
+            CommandHistory.Insert(0, new SensorCommand
+            {
+                SensorId = sensorId,
+                Command = inverseCommand,
+                InverseCommand = originalCommand,
+                Response = result.Response ?? string.Empty,
+                Timestamp = DateTime.UtcNow,
+                HistoryStatus = "UNDONE"
+            });
+            System.Diagnostics.Debug.WriteLine($"UNDO: original={command.Command}, " +
+                $"inverse={inverseCommand}, " + $"success={result.Success}, " + $"response={result.Response}, " + $"error={result.ErrorMessage}");
 
             RefreshUndoState();
         }
@@ -834,6 +882,8 @@ public sealed class HistoryViewModel : ViewModelBase
             ErrorMessage = $"Undo failed: {ex.Message}";
         }
     }
+
+
 
 
     public string SensorSearchText
@@ -903,9 +953,10 @@ public sealed class HistoryViewModel : ViewModelBase
             {
                 SensorId = behavior.SensorId,
                 Command = behavior.Command,
-                InverseCommand = inverse ?? string.Empty,
+                InverseCommand = inverse,
                 Response = behavior.Outcome ?? string.Empty,
-                Timestamp = behavior.Timestamp
+                Timestamp = behavior.Timestamp,
+                HistoryStatus = "CACHED"
             });
         }
 
@@ -1173,15 +1224,29 @@ public sealed class HistoryViewModel : ViewModelBase
 
     private static string? GetInverseCommand(string command)
     {
-        if (string.IsNullOrWhiteSpace(command))
-            return null;
-
         return command.Trim().ToUpperInvariant() switch
         {
             "ON" => "OFF",
             "OFF" => "ON",
+
+            "POWER ON" => "POWER OFF",
+            "POWER OFF" => "POWER ON",
+
             "START" => "STOP",
             "STOP" => "START",
+
+            "ENABLE" => "DISABLE",
+            "DISABLE" => "ENABLE",
+
+            "OPEN" => "CLOSE",
+            "CLOSE" => "OPEN",
+
+            "LOCK" => "UNLOCK",
+            "UNLOCK" => "LOCK",
+
+            "ACTIVATE" => "DEACTIVATE",
+            "DEACTIVATE" => "ACTIVATE",
+
             _ => null
         };
     }

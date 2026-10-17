@@ -93,6 +93,10 @@ public sealed class AlertQueue
             if (leftChildIndex < count && _queue[leftChildIndex].Severity < _queue[smallestIndex].Severity)
                 smallestIndex = leftChildIndex;
 
+            if (rightChildIndex < count &&
+                _queue[rightChildIndex].Severity < _queue[smallestIndex].Severity)
+                smallestIndex = rightChildIndex;
+
             if (smallestIndex == index) break;
 
             Swap(index, smallestIndex);

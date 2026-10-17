@@ -41,10 +41,14 @@ public class SendSensorCommandHandler
         return Result<SensorCommandResponse>.Ok(response);
     }
 
+
     private static string? GetInverseCommand(string command)
     {
-        return command.ToUpperInvariant() switch
+        return command.Trim().ToUpperInvariant() switch
         {
+            "ON" => "OFF",
+            "OFF" => "ON",
+
             "POWER ON" => "POWER OFF",
             "POWER OFF" => "POWER ON",
 
@@ -71,21 +75,31 @@ public class SendSensorCommandHandler
 
     private static bool IsSupportedCommand(string command)
     {
-        return command.ToUpperInvariant() switch
+        return command.Trim().ToUpperInvariant() switch
         {
+            "ON" => true,
+            "OFF" => true,
+
             "POWER ON" => true,
             "POWER OFF" => true,
+
             "START" => true,
             "STOP" => true,
+
             "ENABLE" => true,
             "DISABLE" => true,
+
             "OPEN" => true,
             "CLOSE" => true,
+
             "LOCK" => true,
             "UNLOCK" => true,
+
             "ACTIVATE" => true,
             "DEACTIVATE" => true,
+
             "RESET" => true,
+
             _ => false
         };
     }

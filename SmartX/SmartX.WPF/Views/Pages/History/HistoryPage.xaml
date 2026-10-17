@@ -569,7 +569,7 @@
                     </Grid>
 
                     <!-- PREDICTIVE INSIGHTS -->
-                    
+
 
                     <!-- HISTORY TABLE -->
 
@@ -703,7 +703,7 @@
                             <RowDefinition Height="16"/>
 
                             <RowDefinition Height="*"/>
-                            
+
                             <RowDefinition Height="Auto"/>
 
                         </Grid.RowDefinitions>
@@ -863,29 +863,44 @@
                                                             <ColumnDefinition Width="Auto"/>
                                                         </Grid.ColumnDefinitions>
 
-                                                        <TextBlock Grid.Column="0"
-                                           Text="{Binding Command}"
-                                           FontFamily="Consolas"
-                                           FontSize="12"
-                                           Foreground="{StaticResource DarkBrush}"
-                                           TextWrapping="Wrap"
-                                           Margin="0,0,8,0"/>
+                                                        <StackPanel Grid.Column="0">
+                                                            <TextBlock
+                                                            Text="{Binding Command}"
+                                                            FontFamily="Consolas"
+                                                            FontSize="12"
+                                                            Foreground="{StaticResource DarkBrush}"
+                                                            TextWrapping="Wrap"
+                                                            Margin="0,0,0,5"/>
+
+                                                            <Border
+                                                                HorizontalAlignment="Left"
+                                                                CornerRadius="4"
+                                                                Padding="6,2"
+                                                                Background="#E8F5E9">
+
+                                                                <TextBlock
+                                                                    Text="{Binding HistoryStatus}"
+                                                                    FontSize="9"
+                                                                    FontWeight="SemiBold"
+                                                                    Foreground="#2E7D32"/>
+                                                            </Border>
+                                                        </StackPanel>
 
                                                         <TextBlock Grid.Column="1"
-                                           Text="{Binding Timestamp,
-                                               StringFormat={}{0:HH:mm:ss}}"
-                                           VerticalAlignment="Top"
-                                           FontSize="10"
-                                           Foreground="#9299A0"/>
+                                                            Text="{Binding Timestamp,
+                                                            StringFormat={}{0:HH:mm:ss}}"
+                                                            VerticalAlignment="Top"
+                                                            FontSize="10"
+                                                            Foreground="#9299A0"/>
                                                     </Grid>
 
                                                     <!-- Response -->
                                                     <TextBlock Grid.Row="1"
-                                       Text="{Binding Response}"
-                                       FontSize="11"
-                                       Foreground="#737A82"
-                                       TextWrapping="Wrap"
-                                       Margin="0,6,0,0"/>
+                                                        Text="{Binding Response}"
+                                                        FontSize="11"
+                                                        Foreground="#737A82"
+                                                        TextWrapping="Wrap"
+                                                        Margin="0,6,0,0"/>
                                                 </Grid>
                                             </Border>
                                         </DataTemplate>
@@ -926,7 +941,7 @@
                                 </Border>
                             </Grid>
                         </Border>
- 
+
                         <!-- PREDICTIVE ANOMALY RECOMMENDATIONS -->
                         <Border Grid.Row="4"
                     Margin="0,16,0,0"
@@ -1051,7 +1066,8 @@ These are advisory identifiers, not executable device commands. Only use command
                             HorizontalAlignment="Stretch"
                             Cursor="Hand"
                             Style="{StaticResource BaseButtonStyle}"
-                            Command="{Binding ApplyRecommendationCommand}"/>
+                            Command="{Binding ApplyRecommendationCommand}"
+                            IsEnabled="{Binding CanApplyRecommendation}"/>
 
                                 <!-- Execution result / status -->
                                 <TextBlock Text="{Binding RecommendationStatus}"
