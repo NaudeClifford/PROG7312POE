@@ -492,7 +492,6 @@ public partial class MainWindow : Window
 
             case NavigationStage.History:
                 GatewayButton.Visibility = Visibility.Visible;
-                HistoryButton.Visibility = Visibility.Visible;
                 AlertsButton.Visibility = Visibility.Visible;
                 break;
 
@@ -543,7 +542,14 @@ public partial class MainWindow : Window
             case NavigationStage.History:
                 GatewayButton.Visibility =
                     Visibility.Visible;
+                AlertsButton.Visibility = Visibility.Visible;
+
                 break;
+            case NavigationStage.Alert:
+                HistoryButton.Visibility = Visibility.Visible;
+                GatewayButton.Visibility = Visibility.Visible;
+                break;
+
 
             case NavigationStage.NetworkMesh:
             case NavigationStage.CommandHistory:
