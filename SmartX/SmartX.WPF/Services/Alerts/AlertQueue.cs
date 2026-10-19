@@ -3,22 +3,22 @@
 public sealed class AlertQueue
 {
     private readonly List<SensorAlert> _queue = new();
+    public event EventHandler<SensorAlert>? AlertEnqueued;
 
     public int Count => _queue.Count;
-
-    public IEnumerable<SensorAlert> GetAlerts()
-    {
-        return _queue.ToList();
-    }
+    public IEnumerable<SensorAlert> GetAlerts() => _queue.ToList();
 
     public void Enqueue(SensorAlert alert)
     {
         ArgumentNullException.ThrowIfNull(alert);
+
         //Added alert to end of heap
         _queue.Add(alert);
 
         //Restore heap property by bubbling up the newly added alert
         SiftUp(_queue.Count - 1);
+
+        AlertEnqueued?.Invoke(this, alert);
     }
 
     public bool TryDequeue(out SensorAlert? alert)
@@ -62,10 +62,7 @@ public sealed class AlertQueue
         return true;
     }
 
-    public void Clear()
-    {
-        _queue.Clear();
-    }
+    public void Clear() => _queue.Clear();
 
     private void SiftUp(int index)
     {

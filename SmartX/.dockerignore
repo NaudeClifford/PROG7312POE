@@ -1,0 +1,12 @@
+
+**/bin/
+**/obj/
+**/.vs/
+**/.vscode/
+.git/
+.gitignore
+.vs/
+Dockerfile*
+docker-compose*
+**/appsettings.Development.json
+**/firebase-service-account.json

@@ -265,6 +265,7 @@ public sealed class HistoryViewModel : ViewModelBase
 
             _commandStack.Clear();
             CommandHistory.Clear();
+            ManualCommand = "";
             RefreshUndoState();
 
             _ = LoadSelectedSensorCommandHistoryAsync();
@@ -272,135 +273,6 @@ public sealed class HistoryViewModel : ViewModelBase
 
             OnPropertyChanged(nameof(CanApplyRecommendation));
             _applyRecommendationCommand.RaiseCanExecuteChanged();
-        }
-    }
-
-
-    private async Task LoadSelectedSensorCommandHistoryAsync()
-    {
-        if (!SelectedSensorId.HasValue)
-        {
-            CommandHistory.Clear();
-            _commandStack.Clear();
-
-            OnPropertyChanged(nameof(CanUndoCommand));
-            _undoLastCommandCommand.RaiseCanExecuteChanged();
-            return;
-        }
-
-        try
-        {
-            await LoadCommandHistoryAsync(SelectedSensorId.Value);
-        }
-        catch (Exception ex)
-        {
-            ErrorMessage = ex.Message;
-        }
-    }
-    private async Task LoadPredictiveSuggestionsAsync(CancellationToken cancellationToken = default)
-    {
-        var sensorId = SelectedSensorId;
-
-        PredictiveSuggestions.Clear();
-
-        AnomalyDescription = string.Empty;
-        RecommendedAction = string.Empty;
-        RecommendedCommand = string.Empty;
-        RecommendationReason = string.Empty;
-        RecommendationStatus = string.Empty;
-
-        if (!sensorId.HasValue)
-        {
-            PredictionMessage = "Select a sensor to analyse its telemetry.";
-            AnomalyDescription = PredictionMessage;
-            return;
-        }
-
-        try
-        {
-            IsAnalyzing = true;
-            PredictionMessage = "Analysing sensor telemetry...";
-
-            var suggestions = await _predictiveSuggestionService.GetWarningsAsync(cancellationToken);
-
-            // The user may have selected a different sensor while
-            // the previous analysis was still running.
-            if (SelectedSensorId != sensorId)
-                return;
-
-            var filteredSuggestions = suggestions
-                .Where(x => x.SensorId == sensorId.Value)
-                .OrderByDescending(x => x.Score)
-                .ToList();
-
-            foreach (var suggestion in filteredSuggestions)
-                PredictiveSuggestions.Add(suggestion);
-
-            var selectedSuggestion = filteredSuggestions.FirstOrDefault();
-
-
-            if (selectedSuggestion is null)
-            {
-                PredictionMessage =
-                    "No anomalies detected for this sensor.";
-
-                AnomalyDescription =
-                    "No active or predictive anomaly was detected.";
-
-                RecommendedAction =
-                    "Continue monitoring the sensor.";
-
-                RecommendedCommand = string.Empty;
-
-                RecommendationReason =
-                    "No command is recommended because the engine found no warning.";
-
-                RecommendationStatus =
-                    "No recommendation is currently available.";
-
-                return;
-            }
-
-
-            RecommendedCommand =
-                selectedSuggestion.RecommendedCommand ?? string.Empty;
-
-            RecommendationStatus =
-                string.IsNullOrWhiteSpace(RecommendedCommand)
-                    ? "No executable command is available. Review the suggested action."
-                    : "Command available for review.";
-
-            // Populate the properties bound to the XAML panel.
-            AnomalyDescription = selectedSuggestion.Description
-                ?? "Anomaly detected.";
-
-            RecommendedAction = selectedSuggestion.RecommendedAction
-                ?? "Review the sensor before taking action.";
-
-            RecommendationReason =
-                $"Severity: {selectedSuggestion.Severity} | " +
-                $"Risk score: {selectedSuggestion.Score}/100";
-
-
-            PredictionMessage =
-                $"{filteredSuggestions.Count} recommendation(s) available.";
-
-            OnPropertyChanged(nameof(RecommendedCommand));
-            OnPropertyChanged(nameof(CanApplyRecommendation));
-            _applyRecommendationCommand.RaiseCanExecuteChanged();
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            PredictionMessage = $"Analysis failed: {ex.Message}";
-            RecommendationStatus = ex.Message;
-        }
-        finally
-        {
-            IsAnalyzing = false;
         }
     }
 
@@ -790,6 +662,133 @@ public sealed class HistoryViewModel : ViewModelBase
         }
     }
 
+    private async Task LoadSelectedSensorCommandHistoryAsync()
+    {
+        if (!SelectedSensorId.HasValue)
+        {
+            CommandHistory.Clear();
+            _commandStack.Clear();
+
+            OnPropertyChanged(nameof(CanUndoCommand));
+            _undoLastCommandCommand.RaiseCanExecuteChanged();
+            return;
+        }
+
+        try
+        {
+            await LoadCommandHistoryAsync(SelectedSensorId.Value);
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+    }
+    private async Task LoadPredictiveSuggestionsAsync(CancellationToken cancellationToken = default)
+    {
+        var sensorId = SelectedSensorId;
+
+        PredictiveSuggestions.Clear();
+
+        AnomalyDescription = string.Empty;
+        RecommendedAction = string.Empty;
+        RecommendedCommand = string.Empty;
+        RecommendationReason = string.Empty;
+        RecommendationStatus = string.Empty;
+
+        if (!sensorId.HasValue)
+        {
+            PredictionMessage = "Select a sensor to analyse its telemetry.";
+            AnomalyDescription = PredictionMessage;
+            return;
+        }
+
+        try
+        {
+            IsAnalyzing = true;
+            PredictionMessage = "Analysing sensor telemetry...";
+
+            var suggestions = await _predictiveSuggestionService.GetWarningsAsync(cancellationToken);
+
+            // The user may have selected a different sensor while
+            // the previous analysis was still running.
+            if (SelectedSensorId != sensorId)
+                return;
+
+            var filteredSuggestions = suggestions
+                .Where(x => x.SensorId == sensorId.Value)
+                .OrderByDescending(x => x.Score)
+                .ToList();
+
+            foreach (var suggestion in filteredSuggestions)
+                PredictiveSuggestions.Add(suggestion);
+
+            var selectedSuggestion = filteredSuggestions.FirstOrDefault(x => !string.IsNullOrWhiteSpace(x.RecommendedCommand)) ?? filteredSuggestions.FirstOrDefault();
+
+            if (selectedSuggestion is null)
+            {
+                PredictionMessage =
+                    "No anomalies detected for this sensor.";
+
+                AnomalyDescription =
+                    "No active or predictive anomaly was detected.";
+
+                RecommendedAction =
+                    "Continue monitoring the sensor.";
+
+                RecommendedCommand = string.Empty;
+
+                RecommendationReason =
+                    "No command is recommended because the engine found no warning.";
+
+                RecommendationStatus =
+                    "No recommendation is currently available.";
+
+                return;
+            }
+
+
+            RecommendedCommand =
+                selectedSuggestion.RecommendedCommand ?? string.Empty;
+
+            RecommendationStatus =
+                string.IsNullOrWhiteSpace(RecommendedCommand)
+                    ? "No executable command is available. Review the suggested action."
+                    : "Command available for review.";
+
+            // Populate the properties bound to the XAML panel.
+            AnomalyDescription = selectedSuggestion.Description
+                ?? "Anomaly detected.";
+
+            RecommendedAction = selectedSuggestion.RecommendedAction
+                ?? "Review the sensor before taking action.";
+
+            RecommendationReason =
+                $"Severity: {selectedSuggestion.Severity} | " +
+                $"Risk score: {selectedSuggestion.Score}/100";
+
+
+            PredictionMessage =
+                $"{filteredSuggestions.Count} recommendation(s) available.";
+
+            OnPropertyChanged(nameof(RecommendedCommand));
+            OnPropertyChanged(nameof(CanApplyRecommendation));
+            _applyRecommendationCommand.RaiseCanExecuteChanged();
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            PredictionMessage = $"Analysis failed: {ex.Message}";
+            RecommendationStatus = ex.Message;
+        }
+        finally
+        {
+            IsAnalyzing = false;
+        }
+    }
+
     private void ClearCommandHistory()
     {
         _commandStack.Clear();
@@ -805,8 +804,6 @@ public sealed class HistoryViewModel : ViewModelBase
         OnPropertyChanged(nameof(CanUndoCommand));
         _undoLastCommandCommand.RaiseCanExecuteChanged();
     }
-
-
 
     private async Task UndoLastCommandAsync(
         CancellationToken cancellationToken = default)
@@ -882,9 +879,6 @@ public sealed class HistoryViewModel : ViewModelBase
             ErrorMessage = $"Undo failed: {ex.Message}";
         }
     }
-
-
-
 
     public string SensorSearchText
     {
@@ -1445,83 +1439,33 @@ public sealed class HistoryViewModel : ViewModelBase
         return "\"" + value.Replace("\"", "\"\"") + "\"";
     }
 
-    private async Task ApplyRecommendationAsync(
-    CancellationToken cancellationToken = default)
+    private Task ApplyRecommendationAsync()
     {
-        if (!SelectedSensorId.HasValue ||
-            string.IsNullOrWhiteSpace(RecommendedCommand))
+        if (!SelectedSensorId.HasValue)
         {
-            return;
+            RecommendationStatus = "Select a sensor first.";
+            return Task.CompletedTask;
         }
 
-        var sensorId = SelectedSensorId.Value;
-        var command = RecommendedCommand.Trim();
+        var command = RecommendedCommand?.Trim();
 
-        var confirmation = MessageBox.Show(
-            $"Anomaly:\n{AnomalyDescription}\n\n" +
-            $"Recommended action:\n{RecommendedAction}\n\n" +
-            $"Command to send:\n{command}\n\n" +
-            "Do you want to send this command to the selected sensor?",
-            "Confirm Recommended Action",
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
-
-        if (confirmation != MessageBoxResult.Yes)
+        if (string.IsNullOrWhiteSpace(command))
         {
-            RecommendationStatus = "Recommendation cancelled.";
-            return;
+            RecommendationStatus =
+                "No executable recommendation is available.";
+            return Task.CompletedTask;
         }
 
-        try
-        {
-            RecommendationStatus = "Sending command...";
+        // Load the command into the manual command input.
+        ManualCommand = command;
 
-            var result = await _sensorService.SendCommandAsync(
-                sensorId,
-                command,
-                cancellationToken);
+        RecommendationStatus =
+            $"Command '{command}' loaded into the manual command panel. " +
+            "Review it before sending.";
 
-            await RecordUserBehaviorAsync(
-                sensorId,
-                command,
-                result.Success,
-                result.Success
-                    ? result.Response
-                    : result.ErrorMessage ?? "Recommended command failed.",
-                cancellationToken);
-
-            if (!result.Success)
-            {
-                RecommendationStatus =
-                    result.ErrorMessage ?? "Command failed.";
-
-                return;
-            }
-
-            var sensorCommand = new SensorCommand
-            {
-                SensorId = sensorId,
-                Command = command,
-                InverseCommand = result.InverseCommand ?? string.Empty,
-                Response = result.Response
-            };
-
-            _commandStack.Push(sensorCommand);
-            CommandHistory.Insert(0, sensorCommand);
-
-            RefreshUndoState();
-
-            RecommendationStatus = "Command sent successfully.";
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            RecommendationStatus = $"Command failed: {ex.Message}";
-        }
+        return Task.CompletedTask;
     }
+
     private double? GetTelemetryValue(
     DomainTelemetry telemetry)
     {

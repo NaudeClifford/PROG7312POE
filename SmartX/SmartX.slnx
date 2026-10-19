@@ -1,7 +1,9 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path=".dockerignore" />
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
+    <File Path="Dockerfile" />
   </Folder>
   <Project Path="SmartX.API/SmartX.API.csproj" />
   <Project Path="SmartX.Application/SmartX.Application.csproj" Id="1f8ab15a-c9ad-4292-acc9-fc2eb629f8d1" />

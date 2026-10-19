@@ -1,5 +1,6 @@
 ﻿using SmartX.Domain.Entities;
 using SmartX.Domain.Enums;
+using SmartX.Domain.shared;
 using SmartX.Shared.DTOs;
 using SmartX.Shared.DTOs.Telemetry;
 
@@ -90,7 +91,7 @@ public sealed class PredictiveEngine : IPredictiveEngine
             var title = currentScore > 0 ? "Active telemetry warning" : isRecurring
                     ? "Recurring anomaly detected" : "Rising telemetry trend";
 
-            var (recommendedCommand, recommendationReason) = BuildRecommendedCommand(latest);
+            var (recommendedCommand, recommendationReason) = BuildRecommendedCommand(latest, sensorBehaviors);
 
             var warning = new PredictiveSuggestion
             {
@@ -354,9 +355,7 @@ public sealed class PredictiveEngine : IPredictiveEngine
         // Find commands relevant to the current warning.
         var relevantCommands = behaviors
             .Where(behavior => warningTypes.Any(
-                warningType => IsCommandRelevant(
-                    behavior.Command,
-                    warningType)))
+                warningType => SensorCommandCatalog.IsCommandRelevant(behavior.Command, warningType)))
             .OrderByDescending(behavior => behavior.Timestamp)
             .ToList();
 
@@ -365,10 +364,8 @@ public sealed class PredictiveEngine : IPredictiveEngine
         // Analyze temperature before and after the latest
         // relevant temperature command.
         var temperatureCommand = relevantCommands
-            .FirstOrDefault(behavior =>
-                IsCommandRelevant(
-                    behavior.Command,
-                    "Temperature"));
+            .FirstOrDefault(behavior => SensorCommandCatalog.IsCommandRelevant(
+                    behavior.Command, "Temperature"));
 
         if (temperatureCommand != null)
         {
@@ -478,42 +475,114 @@ public sealed class PredictiveEngine : IPredictiveEngine
         return string.Join(" ", actions);
     }
 
-    private static bool IsCommandRelevant(string command, string warningType)
+
+
+    private static (string? Command, string Reason) BuildRecommendedCommand(
+        TelemetryDto reading,
+        IEnumerable<UserBehaviorDto> behaviors)
     {
-        if (string.IsNullOrWhiteSpace(command) || string.IsNullOrWhiteSpace(warningType))
-            return false;
+        // Identify the active telemetry warnings.
+        var temperatureCritical =
+            reading.Temperature >= TemperatureCritical;
 
-        // Commands that may be relevant to any warning.
-        string[] generalCommands = { "reset", "reboot", "restart", "stop", "shutdown",
-            "turn off", "start", "start up", "turn on" };
+        var voltageCritical =
+            reading.Voltage >= VoltageCritical;
 
-        // Commands specifically related to each measurement.
-        string[] temperatureCommands = { "temperature", "cooling", "cool", "fan",
-            "ventilation", "overheat", "heater" };
+        var currentCritical =
+            reading.Current >= CurrentCritical;
 
-        string[] voltageCommands = { "voltage", "power supply", "power", "electrical supply", "voltage regulator" };
+        var temperatureWarning =
+            reading.Temperature >= TemperatureWarning;
 
-        string[] currentCommands = { "current", "load", "current limit", "motor load", "reduce load" };
+        var voltageWarning =
+            reading.Voltage >= VoltageWarning;
 
-        // First, check for generally relevant commands.
-        if (generalCommands.Any(keyword => command.Contains(
-                keyword, StringComparison.OrdinalIgnoreCase))) return true;
+        var currentWarning =
+            reading.Current >= CurrentWarning;
 
+        var hasCriticalWarning =
+            temperatureCritical ||
+            voltageCritical ||
+            currentCritical;
 
-        // Next, choose keywords based on the warning type.
-        string[] specificCommands;
+        var hasWarning =
+            temperatureWarning ||
+            voltageWarning ||
+            currentWarning;
 
-        if (warningType.Contains("Temperature", StringComparison.OrdinalIgnoreCase)) specificCommands = temperatureCommands;
+        // No corrective command is necessary when telemetry
+        // is within the configured thresholds.
+        if (!hasWarning)
+        {
+            return (
+                null,
+                "No active telemetry threshold requires a corrective command."
+            );
+        }
 
-        else if (warningType.Contains("Voltage", StringComparison.OrdinalIgnoreCase)) specificCommands = voltageCommands;
+        // Keep previously successful, supported commands as
+        // candidates, but never recommend arbitrary command text.
+        var successfulCommands = behaviors
+            .Where(b => b.Succeeded)
+            .Where(b => !string.IsNullOrWhiteSpace(b.Command))
+            .OrderByDescending(b => b.Timestamp)
+            .Select(b => b.Command.Trim())
+            .Where(SensorCommandCatalog.IsSupported).ToList();
 
-        else if (warningType.Contains("Current", StringComparison.OrdinalIgnoreCase)) specificCommands = currentCommands;
+        // Prefer a previously successful RESET when available.
+        var previousReset = successfulCommands
+            .FirstOrDefault(c =>
+                c.Equals("RESET", StringComparison.OrdinalIgnoreCase));
 
-        else return false;
+        if (previousReset is not null)
+        {
+            return (
+                previousReset.ToUpperInvariant(),
+                "RESET is supported by the command service and has " +
+                "previously been recorded as successful. Review the " +
+                "equipment state and confirm that resetting is safe."
+            );
+        }
 
-        // Return true if any warning-specific keyword matches.
-        return specificCommands.Any(keyword => command.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+        // A critical warning needs additional caution.
+        // RESET is a supported command, but its safety must be
+        // confirmed for the particular device before execution.
+        if (hasCriticalWarning)
+        {
+            return (
+                "RESET",
+                "Critical telemetry detected. RESET is an available " +
+                "corrective command, but it has not been verified as safe " +
+                "for this particular critical condition. Confirm the " +
+                "equipment safety procedure before applying it."
+            );
+        }
+
+        // For non-critical warnings, prefer a supported command
+        // already recorded as successful, if one exists.
+        var previousCommand = successfulCommands.FirstOrDefault();
+
+        if (previousCommand is not null)
+        {
+            return (
+                previousCommand.ToUpperInvariant(),
+                $"The command '{previousCommand}' was previously recorded " +
+                "as successful. Review its suitability for the current " +
+                "telemetry warning before sending it."
+            );
+        }
+
+        // Supported fallback for a non-critical warning.
+        // RESET is used because it is explicitly supported by your service.
+        return (
+            "RESET",
+            "A non-critical telemetry warning was detected. RESET is " +
+            "supported by the command service and is suggested for review. " +
+            "Confirm that resetting is appropriate for this device first."
+        );
     }
+
+
 
     private static (List<TelemetryDto> Before, List<TelemetryDto> After)
     GetBalancedReadingsAroundCommand(IEnumerable<TelemetryDto> telemetry, DateTime commandTimestamp)
@@ -534,78 +603,5 @@ public sealed class PredictiveEngine : IPredictiveEngine
         return (before, after);
     }
 
-    private static (string? Command, string Reason)
-        BuildRecommendedCommand(TelemetryDto reading)
-    {
-        // Critical conditions take priority.
-        if (reading.Temperature >= TemperatureCritical)
-        {
-            return (
-                null,
-                $"Critical temperature detected ({reading.Temperature:F1} °C). " +
-                "Inspect the cooling system immediately. " +
-                "A device-specific shutdown command must be configured " +
-                "before a command can safely be recommended."
-            );
-        }
 
-        if (reading.Current >= CurrentCritical)
-        {
-            return (
-                null,
-                $"Critical current detected ({reading.Current:F1} A). " +
-                "Check the equipment load and rated current limits. " +
-                "Configure a device-supported shutdown command " +
-                "before recommending automatic execution."
-            );
-        }
-
-        if (reading.Voltage >= VoltageCritical)
-        {
-            return (
-                null,
-                $"Critical voltage detected ({reading.Voltage:F1} V). " +
-                "Inspect the electrical supply and follow the " +
-                "equipment manufacturer's safety procedure."
-            );
-        }
-
-        // Elevated temperature.
-        if (reading.Temperature >= TemperatureWarning)
-        {
-            return (
-                "INSPECT_COOLING",
-                $"Temperature is elevated at {reading.Temperature:F1} °C. " +
-                "Inspect ventilation and cooling. INSPECT_COOLING is an " +
-                "advisory identifier, not an executable device command."
-            );
-        }
-
-        // Elevated current.
-        if (reading.Current >= CurrentWarning)
-        {
-            return (
-                "INSPECT_LOAD",
-                $"Current is elevated at {reading.Current:F1} A. " +
-                "Inspect the equipment load and compare it with rated limits. " +
-                "INSPECT_LOAD is an advisory identifier, not an executable device command."
-            );
-        }
-
-        // Elevated voltage.
-        if (reading.Voltage >= VoltageWarning)
-        {
-            return (
-                "INSPECT_VOLTAGE",
-                $"Voltage is elevated at {reading.Voltage:F1} V. " +
-                "Verify the rated supply range. INSPECT_VOLTAGE is an " +
-                "advisory identifier, not an executable device command."
-            );
-        }
-
-        return (
-            null,
-            "No telemetry threshold currently requires a corrective recommendation."
-        );
-    }
 }

@@ -1048,9 +1048,9 @@
            Foreground="#737A82"
            TextWrapping="Wrap"
            Text="INSPECT_COOLING — inspect ventilation and cooling.
-INSPECT_LOAD — inspect equipment load.
-INSPECT_VOLTAGE — verify the electrical supply.
-These are advisory identifiers, not executable device commands. Only use commands supported by your device."
+                INSPECT_LOAD — inspect equipment load.
+                INSPECT_VOLTAGE — verify the electrical supply.
+                These are advisory identifiers, not executable device commands. Only use commands supported by your device."
            />
 
                                 <!-- Recommendation rationale -->

@@ -941,60 +941,75 @@ public class TelemetryViewModel : ViewModelBase
     {
         if (telemetry.Temperature >= 35)
         {
-            _activeErrorStates.Add($"{telemetry.SensorId}:HighTemperature");
+            var key = $"{telemetry.SensorId}:HighTemperature";
 
-            _alertQueue.Enqueue(
-                new SensorAlert
+            if (_activeErrorStates.Add(key))
+            {
+                _alertQueue.Enqueue(new SensorAlert
                 {
                     SensorId = telemetry.SensorId,
                     Message =
                         $"Temperature is critically high: " +
                         $"{telemetry.Temperature:F1}°C.",
-                    Severity =
-                        AlertSeverity.Critical,
-                    Timestamp =
-                        telemetry.Timestamp
+                    Severity = AlertSeverity.Critical,
+                    Timestamp = telemetry.Timestamp
                 });
+            }
 
             return;
+        }
+        else
+        {
+            _activeErrorStates.Remove($"{telemetry.SensorId}:HighTemperature");
         }
 
         if (telemetry.Voltage >= 240)
         {
-            _activeErrorStates.Add($"{telemetry.SensorId}:HighVoltage");
+            var key = $"{telemetry.SensorId}:HighVoltage";
 
-            _alertQueue.Enqueue(
-                new SensorAlert
+            if (_activeErrorStates.Add(key))
+            {
+                _alertQueue.Enqueue(new SensorAlert
                 {
                     SensorId = telemetry.SensorId,
                     Message =
-                        $"High voltage detected: " +
-                        $"{telemetry.Voltage:F1}V.",
-                    Severity =
-                        AlertSeverity.High,
-                    Timestamp =
-                        telemetry.Timestamp
+                        $"Voltage is critically high: " +
+                        $"{telemetry.Voltage:F1}°C.",
+                    Severity = AlertSeverity.Critical,
+                    Timestamp = telemetry.Timestamp
                 });
+            }
 
             return;
+        }
+        else
+        {
+            _activeErrorStates.Remove($"{telemetry.SensorId}:HighVoltage");
         }
 
         if (telemetry.Current >= 5)
         {
-            _activeErrorStates.Add($"{telemetry.SensorId}:HighCurrent");
+            var key = $"{telemetry.SensorId}:HighCurrennt";
 
-            _alertQueue.Enqueue(
-                new SensorAlert
+            if (_activeErrorStates.Add(key))
+            {
+                _alertQueue.Enqueue(new SensorAlert
                 {
                     SensorId = telemetry.SensorId,
                     Message =
-                        $"High current detected: " +
-                        $"{telemetry.Current:F1}A.",
-                    Severity =
-                        AlertSeverity.Medium,
-                    Timestamp =
-                        telemetry.Timestamp
+                        $"Current is critically high: " +
+                        $"{telemetry.Current:F1}°C.",
+                    Severity = AlertSeverity.Critical,
+                    Timestamp = telemetry.Timestamp
                 });
+            }
+
+            return;
+        }
+        else
+        {
+            _activeErrorStates.Remove(
+                $"{telemetry.SensorId}:HighCurrent");
         }
 
     }

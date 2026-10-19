@@ -1,5 +1,6 @@
 ﻿using SmartX.Application.Commands.Sensors;
 using SmartX.Application.Requests.Sensor;
+using SmartX.Domain.shared;
 using SmartX.Shared.Models;
 
 namespace SmartX.Application.Commands.Sensor;
@@ -24,9 +25,9 @@ public class SendSensorCommandHandler
 
         var command = request.Command.Trim();
 
-        var inverseCommand = GetInverseCommand(command);
+        var inverseCommand = SensorCommandCatalog.GetInverseCommand(command);
 
-        if (!IsSupportedCommand(command))
+        if (!SensorCommandCatalog.IsSupported(command))
         {
             return Result<SensorCommandResponse>.Fail(
                 $"Unsupported sensor command: {command}");
@@ -41,66 +42,4 @@ public class SendSensorCommandHandler
         return Result<SensorCommandResponse>.Ok(response);
     }
 
-
-    private static string? GetInverseCommand(string command)
-    {
-        return command.Trim().ToUpperInvariant() switch
-        {
-            "ON" => "OFF",
-            "OFF" => "ON",
-
-            "POWER ON" => "POWER OFF",
-            "POWER OFF" => "POWER ON",
-
-            "START" => "STOP",
-            "STOP" => "START",
-
-            "ENABLE" => "DISABLE",
-            "DISABLE" => "ENABLE",
-
-            "OPEN" => "CLOSE",
-            "CLOSE" => "OPEN",
-
-            "LOCK" => "UNLOCK",
-            "UNLOCK" => "LOCK",
-
-            "ACTIVATE" => "DEACTIVATE",
-            "DEACTIVATE" => "ACTIVATE",
-
-            "RESET" => null,
-
-            _ => null
-        };
-    }
-
-    private static bool IsSupportedCommand(string command)
-    {
-        return command.Trim().ToUpperInvariant() switch
-        {
-            "ON" => true,
-            "OFF" => true,
-
-            "POWER ON" => true,
-            "POWER OFF" => true,
-
-            "START" => true,
-            "STOP" => true,
-
-            "ENABLE" => true,
-            "DISABLE" => true,
-
-            "OPEN" => true,
-            "CLOSE" => true,
-
-            "LOCK" => true,
-            "UNLOCK" => true,
-
-            "ACTIVATE" => true,
-            "DEACTIVATE" => true,
-
-            "RESET" => true,
-
-            _ => false
-        };
-    }
 }
