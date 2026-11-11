@@ -16,5 +16,15 @@ public class CreateSensorRequest
 
     public Guid? GatewayId { get; set; }
 
+    public string? IpAddress { get; set; }
+
+    public int? Port { get; set; }
+
+    public SensorProtocol Protocol { get; set; }
+
+    public bool IsSimulation { get; set; } = true;
+
+    public bool IsConnectionEnabled { get; set; }
+
     public bool IsActive { get; set; } = true;
 }

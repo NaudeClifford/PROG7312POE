@@ -4,39 +4,44 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Background="{StaticResource BackgroundBrush}">
 
-    <Grid Margin="40">
+    <Border Margin="20"
+            Padding="25"
+            Background="{StaticResource DarkBrush}"
+            CornerRadius="24">
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <Grid Margin="10">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
 
-        <!-- HEADER -->
+            <!-- HEADER -->
 
-        <StackPanel Grid.Row="0">
+            <StackPanel Grid.Row="0">
 
-            <TextBlock
+                <TextBlock
                 Text="Configure company services"
                 FontSize="28"
                 Foreground="{StaticResource LightTextBrush}"
                 HorizontalAlignment="Center"
                 FontWeight="SemiBold"/>
 
-            <TextBlock
+                <TextBlock
                 Margin="0,8,0,0"
                 Text="Configure the services this company will use."
                 HorizontalAlignment="Center"
                 Foreground="{StaticResource LightTextBrush}"/>
 
-        </StackPanel>
+            </StackPanel>
 
 
-        <!-- ERROR -->
+            <!-- ERROR -->
 
-        <TextBlock
+            <TextBlock
             Grid.Row="1"
             Margin="0,20,0,10"
             Text="{Binding ErrorMessage}"
@@ -44,192 +49,192 @@
             TextWrapping="Wrap"/>
 
 
-        <!-- CONTENT -->
+            <!-- CONTENT -->
 
-        <ScrollViewer
+            <ScrollViewer
             Grid.Row="2"
             VerticalScrollBarVisibility="Auto">
 
-            <StackPanel
+                <StackPanel
                 MaxWidth="700">
 
 
-                <!-- API -->
+                    <!-- API -->
 
-                <GroupBox
+                    <GroupBox
                     Header="API"
                     Foreground="{StaticResource LightTextBrush}"
                     Margin="0,10">
 
-                    <StackPanel Margin="15">
+                        <StackPanel Margin="15">
 
-                        <CheckBox
+                            <CheckBox
                             Content="Use custom API"
                             Foreground="{StaticResource LightTextBrush}"
                             IsChecked="{Binding UseCustomApi}"/>
 
 
-                        <StackPanel Margin="0,15,0,0">
+                            <StackPanel Margin="0,15,0,0">
 
-                            <StackPanel.Style>
+                                <StackPanel.Style>
 
-                                <Style
+                                    <Style
                                     TargetType="StackPanel">
 
-                                    <Setter
+                                        <Setter
                                         Property="Visibility"
                                         Value="Collapsed"/>
 
-                                    <Style.Triggers>
+                                        <Style.Triggers>
 
-                                        <DataTrigger
+                                            <DataTrigger
                                             Binding="{Binding UseCustomApi}"
                                             Value="True">
 
-                                            <Setter
+                                                <Setter
                                                 Property="Visibility"
                                                 Value="Visible"/>
 
-                                        </DataTrigger>
+                                            </DataTrigger>
 
-                                    </Style.Triggers>
+                                        </Style.Triggers>
 
-                                </Style>
+                                    </Style>
 
-                            </StackPanel.Style>
+                                </StackPanel.Style>
 
 
-                            <TextBlock
+                                <TextBlock
                                 Text="API Base URL"/>
 
-                            <TextBox
+                                <TextBox
                                 Margin="0,5,0,0"
                                 Text="{Binding ApiBaseUrl,
                                                UpdateSourceTrigger=PropertyChanged}"/>
 
-                            <TextBlock
+                                <TextBlock
                                 Margin="0,5,0,0"
                                 Text="Example: https://api.example.com"
                                 Foreground="{StaticResource LightTextBrush}"/>
 
+                            </StackPanel>
+
                         </StackPanel>
 
-                    </StackPanel>
-
-                </GroupBox>
+                    </GroupBox>
 
 
-                <!-- FIREBASE -->
+                    <!-- FIREBASE -->
 
-                <GroupBox
+                    <GroupBox
                     Header="Firebase"
                     Foreground="{StaticResource LightTextBrush}"
                     Margin="0,10">
 
-                    <StackPanel Margin="15">
+                        <StackPanel Margin="15">
 
-                        <CheckBox
+                            <CheckBox
                             Content="Use custom Firebase"
                             Foreground="{StaticResource LightTextBrush}"
                             IsChecked="{Binding UseCustomFirebase}"/>
 
 
-                        <StackPanel Margin="0,15,0,0">
+                            <StackPanel Margin="0,15,0,0">
 
-                            <StackPanel.Style>
+                                <StackPanel.Style>
 
-                                <Style
+                                    <Style
                                     TargetType="StackPanel">
 
-                                    <Setter
+                                        <Setter
                                         Property="Visibility"
                                         Value="Collapsed"/>
 
-                                    <Style.Triggers>
+                                        <Style.Triggers>
 
-                                        <DataTrigger
+                                            <DataTrigger
                                             Binding="{Binding UseCustomFirebase}"
                                             Value="True">
 
-                                            <Setter
+                                                <Setter
                                                 Property="Visibility"
                                                 Value="Visible"/>
 
-                                        </DataTrigger>
+                                            </DataTrigger>
 
-                                    </Style.Triggers>
+                                        </Style.Triggers>
 
-                                </Style>
+                                    </Style>
 
-                            </StackPanel.Style>
+                                </StackPanel.Style>
 
 
-                            <TextBlock
+                                <TextBlock
                                 Text="Firebase Project ID"/>
 
-                            <TextBox
+                                <TextBox
                                 Margin="0,5,0,15"
                                 Text="{Binding FirebaseProjectId,
                                                UpdateSourceTrigger=PropertyChanged}"/>
 
 
-                            <TextBlock
+                                <TextBlock
                                 Text="Firebase API Key"/>
 
-                            <TextBox
+                                <TextBox
                                 Margin="0,5,0,0"
                                 Text="{Binding FirebaseApiKey,
                                                UpdateSourceTrigger=PropertyChanged}"/>
 
+                            </StackPanel>
+
                         </StackPanel>
 
-                    </StackPanel>
-
-                </GroupBox>
+                    </GroupBox>
 
 
-                <!-- STATUS -->
+                    <!-- STATUS -->
 
-                <TextBlock
+                    <TextBlock
                     Margin="0,15,0,0"
                     Text="{Binding StatusMessage}"
                     Foreground="Green"
                     TextWrapping="Wrap"/>
 
-            </StackPanel>
+                </StackPanel>
 
-        </ScrollViewer>
+            </ScrollViewer>
 
 
-        <!-- BUTTONS -->
+            <!-- BUTTONS -->
 
-        <StackPanel
+            <StackPanel
             Grid.Row="3"
             Orientation="Horizontal"
             HorizontalAlignment="Right">
 
-            <Button
+                <Button
                 Content="Cancel"
                 Width="100"
                 Margin="0,0,10,0"
                 Command="{Binding CancelCommand}"
-                Style="{StaticResource BaseButtonStyle}"/>
+                Style="{StaticResource SecondColourButtonStyle}"/>
 
-            <Button
+                <Button
     Content="Test API"
     Width="120"
     Margin="0,0,10,0"
     Command="{Binding TestApiCommand}"
-    Style="{StaticResource BaseButtonStyle}"/>
+    Style="{StaticResource SecondColourButtonStyle}"/>
 
-            <Button
+                <Button
                 Content="Continue"
                 Width="120"
                 Command="{Binding ContinueCommand}"
-                Style="{StaticResource BaseButtonStyle}"/>
-      
-        </StackPanel>
+                Style="{StaticResource SecondColourButtonStyle}"/>
 
-    </Grid>
+            </StackPanel>
 
+        </Grid>
+    </Border>
 </Page>

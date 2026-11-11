@@ -3,8 +3,9 @@ using SmartX.Application.Requests.Gateway;
 using SmartX.Application.Requests.Sensor;
 using SmartX.Application.Requests.Telemetry;
 using SmartX.Application.Requests.User;
+using SmartX.Application.Requests.UserBehavior;
 using SmartX.Application.Services.Registration;
-using SmartX.Application.Services.Sensors;
+using SmartX.Application.Services.Sensors.Command;
 using SmartX.Shared.DTOs;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
@@ -196,12 +197,52 @@ public interface ISmartXApiClient
         string command,
         CancellationToken cancellationToken = default);
 
-    //Userbehavior
+    Task<SensorCommandResult> UndoLastSensorCommandAsync(
+        Guid sensorId,
+        CancellationToken cancellationToken = default);
+
+    // USER BEHAVIOUR
     Task<IReadOnlyList<UserBehaviorDto>> GetUserBehaviorsAsync(
-CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default);
 
     Task<IReadOnlyList<UserBehaviorDto>> GetUserBehaviorsBySensorIdAsync(
         Guid sensorId,
         CancellationToken cancellationToken = default);
 
+    Task<Guid> CreateUserBehaviorAsync(
+        CreateUserBehaviorRequest request,
+        CancellationToken cancellationToken = default);
+
+    // PREDICTIVE ENGINE
+    Task<IReadOnlyList<PredictiveSuggestionDto>> GetPredictiveSuggestionsAsync(
+        Guid sensorId,
+        CancellationToken cancellationToken = default);
+
+    Task<AnomalyRecommendationDto?> AnalyzeSensorAnomalyAsync(
+        Guid sensorId,
+        CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<PredictiveSuggestionDto>> GetPredictiveWarningsAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
+    //Alerts
+    Task<List<SensorAlert>> GetAlertsAsync(
+        CancellationToken cancellationToken = default);
+
+    Task<int> GetPendingAlertCountAsync(
+        CancellationToken cancellationToken = default);
+
+    Task<SensorAlert?> ProcessNextAlertAsync(
+        CancellationToken cancellationToken = default);
+
+    Task<List<SensorAlert>> ProcessAllAlertsAsync(
+        CancellationToken cancellationToken = default);
+
+    Task ClearAlertsAsync(
+        CancellationToken cancellationToken = default);
+
+    Task EnqueueAlertAsync(
+    SensorAlert alert,
+    CancellationToken cancellationToken = default);
 }

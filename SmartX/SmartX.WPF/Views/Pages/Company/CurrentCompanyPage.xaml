@@ -6,20 +6,25 @@
       mc:Ignorable="d"
       Background="{StaticResource BackgroundBrush}">
 
-    <Grid Margin="30">
+    <Border Margin="20"
+            Padding="25"
+            Background="{StaticResource DarkBrush}"
+            CornerRadius="24">
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="20"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid Margin="10">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
 
-        <!-- HEADER -->
+            <!-- HEADER -->
 
-        <StackPanel Grid.Row="0">
+            <StackPanel Grid.Row="0">
 
-            <TextBlock
+                <TextBlock
                 Text="Current Company"
                 FontSize="28"
                 FontWeight="SemiBold"
@@ -27,27 +32,27 @@
                 
                 Foreground="{StaticResource  LightTextBrush}"/>
 
-            <TextBlock
+                <TextBlock
                 Text="View and manage your current company configuration."
                 Margin="0,6,0,0"
                 FontSize="14"
                  HorizontalAlignment="Center"
                 Foreground="{StaticResource LightTextBrush}"/>
 
-        </StackPanel>
+            </StackPanel>
 
 
-        <!-- CONTENT -->
+            <!-- CONTENT -->
 
-        <ScrollViewer
+            <ScrollViewer
     Grid.Row="2"
     VerticalScrollBarVisibility="Auto"
     HorizontalScrollBarVisibility="Disabled">
 
-            <Grid
+                <Grid
         Margin="0,0,0,30">
 
-                <Border
+                    <Border
             Background="White"
             CornerRadius="10"
             Padding="30"
@@ -56,42 +61,42 @@
             MaxWidth="800"
             HorizontalAlignment="Center">
 
-                    <Grid>
+                        <Grid>
 
-                        <Grid.RowDefinitions>
+                            <Grid.RowDefinitions>
 
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="25"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="25"/>
 
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="25"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="25"/>
 
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="18"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="18"/>
 
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="18"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="18"/>
 
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="30"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="30"/>
 
-                            <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
 
-                        </Grid.RowDefinitions>
+                            </Grid.RowDefinitions>
 
 
-                        <!-- COMPANY NAME -->
+                            <!-- COMPANY NAME -->
 
-                        <StackPanel Grid.Row="0">
+                            <StackPanel Grid.Row="0">
 
-                            <TextBlock
+                                <TextBlock
                         Text="Company Name"
                         FontSize="16"
                         HorizontalAlignment="Center"
                         FontWeight="SemiBold"
                         Foreground="#6B7280"/>
 
-                            <Border
+                                <Border
                         Visibility="{Binding AdministratorEditVisibility}"
                         Height="44"
                         Margin="0,6,0,0"                        
@@ -102,7 +107,7 @@
                         BorderThickness="1"
                         CornerRadius="7">
 
-                                <TextBox
+                                    <TextBox
                             Text="{Binding EditCompanyName, UpdateSourceTrigger=PropertyChanged}"
                             Margin="10,0"
                             BorderThickness="0"
@@ -111,9 +116,9 @@
                             FontSize="16"
                             VerticalContentAlignment="Center"/>
 
-                            </Border>
+                                </Border>
 
-                            <TextBlock
+                                <TextBlock
                         Visibility="{Binding ReadOnlyVisibility}"
                         Text="{Binding CompanyName}"
                         Margin="0,5,0,0"
@@ -121,21 +126,21 @@
                         FontWeight="SemiBold"
                         Foreground="#111827"/>
 
-                        </StackPanel>
+                            </StackPanel>
 
 
-                        <!-- DESCRIPTION -->
+                            <!-- DESCRIPTION -->
 
-                        <StackPanel Grid.Row="2">
+                            <StackPanel Grid.Row="2">
 
-                            <TextBlock
+                                <TextBlock
                         Text="Description"
                         FontSize="16"
                         HorizontalAlignment="Center"
                         FontWeight="SemiBold"
                         Foreground="#6B7280"/>
 
-                            <Border
+                                <Border
                         Visibility="{Binding AdministratorEditVisibility}"
                         MinHeight="80"
                         Width="500"
@@ -146,7 +151,7 @@
                         BorderThickness="1"
                         CornerRadius="7">
 
-                                <TextBox
+                                    <TextBox
                             Text="{Binding EditDescription, UpdateSourceTrigger=PropertyChanged}"
                             Margin="10"
                             BorderThickness="0"
@@ -157,9 +162,9 @@
                             AcceptsReturn="True"
                             VerticalScrollBarVisibility="Auto"/>
 
-                            </Border>
+                                </Border>
 
-                            <TextBlock
+                                <TextBlock
                         Visibility="{Binding ReadOnlyVisibility}"
                         Text="{Binding Description}"
                         Margin="0,5,0,0"
@@ -167,21 +172,21 @@
                         Foreground="#374151"
                         TextWrapping="Wrap"/>
 
-                        </StackPanel>
+                            </StackPanel>
 
 
-                        <!-- STATUS -->
+                            <!-- STATUS -->
 
-                        <StackPanel Grid.Row="4">
+                            <StackPanel Grid.Row="4">
 
-                            <TextBlock
+                                <TextBlock
                         Text="Status"
                         FontSize="16"
                         HorizontalAlignment="Center"
                         FontWeight="SemiBold"
                         Foreground="#6B7280"/>
 
-                            <TextBlock
+                                <TextBlock
                         Text="{Binding StatusText}"
                         Margin="0,5,0,0"
                         FontSize="14"
@@ -189,62 +194,62 @@
                         FontWeight="SemiBold"
                         Foreground="{Binding StatusColor}"/>
 
-                        </StackPanel>
+                            </StackPanel>
 
 
-                        <!-- COMPANY ID -->
+                            <!-- COMPANY ID -->
 
-                        <StackPanel Grid.Row="6">
+                            <StackPanel Grid.Row="6">
 
-                            <TextBlock
+                                <TextBlock
                         Text="Company ID"
                         FontSize="16"
                         HorizontalAlignment="Center"
                         FontWeight="SemiBold"
                         Foreground="#6B7280"/>
 
-                            <TextBlock
+                                <TextBlock
                         Text="{Binding CompanyId}"
                         Margin="0,5,0,0"
                         HorizontalAlignment="Center"
                         FontSize="13"
                         Foreground="#4B5563"/>
 
-                        </StackPanel>
+                            </StackPanel>
 
 
-                        <!-- UPDATED -->
+                            <!-- UPDATED -->
 
-                        <StackPanel Grid.Row="8">
+                            <StackPanel Grid.Row="8">
 
-                            <TextBlock
+                                <TextBlock
                         Text="Last Updated"
                         FontSize="16"
                         FontWeight="SemiBold"
                         HorizontalAlignment="Center"
                         Foreground="#6B7280"/>
 
-                            <TextBlock
+                                <TextBlock
                         Text="{Binding UpdatedAt}"
                         Margin="0,5,0,0"
                         FontSize="13"
                         HorizontalAlignment="Center"
                         Foreground="#4B5563"/>
 
-                        </StackPanel>
+                            </StackPanel>
 
 
-                        <!-- ACTIONS -->
+                            <!-- ACTIONS -->
 
-                        <StackPanel
+                            <StackPanel
                     Grid.Row="10"
                     HorizontalAlignment="Left">
 
-                            <!-- NORMAL ACTIONS -->
+                                <!-- NORMAL ACTIONS -->
 
-                            <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal">
 
-                                <Button
+                                    <Button
                             Visibility="{Binding AdministratorEditVisibility}"
                             Content="Save Changes"
                             Command="{Binding SaveCompanyCommand}"
@@ -254,7 +259,7 @@
                             FontWeight="SemiBold"
                             Style="{StaticResource BaseButtonStyle}"/>
 
-                                <Button
+                                    <Button
                             Visibility="{Binding AdministratorEditVisibility}"
                             Content="Cancel"
                             Command="{Binding CancelEditCommand}"
@@ -263,7 +268,7 @@
                             Width="100"
                             Height="42"/>
 
-                                <Button
+                                    <Button
     Visibility="{Binding AdministratorOnlyVisibility}"
     Content="Company Configuration"
     Command="{Binding CompanyConfigurationCommand}"
@@ -274,7 +279,7 @@
     FontWeight="SemiBold"
     Style="{StaticResource BaseButtonStyle}"/>
 
-                                <Button
+                                    <Button
     Visibility="{Binding AdministratorEditVisibility}"
     Content="Continue to Gateway Setup →"
     Command="{Binding ContinueToGatewaySetupCommand}"
@@ -288,12 +293,12 @@
 
 
 
-                            </StackPanel>
+                                </StackPanel>
 
 
-                            <!-- DELETION -->
+                                <!-- DELETION -->
 
-                            <Border
+                                <Border
                         Visibility="{Binding RequestDeletionVisibility}"
                         Margin="0,25,0,0"
                         
@@ -303,16 +308,16 @@
                         BorderThickness="1"
                         CornerRadius="8">
 
-                                <StackPanel>
+                                    <StackPanel>
 
-                                    <TextBlock
+                                        <TextBlock
                                 Text="Danger Zone"
                                 FontSize="14"
                                 HorizontalAlignment="Center"
                                 FontWeight="SemiBold"
                                 Foreground="#991B1B"/>
 
-                                    <TextBlock
+                                        <TextBlock
                                 Text="If you no longer want to use this company, you can request that it be deleted. A SuperAdmin will review the request."
                                 Margin="0,5,0,12"
                                 HorizontalAlignment="Center"
@@ -321,7 +326,7 @@
                                 TextWrapping="Wrap"
                                 MaxWidth="500"/>
 
-                                    <Button
+                                        <Button
                                 Visibility="{Binding RequestDeletionVisibility}"
                                 Content="Request Company Deletion"
                                 Command="{Binding RequestDeletionCommand}"
@@ -333,7 +338,7 @@
                                 BorderBrush="#B91C1C"
                                 FontWeight="SemiBold"/>
 
-                                    <Button
+                                        <Button
                                 Visibility="{Binding CancelDeletionVisibility}"
                                 Content="Cancel Deletion Request"
                                 Command="{Binding CancelDeletionCommand}"
@@ -345,31 +350,31 @@
                                 Foreground="White"
                                 FontWeight="SemiBold"/>
 
-                                </StackPanel>
+                                    </StackPanel>
 
-                            </Border>
+                                </Border>
 
 
-                            <!-- ERROR -->
+                                <!-- ERROR -->
 
-                            <TextBlock
+                                <TextBlock
                         Text="{Binding ErrorMessage}"
                         Foreground="#DC2626"
                         FontSize="13"
                         TextWrapping="Wrap"
                         Margin="0,12,0,0"/>
 
-                        </StackPanel>
+                            </StackPanel>
 
-                    </Grid>
+                        </Grid>
 
-                </Border>
+                    </Border>
 
-            </Grid>
+                </Grid>
 
-        </ScrollViewer>
+            </ScrollViewer>
 
 
-    </Grid>
-
+        </Grid>
+    </Border>
 </Page>

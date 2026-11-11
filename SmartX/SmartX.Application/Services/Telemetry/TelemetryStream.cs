@@ -1,43 +1,69 @@
-﻿using System.Collections.Concurrent;
-
+﻿
 using DomainTelemetry = SmartX.Domain.Entities.Telemetry;
 
 namespace SmartX.Application.Services.Telemetry;
 
 public sealed class TelemetryStream : ITelemetryStream
 {
-    private readonly ConcurrentQueue<DomainTelemetry> _queue = new();
+    private readonly Queue<DomainTelemetry> _criticalQueue = new();
+    private readonly Queue<DomainTelemetry> _normalQueue = new();
 
-    public int Count => _queue.Count;
+    private readonly object _lock = new();
+
+    public int Count
+    {
+        get
+        {
+            lock (_lock)
+            {
+                return _criticalQueue.Count + _normalQueue.Count;
+            }
+        }
+    }
 
     public void Enqueue(
-        DomainTelemetry telemetry)
+        DomainTelemetry telemetry,
+        bool isCritical = false)
     {
         ArgumentNullException.ThrowIfNull(telemetry);
 
-        _queue.Enqueue(telemetry);
+        lock (_lock)
+        {
+            if (isCritical)
+                _criticalQueue.Enqueue(telemetry);
+            else
+                _normalQueue.Enqueue(telemetry);
+        }
     }
 
     public bool TryDequeue(
         out DomainTelemetry? telemetry)
     {
-        if (_queue.TryDequeue(out var result))
+        lock (_lock)
         {
-            telemetry = result;
+            if (_criticalQueue.Count > 0)
+            {
+                telemetry = _criticalQueue.Dequeue();
+                return true;
+            }
 
-            return true;
+            if (_normalQueue.Count > 0)
+            {
+                telemetry = _normalQueue.Dequeue();
+                return true;
+            }
+
+            telemetry = null;
+            return false;
         }
-
-        telemetry = null;
-
-        return false;
     }
 
     public void Clear()
     {
-        while (_queue.TryDequeue(
-                   out _))
+        lock (_lock)
         {
+            _criticalQueue.Clear();
+            _normalQueue.Clear();
         }
     }
 }

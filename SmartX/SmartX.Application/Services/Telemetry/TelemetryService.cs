@@ -1,11 +1,12 @@
-﻿using System.Security.Claims;
-using SmartX.Shared.Mapping;
-using FluentValidation;
+﻿using FluentValidation;
 using SmartX.Application.Requests.Telemetry;
-using DomainTelemetry = SmartX.Domain.Entities.Telemetry;
+using SmartX.Application.Services.Alerts;
+using SmartX.Application.Services.Sensors;
+using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
-using SmartX.Shared.DTOs.Telemetry;
 using SmartX.Shared.Models;
+using System.Security.Claims;
+using DomainTelemetry = SmartX.Domain.Entities.Telemetry;
 
 namespace SmartX.Application.Services.Telemetry;
 
@@ -15,7 +16,8 @@ public class TelemetryService
     private readonly ISensorRepository _sensorRepository;
     private readonly IGatewayRepository _gatewayRepository;
     private readonly ITelemetryStream _telemetryStream;
-
+    private readonly ISensorAlertProcessor _sensorAlertProcessor;
+    private readonly SensorRegistry _sensorRegistry;
 
     private readonly IValidator<CreateTelemetryRequest>
         _validator;
@@ -25,8 +27,12 @@ public class TelemetryService
         ISensorRepository sensorRepository,
         IGatewayRepository gatewayRepository,
         IValidator<CreateTelemetryRequest> validator,
-        ITelemetryStream telemetryStream)
+        ITelemetryStream telemetryStream,
+        ISensorAlertProcessor sensorAlertProcessor,
+        SensorRegistry sensorRegistry)
     {
+        _sensorAlertProcessor = sensorAlertProcessor;
+        _sensorRegistry = sensorRegistry;
         _repository = repository;
         _sensorRepository = sensorRepository;
         _gatewayRepository = gatewayRepository;
@@ -55,17 +61,55 @@ public class TelemetryService
             return Result<Guid>.Fail(errors);
         }
 
-        var sensor =
-            await _sensorRepository.GetByIdAsync(
+        Sensor? sensor = null;
+
+        // IDENTIFY SENSOR USING MAC ADDRESS
+        if (!string.IsNullOrWhiteSpace(request.DeviceIdentifier))
+        {
+            sensor = _sensorRegistry.GetSensor(
+                request.DeviceIdentifier);
+
+            // FALLBACK TO DATABASE LOOKUP
+            if (sensor is null)
+            {
+                var sensors = await _sensorRepository.GetAllAsync(
+                    cancellationToken);
+
+                sensor = sensors.FirstOrDefault(x =>
+                    string.Equals(
+                        x.DeviceIdentifier,
+                        request.DeviceIdentifier,
+                        StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (sensor is null)
+                return Result<Guid>.Fail("Sensor not found.");
+
+            // VERIFY SENSOR ID IF PROVIDED
+            if (request.SensorId != Guid.Empty &&
+                sensor.Id != request.SensorId)
+            {
+                return Result<Guid>.Fail(
+                    "Sensor ID does not match the device identifier.");
+            }
+        }
+        else
+        {
+            // FALLBACK TO SENSOR ID
+            sensor = await _sensorRepository.GetByIdAsync(
                 request.SensorId,
                 cancellationToken);
+        }
 
         if (sensor is null)
         {
-            return Result<Guid>.Fail(
-                "Sensor not found.");
+            return Result<Guid>.Fail("Sensor not found.");
         }
 
+        // REGISTER SENSOR
+        _sensorRegistry.Register(sensor);
+
+        // CHECK GATEWAY
         if (!sensor.GatewayId.HasValue)
         {
             return Result<Guid>.Fail(
@@ -79,8 +123,7 @@ public class TelemetryService
 
         if (gateway is null)
         {
-            return Result<Guid>.Fail(
-                "Gateway not found.");
+            return Result<Guid>.Fail("Gateway not found.");
         }
 
         if (!CanAccessCompany(
@@ -97,7 +140,7 @@ public class TelemetryService
         {
             Id = Guid.NewGuid(),
 
-            SensorId = request.SensorId,
+            SensorId = sensor.Id,
 
             Timestamp = request.Timestamp,
 
@@ -114,8 +157,16 @@ public class TelemetryService
             telemetry,
             cancellationToken);
 
+        // PROCESS SENSOR ALERTS
+        bool isCritical =
+            await _sensorAlertProcessor.ProcessAsync(
+                telemetry,
+                cancellationToken);
 
-        _telemetryStream.Enqueue(telemetry);
+        // ADD TO PRIORITY STREAM
+        _telemetryStream.Enqueue(
+            telemetry,
+            isCritical);
 
         return Result<Guid>.Ok(
             telemetry.Id);

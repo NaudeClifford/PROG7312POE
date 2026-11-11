@@ -32,9 +32,36 @@ public class CacheSyncService(
     public async Task SyncSensorsAsync(
     CancellationToken cancellationToken = default)
     {
+        // GET CURRENT SERVER SENSORS
         var sensors = await _apiClient.GetSensorsAsync(
             cancellationToken);
 
+        if (sensors is null)
+            return;
+
+        // GET LOCAL SENSORS
+        var cachedSensors = await _sensorCache.GetAllAsync(
+            cancellationToken);
+
+        // SERVER SENSOR IDS
+        var serverSensorIds = sensors
+            .Select(x => x.Id)
+            .ToHashSet();
+
+        // REMOVE DELETED SENSORS
+        foreach (var cachedSensor in cachedSensors)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (!serverSensorIds.Contains(cachedSensor.Id))
+            {
+                await _sensorCache.DeleteAsync(
+                    cachedSensor.Id,
+                    cancellationToken);
+            }
+        }
+
+        // INSERT OR UPDATE SENSORS
         foreach (var dto in sensors)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -48,6 +75,7 @@ public class CacheSyncService(
             {
                 continue;
             }
+
             var sensor = _mapper.Map<Sensor>(dto);
 
             await _sensorCache.UpdateAsync(
@@ -178,6 +206,7 @@ public class CacheSyncService(
 
         foreach (var dto in gateways)
         {
+
             cancellationToken.ThrowIfCancellationRequested();
 
             var cached =

@@ -12,6 +12,16 @@ public class UpdateSensorRequest
 
     public SensorCategory Category { get; set; }
 
+    public string? IpAddress { get; set; }
+
+    public int? Port { get; set; }
+
+    public SensorProtocol Protocol { get; set; }
+
+    public bool IsSimulation { get; set; }
+
+    public bool IsConnectionEnabled { get; set; }
+
     public string Location { get; set; } = string.Empty;
 
     public string Description { get; set; } = string.Empty;

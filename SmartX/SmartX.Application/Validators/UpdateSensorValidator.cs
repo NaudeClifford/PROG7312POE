@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using SmartX.Application.Requests.Sensor;
+using SmartX.Domain.Enums;
+using System.Net;
 using System.Text.RegularExpressions;
 
 namespace SmartX.Application.Validators.Sensor;
@@ -9,32 +11,53 @@ public class UpdateSensorValidator
 {
     public UpdateSensorValidator()
     {
-        RuleFor(x => x.Id)
-            .NotEmpty()
-            .WithMessage("Sensor ID is required.");
-
         RuleFor(x => x.Name)
             .NotEmpty()
-            .MaximumLength(100)
-            .WithMessage("Sensor name is required and must not exceed 100 characters.");
+            .MaximumLength(100);
 
         RuleFor(x => x.DeviceIdentifier)
             .NotEmpty()
+            .Must(x => !string.IsNullOrWhiteSpace(x))
             .Must(IsValidDeviceIdentifier)
             .WithMessage("Enter a valid device identifier.");
 
+        RuleFor(x => x.IpAddress)
+            .Cascade(CascadeMode.Stop)
+            .Must(ip =>
+                string.IsNullOrWhiteSpace(ip) ||
+                IPAddress.TryParse(ip, out _))
+            .WithMessage("Please enter a valid IP address.");
+
+        RuleFor(x => x.Port)
+    .Must(port =>
+        !port.HasValue ||
+        port.Value is >= 1 and <= 65535)
+    .WithMessage("Please enter a valid port between 1 and 65535.");
+
+        RuleFor(x => x)
+            .Must(x =>
+                x.IsSimulation ||
+                (!string.IsNullOrWhiteSpace(x.IpAddress) &&
+                 x.Port.HasValue))
+            .WithMessage(
+                "Real sensors require an IP address and port.");
+
+        RuleFor(x => x.Protocol)
+            .IsInEnum();
+
+        RuleFor(x => x)
+            .Must(x =>
+                !x.IsSimulation ||
+                x.Protocol == SensorProtocol.Simulation)
+            .WithMessage(
+                "Simulation sensors must use the Simulation protocol.");
+
         RuleFor(x => x.Location)
             .NotEmpty()
-            .MaximumLength(200)
-            .WithMessage("Sensor location is required and must not exceed 200 characters.");
-
-        RuleFor(x => x.Category)
-            .IsInEnum()
-            .WithMessage("A valid sensor category is required.");
+            .MaximumLength(200);
 
         RuleFor(x => x.Description)
-            .MaximumLength(500)
-            .WithMessage("Description must not exceed 500 characters.");
+            .MaximumLength(500);
     }
 
     private static bool IsValidMacAddress(string macAddress)

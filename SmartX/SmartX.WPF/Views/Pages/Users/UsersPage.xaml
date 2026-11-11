@@ -6,226 +6,229 @@
       mc:Ignorable="d"
       Title="Users">
 
-    <Grid Background="{StaticResource BackgroundBrush}">
+    <Border Margin="20"
+            Padding="25"
+            Background="{StaticResource DarkBrush}"
+            CornerRadius="24">
 
-        <!-- LIST MODE -->
+        <Grid Margin="10">
+            <!-- LIST MODE -->
 
-        <Grid>
-            <Grid.Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Visibility"
+            <Grid>
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility"
                             Value="Collapsed"/>
 
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsListMode}"
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsListMode}"
                                      Value="True">
-                            <Setter Property="Visibility"
+                                <Setter Property="Visibility"
                                     Value="Visible"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
 
-            <!-- HEADER -->
-            <Border Grid.Row="0"
-        Background="{StaticResource BackgroundBrush}"
+                <!-- HEADER -->
+                <Border Grid.Row="0"
         Padding="24,20"
 
         BorderBrush="#E5E7EB"
         BorderThickness="0,0,0,1">
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="Users"
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="Users"
                        FontSize="30"
                        HorizontalAlignment="Center"
                        FontWeight="SemiBold"
                        Foreground="{StaticResource LightTextBrush}"/>
 
-                        <TextBlock Text="{Binding CurrentCompanyName}"
+                            <TextBlock Text="{Binding CurrentCompanyName}"
                        Margin="0,5,0,0"
                        HorizontalAlignment="Center"
                        FontSize="20"
                        Foreground="{StaticResource LightTextBrush}"
                        Opacity="0.8"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <WrapPanel Grid.Column="1"
+                        <WrapPanel Grid.Column="1"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Right">
 
-                        <Button Content="Refresh"
+                            <Button Content="Refresh"
                     Command="{Binding RefreshCommand}"
-                    Style="{StaticResource BaseButtonStyle}"
+                    Style="{StaticResource SecondColourButtonStyle}"
                     Padding="16,9"
                     Margin="0,0,8,0"/>
 
-                        <Button Content="Edit User"
+                            <Button Content="Edit User"
                     Command="{Binding EditUserCommand}"
-                    IsEnabled="{Binding SelectedUser}"
-                    Style="{StaticResource BaseButtonStyle}"
+                    IsEnabled="{Binding HasSelectedUser}"
+                    Style="{StaticResource SecondColourButtonStyle}"
                     Padding="16,9"
                     Margin="0,0,8,0"/>
 
-                        <Button Content="+ Add User"
+                            <Button Content="+ Add User"
                     Command="{Binding AddUserCommand}"
-                    Style="{StaticResource BaseButtonStyle}"
+                    Style="{StaticResource SecondColourButtonStyle}"
                     Padding="16,9"
                     Margin="0,0,8,0"/>
 
-                        <Button Content="Delete User"
+                            <Button Content="Delete User"
                     Command="{Binding DeleteUserCommand}"
-                    IsEnabled="{Binding SelectedUser}"
-                    Style="{StaticResource BaseButtonStyle}"
+                    IsEnabled="{Binding HasSelectedUser}"
+                    Style="{StaticResource SecondColourButtonStyle}"
                     Padding="16,9"/>
 
-                    </WrapPanel>
-                </Grid>
-            </Border>
+                        </WrapPanel>
+                    </Grid>
+                </Border>
 
 
-            <!-- FILTER BAR -->
-            <Border Grid.Row="1"
+                <!-- FILTER BAR -->
+                <Border Grid.Row="1"
                     Margin="24,15,24,10"
                     Padding="16"
                     Background="White"
                     CornerRadius="8">
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="1.4*"/>
-                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1.4*"/>
+                        </Grid.ColumnDefinitions>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
-                    <!-- Company -->
-                    <StackPanel Grid.Row="0"
+                        <!-- Company -->
+                        <StackPanel Grid.Row="0"
                         Grid.Column="0"
                         Margin="0,0,12,12">
 
-                        <TextBlock Text="Company"
+                            <TextBlock Text="Company"
                             Style="{StaticResource BodyTextStyleBlack}"
                             Margin="0,0,0,5"/>
 
-                        <ComboBox Grid.Row="1"
+                            <ComboBox Grid.Row="1"
                             ItemsSource="{Binding Companies}"
                             SelectedItem="{Binding SelectedCompany, Mode=TwoWay}"
                             DisplayMemberPath="Name"
                             Height="36">
-                            <ComboBox.Style>
-                                <Style TargetType="ComboBox"
+                                <ComboBox.Style>
+                                    <Style TargetType="ComboBox"
                                     BasedOn="{StaticResource BaseComboBoxStyle}">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Setter Property="Visibility" Value="Collapsed"/>
 
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsSuperAdmin}"
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsSuperAdmin}"
                                             Value="True">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ComboBox.Style>
-                        </ComboBox>
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ComboBox.Style>
+                            </ComboBox>
 
-                        <TextBlock Text="{Binding CurrentCompanyName}"
+                            <TextBlock Text="{Binding CurrentCompanyName}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center"
                             MinHeight="36">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsSuperAdmin}"
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsSuperAdmin}"
                                      Value="True">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </StackPanel>
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
 
-                    <!-- Name -->
-                    <StackPanel Grid.Row="0"
+                        <!-- Name -->
+                        <StackPanel Grid.Row="0"
                             Grid.Column="1"
                             Margin="0,0,12,12">
-                        <TextBlock Text="Name"
+                            <TextBlock Text="Name"
                              Style="{StaticResource BodyTextStyleBlack}"
                             Margin="0,0,0,5"/>
 
-                        <TextBox Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}"
                             Height="36"
                             HorizontalContentAlignment="Center"
                             Padding="10,6"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <!-- Email -->
-                    <StackPanel Grid.Row="0"
+                        <!-- Email -->
+                        <StackPanel Grid.Row="0"
                          Grid.Column="2"
                         Margin="0,0,0,12">
-                        <TextBlock Text="Email"
+                            <TextBlock Text="Email"
                             Style="{StaticResource BodyTextStyleBlack}"
                             Margin="0,0,0,5"/>
 
-                        <TextBox Text="{Binding EmailFilter, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding EmailFilter, UpdateSourceTrigger=PropertyChanged}"
                             Height="36"
                             HorizontalContentAlignment="Center"
                             Padding="10,6"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <!-- Role -->
-                    <StackPanel Grid.Row="1"
+                        <!-- Role -->
+                        <StackPanel Grid.Row="1"
                         Grid.Column="0"
                         Margin="0,0,12,0">
-                        <TextBlock Text="Role"
+                            <TextBlock Text="Role"
                             Style="{StaticResource BodyTextStyleBlack}"
                             Margin="0,0,0,5"/>
 
-                        <ComboBox ItemsSource="{Binding RoleFilters}"
+                            <ComboBox ItemsSource="{Binding RoleFilters}"
                             SelectedItem="{Binding SelectedRoleFilter, Mode=TwoWay}"
                             Style="{StaticResource BaseComboBoxStyle}"
                         HorizontalContentAlignment="Center"
                         FontSize="20"
                         Height="36"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <!-- Status -->
-                    <StackPanel Grid.Row="1"
+                        <!-- Status -->
+                        <StackPanel Grid.Row="1"
                         Grid.Column="1"
                         Margin="0,0,12,0">
-                        
-                        <TextBlock Text="Status"
+
+                            <TextBlock Text="Status"
                             Style="{StaticResource BodyTextStyleBlack}"
                             Margin="0,0,0,5"/>
 
-                        <ComboBox ItemsSource="{Binding StatusFilters}"
+                            <ComboBox ItemsSource="{Binding StatusFilters}"
                             SelectedItem="{Binding StatusFilter, Mode=TwoWay}"
                             Style="{StaticResource BaseComboBoxStyle}"
                             Height="36"
                             HorizontalContentAlignment="Center"
                         FontSize="20"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <!-- Clear -->
-                    <Button Grid.Row="1"
+                        <!-- Clear -->
+                        <Button Grid.Row="1"
                         Grid.Column="2"
                         Content="Clear filters"
                         Command="{Binding ClearFiltersCommand}"
@@ -233,146 +236,284 @@
                         Padding="16,8"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Bottom"/>
-                </Grid>
+                    </Grid>
 
-            </Border>
+                </Border>
 
 
-            <!-- SUMMARY -->
-            <Grid Grid.Row="2"
+                <!-- SUMMARY -->
+                <Grid Grid.Row="2"
                   Margin="24,0,24,10">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
 
-                <!-- TOTAL -->
-                <Border Grid.Column="0"
+                    <!-- TOTAL -->
+                    <Border Grid.Column="0"
                     Style="{StaticResource ElevatedCardStyle}"
                     Margin="0,0,8,0"
                     Padding="18">
-                    <StackPanel>
-                        <TextBlock Text="Total Users"
+                        <StackPanel>
+                            <TextBlock Text="Total Users"
                             Style="{StaticResource MutedTextStyle}"/>
 
-                        <TextBlock Text="{Binding TotalUsers}"
+                            <TextBlock Text="{Binding TotalUsers}"
                    Margin="0,5,0,0"
                    FontSize="24"
                    HorizontalAlignment="Center"
                    FontWeight="SemiBold"
                    Foreground="{StaticResource DarkBrush}"/>
-                    </StackPanel>
-                </Border>
+                        </StackPanel>
+                    </Border>
 
 
-                <!-- ACTIVE -->
-                <Border Grid.Column="1"
+                    <!-- ACTIVE -->
+                    <Border Grid.Column="1"
                     Style="{StaticResource ElevatedCardStyle}"
                     Margin="0,0,8,0"
                     Padding="18">
 
 
-                    <StackPanel>
+                        <StackPanel>
 
-                        <TextBlock Text="Active"
+                            <TextBlock Text="Active"
                             Style="{StaticResource MutedTextStyle}"/>
 
-                        <TextBlock Text="{Binding ActiveUsers}"
+                            <TextBlock Text="{Binding ActiveUsers}"
                                 HorizontalAlignment="Center"
                                    Margin="0,5,0,0"
                                    FontSize="24"
                                    FontWeight="SemiBold"
                                    Foreground="#16A34A"/>
 
-                    </StackPanel>
+                        </StackPanel>
 
-                </Border>
+                    </Border>
 
 
-                <!-- ADMINISTRATORS -->
-                <Border Grid.Column="2"
+                    <!-- ADMINISTRATORS -->
+                    <Border Grid.Column="2"
                     Style="{StaticResource ElevatedCardStyle}"
                     Margin="0,0,8,0"
                     Padding="18">
 
-                    <StackPanel>
+                        <StackPanel>
 
-                        <TextBlock Text="Administrators"
+                            <TextBlock Text="Administrators"
                             Style="{StaticResource MutedTextStyle}"/>
 
-                        <TextBlock Text="{Binding AdministratorCount}"
+                            <TextBlock Text="{Binding AdministratorCount}"
                                    Margin="0,5,0,0"
                                    FontSize="24"
                                    HorizontalAlignment="Center"
                                    FontWeight="SemiBold"
                                    Foreground="#7C3AED"/>
 
-                    </StackPanel>
+                        </StackPanel>
 
-                </Border>
+                    </Border>
 
 
-                <!-- TECHNICIANS -->
-                <Border Grid.Column="3"
+                    <!-- TECHNICIANS -->
+                    <Border Grid.Column="3"
                          Style="{StaticResource ElevatedCardStyle}"
                     Margin="0,0,8,0"
                     Padding="18">
 
-                    <StackPanel>
+                        <StackPanel>
 
-                        <TextBlock Text="Technicians"
+                            <TextBlock Text="Technicians"
                             Style="{StaticResource MutedTextStyle}"/>
 
-                        <TextBlock Text="{Binding TechnicianCount}"
+                            <TextBlock Text="{Binding TechnicianCount}"
                                    Margin="0,5,0,0"
                                    HorizontalAlignment="Center"
                                    FontSize="24"
                                    FontWeight="SemiBold"
                                    Foreground="#2563EB"/>
 
-                    </StackPanel>
+                        </StackPanel>
 
-                </Border>
+                    </Border>
 
 
-                <!-- VIEWERS -->
-                <Border Grid.Column="4"
+                    <!-- VIEWERS -->
+                    <Border Grid.Column="4"
                           Style="{StaticResource ElevatedCardStyle}"
                     Margin="0"
                     Padding="18">
 
-                    <StackPanel>
+                        <StackPanel>
 
-                        <TextBlock Text="Viewers"
+                            <TextBlock Text="Viewers"
                             Style="{StaticResource MutedTextStyle}"/>
 
-                        <TextBlock Text="{Binding ViewerCount}"
+                            <TextBlock Text="{Binding ViewerCount}"
                                    Margin="0,5,0,0"
                                    HorizontalAlignment="Center"
                                    FontSize="24"
                                    FontWeight="SemiBold"
                                    Foreground="#7C3AED"/>
 
-                    </StackPanel>
+                        </StackPanel>
 
-                </Border>
+                    </Border>
 
-            </Grid>
+                </Grid>
 
 
-            <!-- USERS TABLE -->
-            <Border Grid.Row="3"
+                <!-- USERS TABLE -->
+                <Border Grid.Row="3"
                     Margin="24,0,24,24"
                     Background="White"
                     CornerRadius="8"
                     Padding="1">
 
-                <Grid>
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+
+                        <!-- ERROR -->
+                        <TextBlock Grid.Row="0"
+                         Text="{Binding ErrorMessage}"
+                            Foreground="#DC2626"
+                            Margin="16,8"
+                            TextWrapping="Wrap">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock"
+                                BasedOn="{StaticResource BodyTextStyleBlack}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+
+                                        <DataTrigger Binding="{Binding ErrorMessage}"
+                         Value="{x:Null}">
+                                            <Setter Property="Visibility"
+                        Value="Collapsed"/>
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding ErrorMessage}"
+                         Value="">
+                                            <Setter Property="Visibility"
+                        Value="Collapsed"/>
+                                        </DataTrigger>
+
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+
+                        <!-- TABLE -->
+                        <DataGrid Grid.Row="1"
+          ItemsSource="{Binding FilteredUsers}"
+          SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
+          Background="White"
+          AutoGenerateColumns="False"
+          CanUserAddRows="False"
+          IsReadOnly="True"
+          HeadersVisibility="Column"
+          SelectionMode="Single"
+          Margin="5">
+
+                            <DataGrid.Columns>
+
+                                <DataGridTextColumn Header="Name"
+                            Binding="{Binding DisplayName}"
+                            Width="2*"/>
+
+                                <DataGridTextColumn Header="Email"
+                            Binding="{Binding Email}"
+                            Width="2*"/>
+
+                                <DataGridTextColumn Header="Role"
+                            Binding="{Binding Role}"
+                            Width="*"/>
+
+                                <DataGridCheckBoxColumn Header="Active"
+                                Binding="{Binding IsActive}"
+                                Width="*"/>
+
+                                <DataGridTextColumn Header="Created"
+                            Binding="{Binding CreatedAt,
+                                StringFormat={}{0:yyyy-MM-dd}}"
+                            Width="*"/>
+
+                            </DataGrid.Columns>
+
+                            <DataGrid.ContextMenu>
+
+                                <ContextMenu
+            DataContext="{Binding PlacementTarget.DataContext,
+                RelativeSource={RelativeSource Self}}">
+
+                                    <MenuItem Header="Edit"
+                      Command="{Binding EditUserCommand}"/>
+
+                                    <MenuItem Header="Delete"
+                      Command="{Binding DeleteUserCommand}"/>
+
+                                </ContextMenu>
+
+                            </DataGrid.ContextMenu>
+
+                        </DataGrid>
+
+                    </Grid>
+
+                </Border>
+
+            </Grid>
+
+            <!-- CREATE / EDIT MODE -->
+
+            <Grid MaxWidth="500" HorizontalAlignment="Stretch">
+
+                <Grid.Style>
+
+                    <Style TargetType="Grid">
+
+                        <Setter Property="Visibility"
+                            Value="Collapsed"/>
+
+                        <Style.Triggers>
+
+                            <!-- CREATE -->
+                            <DataTrigger Binding="{Binding IsCreateMode}"
+                                     Value="True">
+
+                                <Setter Property="Visibility"
+                                    Value="Visible"/>
+
+                            </DataTrigger>
+
+
+                            <!-- EDIT -->
+                            <DataTrigger Binding="{Binding IsEditMode}"
+                                     Value="True">
+
+                                <Setter Property="Visibility"
+                                    Value="Visible"/>
+
+                            </DataTrigger>
+
+                        </Style.Triggers>
+
+                    </Style>
+
+                </Grid.Style>
+
+
+                <Grid Margin="24">
 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -380,250 +521,109 @@
                     </Grid.RowDefinitions>
 
 
-                    <!-- ERROR -->
-                    <TextBlock Grid.Row="0"
-                         Text="{Binding ErrorMessage}"
-                            Foreground="#DC2626"
-                            Margin="16,8"
-                            TextWrapping="Wrap">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock"
-                                BasedOn="{StaticResource BodyTextStyleBlack}">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ErrorMessage}"
-                                        Value="{x:Null}">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding ErrorMessage}"
-                                        Value="">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding ErrorMessage}"
-                                        Value="">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
-
-
-                    <!-- TABLE -->
-                    <DataGrid Grid.Row="1"
-                              ItemsSource="{Binding FilteredUsers}"
-                              SelectedItem="{Binding SelectedUser}"
-                              Background="White"
-                              AutoGenerateColumns="False"
-                              CanUserAddRows="False"
-                              IsReadOnly="True"
-                              HeadersVisibility="Column"
-                              SelectionMode="Single"
-                              Margin="5">
-
-                        <DataGrid.Columns>
-
-                            <DataGridTextColumn Header="Name"
-                                                Binding="{Binding DisplayName}"
-                                                Width="2*"/>
-
-                            <DataGridTextColumn Header="Email"
-                                                Binding="{Binding Email}"
-                                                Width="2*"/>
-
-                            <DataGridTextColumn Header="Role"
-                                                Binding="{Binding Role}"
-                                                Width="*"/>
-
-                            <DataGridCheckBoxColumn Header="Active"
-                                                    Binding="{Binding IsActive}"
-                                                    Width="*"/>
-
-                            <DataGridTextColumn Header="Created"
-                                                Binding="{Binding CreatedAt,
-                                                          StringFormat={}{0:yyyy-MM-dd}}"
-                                                Width="*"/>
-
-                        </DataGrid.Columns>
-
-
-                        <!-- CONTEXT MENU -->
-                        <DataGrid.ContextMenu>
-                            <ContextMenu
-                                DataContext="{Binding PlacementTarget.DataContext,
-                                    RelativeSource={RelativeSource Self}}">
-
-                                <MenuItem Header="Edit"
-                                    Command="{Binding DataContext.EditUserCommand,
-                                    RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-
-                                <MenuItem Header="Delete"
-                                    Command="{Binding DataContext.DeleteUserCommand,
-                                    RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"/>
-                            </ContextMenu>
-                        </DataGrid.ContextMenu>
-
-                    </DataGrid>
-
-                </Grid>
-
-            </Border>
-
-        </Grid>
-
-        <!-- CREATE / EDIT MODE -->
-
-        <Grid MaxWidth="500" HorizontalAlignment="Stretch">
-
-            <Grid.Style>
-
-                <Style TargetType="Grid">
-
-                    <Setter Property="Visibility"
-                            Value="Collapsed"/>
-
-                    <Style.Triggers>
-
-                        <!-- CREATE -->
-                        <DataTrigger Binding="{Binding IsCreateMode}"
-                                     Value="True">
-
-                            <Setter Property="Visibility"
-                                    Value="Visible"/>
-
-                        </DataTrigger>
-
-
-                        <!-- EDIT -->
-                        <DataTrigger Binding="{Binding IsEditMode}"
-                                     Value="True">
-
-                            <Setter Property="Visibility"
-                                    Value="Visible"/>
-
-                        </DataTrigger>
-
-                    </Style.Triggers>
-
-                </Style>
-
-            </Grid.Style>
-
-
-            <Grid Margin="24">
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-
-                <!-- FORM HEADER -->
-                <Border Grid.Row="0"
+                    <!-- FORM HEADER -->
+                    <Border Grid.Row="0"
                         Background="White"
                         Padding="28,22"
                         BorderBrush="#E5E7EB"
                         BorderThickness="0,0,0,1"
                         CornerRadius="8,8,0,0">
 
-                    <Grid>
+                        <Grid>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
 
 
-                        <StackPanel>
+                            <StackPanel>
 
-                            <TextBlock FontSize="28"
+                                <TextBlock FontSize="28"
                                        FontWeight="SemiBold"
                                        Foreground="#111827">
 
-                                <TextBlock.Style>
+                                    <TextBlock.Style>
 
-                                    <Style TargetType="TextBlock">
+                                        <Style TargetType="TextBlock">
 
-                                        <Setter Property="Text"  Value="Create User"/>
-                                        <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                            <Setter Property="Text"  Value="Create User"/>
+                                            <Setter Property="HorizontalAlignment"  Value="Center"/>
 
-                                        <Style.Triggers>
+                                            <Style.Triggers>
 
-                                            <DataTrigger Binding="{Binding IsEditMode}"
+                                                <DataTrigger Binding="{Binding IsEditMode}"
                                                          Value="True">
 
-                                                <Setter Property="Text"
+                                                    <Setter Property="Text"
                                                         Value="Edit User"/>
-                                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
 
 
-                                            </DataTrigger>
+                                                </DataTrigger>
 
-                                        </Style.Triggers>
+                                            </Style.Triggers>
 
-                                    </Style>
+                                        </Style>
 
-                                </TextBlock.Style>
+                                    </TextBlock.Style>
 
-                            </TextBlock>
+                                </TextBlock>
 
 
-                            <TextBlock Text="{Binding CurrentCompanyName}"
+                                <TextBlock Text="{Binding CurrentCompanyName}"
                                        Margin="0,5,0,0"
                                        HorizontalAlignment="Center"
                                        FontSize="20" 
                                        Foreground="#6B7280"/>
 
-                        </StackPanel>
+                            </StackPanel>
 
 
 
 
-                    </Grid>
+                        </Grid>
 
-                </Border>
+                    </Border>
 
 
-                <!-- FORM BODY -->
-                <Border Grid.Row="1"
+                    <!-- FORM BODY -->
+                    <Border Grid.Row="1"
                         Background="White"
                         Padding="28"
                         CornerRadius="0,0,8,8">
 
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-                        <Grid MaxWidth="700"
+                            <Grid MaxWidth="700"
                               HorizontalAlignment="Center">
 
-                            <Grid.RowDefinitions>
+                                <Grid.RowDefinitions>
 
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-
-
-                            </Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
 
 
-                            <!-- DISPLAY NAME -->
-                            <StackPanel Grid.Row="0"
+                                </Grid.RowDefinitions>
+
+
+                                <!-- DISPLAY NAME -->
+                                <StackPanel Grid.Row="0"
                                         Margin="0,0,0,18">
 
-                                <TextBlock Text="Display Name"
+                                    <TextBlock Text="Display Name"
                                            FontSize="16"
                                            HorizontalAlignment="Center"
                                            FontWeight="SemiBold"
                                            Foreground="#374151"
                                            Margin="0,0,0,6"/>
 
-                                <TextBox Text="{Binding FormDisplayName,  UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBox Text="{Binding FormDisplayName,  UpdateSourceTrigger=PropertyChanged}"
                                          
                                          Height="40"
                                          HorizontalContentAlignment="Center"
@@ -631,125 +631,126 @@
                                          FontSize="18"
                                          Padding="5,7"/>
 
-                            </StackPanel>
+                                </StackPanel>
 
 
-                            <!-- EMAIL -->
-                            <StackPanel Grid.Row="1"
+                                <!-- EMAIL -->
+                                <StackPanel Grid.Row="1"
                                 Margin="0,0,0,18">
 
-                                <StackPanel.Style>
-                                    <Style TargetType="StackPanel">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
 
-                                        <!-- Visible by default -->
-                                        <Setter Property="Visibility"
+                                            <!-- Visible by default -->
+                                            <Setter Property="Visibility"
                                             Value="Visible"/>
 
-                                        <Style.Triggers>
+                                            <Style.Triggers>
 
-                                            <!-- Hide when editing -->
-                                            <DataTrigger Binding="{Binding IsEditMode}"
+                                                <!-- Hide when editing -->
+                                                <DataTrigger Binding="{Binding IsEditMode}"
                                                  Value="True">
 
-                                                <Setter Property="Visibility"
+                                                    <Setter Property="Visibility"
                                                     Value="Collapsed"/>
 
-                                            </DataTrigger>
+                                                </DataTrigger>
 
-                                        </Style.Triggers>
+                                            </Style.Triggers>
 
-                                    </Style>
-                                </StackPanel.Style>
+                                        </Style>
+                                    </StackPanel.Style>
 
-                                <TextBlock Text="Email"
+                                    <TextBlock Text="Email"
                                            FontSize="16"
                                            HorizontalAlignment="Center"
                                            FontWeight="SemiBold"
                                            Foreground="#374151"
                                            Margin="0,0,0,6"/>
 
-                                <TextBox Text="{Binding FormEmail,
-                                    UpdateSourceTrigger=PropertyChanged}"                                         Height="40"
+                                    <TextBox Text="{Binding FormEmail,
+                                    UpdateSourceTrigger=PropertyChanged}"  Height="40"
                                          HorizontalContentAlignment="Center"
                                          HorizontalAlignment="Stretch"
                                          FontSize="18"
                                          Padding="5,7"/>
 
-                            </StackPanel>
+                                </StackPanel>
 
 
-                            <!-- TEMPORARY PASSWORD -->
-                            <StackPanel Grid.Row="2"
+                                <!-- TEMPORARY PASSWORD -->
+                                <StackPanel Grid.Row="2"
                                 Margin="0,0,0,18">
 
-                                <StackPanel.Style>
-                                    <Style TargetType="StackPanel">
+                                    <StackPanel.Style>
+                                        <Style TargetType="StackPanel">
 
-                                        <!-- Visible by default -->
-                                        <Setter Property="Visibility"
+                                            <!-- Visible by default -->
+                                            <Setter Property="Visibility"
                                             Value="Visible"/>
-                                        <Style.Triggers>
+                                            <Style.Triggers>
 
-                                            <!-- Hide when editing -->
-                                            <DataTrigger Binding="{Binding IsEditMode}"
+                                                <!-- Hide when editing -->
+                                                <DataTrigger Binding="{Binding IsEditMode}"
                                                 Value="True">
 
-                                                <Setter Property="Visibility"
+                                                    <Setter Property="Visibility"
                                                     Value="Collapsed"/>
 
-                                            </DataTrigger>
+                                                </DataTrigger>
 
-                                        </Style.Triggers>
+                                            </Style.Triggers>
 
-                                    </Style>
-                                </StackPanel.Style>
+                                        </Style>
+                                    </StackPanel.Style>
 
-                                <TextBlock Text="Temporary Password"
+                                    <TextBlock Text="Temporary Password"
                                            FontSize="16"
                                            HorizontalAlignment="Center"
                                            FontWeight="SemiBold"
                                            Foreground="#374151"
                                            Margin="0,0,0,6"/>
 
-                                <TextBox Text="{Binding FormPassword,
+                                    <TextBox Text="{Binding FormPassword,
                              UpdateSourceTrigger=PropertyChanged}"                                         Height="40"
                                          HorizontalContentAlignment="Center"
                                          HorizontalAlignment="Stretch"
                                          FontSize="18"
                                          Padding="5,7"/>
 
-                                <TextBlock Text="This password is used when creating the user's Firebase account."
+                                    <TextBlock Text="This password is used when creating the user's Firebase account."
                                     FontSize="12"
                                     Foreground="#6B7280"
                                     Margin="0,5,0,0"
                                     TextWrapping="Wrap"/>
 
-                            </StackPanel>
+                                </StackPanel>
 
 
-                            <!-- ROLE -->
-                            <StackPanel Grid.Row="3"
+                                <!-- ROLE -->
+                                <StackPanel Grid.Row="3"
                                         Margin="0,0,0,18">
 
-                                <TextBlock Text="Role"
+                                    <TextBlock Text="Role"
                                            FontSize="16"
                                            HorizontalAlignment="Center"
                                            FontWeight="SemiBold"
                                            Foreground="#374151"
                                            Margin="0,0,0,6"/>
 
-                                <ComboBox ItemsSource="{Binding AvailableRoles}"
-                                          SelectedItem="{Binding FormRole, Mode=TwoWay}"                                         Height="40"
+                                    <ComboBox ItemsSource="{Binding AvailableRoles}"
+                                          SelectedItem="{Binding FormRole, Mode=TwoWay}"                                         
+                                          Height="40"
                                          HorizontalContentAlignment="Center"
                                          HorizontalAlignment="Stretch"
                                          FontSize="18"
                                          Padding="5,7"/>
 
-                            </StackPanel>
+                                </StackPanel>
 
 
-                            <!-- ACTIVE -->
-                            <CheckBox Grid.Row="4"
+                                <!-- ACTIVE -->
+                                <CheckBox Grid.Row="4"
                                       Content="Active"
                                       IsChecked="{Binding FormIsActive, Mode=TwoWay}"
                                       FontSize="13"
@@ -757,8 +758,8 @@
                                       Margin="0,0,0,24"/>
 
 
-                            <!-- ERROR -->
-                            <TextBlock Grid.Row="5"
+                                <!-- ERROR -->
+                                <TextBlock Grid.Row="5"
                                        Text="{Binding ErrorMessage}"
                                        Foreground="#DC2626"
                                        FontSize="13"
@@ -766,33 +767,33 @@
                                        Margin="0,0,0,18"/>
 
 
-                            <!-- SAVE -->
-                            <StackPanel Grid.Row="6"
+                                <!-- SAVE -->
+                                <StackPanel Grid.Row="6"
                                         Orientation="Horizontal" HorizontalAlignment="Center">
 
-                                <Button Content="Save User"
+                                    <Button Content="Save User"
                                         Command="{Binding SaveUserCommand}"
                                         Style="{StaticResource BaseButtonStyle}"
                                         Padding="22,10"
                                         Margin="0,0,10,0"/>
 
-                                <Button Content="Cancel"
+                                    <Button Content="Cancel"
                                         Command="{Binding CancelCommand}"
                                         Style="{StaticResource BaseButtonStyle}"
                                         Padding="22,10"/>
 
-                            </StackPanel>
+                                </StackPanel>
 
-                        </Grid>
+                            </Grid>
 
-                    </ScrollViewer>
+                        </ScrollViewer>
 
-                </Border>
+                    </Border>
+
+                </Grid>
 
             </Grid>
 
         </Grid>
-
-    </Grid>
-
+    </Border>
 </Page>

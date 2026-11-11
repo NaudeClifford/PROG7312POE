@@ -1,15 +1,18 @@
-﻿using DomainTelemetry = SmartX.Domain.Entities.Telemetry;
+﻿
+using DomainTelemetry = SmartX.Domain.Entities.Telemetry;
 
-namespace SmartX.Application.Services.Telemetry
+namespace SmartX.Application.Services.Telemetry;
+
+public interface ITelemetryStream
 {
-    public interface ITelemetryStream
-    {
-        void Enqueue(DomainTelemetry telemetry);
+    void Enqueue(
+        DomainTelemetry telemetry,
+        bool isCritical = false);
 
-        bool TryDequeue(out DomainTelemetry? telemetry);
+    bool TryDequeue(
+        out DomainTelemetry? telemetry);
 
-        int Count { get; }
+    int Count { get; }
 
-        void Clear();
-    }
+    void Clear();
 }

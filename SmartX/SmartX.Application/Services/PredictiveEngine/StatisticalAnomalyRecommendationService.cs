@@ -1,33 +1,51 @@
 ﻿
-using SmartX.Domain.Entities;
-using SmartX.WPF.Models.History;
+using SmartX.Domain.Interfaces;
+using SmartX.Shared.DTOs;
 
-namespace SmartX.WPF.Services.PredictiveEngine;
+namespace SmartX.Application.Services.PredictiveEngine;
 
-public sealed class StatisticalAnomalyRecommendationService : IAnomalyRecommendationService
+public sealed class StatisticalAnomalyRecommendationService
+    : IAnomalyRecommendationService
 {
-    public Task<AnomalyRecommendation?> AnalyzeAsync(
+    private readonly ITelemetryRepository _telemetryRepository;
+
+    public StatisticalAnomalyRecommendationService(
+        ITelemetryRepository telemetryRepository)
+    {
+        _telemetryRepository = telemetryRepository;
+    }
+
+    public async Task<AnomalyRecommendationDto?> AnalyzeAsync(
         Guid sensorId,
-        IReadOnlyCollection<Telemetry> telemetry,
         CancellationToken cancellationToken = default)
     {
-        cancellationToken.ThrowIfCancellationRequested();
+        if (sensorId == Guid.Empty)
+            throw new ArgumentException("Sensor ID is required.");
+
+        var telemetry =
+            await _telemetryRepository.GetBySensorIdAsync(
+                sensorId,
+                cancellationToken);
 
         var readings = telemetry
             .Where(x => x.SensorId == sensorId)
             .OrderBy(x => x.Timestamp)
             .ToArray();
+        System.Diagnostics.Debug.WriteLine(
+    $"ANALYSIS SENSOR: {sensorId}");
 
-        // Require enough data to establish a baseline.
+        System.Diagnostics.Debug.WriteLine(
+            $"READINGS FOUND: {readings.Length}");
+        // Require enough history for a meaningful comparison.
         if (readings.Length < 6)
-            return Task.FromResult<AnomalyRecommendation?>(null);
+            return null;
 
         var latest = readings[^1];
 
-        // Compare the latest reading against the preceding 20 readings.
+        // Exclude the latest reading from the baseline.
         var baseline = readings
-            .Skip(Math.Max(0, readings.Length - 21))
-            .Take(readings.Length - Math.Max(0, readings.Length - 21) - 1)
+            .Take(readings.Length - 1)
+            .TakeLast(20)
             .ToArray();
 
         var candidates = new[]
@@ -67,56 +85,53 @@ public sealed class StatisticalAnomalyRecommendationService : IAnomalyRecommenda
             .FirstOrDefault();
 
         if (anomaly is null)
-            return Task.FromResult<AnomalyRecommendation?>(null);
+            return null;
 
         var severity = anomaly.SeverityScore >= 4
             ? "High"
             : "Medium";
 
         var explanation =
-            $"{anomaly.Metric} is {anomaly.Observed:F2} {anomaly.Unit}; " +
-            $"the recent baseline is {anomaly.Expected:F2} {anomaly.Unit}.";
+            $"{anomaly.Metric} is {anomaly.Observed:F2} " +
+            $"{anomaly.Unit}; the recent baseline is " +
+            $"{anomaly.Expected:F2} {anomaly.Unit}.";
 
         var action = anomaly.Metric switch
         {
             "Temperature" =>
-                "Inspect cooling, ventilation, and sensor placement. " +
-                "Reduce load if the elevated temperature is confirmed.",
+                "Inspect cooling, ventilation, and sensor placement.",
 
             "Power" =>
-                "Inspect the connected load and compare consumption " +
-                "with the expected operating state.",
+                "Inspect the connected load and compare consumption.",
 
             "Voltage" =>
-                "Verify the supply voltage and inspect the power source " +
-                "and electrical connections.",
+                "Verify supply voltage and electrical connections.",
 
             "Current" =>
                 "Inspect the connected load for unexpected current draw.",
 
-            _ => "Inspect the sensor and verify the measurement."
+            _ =>
+                "Inspect the sensor and verify the measurement."
         };
 
-        // No command is automatically inferred from an anomaly.
-        // Configure an approved command mapping for the specific device
-        // and operating condition before allowing command execution.
-        var recommendation = new AnomalyRecommendation(
-            sensorId,
-            anomaly.Metric,
-            anomaly.Observed,
-            anomaly.Expected,
-            anomaly.Unit,
-            severity,
-            explanation,
-            action,
-            SuggestedCommand: null,
-            Confidence: Math.Min(
+        // Recommendations are advisory; do not automatically
+        // generate an executable shutdown command.
+        return new AnomalyRecommendationDto
+        {
+            SensorId = sensorId,
+            Metric = anomaly.Metric,
+            Observed = anomaly.Observed,
+            Expected = anomaly.Expected,
+            Unit = anomaly.Unit,
+            Severity = severity,
+            Explanation = explanation,
+            RecommendedAction = action,
+            SuggestedCommand = null,
+            Confidence = Math.Min(
                 0.99,
                 0.60 + anomaly.SeverityScore * 0.08),
-            DetectedAt: DateTime.UtcNow);
-
-        return Task.FromResult<AnomalyRecommendation?>(
-            recommendation);
+            DetectedAt = DateTime.UtcNow
+        };
     }
 
     private static Candidate? CreateCandidate(
@@ -128,12 +143,12 @@ public sealed class StatisticalAnomalyRecommendationService : IAnomalyRecommenda
     {
         if (!observedValue.HasValue ||
             !double.IsFinite(observedValue.Value))
-        {
             return null;
-        }
 
         var values = baselineValues
-            .Where(x => x.HasValue && double.IsFinite(x.Value))
+            .Where(x =>
+                x.HasValue &&
+                double.IsFinite(x.Value))
             .Select(x => x!.Value)
             .ToArray();
 
@@ -147,15 +162,15 @@ public sealed class StatisticalAnomalyRecommendationService : IAnomalyRecommenda
             .Average();
 
         var standardDeviation = Math.Sqrt(variance);
-        var deviation = Math.Abs(observedValue.Value - mean);
 
-        // Require both a meaningful absolute difference and a
-        // statistically unusual difference from the baseline.
+        var deviation =
+            Math.Abs(observedValue.Value - mean);
+
         if (deviation < minimumDeviation ||
-            deviation < Math.Max(standardDeviation * 3, minimumDeviation))
-        {
+            deviation < Math.Max(
+                standardDeviation * 3,
+                minimumDeviation))
             return null;
-        }
 
         var score = standardDeviation > 0
             ? deviation / standardDeviation

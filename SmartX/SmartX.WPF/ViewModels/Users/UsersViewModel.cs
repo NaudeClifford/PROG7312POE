@@ -61,6 +61,8 @@ public class UsersViewModel :
     public bool IsEditMode =>
         Mode == UserMode.Edit;
 
+    public bool HasSelectedUser => SelectedUser != null;
+
     private Guid? _editingUserId;
 
     public Guid? EditingUserId
@@ -81,16 +83,17 @@ public class UsersViewModel :
     public UserDto? SelectedUser
     {
         get => _selectedUser;
-
         set
         {
             if (!SetProperty(ref _selectedUser, value))
                 return;
 
-            if (value is not null)
-                LoadUserIntoForm(value);
+            OnPropertyChanged(nameof(HasSelectedUser));
+            OnPropertyChanged(nameof(CanEditUser));
+            OnPropertyChanged(nameof(CanDeleteUser));
 
-            RaiseCommandStates();
+            EditUserCommand?.RaiseCanExecuteChanged();
+            DeleteUserCommand?.RaiseCanExecuteChanged();
         }
     }
 
@@ -1053,8 +1056,7 @@ public class UsersViewModel :
                         Role =
                             FormRole,
 
-                        IsActive =
-                            true
+                        IsActive = FormIsActive
                     };
 
                 var userId =

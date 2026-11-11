@@ -15,9 +15,14 @@
 
     </Page.Resources>
 
-    <Grid>
+    <Border Margin="20"
+            Padding="25"
+            Background="{StaticResource DarkBrush}"
+            CornerRadius="24">
 
-        <Border
+        <Grid Margin="10">
+
+            <Border
             MaxWidth="560"
             Margin="40"
             Padding="40"
@@ -26,16 +31,16 @@
             Background="White"
             CornerRadius="22">
 
-            <StackPanel>
+                <StackPanel>
 
-                <TextBlock
+                    <TextBlock
                     Text="{Binding StepTitle}"
                     FontSize="30"
                     FontWeight="Bold"
                     Foreground="#20242A"
                     HorizontalAlignment="Center"/>
 
-                <TextBlock
+                    <TextBlock
                     Text="Set up your SmartX company and administrator account."
                     FontSize="14"
                     Foreground="#707780"
@@ -45,68 +50,68 @@
                     Margin="0,8,0,25"/>
 
 
-                <!-- STEP INDICATOR -->
+                    <!-- STEP INDICATOR -->
 
-                <Grid Margin="0,0,0,25">
+                    <Grid Margin="0,0,0,25">
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                    <Border
+                        <Border
                         Grid.Column="0"
                         Height="2"
                         Background="#2563EB"
                         VerticalAlignment="Center"/>
 
-                    <Border
+                        <Border
                         Grid.Column="1"
                         Width="34"
                         Height="34"
                         CornerRadius="17"
                         Background="#2563EB">
 
-                        <TextBlock
+                            <TextBlock
                             Text="1"
                             Foreground="White"
                             FontWeight="Bold"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"/>
 
-                    </Border>
+                        </Border>
 
-                    <Border
+                        <Border
                         Grid.Column="2"
                         Height="2"
                         Background="#D8DDE2"
                         VerticalAlignment="Center"/>
 
-                </Grid>
+                    </Grid>
 
 
-                <!-- COMPANY -->
+                    <!-- COMPANY -->
 
-                <StackPanel
+                    <StackPanel
                     Visibility="{Binding IsCompanyStep,
                         Converter={StaticResource BooleanToVisibilityConverter}}">
 
-                    <TextBlock
+                        <TextBlock
                         Text="Company name"
                         FontSize="13"
                         FontWeight="SemiBold"
                         Foreground="#30343A"
                         Margin="0,0,0,8"/>
 
-                    <Border
+                        <Border
                         Height="50"
                         CornerRadius="8"
                         BorderBrush="#D8DDE2"
                         BorderThickness="1"
                         Background="#FAFBFC">
 
-                        <TextBox
+                            <TextBox
                             Text="{Binding CompanyName,
                                    UpdateSourceTrigger=PropertyChanged}"
                             Margin="15,0"
@@ -115,24 +120,24 @@
                             FontSize="14"
                             VerticalContentAlignment="Center"/>
 
-                    </Border>
+                        </Border>
 
 
-                    <TextBlock
+                        <TextBlock
                         Text="Description"
                         FontSize="13"
                         FontWeight="SemiBold"
                         Foreground="#30343A"
                         Margin="0,18,0,8"/>
 
-                    <Border
+                        <Border
                         MinHeight="90"
                         CornerRadius="8"
                         BorderBrush="#D8DDE2"
                         BorderThickness="1"
                         Background="#FAFBFC">
 
-                        <TextBox
+                            <TextBox
                             Text="{Binding CompanyDescription,
                                    UpdateSourceTrigger=PropertyChanged}"
                             Margin="15,10"
@@ -143,32 +148,32 @@
                             AcceptsReturn="True"
                             VerticalScrollBarVisibility="Auto"/>
 
-                    </Border>
+                        </Border>
 
-                </StackPanel>
+                    </StackPanel>
 
 
-                <!-- ADMINISTRATOR -->
+                    <!-- ADMINISTRATOR -->
 
-                <StackPanel
+                    <StackPanel
                     Visibility="{Binding IsAdministratorStep,
                         Converter={StaticResource BooleanToVisibilityConverter}}">
 
-                    <TextBlock
+                        <TextBlock
                         Text="Your name"
                         FontSize="13"
                         FontWeight="SemiBold"
                         Foreground="#30343A"
                         Margin="0,0,0,8"/>
 
-                    <Border
+                        <Border
                         Height="50"
                         CornerRadius="8"
                         BorderBrush="#D8DDE2"
                         BorderThickness="1"
                         Background="#FAFBFC">
 
-                        <TextBox
+                            <TextBox
                             Text="{Binding DisplayName,
                                    UpdateSourceTrigger=PropertyChanged}"
                             Margin="15,0"
@@ -177,24 +182,24 @@
                             FontSize="14"
                             VerticalContentAlignment="Center"/>
 
-                    </Border>
+                        </Border>
 
 
-                    <TextBlock
+                        <TextBlock
                         Text="Email address"
                         FontSize="13"
                         FontWeight="SemiBold"
                         Foreground="#30343A"
                         Margin="0,18,0,8"/>
 
-                    <Border
+                        <Border
                         Height="50"
                         CornerRadius="8"
                         BorderBrush="#D8DDE2"
                         BorderThickness="1"
                         Background="#FAFBFC">
 
-                        <TextBox
+                            <TextBox
                             Text="{Binding Email,
                                    UpdateSourceTrigger=PropertyChanged}"
                             Margin="15,0"
@@ -203,24 +208,24 @@
                             FontSize="14"
                             VerticalContentAlignment="Center"/>
 
-                    </Border>
+                        </Border>
 
 
-                    <TextBlock
+                        <TextBlock
                         Text="Password"
                         FontSize="13"
                         FontWeight="SemiBold"
                         Foreground="#30343A"
                         Margin="0,18,0,8"/>
 
-                    <Border
+                        <Border
                         Height="50"
                         CornerRadius="8"
                         BorderBrush="#D8DDE2"
                         BorderThickness="1"
                         Background="#FAFBFC">
 
-                        <PasswordBox
+                            <PasswordBox
                             x:Name="PasswordBox"
                             PasswordChanged="PasswordBox_PasswordChanged"
                             Margin="15,0"
@@ -229,24 +234,24 @@
                             FontSize="14"
                             VerticalContentAlignment="Center"/>
 
-                    </Border>
+                        </Border>
 
 
-                    <TextBlock
+                        <TextBlock
                         Text="Confirm password"
                         FontSize="13"
                         FontWeight="SemiBold"
                         Foreground="#30343A"
                         Margin="0,18,0,8"/>
 
-                    <Border
+                        <Border
                         Height="50"
                         CornerRadius="8"
                         BorderBrush="#D8DDE2"
                         BorderThickness="1"
                         Background="#FAFBFC">
 
-                        <PasswordBox
+                            <PasswordBox
                             x:Name="ConfirmPasswordBox"
                             PasswordChanged="ConfirmPasswordBox_PasswordChanged"
                             Margin="15,0"
@@ -255,14 +260,14 @@
                             FontSize="14"
                             VerticalContentAlignment="Center"/>
 
-                    </Border>
+                        </Border>
 
-                </StackPanel>
+                    </StackPanel>
 
 
-                <!-- ERROR -->
+                    <!-- ERROR -->
 
-                <Border
+                    <Border
                     Background="#FFF1F1"
                     BorderBrush="#FFD0D0"
                     BorderThickness="1"
@@ -272,18 +277,18 @@
                     Visibility="{Binding HasError,
                         Converter={StaticResource BooleanToVisibilityConverter}}">
 
-                    <TextBlock
+                        <TextBlock
                         Text="{Binding ErrorMessage}"
                         Foreground="#C62828"
                         FontSize="13"
                         TextWrapping="Wrap"/>
 
-                </Border>
+                    </Border>
 
 
-                <!-- ACTION -->
+                    <!-- ACTION -->
 
-                <Button
+                    <Button
                     Content="{Binding ButtonText}"
                     Height="52"
                     Margin="0,22,0,0"
@@ -293,7 +298,7 @@
                     Command="{Binding ContinueCommand}"
                     Style="{StaticResource BaseButtonStyle}"/>
 
-                <Button
+                    <Button
                     Content="Cancel"
                     Height="42"
                     Margin="0,10,0,0"
@@ -301,10 +306,10 @@
                     Cursor="Hand"
                     Command="{Binding CancelCommand}"/>
 
-            </StackPanel>
+                </StackPanel>
 
-        </Border>
+            </Border>
 
-    </Grid>
-
+        </Grid>
+    </Border>   
 </Page>

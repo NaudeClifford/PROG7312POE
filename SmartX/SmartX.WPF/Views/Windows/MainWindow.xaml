@@ -239,6 +239,14 @@
                 Visibility="Collapsed"
                 Style="{StaticResource BaseButtonStyle}"/>
 
+                    <!-- Real Time command stream-->
+                    <Button
+                        x:Name="CommandButton"
+                        Content="Command Stream"
+                        Click="Command_Click"
+                        Visibility="Collapsed"
+                        Style="{StaticResource BaseButtonStyle}"/>
+
                     <!-- USERS -->
 
                     <Button

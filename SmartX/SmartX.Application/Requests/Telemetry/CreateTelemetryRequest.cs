@@ -3,6 +3,7 @@
 public class CreateTelemetryRequest
 {
     public Guid SensorId { get; set; }
+    public string DeviceIdentifier { get; set; } = string.Empty;
 
     public DateTime Timestamp { get; set; }
 

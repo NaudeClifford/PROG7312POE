@@ -4,141 +4,109 @@
       Title="Sensors"
       Background="{StaticResource BackgroundBrush}">
 
-    <Grid Margin="35">
+    <Grid Background="{StaticResource BackgroundBrush}">
 
-        <Grid.RowDefinitions>
+        <Border Margin="20"
+            Padding="25"
+            Background="{StaticResource DarkBrush}"
+            CornerRadius="24">
+
+            <Grid Margin="10">
+
+                <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- HEADER -->
-
-        <Grid Grid.Row="0"
-              Margin="0,0,0,25">
+        <Grid Grid.Row="0" Margin="0,0,0,25">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0">
+            <StackPanel>
+                <TextBlock Text="Sensors" Style="{StaticResource PageTitleStyle}"/>
 
-                <TextBlock
-                    Text="Sensors"
-                    FontSize="32"
-                    FontWeight="Bold"
-                    Foreground="{StaticResource TitleBrush}"/>
-
-                <TextBlock
-                    Text="Manage connected sensors and view telemetry."
-                    FontSize="14"
-                    Margin="0,4,0,0"
-                    Foreground="{StaticResource SubTitleBrush}"/>
-
+                <TextBlock Text="Manage connected sensors and view telemetry."
+                           Style="{StaticResource SectionTitleStyle}"/>
             </StackPanel>
 
-            <Border
-                Grid.Column="1"
-                Background="#EAF2FF"
-                BorderBrush="#D5E3FA"
-                BorderThickness="1"
-                CornerRadius="10"
-                Padding="14,8">
+            <Border Grid.Column="1"
+                    Background="#EAF2FF"
+                    BorderBrush="#D5E3FA"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="14,8">
 
-                <StackPanel
-                    Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Gateway:"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Foreground="#657080"
+                               VerticalAlignment="Center"/>
 
-                    <TextBlock
-                        Text="Gateway:"
-                        FontSize="12"
-                        FontWeight="SemiBold"
-                        Foreground="#657080"
-                        VerticalAlignment="Center"/>
-
-                    <TextBlock
-                        Text="{Binding SelectedGatewayName}"
-                        FontSize="12"
-                        FontWeight="Bold"
-                        Foreground="{StaticResource DarkBrush}"
-                        Margin="6,0,0,0"
-                        VerticalAlignment="Center"/>
-
+                    <TextBlock Text="{Binding SelectedGatewayName}"
+                               FontSize="12"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource DarkBrush}"
+                               Margin="6,0,0,0"
+                               VerticalAlignment="Center"/>
                 </StackPanel>
-
             </Border>
-
         </Grid>
 
-
         <!-- SENSOR LIST -->
-
-        <Border
-            Grid.Row="1"
-            Background="White"
-            CornerRadius="15"
-            Padding="25">
+        <Border Grid.Row="1"
+                Background="White"
+                CornerRadius="15"
+                Padding="25">
 
             <Grid>
-
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-
                 <!-- LIST HEADER -->
-
                 <Grid Grid.Row="0">
-
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
+                    <TextBlock Text="Connected Sensors"
+                               FontSize="19"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource DarkBrush}"
+                               VerticalAlignment="Center"/>
 
-                    <TextBlock
-                        Grid.Column="0"
-                        Text="Connected Sensors"
-                        FontSize="19"
-                        FontWeight="SemiBold"
-                        Foreground="{StaticResource DarkBrush}"
-                        VerticalAlignment="Center"/>
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal">
 
+                        <Button Content="+ Add Sensor"
+                                Command="{Binding AddSensorCommand}"
+                                Padding="18,8"
+                                Margin="0,0,10,0"
+                                Style="{StaticResource SecondaryButtonStyle}"/>
 
-                    <StackPanel
-                        Grid.Column="1"
-                        Orientation="Horizontal">
+                        <Button Content="Edit"
+                                Command="{Binding EditSensorCommand}"
+                                Padding="12,6"
+                                Margin="0,0,8,0"
+                                Style="{StaticResource SecondaryButtonStyle}"/>
 
-                        <Button
-                            Content="+ Add Sensor"
-                            Command="{Binding AddSensorCommand}"
-                            Padding="18,8"
-                            Margin="0,0,10,0"
-                            Style="{StaticResource SecondaryButtonStyle}"/>
-
-                        <Button
-                            Content="Edit"
-                            Command="{Binding EditSensorCommand}"
-                            Padding="12,6"
-                            Margin="0,0,8,0"
-                            Style="{StaticResource SecondaryButtonStyle}"/>
-
-                        <Button
-                            Content="Delete"
-                            Command="{Binding DeleteSensorCommand}"
-                            Padding="12,6"
-                            Style="{StaticResource SecondaryButtonStyle}"/>
-
+                        <Button Content="Delete"
+                                Command="{Binding DeleteSensorCommand}"
+                                Padding="12,6"
+                                Style="{StaticResource SecondaryButtonStyle}"/>
                     </StackPanel>
-
                 </Grid>
 
-
                 <!-- FILTER BAR -->
-
-                <Grid Grid.Row="1"
-                      Margin="0,20,0,0">
+                <Grid Grid.Row="1" Margin="0,20,0,0">
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
@@ -148,177 +116,205 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
+                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                        <TextBlock Text="Name"
+                                   FontSize="12"
+                                   Foreground="#657080"
+                                   Margin="0,0,0,5"/>
 
-                    <!-- NAME -->
-
-                    <StackPanel Grid.Column="0"
-                                Margin="0,0,10,0">
-
-                        <TextBlock
-                            Text="Name"
-                            FontSize="12"
-                            Foreground="#657080"
-                            Margin="0,0,0,5"/>
-
-                        <TextBox
-                            Text="{Binding NameFilter,
-                                           UpdateSourceTrigger=PropertyChanged}"
-                            Height="32"
-                            Padding="8,5"/>
-
+                        <TextBox Text="{Binding NameFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Height="32"
+                                 Padding="8,5"/>
                     </StackPanel>
 
+                    <StackPanel Grid.Column="1" Margin="10,0">
+                        <TextBlock Text="Device"
+                                   FontSize="12"
+                                   Foreground="#657080"
+                                   Margin="0,0,0,5"/>
 
-                    <!-- DEVICE -->
-
-                    <StackPanel Grid.Column="1"
-                                Margin="10,0">
-
-                        <TextBlock
-                            Text="Device"
-                            FontSize="12"
-                            Foreground="#657080"
-                            Margin="0,0,0,5"/>
-
-                        <TextBox
-                            Text="{Binding DeviceIdentifierFilter,
-                                           UpdateSourceTrigger=PropertyChanged}"
-                            Height="32"
-                            Padding="8,5"/>
-
+                        <TextBox Text="{Binding DeviceIdentifierFilter, UpdateSourceTrigger=PropertyChanged}"
+                                 Height="32"
+                                 Padding="8,5"/>
                     </StackPanel>
 
+                    <StackPanel Grid.Column="2" Margin="10,0">
+                        <TextBlock Text="Category"
+                                   FontSize="12"
+                                   Foreground="#657080"
+                                   Margin="0,0,0,5"/>
 
-                    <!-- CATEGORY -->
-
-                    <StackPanel Grid.Column="2"
-                                Margin="10,0">
-
-                        <TextBlock
-                            Text="Category"
-                            FontSize="12"
-                            Foreground="#657080"
-                            Margin="0,0,0,5"/>
-
-                        <ComboBox
-                            ItemsSource="{Binding CategoryFilters}"
-                            SelectedItem="{Binding SelectedCategoryFilter,
-                                                   Mode=TwoWay}"
-                            Height="32"/>
-
+                        <ComboBox ItemsSource="{Binding CategoryFilters}"
+                                  SelectedItem="{Binding SelectedCategoryFilter, Mode=TwoWay}"
+                                  Height="32"/>
                     </StackPanel>
 
+                    <StackPanel Grid.Column="3" Margin="10,0">
+                        <TextBlock Text="Status"
+                                   FontSize="12"
+                                   Foreground="#657080"
+                                   Margin="0,0,0,5"/>
 
-                    <!-- STATUS -->
-
-                    <StackPanel Grid.Column="3"
-                                Margin="10,0">
-
-                        <TextBlock
-                            Text="Status"
-                            FontSize="12"
-                            Foreground="#657080"
-                            Margin="0,0,0,5"/>
-
-                        <ComboBox
-                            ItemsSource="{Binding StatusFilters}"
-                            SelectedItem="{Binding StatusFilter,
-                                                   Mode=TwoWay}"
-                            Height="32"/>
-
+                        <ComboBox ItemsSource="{Binding StatusFilters}"
+                                  SelectedItem="{Binding StatusFilter, Mode=TwoWay}"
+                                  Height="32"/>
                     </StackPanel>
 
-
-                    <!-- CLEAR -->
-
-                    <Button
-                        Grid.Column="4"
-                        Content="Clear"
-                        Padding="16,7"
-                        Margin="10,18,0,0"
-                        Style="{StaticResource SecondaryButtonStyle}"
-                        Command="{Binding ClearFiltersCommand}"/>
+                    <Button Grid.Column="4"
+                            Content="Clear"
+                            Padding="16,7"
+                            Margin="10,18,0,0"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Command="{Binding ClearFiltersCommand}"/>
                 </Grid>
 
-
-                <!-- DATAGRID -->
-
-                <DataGrid
-                    Grid.Row="2"
-                    Margin="0,20,0,0"
-                    AutoGenerateColumns="False"
-                    SelectedItem="{Binding SelectedSensor, Mode=TwoWay}"
-                    IsReadOnly="True"
-                    HeadersVisibility="Column"
-                    BorderThickness="0"
-                    GridLinesVisibility="Horizontal"
-                    ItemsSource="{Binding FilteredSensors}"
-                    Background="White"
-                    HorizontalAlignment="Stretch">
+                <!-- SENSOR DATAGRID -->
+                <DataGrid Grid.Row="2"
+                          Margin="0,20,0,0"
+                          AutoGenerateColumns="False"
+                          SelectedItem="{Binding SelectedSensor, Mode=TwoWay}"
+                          IsReadOnly="True"
+                          HeadersVisibility="Column"
+                          BorderThickness="0"
+                          GridLinesVisibility="Horizontal"
+                          ItemsSource="{Binding FilteredSensors}"
+                          Background="White"
+                          HorizontalAlignment="Stretch"
+                          CanUserAddRows="False">
 
                     <DataGrid.Columns>
 
-                        <DataGridTextColumn
-                            Header="Sensor"
-                            Binding="{Binding Name}"
-                            Width="2*"
-                            MinWidth="100"/>
+                        <DataGridTextColumn Header="Sensor"
+                                            Binding="{Binding Name}"
+                                            Width="2*"
+                                            MinWidth="110"/>
 
-                        <DataGridTextColumn
-                            Header="Type"
-                            Binding="{Binding Category}"
-                            Width="*"
-                            MinWidth="80"/>
+                        <DataGridTextColumn Header="Type"
+                                            Binding="{Binding Category}"
+                                            Width="*"
+                                            MinWidth="90"/>
 
-                        <DataGridTextColumn
-                            Header="Location"
-                            Binding="{Binding Location}"
-                            Width="1.5*"
-                            MinWidth="100"/>
+                        <DataGridTextColumn Header="Location"
+                                            Binding="{Binding Location}"
+                                            Width="1.5*"
+                                            MinWidth="100"/>
 
-                        <DataGridTextColumn
-                            Header="Device"
-                            Binding="{Binding DeviceIdentifier}"
-                            Width="1.5*"
-                            MinWidth="100"/>
+                        <DataGridTextColumn Header="Device"
+                                            Binding="{Binding DeviceIdentifier}"
+                                            Width="1.5*"
+                                            MinWidth="120"/>
 
-                        <DataGridTextColumn
-                            Header="Status"
-                            Binding="{Binding IsActive}"
-                            Width="*"
-                            MinWidth="80"/>
+                        <DataGridTextColumn Header="Protocol"
+                                            Binding="{Binding Protocol}"
+                                            Width="*"
+                                            MinWidth="100"/>
 
-                        <DataGridTemplateColumn
-                            Header="Telemetry"
-                            Width="Auto"
-                            MinWidth="80">
+                        <DataGridCheckBoxColumn Header="Simulation"
+                                                Binding="{Binding IsSimulation}"
+                                                Width="90"/>
+
+                        <DataGridTextColumn Header="IP Address"
+                                            Binding="{Binding IpAddress}"
+                                            Width="1.2*"
+                                            MinWidth="110"/>
+
+                        <DataGridTextColumn Header="Port"
+                                            Binding="{Binding Port}"
+                                            Width="65"/>
+
+                        <DataGridTextColumn Header="Connection Enabled"
+                            Binding="{Binding IsConnectionEnabled}"
+                             Width="125"/>
+
+                        <DataGridTextColumn Header="Active"
+                                            Binding="{Binding IsActive}"
+                                            Width="75"/>
+
+                        <!-- ALERT -->
+                        <DataGridTemplateColumn Header="Alert"
+                                                Width="2*"
+                                                MinWidth="150">
 
                             <DataGridTemplateColumn.CellTemplate>
-
                                 <DataTemplate>
+                                    <StackPanel Orientation="Horizontal"
+                                                VerticalAlignment="Center">
 
-                                    <Button
-                                        Content="View"
-                                        Command="{Binding DataContext.OpenTelemetryCommand,
-                                            RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                        CommandParameter="{Binding}"
-                                        Style="{StaticResource SecondaryButtonStyle}"
-                                        Padding="12,6"/>
+                                        <Ellipse Width="9"
+                                                 Height="9"
+                                                 Margin="0,0,8,0"
+                                                 VerticalAlignment="Center">
 
+                                            <Ellipse.Style>
+                                                <Style TargetType="Ellipse">
+                                                    <Setter Property="Fill"
+                                                            Value="#22C55E"/>
+
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding HasActiveAlert}"
+                                                                     Value="True">
+                                                            <Setter Property="Fill"
+                                                                    Value="#EF4444"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Ellipse.Style>
+                                        </Ellipse>
+
+                                        <TextBlock VerticalAlignment="Center"
+                                                   TextTrimming="CharacterEllipsis">
+
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text"
+                                                            Value="No active alerts"/>
+
+                                                    <Setter Property="Foreground"
+                                                            Value="#16A34A"/>
+
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding HasActiveAlert}"
+                                                                     Value="True">
+
+                                                            <Setter Property="Text"
+                                                                    Value="{Binding ActiveAlertMessage}"/>
+
+                                                            <Setter Property="Foreground"
+                                                                    Value="#DC2626"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
                                 </DataTemplate>
-
                             </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
 
+                        <!-- TELEMETRY -->
+                        <DataGridTemplateColumn Header="Telemetry"
+                                                Width="Auto"
+                                                MinWidth="80">
+
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="View"
+                                            Command="{Binding DataContext.OpenTelemetryCommand,
+                                                RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                            CommandParameter="{Binding}"
+                                            Style="{StaticResource SecondaryButtonStyle}"
+                                            Padding="12,6"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
                     </DataGrid.Columns>
-
                 </DataGrid>
-
             </Grid>
-
         </Border>
 
-    </Grid>
+            </Grid>
+        </Border>
 
+</Grid>
 </Page>

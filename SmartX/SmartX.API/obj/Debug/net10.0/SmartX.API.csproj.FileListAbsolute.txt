@@ -192,3 +192,16 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\refint\Sma
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.pdb
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\SmartX.API.genruntimeconfig.cache
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\obj\Debug\net10.0\ref\SmartX.API.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Microsoft.Extensions.Configuration.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Microsoft.Extensions.Configuration.Abstractions.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Microsoft.Extensions.Configuration.Binder.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Microsoft.Extensions.Logging.Abstractions.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Microsoft.Extensions.Options.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\Microsoft.Extensions.Primitives.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\System.Diagnostics.DiagnosticSource.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\System.Formats.Asn1.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\System.Security.Cryptography.Pkcs.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\System.Security.Cryptography.Xml.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.API\bin\Debug\net10.0\runtimes\win\lib\net10.0\System.Security.Cryptography.Pkcs.dll

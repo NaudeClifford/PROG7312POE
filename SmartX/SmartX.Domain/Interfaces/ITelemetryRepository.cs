@@ -33,5 +33,10 @@ public interface ITelemetryRepository
         Guid gatewayId,
         CancellationToken cancellationToken = default);
 
+    Task<IReadOnlyList<Telemetry>> GetLatestByGatewayIdAsync(
+        Guid gatewayId,
+        int countPerSensor,
+        CancellationToken cancellationToken = default);
+
 
 }

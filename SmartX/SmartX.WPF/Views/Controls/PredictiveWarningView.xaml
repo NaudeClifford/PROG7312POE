@@ -16,7 +16,8 @@
             <!-- Header -->
             <TextBlock Grid.Row="0"
                        Text="Predictive Warnings"
-                       HorizontalAlignment="Center"
+                       HorizontalAlignment="Center" 
+                       Foreground="Black"
                        Style="{StaticResource SectionTitleStyle}"
                        Margin="0,0,0,16"/>
 
@@ -62,7 +63,7 @@
                                                TextWrapping="Wrap"/>
 
                                     <!-- Severity -->
-                                    <Border Background="Black"
+                                    <Border Background="LightGray"
                                             CornerRadius="6"
                                             Padding="8,4"
                                             Margin="0,10,0,0"
@@ -102,6 +103,7 @@
                                     <TextBlock Text="{Binding RecommendedAction}"
                                                Style="{StaticResource BodyTextStyle}"
                                                Foreground="Black"
+                                               TextAlignment="Center"
                                                Margin="0,6,0,0"
                                                TextWrapping="Wrap"/>
 

@@ -4,7 +4,6 @@ using SmartX.Domain.Enums;
 using SmartX.Shared.DTOs;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Repositories.Local;
-using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.Session;
@@ -33,6 +32,8 @@ public class SensorViewModel :
     private readonly ISmartXApiClient _apiClient;
     private readonly INavigationService _navigationService;
     private readonly ICacheSyncService _cacheSyncService;
+
+
 
     // FILTERS
     private string _nameFilter = string.Empty;
@@ -88,6 +89,11 @@ public class SensorViewModel :
     private string? _description;
     private bool _isActive = true;
 
+    private string? _ipAddress;
+    private int? _port;
+    private SensorProtocol _protocol = SensorProtocol.Simulation;
+    private bool _isSimulation = true;
+    private bool _isConnectionEnabled;
     // CONSTRUCTOR
     public SensorViewModel(
         ILocalSensorCache sensorCache,
@@ -294,6 +300,42 @@ public class SensorViewModel :
         }
     }
 
+    public string? IpAddress
+    {
+        get => _ipAddress;
+        set
+        {
+            if (!SetProperty(ref _ipAddress, value))
+                return;
+
+            RaiseCommandStates();
+        }
+    }
+
+    public int? Port
+    {
+        get => _port;
+        set => SetProperty(ref _port, value);
+    }
+
+    public SensorProtocol Protocol
+    {
+        get => _protocol;
+        set => SetProperty(ref _protocol, value);
+    }
+
+    public bool IsSimulation
+    {
+        get => _isSimulation;
+        set => SetProperty(ref _isSimulation, value);
+    }
+
+    public bool IsConnectionEnabled
+    {
+        get => _isConnectionEnabled;
+        set => SetProperty(ref _isConnectionEnabled, value);
+    }
+
     // COLLECTIONS
     public ObservableCollection<DomainSensor> Sensors { get; } =
         [];
@@ -448,6 +490,8 @@ public class SensorViewModel :
     public AsyncRelayCommand ClearFiltersCommand { get; }
 
 
+
+    public IEnumerable<SensorProtocol> Protocols => Enum.GetValues<SensorProtocol>();
     public ICommand OpenTelemetryCommand { get; }
 
     // NAVIGATION
@@ -580,6 +624,8 @@ public class SensorViewModel :
                 Sensors.Add(sensor);
             }
 
+
+
             ApplyFilters();
 
             RaiseSensorCounts();
@@ -678,7 +724,13 @@ public class SensorViewModel :
         return result;
     }
 
+    private SensorProtocol _selectedProtocol = SensorProtocol.ModbusTcp;
 
+    public SensorProtocol SelectedProtocol
+    {
+        get => _selectedProtocol;
+        set => SetProperty(ref _selectedProtocol, value);
+    }
 
     private async Task AddSensorAsync()
     {
@@ -746,11 +798,9 @@ public class SensorViewModel :
                     {
                         Name = Name.Trim(),
 
-                        DeviceIdentifier =
-                            DeviceIdentifier.Trim(),
+                        DeviceIdentifier = DeviceIdentifier.Trim(),
 
-                        Location =
-                            string.IsNullOrWhiteSpace(Location)
+                        Location = string.IsNullOrWhiteSpace(Location)
                                 ? string.Empty
                                 : Location.Trim(),
 
@@ -761,9 +811,18 @@ public class SensorViewModel :
                                 ? string.Empty
                                 : Description.Trim(),
 
-                        GatewayId =
-                            Session.GatewayId.Value
+                        GatewayId = Session.GatewayId.Value,
+
+                        IpAddress = IpAddress,
+
+                        Port = Port,
+
+                        Protocol = IsSimulation
+                            ? SensorProtocol.Simulation
+                            : SelectedProtocol,
+                        IsSimulation = IsSimulation,
                     };
+
 
                 var sensorId =
                     await _apiClient.CreateSensorAsync(
@@ -777,16 +836,23 @@ public class SensorViewModel :
                     return;
                 }
 
+                // CLEAR DELETED SENSOR SELECTION
+                SelectedSensor = null;
+
                 // REFRESH CACHE
                 await _cacheSyncService.SyncSensorsAsync();
 
+                // RELOAD LIST
+                await LoadAsync();
+
+                // SUCCESS MESSAGE
                 MessageBox.Show(
-                    $"Sensor '{Name}' has been created successfully.",
-                    "Sensor Created",
+                    "Sensor deleted successfully.",
+                    "Sensor Deleted",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
-                // LoadAsync() will sync again and display it.
+                // RETURN TO LIST
                 _navigationService.NavigateTo<SensorsPage>();
 
                 return;
@@ -797,34 +863,42 @@ public class SensorViewModel :
                 return;
 
             if (Session.GatewayId is null)
-                return; 
+                return;
 
-            var updateCommand =
-                new UpdateSensorRequest
-                {
-                    Id = SelectedSensor.Id,
+            var updateCommand = new UpdateSensorRequest
+            {
+                Id = SelectedSensor.Id,
 
-                    Name = Name.Trim(),
+                Name = Name.Trim(),
 
-                    DeviceIdentifier =
-                        DeviceIdentifier.Trim(),
+                DeviceIdentifier = DeviceIdentifier.Trim(),
 
-                    Category = Category,
+                Category = Category,
 
-                    Location =
-                        string.IsNullOrWhiteSpace(Location)
-                            ? string.Empty
-                            : Location.Trim(),
+                IpAddress = SelectedSensor.IpAddress,
 
-                    Description =
-                        string.IsNullOrWhiteSpace(Description)
-                            ? string.Empty
-                            : Description.Trim(),
+                Port = SelectedSensor.Port,
 
-                    IsActive = IsActive,
+                Protocol = SelectedSensor.Protocol,
 
-                   GatewayId = Session.GatewayId.Value,
-                };
+                IsSimulation = SelectedSensor.IsSimulation,
+
+                IsConnectionEnabled = SelectedSensor.IsConnectionEnabled,
+
+                Location = string.IsNullOrWhiteSpace(Location)
+                    ? string.Empty
+                    : Location.Trim(),
+
+                Description = string.IsNullOrWhiteSpace(Description)
+                    ? string.Empty
+                    : Description.Trim(),
+
+                IsActive = IsActive,
+
+                GatewayId = Session.GatewayId.Value
+            };
+
+
 
             var updated =
                 await _apiClient.UpdateSensorAsync(
@@ -1301,19 +1375,17 @@ public class SensorViewModel :
     private void RaiseSensorCounts()
     {
         OnPropertyChanged(nameof(TotalSensors));
-        OnPropertyChanged(nameof(OnlineSensors));
-        OnPropertyChanged(nameof(OfflineSensors));
+        OnPropertyChanged(nameof(ActiveSensors));
+        OnPropertyChanged(nameof(InactiveSensors));
         OnPropertyChanged(nameof(ActiveAlerts));
     }
 
     public int TotalSensors =>
         Sensors.Count;
 
-    public int OnlineSensors =>
-        Sensors.Count(x => x.IsActive);
+    public int ActiveSensors => Sensors.Count(x => x.IsActive);
 
-    public int OfflineSensors =>
-        Sensors.Count(x => !x.IsActive);
+    public int InactiveSensors => Sensors.Count(x => !x.IsActive);
 
     public int ActiveAlerts =>
         0;

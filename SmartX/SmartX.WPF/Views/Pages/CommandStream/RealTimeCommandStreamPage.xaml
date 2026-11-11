@@ -1,0 +1,564 @@
+﻿<Page x:Class="SmartX.WPF.Views.Pages.CommandStream.RealTimeCommandStreamPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+
+    <Page.Resources>
+
+        <!-- COMMAND CENTRE CARD -->
+
+        <Style x:Key="CommandCardStyle"
+           TargetType="Border">
+
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="Padding" Value="22"/>
+
+        </Style>
+
+
+        <!-- SECTION TITLES -->
+
+        <Style x:Key="CommandSectionTitleStyle"
+           TargetType="TextBlock">
+
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground"
+                Value="{StaticResource DarkBrush}"/>
+
+        </Style>
+
+
+        <!-- FIELD LABELS -->
+
+        <Style x:Key="CommandLabelStyle"
+           TargetType="TextBlock">
+
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground"
+                Value="{StaticResource DarkBrush}"/>
+            <Setter Property="Margin" Value="0,0,0,7"/>
+
+        </Style>
+
+
+        <!-- INPUT FIELDS -->
+
+        <Style x:Key="CommandInputStyle"
+           TargetType="TextBox">
+
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="11,7"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalContentAlignment"
+                Value="Center"/>
+            <Setter Property="BorderBrush" Value="#DCE2EA"/>
+            <Setter Property="Background" Value="White"/>
+
+        </Style>
+
+    </Page.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Border Margin="20"
+            Padding="25"
+            Background="{StaticResource DarkBrush}"
+            CornerRadius="24">
+
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- PAGE HEADER -->
+
+                <Grid Grid.Row="0"
+      Margin="0,0,0,0">
+
+                    <StackPanel>
+
+                        <TextBlock Text="Real-Time Command Centre"
+                   FontSize="40"
+                   FontWeight="Bold"
+                   Foreground="{StaticResource LightTextBrush}"
+                   HorizontalAlignment="Center"/>
+
+                        <TextBlock Text="Send, monitor and reverse sensor commands."
+                   FontSize="18"
+                   Foreground="{StaticResource LightTextBrush}"
+                   HorizontalAlignment="Center"
+                   Margin="0,6,0,0"/>
+
+                    </StackPanel>
+
+                    <!-- REFRESH -->
+
+                    <Button Content="Refresh"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Center"
+            Width="95"
+            Height="38"
+            Cursor="Hand"
+            Style="{StaticResource SecondColourButtonStyle}"
+            Command="{Binding LoadCommand}"/>
+
+                </Grid>
+
+
+                <!-- SENSOR SELECTION -->
+
+                <Border Grid.Row="1"
+        Style="{StaticResource CommandCardStyle}"
+        Margin="0,30,0,25">
+
+                    <Grid>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- SENSOR -->
+
+                        <StackPanel Grid.Column="0"
+                    Margin="0,0,20,0">
+
+                            <TextBlock Text="TARGET SENSOR"
+                       Style="{StaticResource CommandLabelStyle}"/>
+
+                            <ComboBox ItemsSource="{Binding Sensors}"
+                      SelectedValue="{Binding SelectedSensorId,
+                                              Mode=TwoWay}"
+                      SelectedValuePath="Id"
+                      DisplayMemberPath="Name"
+                      Height="40"
+                      FontSize="13"
+                      Padding="8"
+                      ToolTip="Select target sensor"/>
+
+                        </StackPanel>
+
+
+                        <!-- CONNECTION / STATUS -->
+
+                        <StackPanel Grid.Column="1"
+                    Margin="0,0,20,0">
+
+                            <TextBlock Text="COMMAND RESPONSE"
+                       Style="{StaticResource CommandLabelStyle}"/>
+
+                            <Border Background="#F4F8FF"
+                    BorderBrush="#D6E4FF"
+                    BorderThickness="1"
+                    CornerRadius="7"
+                    Height="40"
+                    Padding="10">
+
+                                <TextBlock Text="{Binding CommandResponse,
+                                  TargetNullValue=Ready for commands}"
+                           FontSize="12"
+                           Foreground="#2563EB"
+                           VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis"/>
+
+                            </Border>
+
+                        </StackPanel>
+
+
+                        <!-- REFRESH -->
+
+                        <Button Grid.Column="2"
+                Content="Refresh sensors and history"
+                Height="40"
+                Padding="16,0"
+                VerticalAlignment="Bottom"
+                Cursor="Hand"
+                Style="{StaticResource BaseButtonStyle}"
+                Command="{Binding LoadCommand}"/>
+
+                    </Grid>
+
+                </Border>
+
+                <Grid Grid.Row="2">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2.1*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="15"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- MANUAL COMMAND -->
+
+                        <Border Grid.Row="0"
+        Style="{StaticResource CommandCardStyle}"
+        Margin="0,0,0,18">
+
+                            <StackPanel>
+
+                                <!-- HEADER -->
+
+                                <TextBlock Text="Manual Command"
+                   Style="{StaticResource CommandSectionTitleStyle}"
+                   HorizontalAlignment="Center"/>
+
+                                <TextBlock Text="Execute a command on your selected sensor."
+                   FontSize="13"
+                   Foreground="#737A82"
+                   HorizontalAlignment="Center"
+                   Margin="0,5,0,22"/>
+
+
+                                <!-- COMMAND INPUT -->
+
+                                <TextBlock Text="Command input"
+                   Style="{StaticResource CommandLabelStyle}"/>
+
+                                <TextBox Text="{Binding ManualCommand,
+                        UpdateSourceTrigger=PropertyChanged}"
+                 Height="45"
+                 Padding="12"
+                 FontSize="14"
+                 VerticalContentAlignment="Center"
+                 BorderBrush="#DCE2EA"
+                 ToolTip="Enter sensor command"/>
+
+
+                                <!-- ACTION BUTTONS -->
+
+                                <WrapPanel Margin="0,18,0,0">
+
+                                    <Button Content="Send command"
+                    Command="{Binding SendCommand}"
+                    IsEnabled="{Binding CanSendCommand}"
+                    Background="#2563EB"
+                    Foreground="White"
+                    BorderThickness="0"
+                    Height="42"
+                    MinWidth="145"
+                    Padding="18,0"
+                    Margin="0,0,10,0"
+                    Cursor="Hand"/>
+
+                                    <Button Content="Undo last command"
+                    Command="{Binding UndoCommand}"
+                    IsEnabled="{Binding CanUndoCommand}"
+                    Style="{StaticResource BaseButtonStyle}"
+                    Height="42"
+                    MinWidth="155"
+                    Padding="15,0"
+                    Cursor="Hand"/>
+
+                                </WrapPanel>
+
+
+                                <!-- COMMAND RESPONSE -->
+
+                                <TextBlock Text="COMMAND RESPONSE"
+                   FontSize="11"
+                   FontWeight="Bold"
+                   Foreground="#737A82"
+                   Margin="0,22,0,8"/>
+
+                                <Border Background="#F4F8FF"
+                BorderBrush="#D6E4FF"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="13">
+
+                                    <TextBlock Text="{Binding CommandResponse}"
+                       TextWrapping="Wrap"
+                       FontSize="13"
+                       Foreground="{StaticResource DarkBrush}"/>
+
+                                </Border>
+
+
+                                <!-- ERROR MESSAGE -->
+
+                                <Border Background="#FFF5F5"
+                BorderBrush="#FECACA"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="12"
+                Margin="0,10,0,0">
+
+                                    <TextBlock Text="{Binding ErrorMessage}"
+                       TextWrapping="Wrap"
+                       FontSize="12"
+                       Foreground="#DC2626"/>
+
+                                </Border>
+
+                            </StackPanel>
+
+                        </Border>
+
+                        <!-- COMMAND EXECUTION HISTORY -->
+
+                        <Border Grid.Row="2"
+Style="{StaticResource CommandCardStyle}"
+Padding="20">
+
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+
+                                <!-- TABLE HEADER -->
+
+                                <StackPanel Grid.Row="0">
+
+                                    <TextBlock Text="Command Execution History"
+               FontSize="24"
+               FontWeight="SemiBold"
+               HorizontalAlignment="Center"
+               Foreground="{StaticResource DarkBrush}"/>
+
+                                    <TextBlock Text="Review previously executed sensor commands."
+               FontSize="14"
+               HorizontalAlignment="Center"
+               Foreground="#737A82"
+               Margin="0,5,0,0"/>
+
+                                </StackPanel>
+
+
+                                <!-- HISTORY TABLE -->
+
+                                <DataGrid Grid.Row="1"
+          ItemsSource="{Binding CommandHistory}"
+          AutoGenerateColumns="False"
+          IsReadOnly="True"
+          CanUserAddRows="False"
+          HeadersVisibility="Column"
+          GridLinesVisibility="Horizontal"
+          RowHeight="45"
+          MinHeight="300"
+          Margin="0,20,0,0"
+          BorderThickness="1"
+          BorderBrush="#E1E5E8"
+          Background="White">
+
+                                    <DataGrid.Columns>
+
+                                        <DataGridTextColumn
+            Header="Command"
+            Binding="{Binding Command}"
+            Width="1.2*"/>
+
+                                        <DataGridTextColumn
+            Header="Response"
+            Binding="{Binding Response}"
+            Width="2*"/>
+
+                                        <DataGridTextColumn
+            Header="Timestamp"
+            Binding="{Binding Timestamp,
+            StringFormat={}{0:dd MMM yyyy HH:mm:ss}}"
+            Width="170"/>
+
+                                        <DataGridTextColumn
+            Header="Status"
+            Binding="{Binding HistoryStatus}"
+            Width="110"/>
+
+                                    </DataGrid.Columns>
+
+                                </DataGrid>
+
+                            </Grid>
+
+                        </Border>
+                    </Grid>
+
+                    <!-- RIGHT SIDE: PREDICTIVE ANALYSIS -->
+
+                    <Border Grid.Column="2"
+        Style="{StaticResource CommandCardStyle}"
+        Padding="20">
+
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+                            <StackPanel>
+
+                                <!-- HEADER -->
+
+                                <TextBlock Text="Predictive Analysis"
+                       FontSize="25"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Foreground="{StaticResource DarkBrush}"/>
+
+                                <TextBlock Text="AI-powered sensor anomaly detection and recommendations."
+                       FontSize="13"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"
+                       Margin="0,8,0,20"
+                       Foreground="#737A82"/>
+
+                                <Separator/>
+
+
+                                <!-- ANALYSIS STATUS -->
+
+                                <TextBlock Text="Analysis status"
+                       Style="{StaticResource CommandLabelStyle}"
+                       Margin="0,17,0,6"/>
+
+                                <Border Background="#F8F9FA"
+                    CornerRadius="8"
+                    Padding="12">
+
+                                    <TextBlock Text="{Binding PredictionMessage,
+                                  TargetNullValue=Awaiting sensor analysis.}"
+                           FontSize="13"
+                           TextWrapping="Wrap"
+                           Foreground="{StaticResource DarkBrush}"/>
+
+                                </Border>
+
+
+                                <!-- DETECTED ANOMALY -->
+
+                                <TextBlock Text="Detected anomaly"
+                       Style="{StaticResource CommandLabelStyle}"
+                       Margin="0,20,0,6"/>
+
+                                <Border Background="#F8F9FA"
+                    CornerRadius="8"
+                    Padding="12">
+
+                                    <TextBlock Text="{Binding Recommendation.Description,
+                                  TargetNullValue=No anomaly analysis available.}"
+                           FontSize="13"
+                           TextWrapping="Wrap"
+                           Foreground="{StaticResource DarkBrush}"/>
+
+                                </Border>
+
+
+                                <!-- SEVERITY -->
+
+                                <TextBlock Text="Severity"
+                       Style="{StaticResource CommandLabelStyle}"
+                       Margin="0,18,0,6"/>
+
+                                <Border Background="#FFF7ED"
+                    BorderBrush="#FED7AA"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="11">
+
+                                    <TextBlock Text="{Binding Recommendation.Severity,
+                                  TargetNullValue=Not available}"
+                           FontSize="13"
+                           FontWeight="SemiBold"
+                           Foreground="#C2410C"/>
+
+                                </Border>
+
+
+                                <!-- RECOMMENDED ACTION -->
+
+                                <TextBlock Text="Recommended action"
+                       Style="{StaticResource CommandLabelStyle}"
+                       Margin="0,20,0,6"/>
+
+                                <Border Background="#F4F8FF"
+                    BorderBrush="#D6E4FF"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="12">
+
+                                    <TextBlock Text="{Binding Recommendation.RecommendedAction,
+                                  TargetNullValue=No recommendation available.}"
+                           FontSize="13"
+                           TextWrapping="Wrap"
+                           Foreground="{StaticResource DarkBrush}"/>
+
+                                </Border>
+
+
+                                <!-- SUGGESTED COMMAND -->
+
+                                <TextBlock Text="Suggested command"
+                       Style="{StaticResource CommandLabelStyle}"
+                       Margin="0,20,0,6"/>
+
+                                <TextBox Text="{Binding Recommendation.RecommendedCommand,
+                             Mode=OneWay,
+                             TargetNullValue=''}"
+                     IsReadOnly="True"
+                     TextWrapping="Wrap"
+                     MinHeight="55"
+                     MaxHeight="110"
+                     Padding="11"
+                     FontFamily="Consolas"
+                     FontSize="12"
+                     Background="#F8F9FA"
+                     BorderBrush="#E1E5E8"/>
+
+
+                                <!-- ANALYSE BUTTON -->
+
+                                <Button Content="Analyse Sensor"
+                    Height="43"
+                    Margin="0,22,0,0"
+                    Cursor="Hand"
+                    Style="{StaticResource BaseButtonStyle}"
+                    Command="{Binding AnalyzeAnomalyCommand}"/>
+
+
+                                <!-- SEND RECOMMENDATION -->
+
+                                <Button Content="Send to Command Centre"
+                    Height="46"
+                    Margin="0,10,0,0"
+                    Cursor="Hand"
+                    Background="#2563EB"
+                    Foreground="White"
+                    BorderThickness="0"
+                    Command="{Binding SendToCommandCentreCommand}"
+                    IsEnabled="{Binding CanSendToCommandCentre}"/>
+
+
+                                <!-- INFORMATION -->
+
+                                <TextBlock Text="The recommended command will be transferred for review. It will not execute automatically."
+                       FontSize="11"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"
+                       Margin="0,12,0,0"
+                       Foreground="#737A82"/>
+
+                            </StackPanel>
+
+                        </ScrollViewer>
+
+                    </Border>
+                </Grid>
+
+
+
+            </Grid>
+        </Border>
+    </ScrollViewer>
+</Page>

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartX.Application.Requests.Sensor;
 using SmartX.Application.Services.CRUD;
-using SmartX.Application.Services.Sensors;
+using SmartX.Application.Services.Sensors.Interfaces;
 
 namespace SmartX.API.Controllers;
 
@@ -182,7 +182,7 @@ public class SensorsController : ControllerBase
 
         if (result.Success)
             return Ok(result);
-        
+
         return result.ErrorMessage switch
         {
             "Sensor not found." =>
@@ -196,6 +196,30 @@ public class SensorsController : ControllerBase
 
             _ =>
                 BadRequest(result)
+        };
+    }
+
+    // POST: api/Sensors/{id}/command/undo
+    [HttpPost("{id:guid}/command/undo")]
+    public async Task<IActionResult> UndoLastCommand(
+        Guid id,
+        CancellationToken cancellationToken)
+    {
+        if (id == Guid.Empty)
+            return BadRequest("Sensor ID is required.");
+
+        var result = await _sensorCommandService.UndoLastCommandAsync(
+            id,
+            cancellationToken);
+
+        if (result.Success)
+            return Ok(result);
+
+        return result.ErrorMessage switch
+        {
+            "Sensor not found." => NotFound(result),
+            "Gateway not found." => NotFound(result),
+            _ => BadRequest(result)
         };
     }
 }

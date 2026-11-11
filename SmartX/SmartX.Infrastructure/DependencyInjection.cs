@@ -1,11 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartX.Application.Authentication;
-using SmartX.Application.Commands.Sensor;
+using SmartX.Application.Interfaces.Sensors;
+using SmartX.Application.Services.Sensors;
+using SmartX.Application.Services.Sensors.Interfaces;
 using SmartX.Domain.Interfaces;
 using SmartX.Infrastructure.Authentication.Firebase;
 using SmartX.Infrastructure.Persistence.Mongo;
 using SmartX.Infrastructure.Repositories;
+using SmartX.Infrastructure.Sensors;
 
 namespace SmartX.Infrastructure;
 
@@ -37,8 +40,12 @@ public static class DependencyInjection
         services.AddScoped<IAuditLogRepository, JsonAuditLogRepository>();
         services.AddScoped<ICompanyConfigurationRepository, JsonCompanyConfigurationRepository>();
         services.AddScoped<IUserBehaviorRepository, JsonUserBehaviorRepository>();
+        services.AddScoped<ISensorConnectionService, SensorConnectionManager>();
+        services.AddHostedService<SensorConnectionWorker>();
 
-        services.AddScoped<SendSensorCommandHandler>();
+        services.AddSingleton<ISensorProtocolAdapter, SimulationSensorAdapter>();
+
+
         return services;
     }
 }

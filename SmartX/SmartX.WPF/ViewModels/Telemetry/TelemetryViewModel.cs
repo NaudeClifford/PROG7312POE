@@ -1,13 +1,10 @@
 ﻿using SmartX.Application.Requests.Telemetry;
-using SmartX.Application.Services.Alerts;
 using SmartX.Application.Services.Telemetry;
-using SmartX.Domain.Enums;
 using SmartX.Shared.Mapping;
 using SmartX.WPF.Navigation;
 using SmartX.WPF.Repositories.Local;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
-using SmartX.WPF.Services.PredictiveEngine;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.ViewModels.Alerts;
 using SmartX.WPF.ViewModels.Base;
@@ -27,15 +24,11 @@ public class TelemetryViewModel : ViewModelBase
     private readonly INavigationService _navigationService;
     private readonly ISmartXApiClient _apiClient;
     private readonly IMapper _mapper;
-    private readonly AlertQueue _alertQueue;
     private Guid? _selectedSensorId;
-    private readonly HashSet<string> _activeErrorStates = new();
     private string _selectedSensorFilter = "All";
 
     private DateTime? _fromDate;
     private DateTime? _toDate;
-
-    private readonly LivePredictiveWarningService _warningService;
 
     public PredictiveWarningViewModel PredictiveWarnings { get; }
 
@@ -278,9 +271,7 @@ public class TelemetryViewModel : ViewModelBase
         ISmartXApiClient apiClient,
         ITelemetryStream telemetryStream,
         PredictiveWarningViewModel predictiveWarningViewModel,
-        AlertQueue alertQueue,
-        TelemetryCollection telemetryCollection,
-        LivePredictiveWarningService livePredictiveWarningService
+        TelemetryCollection telemetryCollection
         ) : base(
             connectivityService,
             session)
@@ -292,8 +283,6 @@ public class TelemetryViewModel : ViewModelBase
         _navigationService = navigationService;
         _mapper = mapper;
         _telemetryStream = telemetryStream;
-        _alertQueue = alertQueue;
-        _warningService = livePredictiveWarningService;
         PredictiveWarnings = predictiveWarningViewModel;
 
         BackToSensorsCommand =
@@ -347,7 +336,6 @@ public class TelemetryViewModel : ViewModelBase
 
                 Telemetry.Clear();
                 FilteredTelemetry.Clear();
-                _warningService.Clear();
 
                 ErrorMessage = "No gateway selected.";
 
@@ -371,6 +359,12 @@ public class TelemetryViewModel : ViewModelBase
 
                 _selectedSensorFilter =
                     selectedSensor.Name;
+            }
+            else if (Sensors.Count > 0)
+            {
+                _selectedSensorId = Sensors[0].Id;
+
+                _selectedSensorFilter = Sensors[0].Name;
             }
             else
             {
@@ -474,8 +468,9 @@ public class TelemetryViewModel : ViewModelBase
 
     // LOAD TELEMETRY
 
+
     private async Task LoadTelemetryAsync(
-    CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default)
     {
         if (!Session.GatewayId.HasValue)
         {
@@ -483,34 +478,81 @@ public class TelemetryViewModel : ViewModelBase
             FilteredTelemetry.Clear();
             PowerHistory.Clear();
 
-
             _telemetryCollection.Clear();
-
             _telemetryStream.Clear();
-            _warningService.Clear();
 
             _telemetryArray = [];
-
             TotalPower = 0;
 
             RaiseTelemetryProperties();
-
             return;
         }
-        await _warningService.LoadAsync(
-        Session.GatewayId.Value,
-        cancellationToken);
 
-        _telemetryArray = _telemetryCollection.ToArray();
+        var gatewayId = Session.GatewayId.Value;
+
+        // Load sensors first so sensor mappings are available.
+        var sensorIds = Sensors
+            .Select(x => x.Id)
+            .ToHashSet();
+
+        // Load cached telemetry.
+        var cachedTelemetry =
+            await _telemetryCache.GetByGatewayIdAsync(
+                gatewayId,
+                cancellationToken);
 
         Telemetry.Clear();
+        _telemetryCollection.Clear();
 
-        foreach (var item in _telemetryCollection.Items)
+        foreach (var item in cachedTelemetry)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            Telemetry.Add(CreateDisplayModel(item));
+            if (!sensorIds.Contains(item.SensorId))
+                continue;
+
+            _telemetryCollection.Add(item);
+
+            Telemetry.Add(
+                CreateDisplayModel(item));
         }
+
+        // Retrieve current telemetry from API when online.
+        if (IsOnline)
+        {
+            foreach (var sensor in Sensors)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+
+                var telemetryDtos =
+                    await _apiClient.GetTelemetryBySensorIdAsync(
+                        sensor.Id,
+                        cancellationToken);
+
+                foreach (var dto in telemetryDtos)
+                {
+                    var telemetry =
+                        _mapper.Map<DomainTelemetry>(dto);
+
+                    await _telemetryCache.UpdateAsync(
+                        telemetry,
+                        cancellationToken);
+
+                    if (_telemetryCollection.Items.Any(
+                        x => x.Id == telemetry.Id))
+                    {
+                        continue;
+                    }
+
+                    _telemetryCollection.Add(telemetry);
+
+                    Telemetry.Add(
+                        CreateDisplayModel(telemetry));
+                }
+            }
+        }
+
+        _telemetryArray = _telemetryCollection.ToArray();
 
         ApplyFilters();
     }
@@ -601,6 +643,9 @@ public class TelemetryViewModel : ViewModelBase
             var request = new CreateTelemetryRequest
             {
                 SensorId = SelectedSensorId.Value,
+
+                DeviceIdentifier = SelectedSensor?.DeviceIdentifier ?? string.Empty,
+
                 Timestamp = DateTime.UtcNow,
 
                 Voltage =
@@ -657,6 +702,8 @@ public class TelemetryViewModel : ViewModelBase
             // PROCESS STREAM
             ProcessTelemetryStream();
 
+            await RefreshSensorStatusesAsync();
+
         }
         catch (Exception ex)
         {
@@ -665,6 +712,7 @@ public class TelemetryViewModel : ViewModelBase
         finally
         {
             IsBusy = false;
+            RaiseCommandStates();
         }
 
         await Task.CompletedTask;
@@ -781,7 +829,36 @@ public class TelemetryViewModel : ViewModelBase
             IsBusy = false;
         }
     }
+    private async Task RefreshSensorStatusesAsync(
+    CancellationToken cancellationToken = default)
+    {
+        if (!Session.GatewayId.HasValue)
+            return;
 
+        var sensorDtos =
+            await _apiClient.GetSensorsByGatewayIdAsync(
+                Session.GatewayId.Value,
+                cancellationToken);
+
+        foreach (var sensorDto in sensorDtos)
+        {
+            var sensor =
+                _mapper.Map<DomainSensor>(sensorDto);
+
+            await _sensorCache.UpdateAsync(
+                sensor,
+                cancellationToken);
+
+            var existing = Sensors.FirstOrDefault(
+                x => x.Id == sensor.Id);
+
+            if (existing is not null)
+            {
+                var index = Sensors.IndexOf(existing);
+                Sensors[index] = sensor;
+            }
+        }
+    }
     private double CalculateTotalPower(TelemetryDisplayModel[] telemetry, int index)
     {
         // BASE CASE
@@ -839,6 +916,8 @@ public class TelemetryViewModel : ViewModelBase
     protected override void RaiseCommandStates()
     {
         AddTelemetryCommand?.RaiseCanExecuteChanged();
+        ReloadTelemetryCommand?.RaiseCanExecuteChanged();
+
         BackToSensorsCommand?.RaiseCanExecuteChanged();
         BackToGatewaysCommand?.RaiseCanExecuteChanged();
         ClearFiltersCommand?.RaiseCanExecuteChanged();
@@ -919,8 +998,6 @@ public class TelemetryViewModel : ViewModelBase
                 CreateDisplayModel(
                     telemetry));
 
-            CheckForAlerts(telemetry);
-
             telemetryAdded = true;
         }
 
@@ -932,85 +1009,6 @@ public class TelemetryViewModel : ViewModelBase
         _telemetryArray = _telemetryCollection.ToArray();
 
         ApplyFilters();
-
-        _warningService.Refresh();
-    }
-
-    private void CheckForAlerts(
-    DomainTelemetry telemetry)
-    {
-        if (telemetry.Temperature >= 35)
-        {
-            var key = $"{telemetry.SensorId}:HighTemperature";
-
-            if (_activeErrorStates.Add(key))
-            {
-                _alertQueue.Enqueue(new SensorAlert
-                {
-                    SensorId = telemetry.SensorId,
-                    Message =
-                        $"Temperature is critically high: " +
-                        $"{telemetry.Temperature:F1}°C.",
-                    Severity = AlertSeverity.Critical,
-                    Timestamp = telemetry.Timestamp
-                });
-            }
-
-            return;
-        }
-        else
-        {
-            _activeErrorStates.Remove($"{telemetry.SensorId}:HighTemperature");
-        }
-
-        if (telemetry.Voltage >= 240)
-        {
-            var key = $"{telemetry.SensorId}:HighVoltage";
-
-            if (_activeErrorStates.Add(key))
-            {
-                _alertQueue.Enqueue(new SensorAlert
-                {
-                    SensorId = telemetry.SensorId,
-                    Message =
-                        $"Voltage is critically high: " +
-                        $"{telemetry.Voltage:F1}°C.",
-                    Severity = AlertSeverity.Critical,
-                    Timestamp = telemetry.Timestamp
-                });
-            }
-
-            return;
-        }
-        else
-        {
-            _activeErrorStates.Remove($"{telemetry.SensorId}:HighVoltage");
-        }
-
-        if (telemetry.Current >= 5)
-        {
-            var key = $"{telemetry.SensorId}:HighCurrennt";
-
-            if (_activeErrorStates.Add(key))
-            {
-                _alertQueue.Enqueue(new SensorAlert
-                {
-                    SensorId = telemetry.SensorId,
-                    Message =
-                        $"Current is critically high: " +
-                        $"{telemetry.Current:F1}°C.",
-                    Severity = AlertSeverity.Critical,
-                    Timestamp = telemetry.Timestamp
-                });
-            }
-
-            return;
-        }
-        else
-        {
-            _activeErrorStates.Remove(
-                $"{telemetry.SensorId}:HighCurrent");
-        }
 
     }
 }

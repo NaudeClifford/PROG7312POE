@@ -2,10 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartX.Application.Authentication;
-using SmartX.Application.Commands.Sensor;
 using SmartX.Application.Requests.Gateway;
 using SmartX.Application.Services.Alerts;
-using SmartX.Application.Services.Sensors;
 using SmartX.Application.Services.Telemetry;
 using SmartX.Application.Validators;
 using SmartX.Shared.Mapping;
@@ -17,11 +15,11 @@ using SmartX.WPF.Services;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.Demo;
-using SmartX.WPF.Services.PredictiveEngine;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels;
 using SmartX.WPF.ViewModels.Alerts;
+using SmartX.WPF.ViewModels.CommandStream;
 using SmartX.WPF.ViewModels.Gateway;
 using SmartX.WPF.ViewModels.History;
 using SmartX.WPF.ViewModels.Pages.Company;
@@ -30,6 +28,7 @@ using SmartX.WPF.ViewModels.Pages.Users;
 using SmartX.WPF.ViewModels.SignUp;
 using SmartX.WPF.ViewModels.Telemetry;
 using SmartX.WPF.Views.Pages.Alerts;
+using SmartX.WPF.Views.Pages.CommandStream;
 using SmartX.WPF.Views.Pages.Company;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.History;
@@ -112,12 +111,17 @@ public partial class App
     });
 
         //Services
+        // API communication
+        services.AddHttpClient<ISmartXApiClient, SmartXApiClient>(
+            client =>
+            {
+                client.BaseAddress = new Uri(apiOptions.BaseUrl);
+            });
+
+        // Local services
         services.AddSingleton<ITelemetryStream, TelemetryStream>();
-        services.AddScoped<ISensorCommandService, SensorCommandService>();
-        services.AddScoped<SendSensorCommandHandler>();
         services.AddSingleton<AlertQueue>();
-        services.AddSingleton<PredictiveSuggestionService>();
-        services.AddSingleton<IAnomalyRecommendationService, StatisticalAnomalyRecommendationService>();
+
         //Session
         services.AddSingleton<SmartXSession>();
 
@@ -148,7 +152,7 @@ public partial class App
         services.AddTransient<UsersViewModel>();
         services.AddTransient<CompanyServicesViewModel>();
         services.AddTransient<AlertsViewModel>();
-
+        services.AddTransient<RealTimeCommandViewModel>();
 
         // Pages
         services.AddTransient<HomePage>();
@@ -167,6 +171,7 @@ public partial class App
         services.AddTransient<CompaniesPage>();
         services.AddTransient<CompanyServicesPage>();
         services.AddTransient<AlertsPage>();
+        services.AddTransient<RealTimeCommandStreamPage>();
 
         //Main window
         services.AddSingleton<MainWindow>();
@@ -185,8 +190,7 @@ public partial class App
         services.AddSingleton<IGuestDemoService, GuestDemoService>();
 
         //Services Predictive
-        services.AddSingleton<LivePredictiveWarningService>();
-        services.AddSingleton<IPredictiveEngine, PredictiveEngine>();
+
         services.AddSingleton<TelemetryCollection>();
         services.AddSingleton<PredictiveWarningViewModel>();
 

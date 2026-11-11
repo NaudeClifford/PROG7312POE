@@ -74,7 +74,7 @@
             },
             "Microsoft.AspNetCore.Http.Abstractions": {
               "target": "Package",
-              "version": "[2.3.13, )"
+              "version": "[2.3.14, )"
             },
             "Microsoft.AspNetCore.Http.Features": {
               "target": "Package",
@@ -82,7 +82,11 @@
             },
             "Microsoft.Extensions.DependencyInjection.Abstractions": {
               "target": "Package",
-              "version": "[10.0.13, )"
+              "version": "[11.0.0, )"
+            },
+            "Microsoft.Extensions.Logging.Abstractions": {
+              "target": "Package",
+              "version": "[11.0.0, )"
             }
           },
           "imports": [
@@ -776,15 +780,15 @@
           "dependencies": {
             "Mapster": {
               "target": "Package",
-              "version": "[10.0.13, )"
+              "version": "[10.0.14, )"
             },
             "Microsoft.Extensions.DependencyInjection.Abstractions": {
               "target": "Package",
-              "version": "[10.0.13, )"
+              "version": "[11.0.0, )"
             },
             "MongoDB.Bson": {
               "target": "Package",
-              "version": "[3.12.0, )"
+              "version": "[3.13.0, )"
             }
           },
           "imports": [

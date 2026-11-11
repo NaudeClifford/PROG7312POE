@@ -1,4 +1,4 @@
-﻿namespace SmartX.Application.Services.Sensors;
+﻿namespace SmartX.Application.Services.Sensors.Command;
 
 public sealed class SensorCommandResult
 {

@@ -3,7 +3,7 @@ using SmartX.Shared.DTOs;
 using SmartX.Shared.DTOs.Telemetry;
 
 
-namespace SmartX.WPF.Services.PredictiveEngine
+namespace SmartX.Application.Services.PredictiveEngine
 {
     public interface IPredictiveEngine
     {

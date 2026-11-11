@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.Sqlite;
+﻿
+using Microsoft.Data.Sqlite;
+using System.IO;
 
 namespace SmartX.WPF.Data;
 
@@ -6,10 +8,21 @@ public class SmartXCacheDatabase
 {
     private readonly string _connectionString;
 
+    private const int CurrentSchemaVersion = 2;
+
     public SmartXCacheDatabase()
     {
+        var databasePath = Path.Combine(
+            AppContext.BaseDirectory,
+            "Data",
+            "Local",
+            "smartx-cache.db");
+
+        Directory.CreateDirectory(
+            Path.GetDirectoryName(databasePath)!);
+
         _connectionString =
-            "Data Source=smartx-cache.db";
+            $"Data Source={databasePath}";
     }
 
     public SqliteConnection CreateConnection()
@@ -24,31 +37,57 @@ public class SmartXCacheDatabase
 
         await connection.OpenAsync(cancellationToken);
 
-        using var command = connection.CreateCommand();
-
-        // SENSORS
-
-        command.CommandText = """
-            CREATE TABLE IF NOT EXISTS Sensors
-            (
-                Id TEXT PRIMARY KEY,
-                Name TEXT NOT NULL,
-                DeviceIdentifier TEXT NOT NULL,
-                Category INTEGER NOT NULL,
-                Location TEXT NOT NULL,
-                Description TEXT NOT NULL,
-                IsActive INTEGER NOT NULL,
-                GatewayId TEXT NULL,
-                CreatedAt TEXT NOT NULL,
-                UpdatedAt TEXT NOT NULL
-            );
-            """;
-
-        await command.ExecuteNonQueryAsync(
+        // Run schema migrations first.
+        var version = await GetSchemaVersionAsync(
+            connection,
             cancellationToken);
 
+        if (version > CurrentSchemaVersion)
+        {
+            throw new InvalidOperationException(
+                $"Database schema version {version} is newer than " +
+                $"the supported version {CurrentSchemaVersion}.");
+        }
 
-        // TELEMETRY
+        if (version < 1)
+        {
+            using var transaction =
+                (SqliteTransaction)await connection.BeginTransactionAsync(
+                    cancellationToken);
+
+            await CreateInitialSensorsTableAsync(
+                connection,
+                transaction,
+                cancellationToken);
+
+            await transaction.CommitAsync(cancellationToken);
+
+            version = 1;
+        }
+
+        if (version < 2)
+        {
+            using var transaction =
+                (SqliteTransaction)await connection.BeginTransactionAsync(
+                    cancellationToken);
+
+            await AddSensorAlertFieldsAsync(
+                connection,
+                transaction,
+                cancellationToken);
+
+            await transaction.CommitAsync(cancellationToken);
+
+            version = 2;
+        }
+
+        await SetSchemaVersionAsync(
+            connection,
+            version,
+            cancellationToken);
+
+        // Create remaining tables.
+        using var command = connection.CreateCommand();
 
         command.CommandText = """
             CREATE TABLE IF NOT EXISTS Telemetry
@@ -63,15 +102,7 @@ public class SmartXCacheDatabase
                 CreatedAt TEXT NOT NULL,
                 UpdatedAt TEXT NOT NULL
             );
-            """;
 
-        await command.ExecuteNonQueryAsync(
-            cancellationToken);
-
-
-        // USERS
-
-        command.CommandText = """
             CREATE TABLE IF NOT EXISTS Users
             (
                 Id TEXT PRIMARY KEY,
@@ -84,15 +115,7 @@ public class SmartXCacheDatabase
                 CreatedAt TEXT NOT NULL,
                 UpdatedAt TEXT NOT NULL
             );
-            """;
 
-        await command.ExecuteNonQueryAsync(
-            cancellationToken);
-
-
-        // COMPANIES
-
-        command.CommandText = """
             CREATE TABLE IF NOT EXISTS Companies
             (
                 Id TEXT PRIMARY KEY,
@@ -103,15 +126,7 @@ public class SmartXCacheDatabase
                 CreatedAt TEXT NOT NULL,
                 UpdatedAt TEXT NOT NULL
             );
-            """;
 
-        await command.ExecuteNonQueryAsync(
-            cancellationToken);
-
-
-        // GATEWAYS
-
-        command.CommandText = """
             CREATE TABLE IF NOT EXISTS Gateways
             (
                 Id TEXT PRIMARY KEY,
@@ -124,14 +139,7 @@ public class SmartXCacheDatabase
                 CreatedAt TEXT NOT NULL,
                 UpdatedAt TEXT NOT NULL
             );
-            """;
 
-        await command.ExecuteNonQueryAsync(
-            cancellationToken);
-
-        // SENSOR LOG FILES
-
-        command.CommandText = """
             CREATE TABLE IF NOT EXISTS SensorLogFiles
             (
                 Id TEXT PRIMARY KEY,
@@ -144,45 +152,124 @@ public class SmartXCacheDatabase
                 CreatedAt TEXT NOT NULL,
                 UpdatedAt TEXT NOT NULL
             );
-            """;
 
-        await command.ExecuteNonQueryAsync(
-            cancellationToken);
-
-        // CACHE METADATA
-
-        command.CommandText = """
             CREATE TABLE IF NOT EXISTS CacheMetadata
             (
                 EntityId TEXT PRIMARY KEY,
                 EntityType TEXT NOT NULL,
                 LastSyncedAt TEXT NOT NULL
             );
+
+            CREATE TABLE IF NOT EXISTS UserBehaviors
+            (
+                Id TEXT NOT NULL PRIMARY KEY,
+                UserId TEXT NOT NULL,
+                SensorId TEXT NOT NULL,
+                Command TEXT NOT NULL,
+                Timestamp TEXT NOT NULL,
+                Succeeded INTEGER NOT NULL,
+                Outcome TEXT NULL,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT NOT NULL
+            );
+
+            CREATE INDEX IF NOT EXISTS IX_UserBehaviors_SensorId
+            ON UserBehaviors (SensorId);
             """;
 
         await command.ExecuteNonQueryAsync(
             cancellationToken);
+    }
 
-        // USER BEHAVIOR
+    // SCHEMA VERSION
+
+    private static async Task<int> GetSchemaVersionAsync(
+        SqliteConnection connection,
+        CancellationToken cancellationToken)
+    {
+        using var command = connection.CreateCommand();
+
+        command.CommandText = "PRAGMA user_version;";
+
+        var result = await command.ExecuteScalarAsync(
+            cancellationToken);
+
+        return Convert.ToInt32(result);
+    }
+
+    private static async Task SetSchemaVersionAsync(
+        SqliteConnection connection,
+        int version,
+        CancellationToken cancellationToken)
+    {
+        using var command = connection.CreateCommand();
+
+        command.CommandText =
+            $"PRAGMA user_version = {version};";
+
+        await command.ExecuteNonQueryAsync(
+            cancellationToken);
+    }
+
+    // VERSION 1: INITIAL SENSOR TABLE
+
+    private static async Task CreateInitialSensorsTableAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        CancellationToken cancellationToken)
+    {
+        using var command = connection.CreateCommand();
+
+        command.Transaction = transaction;
 
         command.CommandText = """
-    CREATE TABLE IF NOT EXISTS UserBehaviors
-    (
-        Id TEXT NOT NULL PRIMARY KEY,
-        UserId TEXT NOT NULL,
-        SensorId TEXT NOT NULL,
-        Command TEXT NOT NULL,
-        Timestamp TEXT NOT NULL,
-        Succeeded INTEGER NOT NULL,
-        Outcome TEXT NULL,
-        CreatedAt TEXT NOT NULL,
-        UpdatedAt TEXT NOT NULL
-    );
+            CREATE TABLE IF NOT EXISTS Sensors
+            (
+                Id TEXT PRIMARY KEY,
+                Name TEXT NOT NULL,
+                DeviceIdentifier TEXT NOT NULL,
+                Category INTEGER NOT NULL,
+                Location TEXT NOT NULL,
+                Description TEXT NOT NULL,
+                IsActive INTEGER NOT NULL,
+                GatewayId TEXT NULL,
+                IpAddress TEXT NULL,
+                Port INTEGER NULL,
+                Protocol INTEGER NOT NULL DEFAULT 0,
+                IsSimulation INTEGER NOT NULL DEFAULT 1,
+                IsConnectionEnabled INTEGER NOT NULL DEFAULT 0,
+                CreatedAt TEXT NOT NULL,
+                UpdatedAt TEXT NOT NULL
+            );
+            """;
 
-    CREATE INDEX IF NOT EXISTS IX_UserBehaviors_SensorId
-    ON UserBehaviors (SensorId);
-    """;
+        await command.ExecuteNonQueryAsync(
+            cancellationToken);
+    }
 
-        await command.ExecuteNonQueryAsync(cancellationToken);
+    // VERSION 2: SENSOR ALERT FIELDS
+
+    private static async Task AddSensorAlertFieldsAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        CancellationToken cancellationToken)
+    {
+        using var command = connection.CreateCommand();
+
+        command.Transaction = transaction;
+
+        command.CommandText = """
+            ALTER TABLE Sensors
+            ADD COLUMN HasActiveAlert INTEGER NOT NULL DEFAULT 0;
+
+            ALTER TABLE Sensors
+            ADD COLUMN ActiveAlertMessage TEXT NULL;
+
+            ALTER TABLE Sensors
+            ADD COLUMN ActiveAlertSeverity INTEGER NULL;
+            """;
+
+        await command.ExecuteNonQueryAsync(
+            cancellationToken);
     }
 }

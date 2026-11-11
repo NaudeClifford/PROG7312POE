@@ -4,18 +4,17 @@ using SmartX.Domain.shared;
 using SmartX.Shared.DTOs;
 using SmartX.Shared.DTOs.Telemetry;
 
-namespace SmartX.WPF.Services.PredictiveEngine;
+namespace SmartX.Application.Services.PredictiveEngine;
 
 public sealed class PredictiveEngine : IPredictiveEngine
 {
-    private const int HistoryWindowSize = 20;
+    private const int HistoryWindowSize = 100;
     private const int ReadingsBeforeCommand = 10;
     private const int ReadingsAfterCommand = 10;
     private const int MinimumReadingsForComparison = 5;
 
 
     private const int RecurringReadingThreshold = 3;
-    private const int RecurringPatternBonus = 15;
     private const int MaximumSuggestions = 5;
 
     // Initial thresholds. Adjust for your equipment specifications.
@@ -66,30 +65,60 @@ public sealed class PredictiveEngine : IPredictiveEngine
 
             sensorBehaviors ??= new List<UserBehaviorDto>();
 
+
             // Current threshold risk.
             var currentScore = CalculateTelemetryScore(latest);
 
-            // Recurring anomalies in the recent history.
-            var recurringReadings = history.Count(reading => CalculateTelemetryScore(reading) > 0);
+            // Analyze the latest 20 readings for recent recurrence.
+            var recentHistory = history
+                .Take(20)
+                .ToList();
 
-            var isRecurring = recurringReadings >= RecurringReadingThreshold;
+            var recurringReadings = recentHistory.Count(
+                reading => CalculateTelemetryScore(reading) > 0);
 
-            // Rising trends based on timestamp-aware regression.
-            var trend = CalculateTrend(history);
+            var isRecurring =
+                recurringReadings >= RecurringReadingThreshold;
 
-            // Do not use historical maximum severity as if it
-            // were necessarily the sensor's current condition.
-            if (currentScore == 0 && !isRecurring && trend.Score == 0) continue;
+            // Calculate recurrence score based on frequency.
+            var recurringScore = CalculateRecurringScore(
+                recurringReadings,
+                recentHistory.Count);
 
-            var score = Math.Min(100, currentScore + (isRecurring ? RecurringPatternBonus : 0) + trend.Score);
+            // Analyze recent trends.
+            var trendHistory = history
+                .Take(20)
+                .ToList();
 
+            var trend = CalculateTrend(trendHistory);
+
+            // Skip sensors without a current or predictive warning.
+            if (currentScore == 0 &&
+                !isRecurring &&
+                trend.Score == 0)
+            {
+                continue;
+            }
+
+            // Combine current risk, recurrence and trend.
+            var score = Math.Min(
+                100,
+                currentScore +
+                recurringScore +
+                trend.Score);
+
+            // Historical recurrence alone cannot produce
+            // a high or critical severity.
             // Preserve a meaningful score for historical recurrence.
-            if (currentScore == 0 && isRecurring) score = Math.Max(score, 30);
+            if (currentScore == 0) score = Math.Min(score, 59);
 
             var severity = DetermineSeverity(score);
 
-            var title = currentScore > 0 ? "Active telemetry warning" : isRecurring
-                    ? "Recurring anomaly detected" : "Rising telemetry trend";
+            var title = currentScore > 0
+                ? "Active telemetry warning"
+                : isRecurring
+                    ? "Recurring anomaly detected"
+                    : "Rising telemetry trend";
 
             var (recommendedCommand, recommendationReason) = BuildRecommendedCommand(latest, sensorBehaviors);
 
@@ -101,7 +130,7 @@ public sealed class PredictiveEngine : IPredictiveEngine
                 Type = SuggestionType.DeviceWarning,
                 Severity = severity,
                 Score = score,
-                RecommendedAction = BuildRecommendedAction(latest, isRecurring, trend, sensorBehaviors, allReadings),
+                RecommendedAction = BuildRecommendedAction(latest, isRecurring, trend, sensorBehaviors, history),
                 RecommendedCommand = recommendedCommand,
                 RecommendationReason = recommendationReason
             };
@@ -150,7 +179,25 @@ public sealed class PredictiveEngine : IPredictiveEngine
 
         return score;
     }
+    private static int CalculateRecurringScore(
+    int recurringReadings,
+    int totalReadings)
+    {
+        if (totalReadings == 0 || recurringReadings < RecurringReadingThreshold)
+            return 0;
 
+        var percentage =
+            (double)recurringReadings / totalReadings * 100;
+
+        return percentage switch
+        {
+            >= 50 => 30,
+            >= 30 => 25,
+            >= 20 => 20,
+            >= 10 => 15,
+            _ => 10
+        };
+    }
     private sealed record TrendResult(int Score, List<string> Details);
 
     private static TrendResult CalculateTrend(
@@ -477,11 +524,12 @@ public sealed class PredictiveEngine : IPredictiveEngine
 
 
 
+
+
     private static (string? Command, string Reason) BuildRecommendedCommand(
         TelemetryDto reading,
         IEnumerable<UserBehaviorDto> behaviors)
     {
-        // Identify the active telemetry warnings.
         var temperatureCritical =
             reading.Temperature >= TemperatureCritical;
 
@@ -501,87 +549,92 @@ public sealed class PredictiveEngine : IPredictiveEngine
             reading.Current >= CurrentWarning;
 
         var hasCriticalWarning =
-            temperatureCritical ||
-            voltageCritical ||
-            currentCritical;
+            temperatureCritical || voltageCritical || currentCritical;
 
         var hasWarning =
-            temperatureWarning ||
-            voltageWarning ||
-            currentWarning;
+            temperatureWarning || voltageWarning || currentWarning;
 
-        // No corrective command is necessary when telemetry
-        // is within the configured thresholds.
         if (!hasWarning)
         {
             return (
                 null,
-                "No active telemetry threshold requires a corrective command."
+                "Telemetry is within configured thresholds. No corrective command is recommended."
             );
         }
 
-        // Keep previously successful, supported commands as
-        // candidates, but never recommend arbitrary command text.
-        var successfulCommands = behaviors
-            .Where(b => b.Succeeded)
+        // Avoid recommending a command that previously failed
+        // for the same sensor condition.
+        var relevantBehaviors = behaviors
             .Where(b => !string.IsNullOrWhiteSpace(b.Command))
             .OrderByDescending(b => b.Timestamp)
-            .Select(b => b.Command.Trim())
-            .Where(SensorCommandCatalog.IsSupported).ToList();
+            .ToList();
 
-        // Prefer a previously successful RESET when available.
-        var previousReset = successfulCommands
-            .FirstOrDefault(c =>
-                c.Equals("RESET", StringComparison.OrdinalIgnoreCase));
-
-        if (previousReset is not null)
-        {
-            return (
-                previousReset.ToUpperInvariant(),
-                "RESET is supported by the command service and has " +
-                "previously been recorded as successful. Review the " +
-                "equipment state and confirm that resetting is safe."
-            );
-        }
-
-        // A critical warning needs additional caution.
-        // RESET is a supported command, but its safety must be
-        // confirmed for the particular device before execution.
+        // Critical conditions require stopping operation
+        // rather than blindly resetting the equipment.
         if (hasCriticalWarning)
         {
+            var stopCommand = new[] { "STOP", "OFF", "POWER OFF" }
+                .FirstOrDefault(SensorCommandCatalog.IsSupported);
+
+            if (stopCommand is not null)
+            {
+                return (
+                    stopCommand,
+                    "Critical telemetry detected. Stopping operation is suggested as a simulated protective response. Verify equipment-specific safety requirements before execution."
+                );
+            }
+
             return (
-                "RESET",
-                "Critical telemetry detected. RESET is an available " +
-                "corrective command, but it has not been verified as safe " +
-                "for this particular critical condition. Confirm the " +
-                "equipment safety procedure before applying it."
+                null,
+                "Critical telemetry detected. No suitable supported protective command is available. Immediate inspection is recommended."
             );
         }
 
-        // For non-critical warnings, prefer a supported command
-        // already recorded as successful, if one exists.
-        var previousCommand = successfulCommands.FirstOrDefault();
+        // High temperature: prefer stopping operation.
+        if (temperatureWarning)
+        {
+            var command = new[] { "STOP", "OFF" }
+                .FirstOrDefault(SensorCommandCatalog.IsSupported);
 
-        if (previousCommand is not null)
+            if (command is not null)
+            {
+                return (
+                    command,
+                    "Elevated temperature detected. Stopping operation is suggested to reduce potential additional heat generation."
+                );
+            }
+        }
+
+        // High current: stopping operation may reduce load.
+        if (currentWarning)
+        {
+            var command = new[] { "STOP", "OFF" }
+                .FirstOrDefault(SensorCommandCatalog.IsSupported);
+
+            if (command is not null)
+            {
+                return (
+                    command,
+                    "Elevated current detected. Stopping operation is suggested to reduce the simulated equipment load."
+                );
+            }
+        }
+
+        // High voltage: no generic command is assumed
+        // to regulate or correct the supply.
+        if (voltageWarning)
         {
             return (
-                previousCommand.ToUpperInvariant(),
-                $"The command '{previousCommand}' was previously recorded " +
-                "as successful. Review its suitability for the current " +
-                "telemetry warning before sending it."
+                null,
+                "Elevated voltage detected. Inspect the electrical supply and equipment voltage limits. No voltage-regulation command is currently supported."
             );
         }
 
-        // Supported fallback for a non-critical warning.
-        // RESET is used because it is explicitly supported by your service.
         return (
-            "RESET",
-            "A non-critical telemetry warning was detected. RESET is " +
-            "supported by the command service and is suggested for review. " +
-            "Confirm that resetting is appropriate for this device first."
+            null,
+            "No suitable corrective command was identified."
         );
     }
-
 
 
     private static (List<TelemetryDto> Before, List<TelemetryDto> After)

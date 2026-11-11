@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Authentication;
+using SmartX.API.Services.PredictiveEngine;
 using SmartX.Application;
-using SmartX.Application.Commands.Sensor;
-using SmartX.Application.Services.Telemetry;
+using SmartX.Application.Services.PredictiveEngine;
+using SmartX.Application.Services.Sensors.Interfaces;
 using SmartX.Domain.Interfaces;
 using SmartX.Infrastructure;
 using SmartX.Infrastructure.Authentication.Firebase;
@@ -17,16 +18,19 @@ namespace SmartX.API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddEndpointsApiExplorer()
-                            .AddSwaggerGen()
-                            .AddApplication()
-                            .AddInfrastructure(builder.Configuration)
-                            .AddSmartXMapping()
-                            .AddControllers();
+            builder.Services
+                .AddEndpointsApiExplorer()
+                .AddSwaggerGen()
+                .AddApplication()
+                .AddInfrastructure(builder.Configuration)
+                .AddSmartXMapping()
+                .AddControllers();
 
-            builder.Services.AddScoped<SendSensorCommandHandler>();
-            builder.Services.AddScoped<TelemetryHistoryStore>();
-            builder.Services.AddScoped<TelemetryStream>();
+            builder.Services.AddScoped<IPredictiveWarningService,
+                LivePredictiveWarningService>();
+
+            builder.Services.AddScoped<IPredictiveSuggestionProvider,
+                PredictiveSuggestionProvider>();
 
             builder.Services
                 .AddAuthentication(options =>
@@ -52,7 +56,22 @@ namespace SmartX.API
             builder.Services.AddOpenApi();
 
             var app = builder.Build();
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
 
+                var sensorRepository =
+                    services.GetRequiredService<ISensorRepository>();
+
+                Console.WriteLine(
+                    $"Sensor repository: {sensorRepository.GetType().FullName}");
+
+                var commandService =
+                    services.GetRequiredService<ISensorCommandService>();
+
+                Console.WriteLine(
+                    $"Command service: {commandService.GetType().FullName}");
+            }
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {

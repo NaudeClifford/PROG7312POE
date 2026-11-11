@@ -10,113 +10,112 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-        <Grid Margin="60">
+        <Border Margin="20"
+            Padding="25"
+            Background="{StaticResource DarkBrush}"
+            CornerRadius="24">
 
-            <Grid.RowDefinitions>
+            <Grid Margin="10">
 
-                <!-- Header -->
-                <RowDefinition Height="Auto"/>
+                <Grid.RowDefinitions>
 
-                <!-- Gateway cards -->
-                <RowDefinition Height="Auto"/>
+                    <!-- Header -->
+                    <RowDefinition Height="Auto"/>
 
-                <!-- No gateway -->
-                <RowDefinition Height="Auto"/>
+                    <!-- Gateway cards -->
+                    <RowDefinition Height="Auto"/>
 
-                <RowDefinition Height="Auto"/>
+                    <!-- No gateway -->
+                    <RowDefinition Height="Auto"/>
 
-
-            </Grid.RowDefinitions>
-
-
-            <!-- HEADER -->
-
-            <Grid Grid.Row="0">
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="500"/>
-                </Grid.ColumnDefinitions>
+                    <RowDefinition Height="Auto"/>
 
 
-                <!-- TITLE -->
+                </Grid.RowDefinitions>
 
-                <StackPanel>
 
-                    <TextBlock Text="Gateway"
-                               FontSize="32"
-                               FontWeight="Bold"
+                <!-- HEADER -->
 
-                               Foreground="{StaticResource TitleBrush}"/>
+                <Grid Grid.Row="0">
 
-                    <TextBlock Text="{Binding CurrentGatewayName}"
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="500"/>
+                    </Grid.ColumnDefinitions>
+
+
+                    <!-- TITLE -->
+
+                    <StackPanel>
+
+                        <TextBlock Text="Gateway" Style="{StaticResource PageTitleStyle}"/>
+
+                        <TextBlock Text="{Binding CurrentGatewayName}"
                                FontSize="18"
                                FontWeight="SemiBold"
                                Foreground="{StaticResource TitleBrush}"
                                Margin="0,5,0,0"/>
 
-                    <TextBlock Text="Manage your SmartX gateway and connected services."
-                               FontSize="14"
-                               Foreground="{StaticResource TitleBrush}"
-                               Margin="0,8,0,0"/>
+                        <TextBlock Text="Manage your SmartX gateway and connected services."
+                               Style="{StaticResource SectionTitleStyle}"/>
 
-                </StackPanel>
+                    </StackPanel>
 
 
-                <!-- GATEWAY SELECTOR -->
+                    <!-- GATEWAY SELECTOR -->
 
-                <StackPanel Grid.Column="1">
+                    <StackPanel Grid.Column="1">
 
-                    <!-- CRUD BUTTONS -->
+                        <!-- CRUD BUTTONS -->
 
-                    <StackPanel Orientation="Horizontal"
+                        <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
                                 Visibility="{Binding GatewayCrudVisibility}"
                                 Margin="0,0,0,10">
 
-                        <!-- ADD GATEWAY -->
+                            <!-- ADD GATEWAY -->
 
-                        <Button Content="+ Add Gateway"
+                            <Button Content="+ Add Gateway"
                                 Command="{Binding AddGatewayCommand}"
                                 Width="150"
                                 Height="40"
                                 Padding="18,0"
                                 Margin="1,0,8,0"
-                                Style="{StaticResource PrimaryButtonStyle}"/>
+                                Style="{StaticResource SecondColourButtonStyle}"/>
 
 
-                        <!-- EDIT -->
+                            <!-- EDIT -->
 
-                        <Button Content="Edit"
+                            <Button Content="Edit"
                                 Width="90"
                                 Height="40"
                                 Margin="0,0,8,0"
                                 Command="{Binding EditGatewayCommand}"
-                                Style="{StaticResource BaseButtonStyle}"/>
+                                Style="{StaticResource SecondColourButtonStyle}"/>
 
 
-                        <!-- DELETE -->
+                            <!-- DELETE -->
 
-                        <Button Content="Delete"
+                            <Button Content="Delete"
                                 Width="90"
                                 Height="40"
                                 Command="{Binding DeleteGatewayCommand}"
                                 Background="#C62828"
                                 Foreground="White"/>
 
-                    </StackPanel>
+                        </StackPanel>
 
 
-                    <!-- SELECT GATEWAY -->
+                        <!-- SELECT GATEWAY -->
 
-                    <TextBlock Text="SELECT GATEWAY"
+                        <TextBlock Text="SELECT GATEWAY"
                                FontSize="11"
                                FontWeight="SemiBold"
                                Foreground="#707780"
                                Margin="0,0,0,6"/>
 
-                    <ComboBox ItemsSource="{Binding Gateways}"
+                        <ComboBox ItemsSource="{Binding Gateways}"
                               SelectedItem="{Binding SelectedGateway, Mode=TwoWay}"
                               DisplayMemberPath="Name"
                               Height="42"
@@ -125,148 +124,147 @@
                               Margin="0,0,0,10"
                               Background="{StaticResource BackgroundBrush}"/>
 
-                </StackPanel>
+                    </StackPanel>
 
-            </Grid>
+                </Grid>
 
 
-            <!-- GATEWAY CARDS -->
+                <!-- GATEWAY CARDS -->
 
-            <Grid Grid.Row="1"
+                <Grid Grid.Row="1"
                   Visibility="{Binding GatewayFeaturesVisibility}"
                   Margin="0,30,0,0">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
 
-                <!-- SENSOR DATA & TELEMETRY -->
+                    <!-- SENSOR DATA & TELEMETRY -->
 
-                <Border Grid.Column="0"
+                    <Border Grid.Column="0"
                         Background="#F3F4F6"
                         CornerRadius="16"
                         Padding="25"
                         Margin="0,0,10,0">
 
-                    <StackPanel>
+                        <StackPanel>
 
-                        <TextBlock Text="Sensor Data &amp; Telemetry"
+                            <TextBlock Text="Sensor Data &amp; Telemetry"
                                    FontSize="18"
                                    FontWeight="SemiBold"
                                    Foreground="#20242A"/>
 
-                        <TextBlock Text="View live sensor readings and telemetry coming through this gateway."
+                            <TextBlock Text="View live sensor readings and telemetry coming through this gateway."
                                    FontSize="13"
                                    Foreground="#707780"
                                    TextWrapping="Wrap"
                                    Margin="0,10,0,20"/>
 
-                        <Button Content="View Sensor Data"
+                            <Button Content="View Sensor Data"
                                 Height="45"
                                 Command="{Binding ViewSensorsCommand}"
                                 Style="{StaticResource BaseButtonStyle}"/>
 
-                    </StackPanel>
+                        </StackPanel>
 
-                </Border>
+                    </Border>
 
 
-                <!-- COMMAND STREAM & HISTORY -->
+                    <!-- COMMAND STREAM & HISTORY -->
 
-                <Border Grid.Column="1"
+                    <Border Grid.Column="1"
                         Background="#F3F4F6"
                         CornerRadius="16"
                         Padding="25"
                         Margin="5,0">
 
-                    <StackPanel>
+                        <StackPanel>
 
-                        <TextBlock Text="Command Stream &amp; History"
+                            <TextBlock Text="Command Stream &amp; History"
                                    FontSize="18"
                                    FontWeight="SemiBold"
                                    Foreground="#20242A"/>
 
-                        <TextBlock Text="View gateway commands, command history and gateway activity."
+                            <TextBlock Text="View gateway commands, command history and gateway activity."
                                    FontSize="13"
                                    Foreground="#707780"
                                    TextWrapping="Wrap"
                                    Margin="0,10,0,20"/>
 
-                        <Button Content="View Command History"
+                            <Button Content="View Command History"
                                 Height="45"
                                 Command="{Binding ViewCommandHistoryCommand}"
                                 Style="{StaticResource BaseButtonStyle}"
                                 IsEnabled="true"/>
 
-                    </StackPanel>
+                        </StackPanel>
 
-                </Border>
+                    </Border>
 
 
-                <!-- NETWORK & MESH -->
+                    <!-- NETWORK & MESH -->
 
-                <Border Grid.Column="2"
+                    <Border Grid.Column="2"
                         Background="#F3F4F6"
                         CornerRadius="16"
                         Padding="25"
                         Margin="10,0,0,0">
 
-                    <StackPanel>
+                        <StackPanel>
 
-                        <TextBlock Text="Network &amp; Mesh Routing"
+                            <TextBlock Text="Network &amp; Mesh Routing"
                                    FontSize="18"
                                    FontWeight="SemiBold"
                                    Foreground="#20242A"/>
 
-                        <TextBlock Text="View gateway network status and configure mesh routing."
+                            <TextBlock Text="View gateway network status and configure mesh routing."
                                    FontSize="13"
                                    Foreground="#707780"
                                    TextWrapping="Wrap"
                                    Margin="0,10,0,20"/>
 
-                        <Button Content="View Network"
+                            <Button Content="View Network"
                                 Height="45"
                                 Command="{Binding ViewNetworkCommand}"
-                                Style="{StaticResource BaseButtonStyle}"
-                                IsEnabled="False"/>
+                                Style="{StaticResource BaseButtonStyle}"/>
 
-                    </StackPanel>
+                        </StackPanel>
 
-                </Border>
+                    </Border>
 
-            </Grid>
+                </Grid>
 
 
-            <!-- NO GATEWAY -->
+                <!-- NO GATEWAY -->
 
-            <Border Grid.Row="2"
+                <Border Grid.Row="2"
                     Visibility="{Binding NoGatewayVisibility}"
                     Background="White"
                     CornerRadius="16"
                     Padding="40"
                     Margin="0,30,0,0">
 
-                <StackPanel HorizontalAlignment="Center"
+                    <StackPanel HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             MaxWidth="500">
 
-                    <TextBlock Text="No Gateway Configured"
+                        <TextBlock Text="No Gateway Configured"
                                FontSize="24"
                                FontWeight="Bold"
                                Foreground="#20242A"
                                HorizontalAlignment="Center"/>
 
-                    <TextBlock Text="This company does not currently have a SmartX gateway configured. Gateway-dependent features will become available after a gateway is added."
+                        <TextBlock Text="This company does not currently have a SmartX gateway configured. Gateway-dependent features will become available after a gateway is added."
                                FontSize="14"
                                Foreground="#707780"
                                TextWrapping="Wrap"
                                TextAlignment="Center"
                                Margin="0,12,0,25"/>
 
-                    <Button Content="+ Add Gateway"
+                        <Button Content="+ Add Gateway"
                             Command="{Binding AddGatewayCommand}"
                             Visibility="{Binding GatewayCrudVisibility}"
                             Width="180"
@@ -274,18 +272,18 @@
                             HorizontalAlignment="Center"
                             Style="{StaticResource BaseButtonStyle}"/>
 
-                </StackPanel>
+                    </StackPanel>
 
-            </Border>
+                </Border>
 
-            <!-- PREDICTIVE WARNINGS -->
-            <controls:PredictiveWarningView
+                <!-- PREDICTIVE WARNINGS -->
+                <controls:PredictiveWarningView
                     Grid.Row="3"
                     MaxHeight="300"
                     Margin="0,20,0,0"
                     DataContext="{Binding PredictiveWarnings}" />
-        </Grid>
-
+            </Grid>
+        </Border>
     </ScrollViewer>
 
 </Page>

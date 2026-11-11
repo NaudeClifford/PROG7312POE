@@ -8,272 +8,208 @@
       Background="{StaticResource BackgroundBrush}"
       PreviewKeyDown="Page_PreviewKeyDown">
 
-    <ScrollViewer
-        VerticalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Border Margin="20"
+            Padding="25"
+            Background="{StaticResource DarkBrush}"
+            CornerRadius="24">
 
-        <Grid Margin="60">
+            <Grid Margin="10">
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <!-- HEADER -->
+                <!-- HEADER -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,30">
+                    <TextBlock Text="Sensor Setup"
+                           Style="{StaticResource PageTitleStyle}"
+                           Foreground="{StaticResource TitleBrush}"/>
 
-            <Grid
-                Grid.Row="0"
-                Margin="0,0,0,30">
-
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel
-                    Grid.Column="0">
-
-                    <TextBlock
-                        Text="Sensor Setup"
-                        FontSize="30"
-                        FontWeight="Bold"
-                        Foreground="{StaticResource TitleBrush}"/>
-
-                    <TextBlock
-                        Text="Add a sensor to the current gateway."
-                        FontSize="14"
-                        Foreground="{StaticResource SubTitleBrush}"
-                        Margin="0,8,0,0"/>
-
+                    <TextBlock Text="Add a sensor to the current gateway."
+                           Style="{StaticResource SectionTitleStyle}"
+                           Margin="0,8,0,0"/>
                 </StackPanel>
 
+                <!-- FORM -->
+                <Border Grid.Row="1"
+                    Background="White"
+                    CornerRadius="18"
+                    Padding="35">
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- NAME -->
+                        <StackPanel Grid.Row="0"
+                                Grid.Column="0"
+                                Margin="0,0,12,18">
+                            <TextBlock Text="Sensor name"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,8"/>
+
+                            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                 Height="48"
+                                 Padding="12"
+                                 FontSize="14"/>
+                        </StackPanel>
+
+                        <!-- DEVICE IDENTIFIER -->
+                        <StackPanel Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="12,0,0,18">
+                            <TextBlock Text="Device identifier"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,8"/>
+
+                            <TextBox Text="{Binding DeviceIdentifier, UpdateSourceTrigger=PropertyChanged}"
+                                 Height="48"
+                                 Padding="12"
+                                 FontSize="14"/>
+                        </StackPanel>
+
+                        <!-- LOCATION -->
+                        <StackPanel Grid.Row="1"
+                                Grid.Column="0"
+                                Margin="0,0,12,18">
+                            <TextBlock Text="Location"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,8"/>
+
+                            <TextBox Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"
+                                 Height="48"
+                                 Padding="12"
+                                 FontSize="14"/>
+                        </StackPanel>
+
+                        <!-- CATEGORY -->
+                        <StackPanel Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="12,0,0,18">
+                            <TextBlock Text="Sensor category"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,8"/>
+
+                            <ComboBox ItemsSource="{Binding Categories}"
+                                  SelectedItem="{Binding Category, Mode=TwoWay}"
+                                  Height="48"
+                                  FontSize="14"/>
+                        </StackPanel>
+
+                        <!-- PROTOCOL -->
+                        <StackPanel Grid.Row="2"
+                                Grid.Column="0"
+                                Margin="0,0,12,18">
+                            <TextBlock Text="Communication protocol"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,8"/>
+
+                            <ComboBox ItemsSource="{Binding Protocols}"
+                                  SelectedItem="{Binding SelectedProtocol, Mode=TwoWay}"
+                                  Height="48"
+                                  FontSize="14"/>
+                        </StackPanel>
+
+                        <!-- IP ADDRESS -->
+                        <StackPanel Grid.Row="2"
+                                Grid.Column="1"
+                                Margin="12,0,0,18">
+                            <TextBlock Text="IP address"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,8"/>
+
+                            <TextBox Text="{Binding IpAddress, UpdateSourceTrigger=PropertyChanged}"
+                                 Height="48"
+                                 Padding="12"
+                                 FontSize="14"/>
+                        </StackPanel>
+
+                        <!-- PORT -->
+                        <StackPanel Grid.Row="3"
+                                Grid.Column="0"
+                                Margin="0,0,12,18">
+                            <TextBlock Text="Port"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,8"/>
+
+                            <TextBox Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"
+                                 Height="48"
+                                 Padding="12"
+                                 FontSize="14"/>
+                        </StackPanel>
+
+                        <!-- CONNECTION SETTINGS -->
+                        <StackPanel Grid.Row="3"
+                                Grid.Column="1"
+                                Margin="12,0,0,18">
+
+                            <TextBlock Text="Connection settings"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,12"/>
+
+                            <CheckBox Content="Simulation sensor"
+                                  IsChecked="{Binding IsSimulation, Mode=TwoWay}"
+                                  Margin="0,0,0,12"
+                                  FontSize="14"/>
+
+                            <CheckBox Content="Enable sensor connection"
+                                  IsChecked="{Binding IsConnectionEnabled, Mode=TwoWay}"
+                                  FontSize="14"/>
+                        </StackPanel>
+
+                        <!-- DESCRIPTION -->
+                        <StackPanel Grid.Row="4"
+                                Grid.ColumnSpan="2"
+                                Margin="0,0,0,18">
+                            <TextBlock Text="Description"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,8"/>
+
+                            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                 MinHeight="90"
+                                 Padding="12"
+                                 FontSize="14"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Auto"/>
+                        </StackPanel>
+
+                        <!-- ERROR -->
+                        <TextBlock Grid.Row="5"
+                               Grid.ColumnSpan="2"
+                               Text="{Binding ErrorMessage}"
+                               Foreground="#C62828"
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               Margin="0,5,0,15"/>
+
+                        <!-- CREATE -->
+                        <Button Grid.Row="6"
+                            Grid.ColumnSpan="2"
+                            Content="Create Sensor"
+                            Command="{Binding SaveSensorCommand}"
+                            Style="{StaticResource BaseButtonStyle}"/>
+
+                    </Grid>
+                </Border>
             </Grid>
-
-            <!-- FORM -->
-
-            <Border
-                Grid.Row="1"
-                Background="White"
-                CornerRadius="18"
-                Padding="35">
-
-                <Grid>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-
-                    <!-- SENSOR NAME -->
-
-                    <StackPanel
-                        Grid.Row="0"
-                        Grid.Column="0"
-                        Margin="0,0,12,18">
-
-                        <TextBlock
-                            Text="Sensor name"
-                            FontSize="13"
-                            FontWeight="SemiBold"
-                            Foreground="#30343A"
-                            Margin="0,0,0,8"/>
-
-                        <Border
-                            Height="48"
-                            CornerRadius="8"
-                            BorderBrush="#D8DDE2"
-                            BorderThickness="1"
-                            Background="#FAFBFC">
-
-                            <TextBox
-                                Text="{Binding Name,
-                                               UpdateSourceTrigger=PropertyChanged}"
-                                Margin="12,0"
-                                BorderThickness="0"
-                                Background="Transparent"
-                                FontSize="14"
-                                VerticalContentAlignment="Center"/>
-
-                        </Border>
-
-                    </StackPanel>
-
-                    <!-- DEVICE IDENTIFIER -->
-
-                    <StackPanel
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Margin="12,0,0,18">
-
-                        <TextBlock
-                            Text="Device identifier"
-                            FontSize="13"
-                            FontWeight="SemiBold"
-                            Foreground="#30343A"
-                            Margin="0,0,0,8"/>
-
-                        <Border
-                            Height="48"
-                            CornerRadius="8"
-                            BorderBrush="#D8DDE2"
-                            BorderThickness="1"
-                            Background="#FAFBFC">
-
-                            <TextBox
-                                Text="{Binding DeviceIdentifier,
-                                               UpdateSourceTrigger=PropertyChanged}"
-                                Margin="12,0"
-                                BorderThickness="0"
-                                Background="Transparent"
-                                FontSize="14"
-                                VerticalContentAlignment="Center"/>
-
-                        </Border>
-
-                    </StackPanel>
-
-                    <!-- LOCATION -->
-
-                    <StackPanel
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Margin="0,0,12,18">
-
-                        <TextBlock
-                            Text="Location"
-                            FontSize="13"
-                            FontWeight="SemiBold"
-                            Foreground="#30343A"
-                            Margin="0,0,0,8"/>
-
-                        <Border
-                            Height="48"
-                            CornerRadius="8"
-                            BorderBrush="#D8DDE2"
-                            BorderThickness="1"
-                            Background="#FAFBFC">
-
-                            <TextBox
-                                Text="{Binding Location,
-                                               UpdateSourceTrigger=PropertyChanged}"
-                                Margin="12,0"
-                                BorderThickness="0"
-                                Background="Transparent"
-                                FontSize="14"
-                                VerticalContentAlignment="Center"/>
-
-                        </Border>
-
-                    </StackPanel>
-
-                    <!-- CATEGORY -->
-
-                    <StackPanel
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Margin="12,0,0,18">
-
-                        <TextBlock
-                            Text="Sensor category"
-                            FontSize="13"
-                            FontWeight="SemiBold"
-                            Foreground="#30343A"
-                            Margin="0,0,0,8"/>
-
-                        <Border
-                            Height="48"
-                            CornerRadius="8"
-                            BorderBrush="#D8DDE2"
-                            BorderThickness="1"
-                            Background="#FAFBFC">
-
-                            <ComboBox
-                                ItemsSource="{Binding Categories}"
-                                    SelectedItem="{Binding Category, Mode=TwoWay}"
-                                Margin="6,0"
-                                BorderThickness="0"
-                                Background="Transparent"
-                                FontSize="14"
-                                VerticalContentAlignment="Center"/>
-
-                        </Border>
-
-                    </StackPanel>
-
-                    <!-- DESCRIPTION -->
-
-                    <StackPanel
-                        Grid.Row="2"
-                        Grid.ColumnSpan="2"
-                        Margin="0,0,0,18">
-
-                        <TextBlock
-                            Text="Description"
-                            FontSize="13"
-                            FontWeight="SemiBold"
-                            Foreground="#30343A"
-                            Margin="0,0,0,8"/>
-
-                        <Border
-                            MinHeight="90"
-                            CornerRadius="8"
-                            BorderBrush="#D8DDE2"
-                            BorderThickness="1"
-                            Background="#FAFBFC">
-
-                            <TextBox
-                                Text="{Binding Description,
-                                               UpdateSourceTrigger=PropertyChanged}"
-                                Margin="12,10"
-                                BorderThickness="0"
-                                Background="Transparent"
-                                FontSize="14"
-                                TextWrapping="Wrap"
-                                AcceptsReturn="True"
-                                VerticalScrollBarVisibility="Auto"/>
-
-                        </Border>
-
-                    </StackPanel>
-
-                    <!-- ERROR -->
-
-                    <TextBlock
-                        Grid.Row="3"
-                        Grid.ColumnSpan="2"
-                        Text="{Binding ErrorMessage}"
-                        Foreground="#C62828"
-                        FontSize="13"
-                        TextWrapping="Wrap"
-                        Margin="0,5,0,15"/>
-
-                    <!-- CREATE BUTTON -->
-
-                    <Button
-                        Grid.Row="4"
-                        Grid.ColumnSpan="2"
-                        Content="Create Sensor"
-                        Height="50"
-                        HorizontalAlignment="Right"
-                        Padding="30,0"
-                        Command="{Binding SaveSensorCommand}"
-                        FontSize="15"
-                        FontWeight="SemiBold"
-                        Style="{StaticResource BaseButtonStyle}"/>
-
-                </Grid>
-
-            </Border>
-
-        </Grid>
-
+        
+        </Border>
+        
     </ScrollViewer>
-
 </Page>

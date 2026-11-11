@@ -8,47 +8,47 @@
     ".NETCoreApp,Version=v10.0": {
       "SmartX.Shared/1.0.0": {
         "dependencies": {
-          "Mapster": "10.0.13",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.13",
-          "MongoDB.Bson": "3.12.0",
+          "Mapster": "10.0.14",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "11.0.0",
+          "MongoDB.Bson": "3.13.0",
           "SmartX.Domain": "1.0.0"
         },
         "runtime": {
           "SmartX.Shared.dll": {}
         }
       },
-      "Mapster/10.0.13": {
+      "Mapster/10.0.14": {
         "dependencies": {
-          "Mapster.Core": "10.0.13"
+          "Mapster.Core": "10.0.14"
         },
         "runtime": {
           "lib/net10.0/Mapster.dll": {
-            "assemblyVersion": "10.0.13.0",
-            "fileVersion": "10.0.13.0"
+            "assemblyVersion": "10.0.14.0",
+            "fileVersion": "10.0.14.0"
           }
         }
       },
-      "Mapster.Core/10.0.13": {
+      "Mapster.Core/10.0.14": {
         "runtime": {
           "lib/netstandard2.0/Mapster.Core.dll": {
-            "assemblyVersion": "10.0.13.0",
-            "fileVersion": "10.0.13.0"
+            "assemblyVersion": "10.0.14.0",
+            "fileVersion": "10.0.14.0"
           }
         }
       },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.13": {
+      "Microsoft.Extensions.DependencyInjection.Abstractions/11.0.0": {
         "runtime": {
           "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
-            "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.1326.50504"
+            "assemblyVersion": "11.0.0.0",
+            "fileVersion": "11.0.26.53018"
           }
         }
       },
-      "MongoDB.Bson/3.12.0": {
+      "MongoDB.Bson/3.13.0": {
         "runtime": {
           "lib/net6.0/MongoDB.Bson.dll": {
-            "assemblyVersion": "3.12.0.0",
-            "fileVersion": "3.12.0.0"
+            "assemblyVersion": "3.13.0.0",
+            "fileVersion": "3.13.0.0"
           }
         }
       },
@@ -68,33 +68,33 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Mapster/10.0.13": {
+    "Mapster/10.0.14": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-/FaFSm4W6rQp5kEZa7yTtvHH2yGmuC1p22Bg2zi83+W8SMJ+5RBTEWgRK0JS2S8jIdXj2hm2s4z1egjkE2azoQ==",
-      "path": "mapster/10.0.13",
-      "hashPath": "mapster.10.0.13.nupkg.sha512"
+      "sha512": "sha512-lsJwj0ALW/I8LSCxF6WVa9bqp5E693CC5wDzNUxkiLWr/sD2hjNMvc1p/9A9BLMfCsK6ra4hgPYg7ILkouG2Kw==",
+      "path": "mapster/10.0.14",
+      "hashPath": "mapster.10.0.14.nupkg.sha512"
     },
-    "Mapster.Core/10.0.13": {
+    "Mapster.Core/10.0.14": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-fLj/MDJy16QiL7IULC0+e2YXh9nNDhtzdNl13R6CI0Qh6181eadA6EHykWkJWgTHdMjC5Ured3fq5x1QV7U9vg==",
-      "path": "mapster.core/10.0.13",
-      "hashPath": "mapster.core.10.0.13.nupkg.sha512"
+      "sha512": "sha512-8ad9PtJ9iKXjdwanPBGQrFb3ww0qJLkNE7y2A1vueCoqNaA2rSQZjyFvYPw9708uKTKy4zMhgKUPqNXUg/1ZUw==",
+      "path": "mapster.core/10.0.14",
+      "hashPath": "mapster.core.10.0.14.nupkg.sha512"
     },
-    "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.13": {
+    "Microsoft.Extensions.DependencyInjection.Abstractions/11.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-G2GrGWNAPZBsii2F6AU8n+JT2tC1/I0Ml/e9ZyNCgPjf3hZqronP7o0X91aAynCmVeae8KkSIUNXXeXCNRmdVQ==",
-      "path": "microsoft.extensions.dependencyinjection.abstractions/10.0.13",
-      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.10.0.13.nupkg.sha512"
+      "sha512": "sha512-a2c4Kp55miXT6G+DSb75pczXQJHgNMzPyZEyMxrrKxuQrgvctcDWJWD9fVe/uGbQdu4Z0c3B7AVKp1DXmD64nQ==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/11.0.0",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.11.0.0.nupkg.sha512"
     },
-    "MongoDB.Bson/3.12.0": {
+    "MongoDB.Bson/3.13.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-2iYGykWDl6Wkx2GHjWaPEGAS49lxQN5YFFT1a7l/pKraMo1gqT4aZckhwu53WMinQTc10R4FxUHoo7X9M20GFg==",
-      "path": "mongodb.bson/3.12.0",
-      "hashPath": "mongodb.bson.3.12.0.nupkg.sha512"
+      "sha512": "sha512-jb4fGQIS1bTFSK2336FP3rBHDQ+UiVKdTAZcoWHeed1xlxvmclnHA8Y4CAQa+Y2KWw3Fz9OIAkXH/KXJL9yRGg==",
+      "path": "mongodb.bson/3.13.0",
+      "hashPath": "mongodb.bson.3.13.0.nupkg.sha512"
     },
     "SmartX.Domain/1.0.0": {
       "type": "project",

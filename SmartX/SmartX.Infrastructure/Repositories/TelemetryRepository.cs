@@ -26,7 +26,7 @@ public class TelemetryRepository : ITelemetryRepository
     }
 
     public async Task<Telemetry?> GetByIdAsync(
-        Guid id, CancellationToken cancellationToken) 
+        Guid id, CancellationToken cancellationToken)
     {
         return await _collection
             .Find(x => x.Id == id)
@@ -56,12 +56,12 @@ public class TelemetryRepository : ITelemetryRepository
         Guid sensorId, CancellationToken cancellationToken)
     {
         return await _collection
-            .Find(x =>x.SensorId == sensorId)
+            .Find(x => x.SensorId == sensorId)
             .ToListAsync(cancellationToken);
     }
 
     public async Task<Telemetry?> GetLatestBySensorIdAsync(
-        Guid sensorId, CancellationToken cancellationToken = default) 
+        Guid sensorId, CancellationToken cancellationToken = default)
     {
         return await _collection
             .Find(x => x.SensorId == sensorId)
@@ -107,6 +107,40 @@ public class TelemetryRepository : ITelemetryRepository
             cancellationToken);
     }
 
+    public async Task<IReadOnlyList<Telemetry>> GetLatestByGatewayIdAsync(
+    Guid gatewayId,
+    int countPerSensor,
+    CancellationToken cancellationToken = default)
+    {
+        if (gatewayId == Guid.Empty || countPerSensor <= 0)
+            return [];
 
+        var sensorIds = await _sensorCollection
+            .Find(x => x.GatewayId == gatewayId)
+            .Project(x => x.Id)
+            .ToListAsync(cancellationToken);
+
+        if (sensorIds.Count == 0)
+            return [];
+
+        var filter = Builders<Telemetry>.Filter.In(
+            x => x.SensorId,
+            sensorIds);
+
+        var results = await _collection
+            .Aggregate()
+            .Match(filter)
+            .SortByDescending(x => x.Timestamp)
+            .Group(
+                x => x.SensorId,
+                group => group
+                    .Take(countPerSensor))
+            .ToListAsync(cancellationToken);
+
+        return results
+            .SelectMany(x => x)
+            .OrderBy(x => x.Timestamp)
+            .ToList();
+    }
 
 }

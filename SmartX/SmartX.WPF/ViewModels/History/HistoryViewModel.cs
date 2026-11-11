@@ -4,46 +4,60 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using Microsoft.Win32;
 using SkiaSharp;
-using SmartX.Application.Services.Sensors;
-using SmartX.Domain.Entities;
 using SmartX.Domain.Enums;
 using SmartX.Shared.DTOs;
-using SmartX.WPF.Models.History;
+using SmartX.Shared.DTOs.Sensors;
+using SmartX.Shared.Mapping;
+using SmartX.WPF.Navigation;
 using SmartX.WPF.Repositories.Local;
+using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
-using SmartX.WPF.Services.PredictiveEngine;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.ViewModels.Base;
+using SmartX.WPF.ViewModels.CommandStream;
+using SmartX.WPF.Views.Pages.CommandStream;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
-using DomainSensor = SmartX.Domain.Entities.Sensor;
 using DomainTelemetry = SmartX.Domain.Entities.Telemetry;
 
 namespace SmartX.WPF.ViewModels.History;
 
 public sealed class HistoryViewModel : ViewModelBase
 {
+    private int _predictiveRequestVersion;
+    private int _anomalyRequestVersion;
     private readonly ILocalTelemetryCache _telemetryCache;
     private readonly ILocalSensorCache _sensorCache;
     private readonly ILocalUserBehaviorCache _userBehaviorCache;
     private readonly SmartXSession _session;
-    private readonly ISensorCommandService _sensorService;
-    private readonly IAnomalyRecommendationService _anomalyService;
-    private readonly PredictiveSuggestionService _predictiveSuggestionService;
-
+    private readonly ISmartXApiClient _smartXClient;
+    private readonly IMapper _mapper;
     private bool _isAnalyzing;
     private string _predictionMessage = "Select a sensor to analyse its telemetry.";
-
-    public ObservableCollection<PredictiveSuggestion> PredictiveSuggestions { get; } = [];
+    private readonly INavigationService _navigationService;
+    public ObservableCollection<PredictiveSuggestionDto> PredictiveSuggestions { get; } = [];
 
     public bool IsAnalyzing
     {
         get => _isAnalyzing;
-        private set => SetProperty(ref _isAnalyzing, value);
+        private set
+        {
+            if (!SetProperty(ref _isAnalyzing, value))
+                return;
+
+            _loadPredictiveSuggestionsCommand?
+                .RaiseCanExecuteChanged();
+
+            _analyzeAnomalyCommand?
+                .RaiseCanExecuteChanged();
+
+            _sendToCommandCentreCommand?
+                .RaiseCanExecuteChanged();
+        }
     }
 
     public string PredictionMessage
@@ -61,15 +75,15 @@ public sealed class HistoryViewModel : ViewModelBase
     private DateTime? _toDate;
     private readonly AsyncRelayCommand _loadCommand;
     private readonly AsyncRelayCommand _clearFiltersCommand;
-    private readonly AsyncRelayCommand _sendManualCommandCommand;
-    private readonly AsyncRelayCommand _undoLastCommandCommand;
-    private readonly AsyncRelayCommand _exportCommand;
     private readonly AsyncRelayCommand _analyzeAnomalyCommand;
-    private readonly AsyncRelayCommand _executeRecommendationCommand;
+    private readonly RelayCommand _sendToCommandCentreCommand;
+    private readonly AsyncRelayCommand _exportCsvCommand;
+    private readonly AsyncRelayCommand _loadPredictiveSuggestionsCommand;
 
-    private AnomalyRecommendation? _recommendation;
 
-    public AnomalyRecommendation? Recommendation
+    private AnomalyRecommendationDto? _recommendation;
+
+    public AnomalyRecommendationDto? Recommendation
     {
         get => _recommendation;
         private set
@@ -78,7 +92,9 @@ public sealed class HistoryViewModel : ViewModelBase
             {
                 OnPropertyChanged(nameof(HasRecommendation));
                 OnPropertyChanged(nameof(CanExecuteRecommendation));
-                _executeRecommendationCommand.RaiseCanExecuteChanged();
+                OnPropertyChanged(nameof(CanSendToCommandCentre));
+
+                _sendToCommandCentreCommand.RaiseCanExecuteChanged();
             }
         }
     }
@@ -90,23 +106,16 @@ public sealed class HistoryViewModel : ViewModelBase
         !string.IsNullOrWhiteSpace(Recommendation.SuggestedCommand) &&
         SelectedSensorId == Recommendation.SensorId;
 
+    public ICommand SendToCommandCentreCommand => _sendToCommandCentreCommand;
+
     public ICommand AnalyzeAnomalyCommand => _analyzeAnomalyCommand;
 
-    public ICommand ExecuteRecommendationCommand =>
-        _executeRecommendationCommand;
+    public ICommand LoadCommand => _loadCommand;
 
-    public ICommand ExportCommand => _exportCommand;
-    public ICommand LoadCommand =>
-    _loadCommand;
-
-    public ICommand ClearFiltersCommand =>
-        _clearFiltersCommand;
-
-    public ICommand SendManualCommandCommand =>
-        _sendManualCommandCommand;
-
-    public ICommand UndoLastCommandCommand => _undoLastCommandCommand;
-
+    public ICommand ClearFiltersCommand => _clearFiltersCommand;
+    public ICommand ExportCsvCommand => _exportCsvCommand;
+    public ICommand LoadPredictiveSuggestionsCommand =>
+    _loadPredictiveSuggestionsCommand;
     private TelemetryGraphMetric _selectedMetric = TelemetryGraphMetric.Power;
 
     public TelemetryGraphMetric SelectedMetric
@@ -213,40 +222,9 @@ public sealed class HistoryViewModel : ViewModelBase
 
     private string _sensorSearchText = string.Empty;
 
-    public ObservableCollection<DomainSensor> FilteredSensors { get; } = [];
+    public ObservableCollection<SensorDto> FilteredSensors { get; } = [];
 
-    private readonly ManualStack<SensorCommand> _commandStack = new();
-
-    private string _manualCommand = string.Empty;
-
-    public string ManualCommand
-    {
-        get => _manualCommand;
-        set => SetProperty(ref _manualCommand, value);
-    }
-
-    public ObservableCollection<SensorCommand> CommandHistory { get; } = [];
-
-
-
-    public bool CanUndoCommand
-    {
-        get
-        {
-            if (!SelectedSensorId.HasValue ||
-                !_commandStack.TryPeek(out var command) ||
-                command is null)
-            {
-                return false;
-            }
-
-            return command.SensorId == SelectedSensorId.Value
-                && !string.IsNullOrWhiteSpace(command.InverseCommand);
-        }
-    }
-
-
-    public ObservableCollection<DomainSensor> Sensors
+    public ObservableCollection<SensorDto> Sensors
     { get; } = [];
 
     public ObservableCollection<TelemetryHistoryItem> History
@@ -256,25 +234,43 @@ public sealed class HistoryViewModel : ViewModelBase
     public Guid? SelectedSensorId
     {
         get => _selectedSensorId;
+
         set
         {
             if (!SetProperty(ref _selectedSensorId, value))
                 return;
 
+            // Invalidate requests belonging to the previous sensor.
+            _predictiveRequestVersion++;
+            _anomalyRequestVersion++;
+
+            Recommendation = null;
+            PredictiveSuggestions.Clear();
+
+            RecommendedCommand = string.Empty;
+            RecommendationReason = string.Empty;
+            RecommendationStatus = string.Empty;
+
+            PredictionMessage = value.HasValue
+                ? "Loading sensor analysis..."
+                : "Select a sensor to analyse its telemetry.";
+
+            AnomalyDescription = PredictionMessage;
+
             ApplyFilters();
 
-            _commandStack.Clear();
-            CommandHistory.Clear();
-            ManualCommand = "";
-            RefreshUndoState();
-
-            _ = LoadSelectedSensorCommandHistoryAsync();
-            _ = LoadPredictiveSuggestionsAsync();
-
             OnPropertyChanged(nameof(CanApplyRecommendation));
-            _applyRecommendationCommand.RaiseCanExecuteChanged();
+            OnPropertyChanged(nameof(CanSendToCommandCentre));
+
+            _analyzeAnomalyCommand?.RaiseCanExecuteChanged();
+            _loadPredictiveSuggestionsCommand?.RaiseCanExecuteChanged();
+            _sendToCommandCentreCommand?.RaiseCanExecuteChanged();
+
+            if (value.HasValue)
+                _ = LoadPredictiveSuggestionsAsync();
         }
     }
+
 
     public DateTime? FromDate
     {
@@ -343,14 +339,6 @@ public sealed class HistoryViewModel : ViewModelBase
         set => SetProperty(ref _anomalyDescription, value);
     }
 
-    private string _recommendedAction = "No recommendation available yet.";
-
-    public string RecommendedAction
-    {
-        get => _recommendedAction;
-        set => SetProperty(ref _recommendedAction, value);
-    }
-
     private string _recommendedCommand = string.Empty;
 
     public string RecommendedCommand
@@ -362,7 +350,10 @@ public sealed class HistoryViewModel : ViewModelBase
                 return;
 
             OnPropertyChanged(nameof(CanApplyRecommendation));
-            _applyRecommendationCommand.RaiseCanExecuteChanged();
+            OnPropertyChanged(nameof(CanSendToCommandCentre));
+
+            _sendToCommandCentreCommand?
+                .RaiseCanExecuteChanged();
         }
     }
 
@@ -382,48 +373,42 @@ public sealed class HistoryViewModel : ViewModelBase
         set => SetProperty(ref _recommendationStatus, value);
     }
 
-    private readonly AsyncRelayCommand _applyRecommendationCommand;
-    public ICommand ClearCommandHistoryCommand { get; }
-
-
-    public ICommand ApplyRecommendationCommand =>
-        _applyRecommendationCommand;
     public HistoryViewModel(
     ILocalTelemetryCache telemetryCache,
     ILocalSensorCache sensorCache,
     IConnectivityService connectivityService,
-    ISensorCommandService sensorService,
     ILocalUserBehaviorCache localUserBehaviorCache,
-    IAnomalyRecommendationService anomalyRecommendationService,
-    PredictiveSuggestionService predictiveSuggestionService,
+    ISmartXApiClient smartXClient,
+    INavigationService navigationService,
+    IMapper mapper,
     SmartXSession session)
     : base(connectivityService,
         session)
     {
         _telemetryCache = telemetryCache;
-        _sensorService = sensorService;
-        _sensorCache = sensorCache;
         _sensorCache = sensorCache;
         _userBehaviorCache = localUserBehaviorCache;
         _session = session;
-        _anomalyService = anomalyRecommendationService;
-        _predictiveSuggestionService = predictiveSuggestionService;
+        _smartXClient = smartXClient;
+        _mapper = mapper;
+        _navigationService = navigationService;
 
-        _exportCommand = new AsyncRelayCommand(() => ExportHistoryAsync());
-
-        ClearCommandHistoryCommand = new RelayCommand(_ => ClearCommandHistory());
+        _exportCsvCommand = new AsyncRelayCommand(
+                () => ExportCsvAsync(),
+                () => History.Count > 0);
 
         _analyzeAnomalyCommand = new AsyncRelayCommand(
             () => AnalyzeSelectedSensorAsync(),
-            () => SelectedSensorId.HasValue && !IsBusy);
+            () => SelectedSensorId.HasValue &&
+                  !IsBusy &&
+                  !IsAnalyzing);
 
-        _executeRecommendationCommand = new AsyncRelayCommand(
-            () => ExecuteRecommendationAsync(),
-            () => CanExecuteRecommendation && !IsBusy);
-
-        _loadCommand =
+        _loadPredictiveSuggestionsCommand =
             new AsyncRelayCommand(
-                () => LoadAsync());
+                () => LoadPredictiveSuggestionsAsync(),
+                () => SelectedSensorId.HasValue && !IsAnalyzing);
+
+        _loadCommand = new AsyncRelayCommand(() => LoadAsync());
 
         _clearFiltersCommand =
             new AsyncRelayCommand(
@@ -433,18 +418,22 @@ public sealed class HistoryViewModel : ViewModelBase
                     return Task.CompletedTask;
                 });
 
-        _sendManualCommandCommand =
-            new AsyncRelayCommand(
-                () => SendManualCommandAsync());
+        _sendToCommandCentreCommand = new RelayCommand(
+     _ =>
+     {
+         if (!CanSendToCommandCentre)
+             return;
 
-        _undoLastCommandCommand =
-            new AsyncRelayCommand(
-                () => UndoLastCommandAsync(),
-                () => CanUndoCommand);
+         var request = new CommandNavigationRequest
+         {
+             SensorId = SelectedSensorId!.Value,
+             Command = RecommendedCommand,
+             Source = "History Analysis"
+         };
 
-        _applyRecommendationCommand = new AsyncRelayCommand(
-            () => ApplyRecommendationAsync(),
-            () => CanApplyRecommendation);
+         _navigationService.NavigateTo<RealTimeCommandStreamPage>(request);
+     },
+     _ => CanSendToCommandCentre);
     }
 
     public async Task LoadAsync(
@@ -477,23 +466,18 @@ public sealed class HistoryViewModel : ViewModelBase
                     gatewayId,
                     cancellationToken);
 
+            var sensorDtos = _mapper.Map<List<SensorDto>>(sensors);
+
             Sensors.Clear();
 
-
-            foreach (var sensor in sensors)
+            foreach (var sensor in sensorDtos)
             {
                 Sensors.Add(sensor);
             }
 
             ApplySensorFilter();
 
-            if (SelectedSensorId.HasValue &&
-                Sensors.Any(x => x.Id == SelectedSensorId.Value))
-            {
-                await LoadCommandHistoryAsync(
-                    SelectedSensorId.Value,
-                    cancellationToken);
-            }
+
 
             var telemetry =
                 await _telemetryCache.GetByGatewayIdAsync(
@@ -578,126 +562,24 @@ public sealed class HistoryViewModel : ViewModelBase
         }
 
         CalculateStatistics(telemetry);
-
+        _exportCsvCommand.RaiseCanExecuteChanged();
         UpdateGraph();
 
     }
 
-    public async Task SendManualCommandAsync(
-     CancellationToken cancellationToken = default)
+    private async Task LoadPredictiveSuggestionsAsync(
+    CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(ManualCommand))
-            return;
-
-        if (!SelectedSensorId.HasValue)
-        {
-            ErrorMessage = "Please select a sensor first.";
-
-            return;
-        }
-
-
-        try
-        {
-            var sensorId = SelectedSensorId.Value;
-
-            ErrorMessage = string.Empty;
-
-            var commandText = ManualCommand.Trim();
-
-            var result =
-                await _sensorService.SendCommandAsync(
-                    sensorId,
-                    commandText,
-                    cancellationToken);
-
-            await RecordUserBehaviorAsync(
-                sensorId, commandText, result.Success,
-                result.Success ? result.Response
-                : result.ErrorMessage ?? "Command failed.", cancellationToken);
-
-            if (!result.Success)
-            {
-                ErrorMessage =
-                    result.ErrorMessage ??
-                    "The command could not be sent.";
-
-                await LoadCommandHistoryAsync(sensorId, cancellationToken);
-
-                return;
-            }
-            var inverseCommand = result.InverseCommand ?? GetInverseCommand(commandText);
-
-            var command = new SensorCommand
-            {
-                SensorId = sensorId,
-                Command = commandText,
-                InverseCommand = result.InverseCommand
-                    ?? GetInverseCommand(commandText)
-                    ?? string.Empty,
-                Response = result.Response,
-                HistoryStatus = "IN STACK"
-            };
-
-            CommandHistory.Insert(0, command);
-
-            if (!string.IsNullOrWhiteSpace(command.InverseCommand))
-            {
-                _commandStack.Push(command);
-            }
-
-            ManualCommand = string.Empty;
-            ErrorMessage = string.Empty;
-
-            RefreshUndoState();
-
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            ErrorMessage = ex.Message;
-        }
-    }
-
-    private async Task LoadSelectedSensorCommandHistoryAsync()
-    {
-        if (!SelectedSensorId.HasValue)
-        {
-            CommandHistory.Clear();
-            _commandStack.Clear();
-
-            OnPropertyChanged(nameof(CanUndoCommand));
-            _undoLastCommandCommand.RaiseCanExecuteChanged();
-            return;
-        }
-
-        try
-        {
-            await LoadCommandHistoryAsync(SelectedSensorId.Value);
-        }
-        catch (Exception ex)
-        {
-            ErrorMessage = ex.Message;
-        }
-    }
-    private async Task LoadPredictiveSuggestionsAsync(CancellationToken cancellationToken = default)
-    {
+        var requestVersion = ++_predictiveRequestVersion;
         var sensorId = SelectedSensorId;
 
         PredictiveSuggestions.Clear();
 
-        AnomalyDescription = string.Empty;
-        RecommendedAction = string.Empty;
-        RecommendedCommand = string.Empty;
-        RecommendationReason = string.Empty;
-        RecommendationStatus = string.Empty;
-
         if (!sensorId.HasValue)
         {
-            PredictionMessage = "Select a sensor to analyse its telemetry.";
+            PredictionMessage =
+                "Select a sensor to analyse its telemetry.";
+
             AnomalyDescription = PredictionMessage;
             return;
         }
@@ -707,24 +589,27 @@ public sealed class HistoryViewModel : ViewModelBase
             IsAnalyzing = true;
             PredictionMessage = "Analysing sensor telemetry...";
 
-            var suggestions = await _predictiveSuggestionService.GetWarningsAsync(cancellationToken);
+            var suggestions =
+                await _smartXClient.GetPredictiveSuggestionsAsync(
+                    sensorId.Value,
+                    cancellationToken);
 
-            // The user may have selected a different sensor while
-            // the previous analysis was still running.
-            if (SelectedSensorId != sensorId)
+            if (requestVersion != _predictiveRequestVersion ||
+                    SelectedSensorId != sensorId)
+            {
                 return;
+            }
 
-            var filteredSuggestions = suggestions
-                .Where(x => x.SensorId == sensorId.Value)
-                .OrderByDescending(x => x.Score)
-                .ToList();
-
-            foreach (var suggestion in filteredSuggestions)
+            foreach (var suggestion in suggestions)
+            {
                 PredictiveSuggestions.Add(suggestion);
+            }
 
-            var selectedSuggestion = filteredSuggestions.FirstOrDefault(x => !string.IsNullOrWhiteSpace(x.RecommendedCommand)) ?? filteredSuggestions.FirstOrDefault();
+            var selected = suggestions
+                .OrderByDescending(x => x.Score)
+                .FirstOrDefault();
 
-            if (selectedSuggestion is null)
+            if (selected is null)
             {
                 PredictionMessage =
                     "No anomalies detected for this sensor.";
@@ -732,47 +617,36 @@ public sealed class HistoryViewModel : ViewModelBase
                 AnomalyDescription =
                     "No active or predictive anomaly was detected.";
 
-                RecommendedAction =
-                    "Continue monitoring the sensor.";
-
-                RecommendedCommand = string.Empty;
-
                 RecommendationReason =
-                    "No command is recommended because the engine found no warning.";
+                    "No corrective action is currently recommended.";
 
                 RecommendationStatus =
                     "No recommendation is currently available.";
 
+                RecommendedCommand = string.Empty;
+
+                OnPropertyChanged(nameof(CanSendToCommandCentre));
+                _sendToCommandCentreCommand.RaiseCanExecuteChanged();
+
                 return;
             }
 
-
             RecommendedCommand =
-                selectedSuggestion.RecommendedCommand ?? string.Empty;
+                selected.RecommendedCommand ?? string.Empty;
+
+            AnomalyDescription = selected.Description;
+
+            RecommendationReason =
+                $"Severity: {selected.Severity} | " +
+                $"Risk score: {selected.Score}/100";
 
             RecommendationStatus =
                 string.IsNullOrWhiteSpace(RecommendedCommand)
-                    ? "No executable command is available. Review the suggested action."
+                    ? "No executable command is available."
                     : "Command available for review.";
 
-            // Populate the properties bound to the XAML panel.
-            AnomalyDescription = selectedSuggestion.Description
-                ?? "Anomaly detected.";
-
-            RecommendedAction = selectedSuggestion.RecommendedAction
-                ?? "Review the sensor before taking action.";
-
-            RecommendationReason =
-                $"Severity: {selectedSuggestion.Severity} | " +
-                $"Risk score: {selectedSuggestion.Score}/100";
-
-
             PredictionMessage =
-                $"{filteredSuggestions.Count} recommendation(s) available.";
-
-            OnPropertyChanged(nameof(RecommendedCommand));
-            OnPropertyChanged(nameof(CanApplyRecommendation));
-            _applyRecommendationCommand.RaiseCanExecuteChanged();
+                $"{suggestions.Count} recommendation(s) available.";
         }
         catch (OperationCanceledException)
         {
@@ -780,103 +654,13 @@ public sealed class HistoryViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            PredictionMessage = $"Analysis failed: {ex.Message}";
-            RecommendationStatus = ex.Message;
+            PredictionMessage =
+                $"Analysis failed: {ex.Message}";
         }
         finally
         {
-            IsAnalyzing = false;
-        }
-    }
-
-    private void ClearCommandHistory()
-    {
-        _commandStack.Clear();
-        CommandHistory.Clear();
-
-        ErrorMessage = string.Empty;
-
-        RefreshUndoState();
-    }
-
-    private void RefreshUndoState()
-    {
-        OnPropertyChanged(nameof(CanUndoCommand));
-        _undoLastCommandCommand.RaiseCanExecuteChanged();
-    }
-
-    private async Task UndoLastCommandAsync(
-        CancellationToken cancellationToken = default)
-    {
-        if (!SelectedSensorId.HasValue ||
-            !_commandStack.TryPeek(out var command) ||
-            command is null ||
-            command.SensorId != SelectedSensorId.Value ||
-            string.IsNullOrWhiteSpace(command.InverseCommand))
-        {
-            ErrorMessage =
-                "No reversible command is available for the selected sensor.";
-            RefreshUndoState();
-            return;
-        }
-
-        var sensorId = command.SensorId;
-        var originalCommand = command.Command;
-        var inverseCommand = command.InverseCommand.Trim();
-
-        try
-        {
-            ErrorMessage = string.Empty;
-
-            // Send the inverse through the same service as normal commands.
-            var result = await _sensorService.SendCommandAsync(
-                sensorId,
-                inverseCommand,
-                cancellationToken);
-
-            if (!result.Success)
-            {
-                ErrorMessage = result.ErrorMessage
-                    ?? $"Undo command '{inverseCommand}' failed.";
-
-                // Preserve the original command so the user can retry.
-                return;
-            }
-
-            await RecordUserBehaviorAsync(
-                sensorId,
-                inverseCommand,
-                true,
-                $"Reversal of '{originalCommand}' executed. " +
-                $"Service response: {result.Response}",
-                cancellationToken);
-
-            // Remove the original only after successful execution.
-            _commandStack.Pop();
-            CommandHistory.Remove(command);
-
-            // Show the reversal explicitly in the history.
-            CommandHistory.Insert(0, new SensorCommand
-            {
-                SensorId = sensorId,
-                Command = inverseCommand,
-                InverseCommand = originalCommand,
-                Response = result.Response ?? string.Empty,
-                Timestamp = DateTime.UtcNow,
-                HistoryStatus = "UNDONE"
-            });
-            System.Diagnostics.Debug.WriteLine($"UNDO: original={command.Command}, " +
-                $"inverse={inverseCommand}, " + $"success={result.Success}, " + $"response={result.Response}, " + $"error={result.ErrorMessage}");
-
-            RefreshUndoState();
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            ErrorMessage = $"Undo failed: {ex.Message}";
+            if (requestVersion == _predictiveRequestVersion)
+                IsAnalyzing = false;
         }
     }
 
@@ -896,20 +680,16 @@ public sealed class HistoryViewModel : ViewModelBase
     {
         FilteredSensors.Clear();
 
-        var search =
-            SensorSearchText?.Trim();
+        var search = SensorSearchText?.Trim();
 
-        IEnumerable<DomainSensor> sensors =
-            Sensors;
+        IEnumerable<SensorDto> sensors = Sensors;
 
         if (!string.IsNullOrWhiteSpace(search))
         {
-            sensors =
-                sensors.Where(
-                    x =>
-                        x.Name.Contains(
-                            search,
-                            StringComparison.OrdinalIgnoreCase));
+            sensors = sensors.Where(
+                x => x.Name.Contains(
+                    search,
+                    StringComparison.OrdinalIgnoreCase));
         }
 
         foreach (var sensor in sensors)
@@ -918,65 +698,11 @@ public sealed class HistoryViewModel : ViewModelBase
         }
     }
 
-
-    private async Task LoadCommandHistoryAsync(
-    Guid sensorId,
-    CancellationToken cancellationToken = default)
-    {
-        var behaviors = await _userBehaviorCache.GetBySensorIdAsync(
-            sensorId,
-            cancellationToken);
-
-        cancellationToken.ThrowIfCancellationRequested();
-
-        var ordered = behaviors
-            .Where(x => x.SensorId == sensorId)
-            .OrderByDescending(x => x.Timestamp)
-            .ToList();
-
-        CommandHistory.Clear();
-        _commandStack.Clear();
-
-        foreach (var behavior in ordered)
-        {
-            var inverse = behavior.Succeeded
-                ? GetInverseCommand(behavior.Command)
-                : null;
-
-            CommandHistory.Add(new SensorCommand
-            {
-                SensorId = behavior.SensorId,
-                Command = behavior.Command,
-                InverseCommand = inverse,
-                Response = behavior.Outcome ?? string.Empty,
-                Timestamp = behavior.Timestamp,
-                HistoryStatus = "CACHED"
-            });
-        }
-
-        // Push oldest first so the newest undoable command is on top.
-        foreach (var behavior in ordered
-            .Where(x => x.Succeeded)
-            .OrderBy(x => x.Timestamp))
-        {
-            var inverse = GetInverseCommand(behavior.Command);
-
-            if (string.IsNullOrWhiteSpace(inverse))
-                continue;
-
-            _commandStack.Push(new SensorCommand
-            {
-                SensorId = behavior.SensorId,
-                Command = behavior.Command,
-                InverseCommand = inverse,
-                Response = behavior.Outcome ?? string.Empty,
-                Timestamp = behavior.Timestamp
-            });
-        }
-
-        RefreshUndoState();
-    }
-
+    public bool CanSendToCommandCentre =>
+        SelectedSensorId.HasValue &&
+        !string.IsNullOrWhiteSpace(RecommendedCommand) &&
+        !IsBusy &&
+        !IsAnalyzing;
 
     private bool HasGraphValue(
     TelemetryHistoryItem item)
@@ -1142,35 +868,6 @@ public sealed class HistoryViewModel : ViewModelBase
         OnPropertyChanged(nameof(GraphUnit));
     }
 
-    private async Task RecordUserBehaviorAsync(
-    Guid sensorId,
-    string command,
-    bool succeeded,
-    string? outcome,
-    CancellationToken cancellationToken)
-    {
-        if (_session.UserId == Guid.Empty)
-            return;
-
-        var now = DateTime.UtcNow;
-
-        var behavior = new UserBehaviorDto
-        {
-            UserId = _session.UserId,
-            SensorId = sensorId,
-            Command = command,
-            Timestamp = now,
-            Succeeded = succeeded,
-            Outcome = outcome,
-            CreatedAt = now,
-            UpdatedAt = now
-        };
-
-        await _userBehaviorCache.AddAsync(
-            behavior,
-            cancellationToken);
-    }
-
     private void CalculateStatistics(
      IEnumerable<DomainTelemetry> telemetry)
     {
@@ -1216,258 +913,196 @@ public sealed class HistoryViewModel : ViewModelBase
             nameof(MinimumDisplay));
     }
 
-    private static string? GetInverseCommand(string command)
-    {
-        return command.Trim().ToUpperInvariant() switch
-        {
-            "ON" => "OFF",
-            "OFF" => "ON",
 
-            "POWER ON" => "POWER OFF",
-            "POWER OFF" => "POWER ON",
-
-            "START" => "STOP",
-            "STOP" => "START",
-
-            "ENABLE" => "DISABLE",
-            "DISABLE" => "ENABLE",
-
-            "OPEN" => "CLOSE",
-            "CLOSE" => "OPEN",
-
-            "LOCK" => "UNLOCK",
-            "UNLOCK" => "LOCK",
-
-            "ACTIVATE" => "DEACTIVATE",
-            "DEACTIVATE" => "ACTIVATE",
-
-            _ => null
-        };
-    }
-
-    private async Task AnalyzeSelectedSensorAsync(
-    CancellationToken cancellationToken = default)
-    {
-        if (!SelectedSensorId.HasValue)
-        {
-            ErrorMessage = "Select a sensor before analyzing anomalies.";
-            return;
-        }
-
-        try
-        {
-            IsBusy = true;
-            ErrorMessage = string.Empty;
-            Recommendation = null;
-
-            var sensorId = SelectedSensorId.Value;
-
-            Recommendation = await _anomalyService.AnalyzeAsync(
-                sensorId,
-                _loadedTelemetry,
-                cancellationToken);
-
-            if (Recommendation is null)
-            {
-                ErrorMessage =
-                    "No anomaly was detected, or there is insufficient " +
-                    "telemetry to establish a reliable baseline.";
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            ErrorMessage = $"Anomaly analysis failed: {ex.Message}";
-        }
-        finally
-        {
-            IsBusy = false;
-            _analyzeAnomalyCommand.RaiseCanExecuteChanged();
-            _executeRecommendationCommand.RaiseCanExecuteChanged();
-        }
-    }
-
-    private async Task ExecuteRecommendationAsync(
-    CancellationToken cancellationToken = default)
-    {
-        var recommendation = Recommendation;
-
-        if (recommendation is null ||
-            !SelectedSensorId.HasValue ||
-            SelectedSensorId.Value != recommendation.SensorId)
-        {
-            ErrorMessage = "Select the sensor associated with this recommendation.";
-            return;
-        }
-
-        var command = recommendation.SuggestedCommand?.Trim();
-
-        if (string.IsNullOrWhiteSpace(command))
-        {
-            ErrorMessage =
-                "No approved command is available for this recommendation.";
-            return;
-        }
-
-        var answer = MessageBox.Show(
-            $"Anomaly: {recommendation.Explanation}\n\n" +
-            $"Recommended action: {recommendation.RecommendedAction}\n\n" +
-            $"Command to send: {command}\n\n" +
-            "Only proceed if this command is safe for the connected equipment.\n\n" +
-            "Send this command?",
-            "Confirm corrective action",
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
-
-        if (answer != MessageBoxResult.Yes)
-            return;
-
-        try
-        {
-            IsBusy = true;
-            ErrorMessage = string.Empty;
-
-            var result = await _sensorService.SendCommandAsync(
-                recommendation.SensorId,
-                command,
-                cancellationToken);
-
-            await RecordUserBehaviorAsync(
-                recommendation.SensorId,
-                command,
-                result.Success,
-                result.Success
-                    ? result.Response
-                    : result.ErrorMessage ?? "Command failed.",
-                cancellationToken);
-
-            if (!result.Success)
-            {
-                ErrorMessage = result.ErrorMessage ??
-                    "The corrective command failed.";
-                return;
-            }
-
-            // Refresh the displayed telemetry and graph.
-            await LoadAsync(cancellationToken);
-
-            // Analyze again after refreshing telemetry.
-            await AnalyzeSelectedSensorAsync(cancellationToken);
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
-        catch (Exception ex)
-        {
-            ErrorMessage = $"Corrective action failed: {ex.Message}";
-        }
-        finally
-        {
-            IsBusy = false;
-            _executeRecommendationCommand.RaiseCanExecuteChanged();
-            _analyzeAnomalyCommand.RaiseCanExecuteChanged();
-        }
-    }
-    private Task ExportHistoryAsync()
+    private async Task ExportCsvAsync()
     {
         if (History.Count == 0)
         {
-            ErrorMessage = "There is no history to export.";
-            OnPropertyChanged(nameof(ErrorMessage));
-            return Task.CompletedTask;
+            MessageBox.Show(
+                "There is no telemetry history to export.",
+                "Export CSV",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+
+            return;
         }
 
         var dialog = new SaveFileDialog
         {
-            Title = "Export Telemetry History",
-            FileName = $"SmartX_History_{DateTime.Now:yyyyMMdd_HHmmss}.csv",
+            Title = "Export Sensor History",
+            Filter = "CSV Files (*.csv)|*.csv",
             DefaultExt = ".csv",
-            Filter = "CSV files (*.csv)|*.csv",
             AddExtension = true,
-            OverwritePrompt = true
+            FileName = $"SensorHistory_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
         };
 
         if (dialog.ShowDialog() != true)
-        {
-            return Task.CompletedTask;
-        }
+            return;
 
         try
         {
             var csv = new StringBuilder();
 
+            // CSV headers
             csv.AppendLine(
-                "Timestamp,Sensor Name,Voltage (V),Current (A),Power (W),Temperature (C)");
+                "Telemetry ID,Sensor ID,Sensor Name,Timestamp,Voltage (V),Current (A),Power (W),Temperature (°C)");
 
             foreach (var item in History)
             {
-                csv.AppendLine(string.Join(",",
-                    CsvEscape(item.Timestamp.ToString("O", CultureInfo.InvariantCulture)),
-                    CsvEscape(item.SensorName),
-                    CsvEscape(Convert.ToString(item.Voltage, CultureInfo.InvariantCulture)),
-                    CsvEscape(Convert.ToString(item.Current, CultureInfo.InvariantCulture)),
-                    CsvEscape(Convert.ToString(item.Power, CultureInfo.InvariantCulture)),
-                    CsvEscape(Convert.ToString(item.Temperature, CultureInfo.InvariantCulture))
-                ));
+                var values = new[]
+{
+    EscapeCsv(item.Id.ToString()),
+    EscapeCsv(item.SensorId.ToString()),
+    EscapeCsv(item.SensorName),
+    EscapeCsv(item.Timestamp.ToString(
+        "yyyy-MM-dd HH:mm:ss",
+        CultureInfo.InvariantCulture)),
+
+    EscapeCsv(FormatCsvValue(item.Voltage)),
+    EscapeCsv(FormatCsvValue(item.Current)),
+    EscapeCsv(FormatCsvValue(item.Power)),
+    EscapeCsv(FormatCsvValue(item.Temperature))
+};
+
+                csv.AppendLine(string.Join(",", values));
             }
 
-            File.WriteAllText(
+            await File.WriteAllTextAsync(
                 dialog.FileName,
                 csv.ToString(),
                 new UTF8Encoding(true));
 
-            ErrorMessage = string.Empty;
-            OnPropertyChanged(nameof(ErrorMessage));
+            MessageBox.Show(
+                $"Successfully exported {History.Count} telemetry records.",
+                "Export Complete",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"Export failed: {ex.Message}";
-            OnPropertyChanged(nameof(ErrorMessage));
+            MessageBox.Show(
+                $"Failed to export telemetry history:\n{ex.Message}",
+                "Export Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
         }
-
-        return Task.CompletedTask;
+    }
+    private static string FormatCsvValue<T>(T? value)
+    where T : struct, IFormattable
+    {
+        return value.HasValue
+            ? value.Value.ToString(null, CultureInfo.InvariantCulture)
+            : string.Empty;
     }
 
-    private static string CsvEscape(string? value)
+    private static string EscapeCsv(string? value)
     {
-        value ??= string.Empty;
+        if (string.IsNullOrEmpty(value))
+            return "\"\"";
 
         return "\"" + value.Replace("\"", "\"\"") + "\"";
     }
 
-    private Task ApplyRecommendationAsync()
+
+    private async Task AnalyzeSelectedSensorAsync(
+        CancellationToken cancellationToken = default)
     {
         if (!SelectedSensorId.HasValue)
         {
-            RecommendationStatus = "Select a sensor first.";
-            return Task.CompletedTask;
+            ErrorMessage = "Select a sensor first.";
+            return;
         }
 
-        var command = RecommendedCommand?.Trim();
-
-        if (string.IsNullOrWhiteSpace(command))
+        var sensorId = SelectedSensorId.Value;
+        var requestVersion = ++_anomalyRequestVersion;
+        try
         {
+            IsBusy = true;
+            ErrorMessage = string.Empty;
+
+            PredictionMessage = "Analysing sensor telemetry...";
+
+            var result =
+                await _smartXClient.AnalyzeSensorAnomalyAsync(
+                    sensorId,
+                    cancellationToken);
+
+            // Ignore results belonging to an old sensor/request.
+            if (requestVersion != _predictiveRequestVersion ||
+                SelectedSensorId != sensorId)
+            {
+                return;
+            }
+
+            if (result is null)
+            {
+                PredictionMessage = "No anomaly detected.";
+
+                AnomalyDescription =
+                    "No anomaly detected or insufficient telemetry.";
+
+                RecommendationReason =
+                    "No new recommendation was generated.";
+
+                RecommendationStatus =
+                    "No recommendation available.";
+
+                // Preserve the previous recommendation.
+                OnPropertyChanged(nameof(CanSendToCommandCentre));
+                _sendToCommandCentreCommand.RaiseCanExecuteChanged();
+
+                return;
+            }
+
+            // Update the recommendation only after successful analysis.
+            Recommendation = result;
+
+            AnomalyDescription =
+                $"{result.Metric}: {result.Observed:F2} " +
+                $"{result.Unit} (Expected: {result.Expected:F2} " +
+                $"{result.Unit})";
+
+            RecommendationReason =
+                $"{result.Explanation}\n" +
+                $"Severity: {result.Severity}\n" +
+                $"Confidence: {result.Confidence:P0}";
+
+            RecommendedCommand =
+                result.SuggestedCommand ?? string.Empty;
+
             RecommendationStatus =
-                "No executable recommendation is available.";
-            return Task.CompletedTask;
+                string.IsNullOrWhiteSpace(RecommendedCommand)
+                    ? "Recommendation available, but no command was generated."
+                    : "Command available for review.";
+
+            PredictionMessage =
+                $"Analysis completed. Severity: {result.Severity}";
+
+            OnPropertyChanged(nameof(CanSendToCommandCentre));
+            _sendToCommandCentreCommand.RaiseCanExecuteChanged();
         }
-
-        // Load the command into the manual command input.
-        ManualCommand = command;
-
-        RecommendationStatus =
-            $"Command '{command}' loaded into the manual command panel. " +
-            "Review it before sending.";
-
-        return Task.CompletedTask;
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            if (requestVersion == _predictiveRequestVersion)
+            {
+                ErrorMessage =
+                    $"Anomaly analysis failed: {ex.Message}";
+            }
+        }
+        finally
+        {
+            if (requestVersion == _predictiveRequestVersion)
+            {
+                IsBusy = false;
+            }
+        }
     }
 
-    private double? GetTelemetryValue(
-    DomainTelemetry telemetry)
+    private double? GetTelemetryValue(DomainTelemetry telemetry)
     {
         return SelectedMetric switch
         {
@@ -1499,12 +1134,10 @@ public sealed class HistoryViewModel : ViewModelBase
     {
         _loadCommand.RaiseCanExecuteChanged();
         _clearFiltersCommand.RaiseCanExecuteChanged();
-        _sendManualCommandCommand.RaiseCanExecuteChanged();
-        _undoLastCommandCommand.RaiseCanExecuteChanged();
-        _exportCommand.RaiseCanExecuteChanged();
         _analyzeAnomalyCommand.RaiseCanExecuteChanged();
-        _executeRecommendationCommand.RaiseCanExecuteChanged();
-        _applyRecommendationCommand.RaiseCanExecuteChanged();
+        _loadPredictiveSuggestionsCommand.RaiseCanExecuteChanged();
+        _exportCsvCommand.RaiseCanExecuteChanged();
+        _sendToCommandCentreCommand.RaiseCanExecuteChanged();
     }
 
 

@@ -10,6 +10,9 @@
     <Compile Update="Views\Pages\Alerts\AlertsPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Pages\CommandStream\RealTimeCommandStreamPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Pages\Company\CompaniesPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

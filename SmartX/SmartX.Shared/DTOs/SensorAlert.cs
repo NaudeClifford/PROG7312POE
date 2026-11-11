@@ -1,6 +1,6 @@
 ﻿using SmartX.Domain.Enums;
 
-namespace SmartX.Application.Services.Alerts;
+namespace SmartX.Shared.DTOs;
 
 public sealed class SensorAlert
 {

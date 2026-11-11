@@ -1,16 +1,17 @@
-﻿using SmartX.Application.Services.Alerts;
-using SmartX.Domain.Enums;
+﻿using SmartX.Domain.Enums;
+using SmartX.Shared.DTOs;
+using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.ViewModels.Base;
 using System.Collections.ObjectModel;
-using System.Windows.Threading;
 
 namespace SmartX.WPF.ViewModels.Alerts;
 
 public sealed class AlertsViewModel : ViewModelBase
 {
-    private readonly AlertQueue _alertQueue;
+    private readonly ISmartXApiClient _apiClient;
+
     public AsyncRelayCommand ProcessNextAlertCommand { get; }
 
     public AsyncRelayCommand ProcessAllAlertsCommand { get; }
@@ -22,42 +23,47 @@ public sealed class AlertsViewModel : ViewModelBase
     public PredictiveWarningViewModel PredictiveWarnings { get; }
 
     public ObservableCollection<SensorAlert> ProcessedAlerts { get; } = [];
-    private readonly Dispatcher _dispatcher = System.Windows.Application.Current.Dispatcher;
 
-    public int PendingAlertCount =>
-        _alertQueue.Count;
+    private int _pendingAlertCount;
+
+    public int PendingAlertCount
+    {
+        get => _pendingAlertCount;
+        private set => SetProperty(
+            ref _pendingAlertCount,
+            value);
+    }
+
     public int PredictiveWarningCount =>
         PredictiveWarnings.Suggestions.Count;
 
     public AlertsViewModel(
-        AlertQueue alertQueue,
-        IConnectivityService connectivityService,
-        PredictiveWarningViewModel predictiveWarningViewModel,
-        SmartXSession session)
-        : base(
-            connectivityService,
-            session)
+    IConnectivityService connectivityService,
+    PredictiveWarningViewModel predictiveWarningViewModel,
+    ISmartXApiClient apiClient,
+    SmartXSession session)
+    : base(connectivityService, session)
     {
-        _alertQueue = alertQueue;
+        _apiClient = apiClient;
         PredictiveWarnings = predictiveWarningViewModel;
 
         AddDemoAlertsCommand = new AsyncRelayCommand(AddDemoAlertsAsync);
-
 
         PredictiveWarnings.Suggestions.CollectionChanged += (_, _) =>
         {
             OnPropertyChanged(nameof(PredictiveWarningCount));
         };
 
-        ProcessNextAlertCommand = new AsyncRelayCommand(ProcessNextAlertAsync, CanProcessAlert);
+        ProcessNextAlertCommand =
+            new AsyncRelayCommand(ProcessNextAlertAsync, CanProcessAlert);
 
-        ProcessAllAlertsCommand = new AsyncRelayCommand(ProcessAllAlertsAsync, CanProcessAlert);
+        ProcessAllAlertsCommand =
+            new AsyncRelayCommand(ProcessAllAlertsAsync, CanProcessAlert);
 
-        ClearAlertsCommand = new AsyncRelayCommand(ClearAlertsAsync);
-
-        _alertQueue.AlertEnqueued += OnAlertEnqueued;
-
+        ClearAlertsCommand =
+            new AsyncRelayCommand(ClearAlertsAsync);
     }
+
     public async Task LoadAsync(
     CancellationToken cancellationToken = default)
     {
@@ -69,12 +75,15 @@ public sealed class AlertsViewModel : ViewModelBase
             IsBusy = true;
             ErrorMessage = string.Empty;
 
-            cancellationToken.ThrowIfCancellationRequested();
+            var alerts = await _apiClient.GetAlertsAsync(
+                cancellationToken);
 
-            OnPropertyChanged(
-                nameof(PendingAlertCount));
+            Alerts.Clear();
 
-            RaiseCommandStates();
+            foreach (var alert in alerts)
+                Alerts.Add(alert);
+
+            PendingAlertCount = alerts.Count;
         }
         catch (OperationCanceledException)
         {
@@ -82,40 +91,92 @@ public sealed class AlertsViewModel : ViewModelBase
         }
         catch (Exception ex)
         {
-            ErrorMessage = ex.Message;
+            ErrorMessage = $"Unable to load alerts: {ex.Message}";
         }
         finally
         {
             IsBusy = false;
             RaiseCommandStates();
         }
-
-        await Task.CompletedTask;
     }
 
-    public Task ProcessNextAlertAsync()
+    public async Task ProcessNextAlertAsync()
     {
-        if (_alertQueue.TryDequeue(out var alert) &&
-            alert is not null)
+        if (IsBusy || PendingAlertCount == 0)
+            return;
+
+        try
         {
-            // Remove the alert from the live inbox.
-            Alerts.Remove(alert);
+            IsBusy = true;
+            ErrorMessage = string.Empty;
 
-            // Retain it in processed history.
-            ProcessedAlerts.Insert(0, alert);
+            var processed = await _apiClient.ProcessNextAlertAsync();
+
+            if (processed is not null)
+                ProcessedAlerts.Insert(0, processed);
+
+            await RefreshAlertsAsync();
         }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Unable to process alert: {ex.Message}";
+        }
+        finally
+        {
+            IsBusy = false;
+            RaiseCommandStates();
+        }
+    }
 
-        OnPropertyChanged(nameof(PendingAlertCount));
+    public async Task ProcessAllAlertsAsync()
+    {
+        if (IsBusy || PendingAlertCount == 0)
+            return;
+
+        try
+        {
+            IsBusy = true;
+            ErrorMessage = string.Empty;
+
+            var processed = await _apiClient.ProcessAllAlertsAsync();
+
+            foreach (var alert in processed)
+                ProcessedAlerts.Insert(0, alert);
+
+            await RefreshAlertsAsync();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Unable to process alerts: {ex.Message}";
+        }
+        finally
+        {
+            IsBusy = false;
+            RaiseCommandStates();
+        }
+    }
+
+    private async Task RefreshAlertsAsync(
+    CancellationToken cancellationToken = default)
+    {
+        var alerts = await _apiClient.GetAlertsAsync(cancellationToken);
+
+        Alerts.Clear();
+
+        foreach (var alert in alerts)
+            Alerts.Add(alert);
+
+        PendingAlertCount = Alerts.Count;
+
         RaiseCommandStates();
-
-        return Task.CompletedTask;
     }
 
     private bool CanProcessAlert()
     {
-        return _alertQueue.Count > 0;
+        return PendingAlertCount > 0 && !IsBusy;
     }
-    public Task AddDemoAlertsAsync()
+
+    public async Task AddDemoAlertsAsync()
     {
         var sensorId = PredictiveWarnings.Suggestions
             .FirstOrDefault()?.SensorId;
@@ -123,80 +184,63 @@ public sealed class AlertsViewModel : ViewModelBase
         if (sensorId is null)
         {
             ErrorMessage =
-                "Load a sensor or generate telemetry before creating demo alerts.";
+                "Select a sensor or load predictive suggestions first.";
 
-            return Task.CompletedTask;
-        }
-
-        _alertQueue.Enqueue(new SensorAlert
-        {
-            SensorId = sensorId.Value,
-            Message = "DEMO: Critical temperature warning.",
-            Severity = AlertSeverity.Critical,
-            Timestamp = DateTime.Now
-        });
-
-        _alertQueue.Enqueue(new SensorAlert
-        {
-            SensorId = sensorId.Value,
-            Message = "DEMO: Routine sensor status update.",
-            Severity = AlertSeverity.Medium,
-            Timestamp = DateTime.Now
-        });
-
-        return Task.CompletedTask;
-    }
-    public Task ProcessAllAlertsAsync()
-    {
-        while (_alertQueue.TryDequeue(out var alert))
-        {
-            if (alert is null)
-                continue;
-
-            // Remove each processed alert from the live inbox.
-            Alerts.Remove(alert);
-
-            // Retain the alert in history.
-            ProcessedAlerts.Insert(0, alert);
-        }
-
-        OnPropertyChanged(nameof(PendingAlertCount));
-        RaiseCommandStates();
-
-        return Task.CompletedTask;
-    }
-
-    private void OnAlertEnqueued(object? sender, SensorAlert alert)
-    {
-        if (_dispatcher.CheckAccess())
-        {
-            AddAlertToInbox(alert);
             return;
         }
 
-        _dispatcher.BeginInvoke(
-            new Action(() => AddAlertToInbox(alert)));
+        try
+        {
+            await _apiClient.EnqueueAlertAsync(new SensorAlert
+            {
+                SensorId = sensorId.Value,
+                Message = "DEMO: Critical temperature warning.",
+                Severity = AlertSeverity.Critical,
+                Timestamp = DateTime.UtcNow
+            });
+
+            await _apiClient.EnqueueAlertAsync(new SensorAlert
+            {
+                SensorId = sensorId.Value,
+                Message = "DEMO: Routine sensor status update.",
+                Severity = AlertSeverity.Medium,
+                Timestamp = DateTime.UtcNow
+            });
+
+            await RefreshAlertsAsync();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Unable to add demo alerts: {ex.Message}";
+        }
     }
 
-    private void AddAlertToInbox(SensorAlert alert)
+    public async Task ClearAlertsAsync()
     {
-        Alerts.Insert(0, alert);
+        if (IsBusy)
+            return;
 
-        OnPropertyChanged(nameof(PendingAlertCount));
-        RaiseCommandStates();
-    }
+        try
+        {
+            IsBusy = true;
+            ErrorMessage = string.Empty;
 
-    public Task ClearAlertsAsync()
-    {
-        _alertQueue.Clear();
+            await _apiClient.ClearAlertsAsync();
 
-        Alerts.Clear();
-        ProcessedAlerts.Clear();
+            Alerts.Clear();
+            ProcessedAlerts.Clear();
 
-        OnPropertyChanged(nameof(PendingAlertCount));
-        RaiseCommandStates();
-
-        return Task.CompletedTask;
+            PendingAlertCount = 0;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Unable to clear alerts: {ex.Message}";
+        }
+        finally
+        {
+            IsBusy = false;
+            RaiseCommandStates();
+        }
     }
 
     protected override void RaiseCommandStates()

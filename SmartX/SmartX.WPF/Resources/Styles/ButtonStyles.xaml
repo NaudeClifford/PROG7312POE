@@ -81,6 +81,19 @@
         </Setter>
     </Style>
 
+    <!-- Second Button Colour -->
+    <Style x:Key="SecondColourButtonStyle"
+    TargetType="Button"
+    BasedOn="{StaticResource BaseButtonStyle}">
+
+        <Setter Property="Background"
+         Value="White"/>
+
+        <Setter Property="Foreground"
+         Value="Black"/>
+
+    </Style>
+
     <!-- Primary -->
     <Style x:Key="PrimaryButtonStyle"
         TargetType="Button"

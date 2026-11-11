@@ -6,7 +6,6 @@ using SmartX.WPF.Navigation;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.Demo;
-using SmartX.WPF.Services.PredictiveEngine;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.Services.Sync;
 using SmartX.WPF.ViewModels.Alerts;
@@ -52,7 +51,6 @@ public class GatewayViewModel : ViewModelBase
     private bool _isActive = true;
     private string? _statusMessage;
 
-    private readonly LivePredictiveWarningService _warningService;
 
     public PredictiveWarningViewModel PredictiveWarnings { get; }
 
@@ -64,7 +62,6 @@ public class GatewayViewModel : ViewModelBase
         IValidator<CreateGatewayRequest> createGatewayValidator,
         IGuestDemoService guestDemoService,
         PredictiveWarningViewModel predictiveWarningViewModel,
-        LivePredictiveWarningService livePredictiveWarningService,
         SmartXSession session)
         : base(connectivityService, session)
     {
@@ -74,7 +71,6 @@ public class GatewayViewModel : ViewModelBase
         _createGatewayValidator = createGatewayValidator;
         _guestDemoService = guestDemoService;
         PredictiveWarnings = predictiveWarningViewModel;
-        _warningService = livePredictiveWarningService;
 
         AddGatewayCommand =
             new AsyncRelayCommand(
@@ -184,29 +180,26 @@ public class GatewayViewModel : ViewModelBase
         get => _selectedGateway;
         set
         {
-            if (_selectedGateway == value)
+            if (!SetProperty(ref _selectedGateway, value))
                 return;
 
-            _selectedGateway = value;
+            Gateway = value;
 
-            OnPropertyChanged();
-
-            if (_selectedGateway is not null)
+            if (value is not null)
             {
-                Gateway = _selectedGateway;
-
                 Session.SelectGateway(
-                    _selectedGateway.Id,
-                    _selectedGateway.Name);
+                    value.Id,
+                    value.Name);
             }
             else
             {
-                Gateway = null;
                 Session.ClearGateway();
             }
 
             OnPropertyChanged(nameof(SelectedGatewayName));
             OnPropertyChanged(nameof(HasSelectedGateway));
+            OnPropertyChanged(nameof(GatewayFeaturesVisibility));
+            OnPropertyChanged(nameof(NoGatewayVisibility));
 
             RaiseCommandStates();
         }
@@ -472,29 +465,49 @@ public class GatewayViewModel : ViewModelBase
                 cancellationToken);
 
             if (Session.GatewayId is Guid gatewayId &&
-            gatewayId != Guid.Empty &&
-            !_warningService.IsLoadedFor(gatewayId))
+                gatewayId != Guid.Empty)
             {
-                await _warningService.LoadAsync(
-                    gatewayId,
-                    cancellationToken);
+                try
+                {
+                    var warnings =
+                        await _apiClient.GetPredictiveWarningsAsync(
+                            gatewayId,
+                            cancellationToken);
+
+                    PredictiveWarnings.SetWarnings(warnings);
+                }
+                catch (HttpRequestException ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(
+                        $"Predictive warnings API error: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(
+                        $"Predictive warnings error: {ex}");
+                }
             }
         }
         catch (OperationCanceledException)
         {
             throw;
         }
-        catch (HttpRequestException)
+        catch (HttpRequestException ex)
         {
             ErrorMessage =
-                "Unable to connect to the SmartX API.";
+                "Unable to connect to the SmartX API. " +
+                "Please check your connection.";
 
-            ClearGatewaySelection();
+            StatusMessage = ex.Message;
+
+            // IMPORTANT:
+            // Do not clear the existing gateway selection.
         }
         catch (Exception ex)
         {
             ErrorMessage = ex.Message;
-            ClearGatewaySelection();
+
+            // Preserve the existing gateway selection.
         }
         finally
         {
@@ -698,12 +711,16 @@ public class GatewayViewModel : ViewModelBase
                 gateway.Id,
                 gateway.Name);
 
-            StatusMessage =
-                "Demo gateway created successfully.";
+
 
             Mode = GatewayMode.List;
 
             ClearEditor();
+
+            StatusMessage =
+                IsOnboarding
+                    ? "Gateway created successfully. Company setup is complete."
+                    : "Gateway created successfully.";
 
             _navigationService
                 .NavigateTo<GatewayPage>();
@@ -1100,80 +1117,69 @@ public class GatewayViewModel : ViewModelBase
     }
 
     private async Task LoadGatewaysAsync(
-        CancellationToken cancellationToken = default)
+    CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        List<GatewayDto> loadedGateways;
+
         if (Session.IsGuest)
         {
-            Gateways.Clear();
-
-            foreach (var gateway in _guestDemoService.GetGateways())
+            loadedGateways = _guestDemoService
+                .GetGateways()
+                .Select(gateway => new GatewayDto
+                {
+                    Id = gateway.Id,
+                    CompanyId = Session.CompanyId,
+                    Name = gateway.Name,
+                    Description = gateway.Description,
+                    SerialNumber = gateway.SerialNumber,
+                    IpAddress = gateway.IpAddress,
+                    IsActive = gateway.IsActive
+                })
+                .ToList();
+        }
+        else
+        {
+            if (!Session.IsAuthenticated)
             {
-                Gateways.Add(
-                    new GatewayDto
-                    {
-                        Id = gateway.Id,
-                        CompanyId = Session.CompanyId,
-                        Name = gateway.Name,
-                        Description = gateway.Description,
-                        SerialNumber = gateway.SerialNumber,
-                        IpAddress = gateway.IpAddress,
-                        IsActive = gateway.IsActive
-                    });
-            }
+                ErrorMessage =
+                    "No authenticated user is associated with this session.";
 
-            if (Gateways.Count == 0)
-            {
-                ClearGatewaySelection();
                 return;
             }
 
-            if (Session.GatewayId.HasValue)
+            if (Session.CompanyId == Guid.Empty)
             {
-                var existing =
-                    Gateways.FirstOrDefault(
-                        x => x.Id == Session.GatewayId.Value);
+                ErrorMessage =
+                    "No company is associated with this session.";
 
-                if (existing is not null)
-                {
-                    SelectedGateway = existing;
-                    return;
-                }
+                return;
             }
 
-            SelectedGateway = Gateways[0];
+            if (Session.Role == UserRole.SuperAdmin)
+            {
+                ErrorMessage =
+                    "SuperAdmin accounts cannot access gateways.";
 
-            return;
+                return;
+            }
+
+            loadedGateways =
+                (await _apiClient.GetGatewaysByCompanyIdAsync(
+                    Session.CompanyId,
+                    cancellationToken)).ToList();
         }
 
-        if (Session.CompanyId == Guid.Empty)
-        {
-            ErrorMessage =
-                "No company is associated with this session.";
+        cancellationToken.ThrowIfCancellationRequested();
 
-            ClearGatewaySelection();
-
-            return;
-        }
-
-        if (Session.Role == UserRole.SuperAdmin)
-        {
-            ErrorMessage =
-                "SuperAdmin accounts cannot access gateways.";
-
-            ClearGatewaySelection();
-
-            return;
-        }
-
-        var gateways =
-            await _apiClient.GetGatewaysByCompanyIdAsync(
-                Session.CompanyId,
-                cancellationToken);
-
+        // Only replace the collection after successfully retrieving data.
         Gateways.Clear();
 
-        foreach (var gateway in gateways)
+        foreach (var gateway in loadedGateways)
+        {
             Gateways.Add(gateway);
+        }
 
         if (Gateways.Count == 0)
         {
@@ -1181,38 +1187,36 @@ public class GatewayViewModel : ViewModelBase
             return;
         }
 
-        if (Session.GatewayId.HasValue)
-        {
-            var existing =
-                Gateways.FirstOrDefault(
-                    x => x.Id == Session.GatewayId.Value);
+        GatewayDto? selectedGateway = null;
 
-            if (existing is not null)
-            {
-                SelectedGateway = existing;
-                return;
-            }
+        if (Session.GatewayId is Guid savedGatewayId &&
+            savedGatewayId != Guid.Empty)
+        {
+            selectedGateway = Gateways.FirstOrDefault(
+                x => x.Id == savedGatewayId);
         }
 
-        SelectedGateway = Gateways[0];
+        selectedGateway ??= Gateways.First();
+
+        SelectedGateway = selectedGateway;
+
+        RaiseCommandStates();
     }
 
     private void ClearGatewaySelection()
     {
         _selectedGateway = null;
 
-        OnPropertyChanged(
-            nameof(SelectedGateway));
+        OnPropertyChanged(nameof(SelectedGateway));
 
         Gateway = null;
 
         Session.ClearGateway();
 
-        OnPropertyChanged(
-            nameof(SelectedGatewayName));
-
-        OnPropertyChanged(
-            nameof(HasSelectedGateway));
+        OnPropertyChanged(nameof(SelectedGatewayName));
+        OnPropertyChanged(nameof(HasSelectedGateway));
+        OnPropertyChanged(nameof(GatewayFeaturesVisibility));
+        OnPropertyChanged(nameof(NoGatewayVisibility));
 
         RaiseCommandStates();
     }
@@ -1296,6 +1300,17 @@ public class GatewayViewModel : ViewModelBase
             e.PropertyName == nameof(SmartXSession.GatewayId) ||
             e.PropertyName == nameof(SmartXSession.GatewayName))
         {
+            OnPropertyChanged(nameof(SelectedGatewayName));
+            OnPropertyChanged(nameof(HasSelectedGateway));
+
+            OnPropertyChanged(nameof(IsAdministrator));
+            OnPropertyChanged(nameof(IsTechnician));
+            OnPropertyChanged(nameof(IsSuperAdmin));
+
+            OnPropertyChanged(nameof(GatewayFeaturesVisibility));
+            OnPropertyChanged(nameof(NoGatewayVisibility));
+            OnPropertyChanged(nameof(GatewayCrudVisibility));
+
             RaiseCommandStates();
         }
     }

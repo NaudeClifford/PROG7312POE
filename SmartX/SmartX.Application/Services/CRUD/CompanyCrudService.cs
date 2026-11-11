@@ -155,9 +155,9 @@ public class CompanyCrudService :
     }
 
     public async Task<Result<bool>> UpdateAsync(
-        UpdateCompanyRequest request,
-        ClaimsPrincipal user,
-        CancellationToken cancellationToken = default)
+    UpdateCompanyRequest request,
+    ClaimsPrincipal user,
+    CancellationToken cancellationToken = default)
     {
         if (request is null)
         {
@@ -177,9 +177,10 @@ public class CompanyCrudService :
                 "You do not have access to this company.");
         }
 
-        var validationResult = await _updateValidator.ValidateAsync(
-            request,
-            cancellationToken);
+        var validationResult =
+            await _updateValidator.ValidateAsync(
+                request,
+                cancellationToken);
 
         if (!validationResult.IsValid)
         {
@@ -200,10 +201,14 @@ public class CompanyCrudService :
                 "Company not found.");
         }
 
+        // Update company details only.
+        // Preserve the existing active status.
+
         company.Name = request.Name.Trim();
+
         company.Description =
             request.Description?.Trim() ?? string.Empty;
-        company.IsActive = request.IsActive;
+
         company.UpdatedAt = DateTime.UtcNow;
 
         await _companyRepository.UpdateAsync(
@@ -215,7 +220,7 @@ public class CompanyCrudService :
             entityId: company.Id,
             action: "Updated",
             companyId: company.Id,
-            details: "Company updated.",
+            details: "Company details updated.",
             cancellationToken: cancellationToken);
 
         return Result<bool>.Ok(true);

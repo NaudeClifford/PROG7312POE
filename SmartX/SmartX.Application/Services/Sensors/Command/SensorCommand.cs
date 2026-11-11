@@ -1,4 +1,4 @@
-﻿namespace SmartX.WPF.ViewModels.History
+﻿namespace SmartX.Application.Services.Sensors.Command
 {
     public sealed class SensorCommand
     {

@@ -1,4 +1,4 @@
-﻿namespace SmartX.WPF.ViewModels.History
+﻿namespace SmartX.Application.Services.Sensors
 {
     public sealed class ManualStack<T>
     {
@@ -57,7 +57,21 @@
             item = _items[^1];
             return true;
         }
+        public T? PeekLast(Func<T, bool> predicate)
+        {
+            for (int i = _items.Count - 1; i >= 0; i--)
+            {
+                if (predicate(_items[i]))
+                    return _items[i];
+            }
 
+            return default;
+        }
+
+        public bool Remove(T item)
+        {
+            return _items.Remove(item);
+        }
         public void Clear()
         {
             _items.Clear();

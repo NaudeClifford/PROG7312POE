@@ -1,29 +1,25 @@
-﻿using SmartX.Domain.Entities;
-using SmartX.WPF.Services.PredictiveEngine;
+﻿using SmartX.Shared.DTOs;
 using System.Collections.ObjectModel;
 
 namespace SmartX.WPF.ViewModels.Alerts;
 
 public sealed class PredictiveWarningViewModel
 {
-    private readonly LivePredictiveWarningService _warningService;
+    public ObservableCollection<PredictiveSuggestionDto>
+        Suggestions
+    { get; } = [];
 
-    public ObservableCollection<PredictiveSuggestion> Suggestions
-        => _warningService.Warnings;
-
-    public PredictiveWarningViewModel(
-        LivePredictiveWarningService warningService)
+    public void SetWarnings(
+        IEnumerable<PredictiveSuggestionDto> warnings)
     {
-        _warningService = warningService;
-    }
+        Suggestions.Clear();
 
-    public void Refresh()
-    {
-        _warningService.Refresh();
+        foreach (var warning in warnings)
+            Suggestions.Add(warning);
     }
 
     public void Clear()
     {
-        _warningService.Clear();
+        Suggestions.Clear();
     }
 }

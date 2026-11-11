@@ -12,82 +12,87 @@
     <ScrollViewer
         VerticalScrollBarVisibility="Auto">
 
-        <Grid Margin="60">
+        <Border Margin="20"
+            Padding="25"
+            Background="{StaticResource DarkBrush}"
+            CornerRadius="24">
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+            <Grid Margin="10">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
 
-            <!-- HEADER -->
+                <!-- HEADER -->
 
-            <StackPanel Grid.Row="0">
+                <StackPanel Grid.Row="0">
 
-                <TextBlock
+                    <TextBlock
                     Text="Gateway Setup"
                     FontSize="30"
                     FontWeight="Bold"
                     HorizontalAlignment="Center"
                     Foreground="{StaticResource LightTextBrush}"/>
 
-                <TextBlock
+                    <TextBlock
                     Text="Configure gateways for your SmartX company."
                                         HorizontalAlignment="Center"
                     FontSize="14"
                     Foreground="{StaticResource LightTextBrush}"
                     Margin="0,8,0,30"/>
 
-            </StackPanel>
+                </StackPanel>
 
 
-            <!-- SETUP FORM -->
+                <!-- SETUP FORM -->
 
-            <Border
+                <Border
                 Grid.Row="1"
                 Background="White"
                 CornerRadius="18"
                 Padding="35">
 
-                <Grid>
+                    <Grid>
 
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
 
-                    <!-- NAME -->
+                        <!-- NAME -->
 
-                    <StackPanel
+                        <StackPanel
                         Grid.Row="0"
                         Grid.Column="0"
                         Margin="0,0,12,18">
 
-                        <TextBlock
+                            <TextBlock
                             Text="Gateway name"
                             FontSize="13"
                             FontWeight="SemiBold"
                             Foreground="#30343A"
                             Margin="0,0,0,8"/>
 
-                        <Border
+                            <Border
                             Height="48"
                             CornerRadius="8"
                             BorderBrush="#D8DDE2"
                             BorderThickness="1"
                             Background="#FAFBFC">
 
-                            <TextBox
+                                <TextBox
                                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                                 Margin="12,0"
                                 BorderThickness="0"
@@ -95,33 +100,33 @@
                                 FontSize="14"
                                 VerticalContentAlignment="Center"/>
 
-                        </Border>
+                            </Border>
 
-                    </StackPanel>
+                        </StackPanel>
 
 
-                    <!-- SERIAL -->
+                        <!-- SERIAL -->
 
-                    <StackPanel
+                        <StackPanel
                         Grid.Row="0"
                         Grid.Column="1"
                         Margin="12,0,0,18">
 
-                        <TextBlock
+                            <TextBlock
                             Text="Serial number"
                             FontSize="13"
                             FontWeight="SemiBold"
                             Foreground="#30343A"
                             Margin="0,0,0,8"/>
 
-                        <Border
+                            <Border
                             Height="48"
                             CornerRadius="8"
                             BorderBrush="#D8DDE2"
                             BorderThickness="1"
                             Background="#FAFBFC">
 
-                            <TextBox
+                                <TextBox
                                 Text="{Binding SerialNumber, UpdateSourceTrigger=PropertyChanged}"
                                 Margin="12,0"
                                 BorderThickness="0"
@@ -129,33 +134,33 @@
                                 FontSize="14"
                                 VerticalContentAlignment="Center"/>
 
-                        </Border>
+                            </Border>
 
-                    </StackPanel>
+                        </StackPanel>
 
 
-                    <!-- IP -->
+                        <!-- IP -->
 
-                    <StackPanel
+                        <StackPanel
                         Grid.Row="1"
                         Grid.Column="0"
                         Margin="0,0,12,18">
 
-                        <TextBlock
+                            <TextBlock
                             Text="IP address"
                             FontSize="13"
                             FontWeight="SemiBold"
                             Foreground="#30343A"
                             Margin="0,0,0,8"/>
 
-                        <Border
+                            <Border
                             Height="48"
                             CornerRadius="8"
                             BorderBrush="#D8DDE2"
                             BorderThickness="1"
                             Background="#FAFBFC">
 
-                            <TextBox
+                                <TextBox
                                 Text="{Binding IpAddress, UpdateSourceTrigger=PropertyChanged}"
                                 Margin="12,0"
                                 BorderThickness="0"
@@ -163,33 +168,33 @@
                                 FontSize="14"
                                 VerticalContentAlignment="Center"/>
 
-                        </Border>
+                            </Border>
 
-                    </StackPanel>
+                        </StackPanel>
 
 
-                    <!-- DESCRIPTION -->
+                        <!-- DESCRIPTION -->
 
-                    <StackPanel
+                        <StackPanel
                         Grid.Row="1"
                         Grid.Column="1"
                         Margin="12,0,0,18">
 
-                        <TextBlock
+                            <TextBlock
                             Text="Description"
                             FontSize="13"
                             FontWeight="SemiBold"
                             Foreground="#30343A"
                             Margin="0,0,0,8"/>
 
-                        <Border
+                            <Border
                             Height="48"
                             CornerRadius="8"
                             BorderBrush="#D8DDE2"
                             BorderThickness="1"
                             Background="#FAFBFC">
 
-                            <TextBox
+                                <TextBox
                                 Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                                 Margin="12,0"
                                 BorderThickness="0"
@@ -197,14 +202,14 @@
                                 FontSize="14"
                                 VerticalContentAlignment="Center"/>
 
-                        </Border>
+                            </Border>
 
-                    </StackPanel>
+                        </StackPanel>
 
 
-                    <!-- STATUS -->
+                        <!-- STATUS -->
 
-                    <TextBlock
+                        <TextBlock
     Grid.Row="2"
     Grid.ColumnSpan="2"
     Text="{Binding ErrorMessage}"
@@ -214,18 +219,18 @@
     Margin="0,5,0,15"/>
 
 
-                    <!-- ACTION BUTTONS -->
+                        <!-- ACTION BUTTONS -->
 
-                    <StackPanel
+                        <StackPanel
     Grid.Row="3"
     Grid.ColumnSpan="2"
     Orientation="Horizontal"
     HorizontalAlignment="Right"
     Margin="0,5,0,0">
 
-                        <!-- CREATE GATEWAY -->
+                            <!-- CREATE GATEWAY -->
 
-                        <Button
+                            <Button
         Content="Create Gateway"
         Height="50"
         Width="180"
@@ -235,20 +240,20 @@
         FontWeight="SemiBold"
         Style="{StaticResource BaseButtonStyle}"/>
 
-                    </StackPanel>
+                        </StackPanel>
 
-                </Grid>
+                    </Grid>
 
-            </Border>
+                </Border>
 
 
-            <!-- EXISTING GATEWAYS -->
+                <!-- EXISTING GATEWAYS -->
 
-            <StackPanel
+                <StackPanel
                 Grid.Row="2"
                 Margin="0,30,0,0">
 
-                <TextBlock
+                    <TextBlock
                     Text="Your Gateways"
                     FontSize="22"
                     FontWeight="Bold"
@@ -256,78 +261,78 @@
                     Foreground="{StaticResource LightTextBrush}"
                     Margin="0,0,0,15"/>
 
-                <ItemsControl
+                    <ItemsControl
                     ItemsSource="{Binding Gateways}">
 
-                    <ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemTemplate>
 
-                        <DataTemplate>
+                            <DataTemplate>
 
-                            <Border
+                                <Border
                                 Background="White"
                                 CornerRadius="14"
                                 Padding="20"
                                 Margin="0,0,0,12">
 
-                                <Grid>
+                                    <Grid>
 
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
 
-                                    <StackPanel>
+                                        <StackPanel>
 
-                                        <TextBlock
+                                            <TextBlock
                                             Text="{Binding Name}"
                                             FontSize="18"
                                             FontWeight="SemiBold"
                                             Foreground="#20242A"/>
 
-                                        <TextBlock
+                                            <TextBlock
                                             Text="{Binding Description}"
                                             Foreground="#707780"
                                             Margin="0,5,0,0"/>
 
-                                        <TextBlock
+                                            <TextBlock
                                             Text="{Binding SerialNumber, StringFormat=Serial: {0}}"
                                             Foreground="#707780"
                                             Margin="0,8,0,0"/>
 
-                                        <TextBlock
+                                            <TextBlock
                                             Text="{Binding IpAddress, StringFormat=IP: {0}}"
                                             Foreground="#707780"/>
 
-                                    </StackPanel>
+                                        </StackPanel>
 
-                                    <Border
+                                        <Border
                                         Grid.Column="1"
                                         Background="#E8F5E9"
                                         CornerRadius="12"
                                         Padding="12,6"
                                         VerticalAlignment="Top">
 
-                                        <TextBlock
+                                            <TextBlock
                                             Text="Active"
                                             Foreground="#2E7D32"
                                             FontWeight="SemiBold"/>
 
-                                    </Border>
+                                        </Border>
 
-                                </Grid>
+                                    </Grid>
 
-                            </Border>
+                                </Border>
 
-                        </DataTemplate>
+                            </DataTemplate>
 
-                    </ItemsControl.ItemTemplate>
+                        </ItemsControl.ItemTemplate>
 
-                </ItemsControl>
+                    </ItemsControl>
 
-            </StackPanel>
+                </StackPanel>
 
-        </Grid>
-
+            </Grid>
+        </Border>
     </ScrollViewer>
 
 </Page>

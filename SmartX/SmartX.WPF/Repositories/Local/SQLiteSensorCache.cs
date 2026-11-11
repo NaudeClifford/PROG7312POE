@@ -31,6 +31,14 @@ public class SQLiteSensorCache(
                 Description,
                 IsActive,
                 GatewayId,
+                IpAddress,
+                Port,
+                Protocol,
+                IsSimulation,
+                IsConnectionEnabled,
+                HasActiveAlert,
+                ActiveAlertMessage,
+                ActiveAlertSeverity,
                 CreatedAt,
                 UpdatedAt
             FROM Sensors
@@ -72,6 +80,14 @@ public class SQLiteSensorCache(
                 Description,
                 IsActive,
                 GatewayId,
+                IpAddress,
+                Port,
+                Protocol,
+                IsSimulation,
+                IsConnectionEnabled,
+                HasActiveAlert,
+                ActiveAlertMessage,
+                ActiveAlertSeverity,
                 CreatedAt,
                 UpdatedAt
             FROM Sensors
@@ -115,6 +131,14 @@ public class SQLiteSensorCache(
                 s.Description,
                 s.IsActive,
                 s.GatewayId,
+                s.IpAddress,
+                s.Port,
+                s.Protocol,
+                s.IsSimulation,
+                s.IsConnectionEnabled,
+                s.HasActiveAlert,
+                s.ActiveAlertMessage,
+                s.ActiveAlertSeverity,
                 s.CreatedAt,
                 s.UpdatedAt
             FROM Sensors s
@@ -165,6 +189,14 @@ public class SQLiteSensorCache(
                 Description = $description,
                 IsActive = $isActive,
                 GatewayId = $gatewayId,
+                IpAddress = $ipAddress,
+                Port = $port,
+                Protocol = $protocol,
+                IsSimulation = $isSimulation,
+                IsConnectionEnabled = $isConnectionEnabled,
+                HasActiveAlert = $hasActiveAlert,
+                ActiveAlertMessage = $activeAlertMessage,
+                ActiveAlertSeverity = $activeAlertSeverity,
                 CreatedAt = $createdAt,
                 UpdatedAt = $updatedAt
             WHERE Id = $id;
@@ -205,6 +237,42 @@ public class SQLiteSensorCache(
                 : (object)DBNull.Value);
 
         command.Parameters.AddWithValue(
+"$ipAddress",
+(object?)sensor.IpAddress ?? DBNull.Value);
+
+        command.Parameters.AddWithValue(
+            "$port",
+            sensor.Port.HasValue
+                ? (object)sensor.Port.Value
+                : DBNull.Value);
+
+        command.Parameters.AddWithValue(
+            "$protocol",
+            (int)sensor.Protocol);
+
+        command.Parameters.AddWithValue(
+            "$isSimulation",
+            sensor.IsSimulation ? 1 : 0);
+
+        command.Parameters.AddWithValue(
+            "$isConnectionEnabled",
+            sensor.IsConnectionEnabled ? 1 : 0);
+
+        command.Parameters.AddWithValue(
+            "$hasActiveAlert",
+            sensor.HasActiveAlert ? 1 : 0);
+
+        command.Parameters.AddWithValue(
+            "$activeAlertMessage",
+            (object?)sensor.ActiveAlertMessage ?? DBNull.Value);
+
+        command.Parameters.AddWithValue(
+            "$activeAlertSeverity",
+            sensor.ActiveAlertSeverity.HasValue
+                ? (object)(int)sensor.ActiveAlertSeverity.Value
+                : DBNull.Value);
+
+        command.Parameters.AddWithValue(
             "$createdAt",
             sensor.CreatedAt.ToString("O"));
 
@@ -232,6 +300,14 @@ public class SQLiteSensorCache(
                 Description,
                 IsActive,
                 GatewayId,
+                IpAddress,
+                Port,
+                Protocol,
+                IsSimulation,
+                IsConnectionEnabled,
+                HasActiveAlert,
+                ActiveAlertMessage,
+                ActiveAlertSeverity,
                 CreatedAt,
                 UpdatedAt
             )
@@ -245,6 +321,14 @@ public class SQLiteSensorCache(
                 $description,
                 $isActive,
                 $gatewayId,
+                $ipAddress,
+                $port,
+                $protocol,
+                $isSimulation,
+                $isConnectionEnabled,
+                $hasActiveAlert,
+                $activeAlertMessage,
+                $activeAlertSeverity,
                 $createdAt,
                 $updatedAt
             );
@@ -301,6 +385,14 @@ public class SQLiteSensorCache(
             Description,
             IsActive,
             GatewayId,
+            IpAddress,
+            Port,
+            Protocol,
+            IsSimulation,
+            IsConnectionEnabled,
+            HasActiveAlert,
+            ActiveAlertMessage,
+            ActiveAlertSeverity,
             CreatedAt,
             UpdatedAt
         FROM Sensors

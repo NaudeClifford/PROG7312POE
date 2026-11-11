@@ -31,10 +31,15 @@ public class JsonTelemetryRepository : ITelemetryRepository
         Guid sensorId,
         CancellationToken cancellationToken = default)
     {
-        var telemetryRecords = await GetAllAsync(cancellationToken);
+        if (sensorId == Guid.Empty)
+            throw new ArgumentException("Invalid sensor ID.", nameof(sensorId));
+
+        var telemetryRecords =
+            await GetAllAsync(cancellationToken);
 
         return telemetryRecords
             .Where(x => x.SensorId == sensorId)
+            .OrderBy(x => x.Timestamp)
             .ToList();
     }
     public async Task<Telemetry?> GetLatestBySensorIdAsync(
@@ -43,7 +48,7 @@ public class JsonTelemetryRepository : ITelemetryRepository
     {
         var telemetryRecords = await GetAllAsync(cancellationToken);
 
-        return telemetryRecords          
+        return telemetryRecords
             .Where(x => x.SensorId == sensorId)
             .OrderByDescending(x => x.Timestamp)
             .FirstOrDefault();
@@ -162,5 +167,37 @@ public class JsonTelemetryRepository : ITelemetryRepository
             .ToList();
     }
 
+    public async Task<IReadOnlyList<Telemetry>> GetLatestByGatewayIdAsync(
+     Guid gatewayId,
+     int countPerSensor,
+     CancellationToken cancellationToken = default)
+    {
+        if (gatewayId == Guid.Empty)
+            return [];
 
+        if (countPerSensor <= 0)
+            return [];
+
+        var sensors = await _sensorRepository.GetByGatewayIdAsync(
+            gatewayId,
+            cancellationToken);
+
+        if (sensors.Count == 0)
+            return [];
+
+        var sensorIds = sensors
+            .Select(x => x.Id)
+            .ToHashSet();
+
+        var records = await GetAllAsync(cancellationToken);
+
+        return records
+            .Where(x => sensorIds.Contains(x.SensorId))
+            .GroupBy(x => x.SensorId)
+            .SelectMany(group => group
+                .OrderByDescending(x => x.Timestamp)
+                .Take(countPerSensor))
+            .OrderBy(x => x.Timestamp)
+            .ToList();
+    }
 }

@@ -63,25 +63,25 @@ Title="Alerts">
                 <Button Content="Process Next"
                 Margin="0,0,10,8"
                 Cursor="Hand"
-                Style="{StaticResource PrimaryButtonStyle}"
+                Style="{StaticResource SecondColourButtonStyle}"
                 Command="{Binding ProcessNextAlertCommand}"/>
 
                 <Button Content="Process All"
                 Margin="0,0,10,8"
                 Cursor="Hand"
-                Style="{StaticResource PrimaryButtonStyle}"
+                Style="{StaticResource SecondColourButtonStyle}"
                 Command="{Binding ProcessAllAlertsCommand}"/>
 
                 <Button Content="Add Demo Alerts"
                 Margin="0,0,10,8"
                 Cursor="Hand"
-                Style="{StaticResource PrimaryButtonStyle}"
+                Style="{StaticResource SecondColourButtonStyle}"
                 Command="{Binding AddDemoAlertsCommand}"/>
 
                 <Button Content="Clear"
                 Margin="0,0,10,8"
                 Cursor="Hand"
-                Style="{StaticResource PrimaryButtonStyle}"
+                Style="{StaticResource SecondColourButtonStyle}"
                 Command="{Binding ClearAlertsCommand}"/>
 
             </WrapPanel>

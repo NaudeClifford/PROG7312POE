@@ -4,6 +4,7 @@ using SmartX.WPF.Navigation;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Session;
 using SmartX.WPF.Views.Pages.Alerts;
+using SmartX.WPF.Views.Pages.CommandStream;
 using SmartX.WPF.Views.Pages.Company;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.History;
@@ -28,8 +29,7 @@ public partial class MainWindow : Window
 
     private bool _isInitializingNavigation;
 
-    private NavigationStage _navigationStage =
-        NavigationStage.Home;
+    private NavigationStage _navigationStage = NavigationStage.Home;
 
     private enum NavigationStage
     {
@@ -38,11 +38,14 @@ public partial class MainWindow : Window
         CurrentCompany,
         Companies,
         Gateway,
+
         Sensors,
         Telemetry,
-        History,
 
+        History,
         Alert,
+        Command,
+
         NetworkMesh,
         CommandHistory
     }
@@ -191,21 +194,17 @@ public partial class MainWindow : Window
         }
     }
 
+
     protected override async void OnClosing(
-    System.ComponentModel.CancelEventArgs e)
+        System.ComponentModel.CancelEventArgs e)
     {
-        if (_isClosing)
+        if (_isClosing || !_session.IsGuest)
         {
             base.OnClosing(e);
             return;
         }
 
-        if (!_session.IsGuest)
-        {
-            base.OnClosing(e);
-            return;
-        }
-
+        // Prevent the window from closing until cleanup finishes.
         e.Cancel = true;
         _isClosing = true;
 
@@ -221,8 +220,12 @@ public partial class MainWindow : Window
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
         }
-
-        Close();
+        finally
+        {
+            // Trigger OnClosing again.
+            // _isClosing allows the second close to proceed.
+            Close();
+        }
     }
 
 
@@ -302,6 +305,9 @@ public partial class MainWindow : Window
             Visibility.Collapsed;
 
         AlertsButton.Visibility =
+            Visibility.Collapsed;
+
+        CommandButton.Visibility =
             Visibility.Collapsed;
 
         LogOutButton.Visibility =
@@ -400,6 +406,18 @@ public partial class MainWindow : Window
             case HistoryPage:
                 _navigationStage = NavigationStage.History;
                 break;
+
+            case AlertsPage:
+                _navigationStage = NavigationStage.Alert;
+                break;
+
+            case RealTimeCommandStreamPage:
+                _navigationStage = NavigationStage.Command;
+                break;
+
+                //case NetworkMeshPage:
+                //_navigationStage = NavigationStage.NetworkMesh;
+                //break;
         }
 
         UpdateNavigation();
@@ -493,11 +511,21 @@ public partial class MainWindow : Window
             case NavigationStage.History:
                 GatewayButton.Visibility = Visibility.Visible;
                 AlertsButton.Visibility = Visibility.Visible;
+                CommandButton.Visibility = Visibility.Visible;
                 break;
 
             case NavigationStage.Alert:
                 HistoryButton.Visibility = Visibility.Visible;
                 GatewayButton.Visibility = Visibility.Visible;
+                CommandButton.Visibility = Visibility.Visible;
+
+                break;
+
+            case NavigationStage.Command:
+                HistoryButton.Visibility = Visibility.Visible;
+                GatewayButton.Visibility = Visibility.Visible;
+                AlertsButton.Visibility = Visibility.Visible;
+
                 break;
 
             case NavigationStage.NetworkMesh:
@@ -540,14 +568,23 @@ public partial class MainWindow : Window
                 break;
 
             case NavigationStage.History:
-                GatewayButton.Visibility =
-                    Visibility.Visible;
+                GatewayButton.Visibility = Visibility.Visible;
                 AlertsButton.Visibility = Visibility.Visible;
-
+                CommandButton.Visibility = Visibility.Visible;
                 break;
+
             case NavigationStage.Alert:
                 HistoryButton.Visibility = Visibility.Visible;
                 GatewayButton.Visibility = Visibility.Visible;
+                CommandButton.Visibility = Visibility.Visible;
+
+                break;
+
+            case NavigationStage.Command:
+                HistoryButton.Visibility = Visibility.Visible;
+                GatewayButton.Visibility = Visibility.Visible;
+                AlertsButton.Visibility = Visibility.Visible;
+
                 break;
 
 
@@ -745,6 +782,16 @@ public partial class MainWindow : Window
             NavigationStage.Alert);
     }
 
+    private void Command_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (!CanAccessGatewayArea())
+            return;
+
+        NavigateTo<RealTimeCommandStreamPage>(NavigationStage.Command);
+    }
+
     private bool CanAccessGatewayArea()
     {
         return _session.Role is
@@ -792,6 +839,7 @@ public partial class MainWindow : Window
 
         NavigatePublicHome();
     }
+
     private async Task CleanupGuestSessionAsync()
     {
         if (!_session.IsGuest)
@@ -809,6 +857,7 @@ public partial class MainWindow : Window
         }
         finally
         {
+            // Always clear the local guest session.
             _session.SignOut();
         }
     }
