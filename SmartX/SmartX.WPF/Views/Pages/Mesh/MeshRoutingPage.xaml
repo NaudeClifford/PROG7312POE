@@ -1,14 +1,294 @@
 ﻿<Page x:Class="SmartX.WPF.Views.Pages.Mesh.MeshRoutingPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:SmartX.WPF.Views.Pages.Mesh"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="MeshRoutingPage">
+      Background="#F3F6FB"
+      Title="Mesh Routing">
 
-    <Grid>
-        
-    </Grid>
+    <Page.Resources>
+
+        <SolidColorBrush x:Key="Primary" Color="#2563EB"/>
+        <SolidColorBrush x:Key="Dark" Color="#172554"/>
+        <SolidColorBrush x:Key="Muted" Color="#64748B"/>
+
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="11"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+            <Setter Property="BorderBrush" Value="#E5EAF2"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#172554"/>
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+
+        <Style x:Key="ActionButton" TargetType="Button">
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Margin" Value="0,8,8,0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="InputBox" TargetType="TextBox">
+            <Setter Property="Height" Value="37"/>
+            <Setter Property="Padding" Value="9,7"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+    </Page.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+        <Border Margin="20"
+    Padding="25"
+    Background="{StaticResource DarkBrush}"
+    CornerRadius="24">
+
+            <Grid Margin="10">
+                <StackPanel Margin="26">
+
+                    <!-- HEADER -->
+
+                    <Border Background="#172554" BorderBrush="White" BorderThickness="2"
+                    CornerRadius="12"
+                    Padding="25"
+                    Margin="0,0,0,20">
+
+                        <StackPanel>
+
+                            <TextBlock Text="Mesh Routing" Style="{StaticResource PageTitleStyle}" TextAlignment="Center" Foreground="White"/>
+
+                            <TextBlock Text="Calculate optimal paths and explore mesh network traversal algorithms."  Style="{StaticResource BodyTextStyle}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- GATEWAY -->
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+                            <TextBlock Text="Network Configuration"
+                               Style="{StaticResource SectionTitle}"/>
+
+                            <TextBlock Text="Gateway ID" Style="{StaticResource BodyTextStyleBlack}"/>
+
+                            <TextBox Text="{Binding GatewayId, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource InputBox}"
+                             MaxWidth="500"
+                             HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ROUTE INPUT -->
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+
+                            <TextBlock Text="Route Configuration"
+                               Style="{StaticResource SectionTitle}"/>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0"
+                                    Margin="0,0,12,0">
+
+                                    <TextBlock Text="Source Node ID" Style="{StaticResource BodyTextStyleBlack}"/>
+
+                                    <TextBox Text="{Binding SourceNodeId, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource InputBox}"/>
+
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1">
+
+                                    <TextBlock Text="Destination Node ID" Style="{StaticResource BodyTextStyleBlack}"/>
+
+                                    <TextBox Text="{Binding DestinationNodeId, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource InputBox}"/>
+
+                                </StackPanel>
+                            </Grid>
+
+                            <TextBlock Text="Route Algorithms" Style="{StaticResource SectionTitle}"/>
+
+                            <WrapPanel HorizontalAlignment="Center">
+                                <Button Content="Shortest Path"
+                                Style="{StaticResource BaseButtonStyle}"
+                                Command="{Binding ShortestPathCommand}"/>
+
+                                <Button Content="BFS Route"
+                                Style="{StaticResource BaseButtonStyle}"
+                                Command="{Binding FindBfsRouteCommand}"/>
+
+                                <Button Content="DFS Route"
+                                Style="{StaticResource BaseButtonStyle}"
+                                Command="{Binding FindDfsRouteCommand}"/>
+                            </WrapPanel>
+
+                        </StackPanel>
+                    </Border>
+
+                    <!-- TRAVERSAL -->
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+
+                            <TextBlock Text="Network Traversal"
+                               Style="{StaticResource SectionTitle}"/>
+
+                            <TextBlock Text="Starting Node ID" Style="{StaticResource BodyTextStyleBlack}"/>
+
+                            <TextBox Text="{Binding StartNodeId, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource InputBox}"
+                             MaxWidth="500"
+                             HorizontalAlignment="Left"/>
+
+                            <WrapPanel Margin="0,8,0,0" HorizontalAlignment="Center">
+
+                                <Button Content="Breadth First Search"
+                                Style="{StaticResource BaseButtonStyle}"
+                                Command="{Binding BreadthFirstSearchCommand}"/>
+
+                                <Button Content="Depth First Search"
+                                Style="{StaticResource BaseButtonStyle}"
+                                Command="{Binding DepthFirstSearchCommand}"/>
+
+                                <Button Content="Minimum Spanning Tree"
+                                Style="{StaticResource BaseButtonStyle}"
+                                Command="{Binding SpanningTreeCommand}"/>
+
+                            </WrapPanel>
+
+                        </StackPanel>
+                    </Border>
+
+                    <!-- STATUS -->
+
+                    <Border Background="#EFF6FF"
+                    BorderBrush="#BFDBFE"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="15"
+                    Margin="0,0,0,15">
+
+                        <StackPanel>
+
+                            <TextBlock Text="{Binding StatusMessage}"
+                               Foreground="#1D4ED8"
+                               FontWeight="SemiBold"
+                               TextWrapping="Wrap"/>
+
+                            <TextBlock Text="{Binding ErrorMessage}"
+                               Foreground="#DC2626"
+                               TextWrapping="Wrap"
+                               Margin="0,6,0,0"/>
+
+                            <TextBlock Text="Calculating..."
+                               Foreground="#2563EB"
+                               Margin="0,5,0,0">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsBusy}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+
+                        </StackPanel>
+                    </Border>
+
+                    <!-- RESULTS -->
+
+                    <Border Style="{StaticResource Card}">
+                        <StackPanel>
+
+                            <TextBlock Text="Algorithm Results"
+                               Style="{StaticResource SectionTitle}"/>
+
+                            <TextBlock Text="{Binding ResultMessage}"
+                               Foreground="#334155"
+                               FontSize="13"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,15"/>
+
+                            <TextBlock Text="Route Result" Style="{StaticResource SectionTitle}"/>
+
+                            <DataGrid ItemsSource="{Binding RoutingResult.PathNodeIds}"
+                              AutoGenerateColumns="True"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              MinHeight="90"
+                              MaxHeight="200"
+                              Background="White"/>
+
+                            <TextBlock Text="Traversal Result" Style="{StaticResource SectionTitle}"/>
+
+                            <DataGrid ItemsSource="{Binding TraversalResult.VisitedNodeIds}"
+                              AutoGenerateColumns="True"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              MinHeight="90"
+                              MaxHeight="200"
+                              Background="White"/>
+
+                            <TextBlock Text="Minimum Spanning Tree" Style="{StaticResource SectionTitle}"/>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel>
+                                    <TextBlock Text="Total Connections" Style="{StaticResource BodyTextStyleBlack}"/>
+
+                                    <TextBlock Text="{Binding SpanningTree.TotalConnections}"
+                                       FontSize="23"
+                                       FontWeight="Bold"
+                                       Foreground="#172554"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Total Cost" Style="{StaticResource BodyTextStyleBlack}"/>
+
+                                    <TextBlock Text="{Binding SpanningTree.TotalCost, StringFormat={}{0:F2}}"
+                                       FontSize="23"
+                                       FontWeight="Bold"
+                                       Foreground="#2563EB"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <DataGrid ItemsSource="{Binding SpanningTree.Connections}"
+                              AutoGenerateColumns="True"
+                              IsReadOnly="True"
+                              CanUserAddRows="False"
+                              MinHeight="100"
+                              MaxHeight="250"
+                              Background="White"
+                              Margin="0,15,0,0"/>
+
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </Grid>
+            </Border>
+    </ScrollViewer>
 </Page>

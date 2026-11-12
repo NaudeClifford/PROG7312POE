@@ -1,26 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿
+using SmartX.WPF.ViewModels.Mesh;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace SmartX.WPF.Views.Pages.Mesh
+namespace SmartX.WPF.Views.Pages.Mesh;
+
+public partial class MeshRoutingPage : Page
 {
-    /// <summary>
-    /// Interaction logic for MeshRoutingPage.xaml
-    /// </summary>
-    public partial class MeshRoutingPage : Page
+    private readonly MeshRoutingViewModel _viewModel;
+
+    public MeshRoutingPage(MeshRoutingViewModel viewModel)
     {
-        public MeshRoutingPage()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+
+        _viewModel = viewModel;
+        DataContext = _viewModel;
     }
 }

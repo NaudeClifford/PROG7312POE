@@ -61,33 +61,28 @@ public class MeshNetworkService
         RoutingAlgorithm algorithm,
         CancellationToken cancellationToken = default)
     {
+        ValidateIds(gatewayId, sourceNodeId, destinationNodeId);
+
         var graph = await BuildGraphAsync(
             gatewayId, cancellationToken);
 
-        MeshRouteResult result;
-
-        switch (algorithm)
+        MeshRouteResult result = algorithm switch
         {
-            case RoutingAlgorithm.Dijkstra:
-                result = _routingService.FindShortestPath(
-                    graph, sourceNodeId, destinationNodeId);
-                break;
+            RoutingAlgorithm.Dijkstra =>
+                _routingService.FindShortestPath(
+                    graph, sourceNodeId, destinationNodeId),
 
-            case RoutingAlgorithm.BreadthFirstSearch:
-                result = CalculateBfsRoute(
-                    graph, sourceNodeId, destinationNodeId);
-                break;
+            RoutingAlgorithm.BreadthFirstSearch =>
+                _traversalService.FindBfsRoute(
+                    graph, sourceNodeId, destinationNodeId),
 
-            case RoutingAlgorithm.DepthFirstSearch:
-                result = CalculateDfsRoute(
-                    graph, sourceNodeId, destinationNodeId);
-                break;
+            RoutingAlgorithm.DepthFirstSearch =>
+                _traversalService.FindDfsRoute(
+                    graph, sourceNodeId, destinationNodeId),
 
-            default:
-                throw new NotSupportedException(
-                    $"Routing algorithm {algorithm} is not supported " +
-                    "for source-to-destination route calculation.");
-        }
+            _ => throw new NotSupportedException(
+                $"Routing algorithm {algorithm} is not supported.")
+        };
 
         if (!result.Success)
             return result;
@@ -119,6 +114,9 @@ public class MeshNetworkService
         RoutingAlgorithm algorithm,
         CancellationToken cancellationToken = default)
     {
+        if (gatewayId == Guid.Empty || startNodeId == Guid.Empty)
+            throw new ArgumentException("Valid gateway and node IDs are required.");
+
         var graph = await BuildGraphAsync(
             gatewayId, cancellationToken);
 
@@ -142,6 +140,9 @@ public class MeshNetworkService
         Guid startNodeId,
         CancellationToken cancellationToken = default)
     {
+        if (gatewayId == Guid.Empty || startNodeId == Guid.Empty)
+            throw new ArgumentException("Valid gateway and node IDs are required.");
+
         var graph = await BuildGraphAsync(
             gatewayId, cancellationToken);
 
@@ -149,92 +150,20 @@ public class MeshNetworkService
             graph, startNodeId);
     }
 
-    private MeshRouteResult CalculateBfsRoute(
-        MeshGraph graph,
-        Guid sourceId,
-        Guid destinationId)
+    private static void ValidateIds(
+    Guid gatewayId,
+    Guid sourceNodeId,
+    Guid destinationNodeId)
     {
-        var path = _traversalService.BreadthFirstSearch(
-            graph, sourceId);
+        if (gatewayId == Guid.Empty)
+            throw new ArgumentException("Gateway ID is required.");
 
-        return BuildTraversalResult(
-            graph, sourceId, destinationId, path);
-    }
+        if (sourceNodeId == Guid.Empty ||
+            destinationNodeId == Guid.Empty)
+            throw new ArgumentException("Valid node IDs are required.");
 
-    private MeshRouteResult CalculateDfsRoute(
-        MeshGraph graph,
-        Guid sourceId,
-        Guid destinationId)
-    {
-        var path = _traversalService.DepthFirstSearch(
-            graph, sourceId);
-
-        return BuildTraversalResult(
-            graph, sourceId, destinationId, path);
-    }
-
-    private static MeshRouteResult BuildTraversalResult(
-        MeshGraph graph,
-        Guid sourceId,
-        Guid destinationId,
-        List<Guid> traversal)
-    {
-        var result = new MeshRouteResult
-        {
-            SourceNodeId = sourceId,
-            DestinationNodeId = destinationId
-        };
-
-        if (graph.GetNode(sourceId) is not { IsOnline: true } ||
-            graph.GetNode(destinationId) is not { IsOnline: true })
-        {
-            result.Message = "Source or destination is offline.";
-            return result;
-        }
-
-        var destinationIndex = traversal.IndexOf(destinationId);
-
-        if (destinationIndex < 0)
-        {
-            result.Message = "No available route to destination.";
-            return result;
-        }
-
-        var path = traversal
-            .Take(destinationIndex + 1)
-            .ToList();
-
-        double cost = 0;
-        double latency = 0;
-        double energy = 0;
-
-        for (int i = 0; i < path.Count - 1; i++)
-        {
-            var current = graph.GetNode(path[i])!;
-
-            var edge = current.Connections.FirstOrDefault(
-                x => x.DestinationNodeId == path[i + 1] &&
-                     x.IsActive);
-
-            if (edge is null)
-            {
-                result.Message = "Route contains an unavailable link.";
-                return result;
-            }
-
-            cost += edge.RoutingCost;
-            latency += edge.Latency;
-            energy += edge.EnergyCost;
-        }
-
-        result.Success = true;
-        result.NodePath = path;
-        result.TotalCost = cost;
-        result.TotalLatency = latency;
-        result.TotalEnergyCost = energy;
-        result.HopCount = path.Count - 1;
-        result.Message = "Route successfully calculated.";
-
-        return result;
+        if (sourceNodeId == destinationNodeId)
+            throw new ArgumentException(
+                "Source and destination must be different.");
     }
 }

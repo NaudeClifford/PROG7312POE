@@ -1,6 +1,8 @@
 ﻿using Mapster;
 using SmartX.Domain.Entities;
+using SmartX.Domain.Entities.Mesh;
 using SmartX.Shared.DTOs;
+using SmartX.Shared.DTOs.Mesh;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
 
@@ -8,40 +10,75 @@ namespace SmartX.Shared.Mapping;
 
 public static class MappingConfiguration
 {
+    private static bool _configured;
+
     public static void Configure()
     {
-        // Sensor
+        if (_configured)
+            return;
+
+        _configured = true;
+
+        // SENSOR
+
         TypeAdapterConfig<Sensor, SensorDto>
             .NewConfig()
-            .Map(
-                dest => dest.Category,
-                src => (int)src.Category);
+            .Map(dest => dest.Category,
+                 src => (int)src.Category);
 
-        // Telemetry
-        TypeAdapterConfig<Telemetry, TelemetryDto>.NewConfig();
+        // TELEMETRY
 
-        // User
-        TypeAdapterConfig<User, UserDto>.NewConfig();
+        TypeAdapterConfig<Telemetry, TelemetryDto>
+            .NewConfig();
 
-        // Company
-        TypeAdapterConfig<Company, CompanyDto>.NewConfig();
+        // USER
 
-        // Gateway
-        TypeAdapterConfig<Gateway, GatewayDto>.NewConfig();
+        TypeAdapterConfig<User, UserDto>
+            .NewConfig();
 
-        // Sensor log file
-        TypeAdapterConfig<SensorLogFile, SensorLogFileDto>.NewConfig();
+        // COMPANY
 
-        // Company DTO -> Entity
-        TypeAdapterConfig<CompanyDto, Company>.NewConfig();
+        TypeAdapterConfig<Company, CompanyDto>
+            .NewConfig();
 
-        // Company configuration
-        TypeAdapterConfig<CompanyConfiguration, CompanyConfigurationDto>.NewConfig();
+        TypeAdapterConfig<CompanyDto, Company>
+            .NewConfig();
 
-        // User behavior DTO -> Entity
-        TypeAdapterConfig<UserBehaviorDto, UserBehavior>.NewConfig();
+        TypeAdapterConfig<CompanyConfiguration, CompanyConfigurationDto>
+            .NewConfig();
 
-        // User behavior Entity -> DTO
-        TypeAdapterConfig<UserBehavior, UserBehaviorDto>.NewConfig();
+        // GATEWAY
+
+        TypeAdapterConfig<Gateway, GatewayDto>
+            .NewConfig();
+
+        // SENSOR LOG FILE
+
+        TypeAdapterConfig<SensorLogFile, SensorLogFileDto>
+            .NewConfig();
+
+        // USER BEHAVIOUR
+
+        TypeAdapterConfig<UserBehavior, UserBehaviorDto>
+            .NewConfig();
+
+        TypeAdapterConfig<UserBehaviorDto, UserBehavior>
+            .NewConfig();
+
+        // MESH
+
+        TypeAdapterConfig<MeshNode, MeshNodeDto>
+            .NewConfig();
+
+        TypeAdapterConfig<MeshLink, MeshLinkDto>
+            .NewConfig();
+
+        TypeAdapterConfig<MeshConnection, MeshConnectionDto>
+            .NewConfig();
+
+        TypeAdapterConfig<MeshLog, MeshLogDto>
+            .NewConfig();
+
+
     }
 }

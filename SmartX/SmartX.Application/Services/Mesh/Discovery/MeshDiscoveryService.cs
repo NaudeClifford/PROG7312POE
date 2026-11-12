@@ -82,11 +82,13 @@ public class MeshDiscoveryService(
                 gatewayId,
                 cancellationToken);
 
-        var nodesByDevice = existingNodes.ToDictionary(
-            x => (x.DeviceId, x.NodeType));
+        var nodesByDevice = existingNodes
+            .GroupBy(x => (x.DeviceId, x.NodeType))
+            .ToDictionary(x => x.Key, x => x.First());
 
-        var linksByEndpoints = existingLinks.ToDictionary(
-            x => (x.SourceNodeId, x.TargetNodeId));
+        var linksByEndpoints = existingLinks
+            .GroupBy(x => (x.SourceNodeId, x.TargetNodeId))
+            .ToDictionary(x => x.Key, x => x.First());
 
         int changes = 0;
 
@@ -185,5 +187,14 @@ public class MeshDiscoveryService(
                 "A valid gateway ID is required.",
                 nameof(gatewayId));
         }
+    }
+
+    private static (Guid First, Guid Second) NormalizeEndpoints(
+    Guid source,
+    Guid target)
+    {
+        return source.CompareTo(target) < 0
+            ? (source, target)
+            : (target, source);
     }
 }

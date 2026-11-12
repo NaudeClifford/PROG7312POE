@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET10_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NET10_0_OR_GREATER;NETCOREAPP1_0_OR_GREATER;NETCOREAPP1_1_OR_GREATER;NETCOREAPP2_0_OR_GREATER;NETCOREAPP2_1_OR_GREATER;NETCOREAPP2_2_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\App.xaml
-27882071707
+27628789336
 11413424753
-102585067907
-257-517332961
-Resources\Styles\ButtonStyles.xaml;Resources\Styles\CardStyles.xaml;Resources\Styles\Colors.xaml;Resources\Styles\ComboBoxStyle.xaml;Resources\Styles\TextStyles.xaml;Views\Controls\PredictiveWarningView.xaml;Views\Pages\Alerts\AlertsPage.xaml;Views\Pages\CommandStream\RealTimeCommandStreamPage.xaml;Views\Pages\Company\CompaniesPage.xaml;Views\Pages\Company\CurrentCompanyPage.xaml;Views\Pages\Gateway\GatewayEditPage.xaml;Views\Pages\Gateway\GatewayPage.xaml;Views\Pages\Gateway\GatewaySetupPage.xaml;Views\Pages\History\HistoryPage.xaml;Views\Pages\Home\HomePage.xaml;Views\Pages\Mesh\MeshDashboardPage.xaml;Views\Pages\Mesh\MeshRoutingPage.xaml;Views\Pages\Mesh\NetwordTopologyPage.xaml;Views\Pages\Sensor\SensorEditPage.xaml;Views\Pages\Sensor\SensorSetupPage.xaml;Views\Pages\Sensor\SensorsPage.xaml;Views\Pages\Signin\SigninPage.xaml;Views\Pages\SignUp\CompanyServicesPage.xaml;Views\Pages\SignUp\SignUpPage.xaml;Views\Pages\Telemetry\TelemetryPage.xaml;Views\Pages\Users\UsersPage.xaml;Views\Windows\MainWindow.xaml;
+1021457538246
+258-712163409
+Resources\Styles\ButtonStyles.xaml;Resources\Styles\CardStyles.xaml;Resources\Styles\Colors.xaml;Resources\Styles\ComboBoxStyle.xaml;Resources\Styles\TextStyles.xaml;Views\Controls\PredictiveWarningView.xaml;Views\Pages\Alerts\AlertsPage.xaml;Views\Pages\CommandStream\RealTimeCommandStreamPage.xaml;Views\Pages\Company\CompaniesPage.xaml;Views\Pages\Company\CurrentCompanyPage.xaml;Views\Pages\Gateway\GatewayEditPage.xaml;Views\Pages\Gateway\GatewayPage.xaml;Views\Pages\Gateway\GatewaySetupPage.xaml;Views\Pages\History\HistoryPage.xaml;Views\Pages\Home\HomePage.xaml;Views\Pages\Mesh\MeshDashboardPage.xaml;Views\Pages\Mesh\MeshRoutingPage.xaml;Views\Pages\Mesh\NetworkTopologyPage.xaml;Views\Pages\Sensor\SensorEditPage.xaml;Views\Pages\Sensor\SensorSetupPage.xaml;Views\Pages\Sensor\SensorsPage.xaml;Views\Pages\Signin\SigninPage.xaml;Views\Pages\SignUp\CompanyServicesPage.xaml;Views\Pages\SignUp\SignUpPage.xaml;Views\Pages\Telemetry\TelemetryPage.xaml;Views\Pages\Users\UsersPage.xaml;Views\Windows\MainWindow.xaml;
 
 False
 

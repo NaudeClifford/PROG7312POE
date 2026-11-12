@@ -2,7 +2,7 @@
 
 namespace SmartX.Shared.Mapping;
 
-public sealed class MapsterMapper : IMapper
+public sealed class MapsterObjectMapper : IMapper
 {
     public TDestination Map<TDestination>(object source)
     {

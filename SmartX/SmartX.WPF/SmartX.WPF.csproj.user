@@ -40,7 +40,7 @@
     <Compile Update="Views\Pages\Mesh\MeshRoutingPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Pages\Mesh\NetwordTopologyPage.xaml.cs">
+    <Compile Update="Views\Pages\Mesh\NetworkTopologyPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Pages\Sensor\SensorEditPage.xaml.cs">

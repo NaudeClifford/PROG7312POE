@@ -22,6 +22,7 @@ using SmartX.WPF.ViewModels.Alerts;
 using SmartX.WPF.ViewModels.CommandStream;
 using SmartX.WPF.ViewModels.Gateway;
 using SmartX.WPF.ViewModels.History;
+using SmartX.WPF.ViewModels.Mesh;
 using SmartX.WPF.ViewModels.Pages.Company;
 using SmartX.WPF.ViewModels.Pages.Sensor;
 using SmartX.WPF.ViewModels.Pages.Users;
@@ -33,6 +34,7 @@ using SmartX.WPF.Views.Pages.Company;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.History;
 using SmartX.WPF.Views.Pages.Home;
+using SmartX.WPF.Views.Pages.Mesh;
 using SmartX.WPF.Views.Pages.Sensor;
 using SmartX.WPF.Views.Pages.Signin;
 using SmartX.WPF.Views.Pages.SignUp;
@@ -153,6 +155,9 @@ public partial class App
         services.AddTransient<CompanyServicesViewModel>();
         services.AddTransient<AlertsViewModel>();
         services.AddTransient<RealTimeCommandViewModel>();
+        services.AddTransient<MeshDashboardViewModel>();
+        services.AddTransient<MeshRoutingViewModel>();
+        services.AddTransient<NetworkTopologyViewModel>();
 
         // Pages
         services.AddTransient<HomePage>();
@@ -172,6 +177,9 @@ public partial class App
         services.AddTransient<CompanyServicesPage>();
         services.AddTransient<AlertsPage>();
         services.AddTransient<RealTimeCommandStreamPage>();
+        services.AddTransient<MeshDashboardPage>();
+        services.AddTransient<MeshRoutingPage>();
+        services.AddTransient<NetworkTopologyPage>();
 
         //Main window
         services.AddSingleton<MainWindow>();

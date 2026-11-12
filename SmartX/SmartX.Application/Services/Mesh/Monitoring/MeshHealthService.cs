@@ -31,20 +31,23 @@ public class MeshHealthService : IMeshHealthService
                 nameof(gatewayId));
 
         var nodes = await _nodeRepository.GetByGatewayIdAsync(
-            gatewayId,
-            cancellationToken);
+            gatewayId, cancellationToken);
 
         var links = await _linkRepository.GetByGatewayIdAsync(
-            gatewayId,
-            cancellationToken);
+            gatewayId, cancellationToken);
 
-        // Adapt this call if your route repository uses
-        // a different method name.
         var routes = await _routeRepository.GetByGatewayIdAsync(
-            gatewayId,
-            cancellationToken);
+            gatewayId, cancellationToken);
 
         cancellationToken.ThrowIfCancellationRequested();
+
+        var availableLinks = links
+            .Where(x => x.IsAvailable)
+            .ToList();
+
+        var successfulRoutes = routes
+            .Where(x => x.IsSuccessful)
+            .ToList();
 
         var report = new MeshHealthReport
         {
@@ -64,96 +67,91 @@ public class MeshHealthService : IMeshHealthService
 
             UnreachableNodes = nodes.Count(x =>
                 x.Status == MeshNodeStatus.Unreachable),
+
             TotalLinks = links.Count,
 
-            AvailableLinks = links.Count(x =>
-                x.IsAvailable),
+            AvailableLinks = availableLinks.Count,
 
-            UnavailableLinks = links.Count(x =>
-                !x.IsAvailable),
+            UnavailableLinks = links.Count -
+                               availableLinks.Count,
 
             TotalRoutes = routes.Count,
 
-            SuccessfulRoutes = routes.Count(x =>
-                x.IsSuccessful),
+            SuccessfulRoutes = successfulRoutes.Count,
 
             FailedRoutes = routes.Count(x =>
-                !x.IsSuccessful)
+                !x.IsSuccessful),
+
+            AverageLatency = availableLinks.Count == 0
+                ? 0
+                : availableLinks.Average(x =>
+                    x.LatencyMilliseconds ?? 0),
+
+            NetworkAvailability = nodes.Count == 0
+                ? 0
+                : (double)nodes.Count(x =>
+                    x.Status == MeshNodeStatus.Online) /
+                  nodes.Count * 100
         };
 
-        // Calculate network availability.
-        report.NetworkAvailability =
-            report.TotalNodes == 0
-                ? 0
-                : (double)report.OnlineNodes /
-                  report.TotalNodes * 100;
+        GenerateWarnings(report);
 
-        // Calculate average route latency.
-        var successfulRoutes = routes
-            .Where(x => x.IsSuccessful)
-            .ToList();
-
-        report.AverageLatency =
-            successfulRoutes.Count == 0
-                ? 0
-                : successfulRoutes.Average(x =>
-                    x.TotalLatency);
-
-        // Generate health warnings.
-        if (report.TotalNodes == 0)
-        {
-            report.Warnings.Add(
-                "No mesh nodes were found.");
-        }
-
-        if (report.OfflineNodes > 0)
-        {
-            report.Warnings.Add(
-                $"{report.OfflineNodes} mesh node(s) are offline.");
-        }
-
-        if (report.DegradedNodes > 0)
-        {
-            report.Warnings.Add(
-                $"{report.DegradedNodes} mesh node(s) are degraded.");
-        }
-
-        if (report.UnavailableLinks > 0)
-        {
-            report.Warnings.Add(
-                $"{report.UnavailableLinks} mesh link(s) are unavailable.");
-        }
-
-        if (report.FailedRoutes > 0)
-        {
-            report.Warnings.Add(
-                $"{report.FailedRoutes} route(s) failed.");
-        }
-
-        // Determine overall health.
         report.Status = CalculateHealthStatus(report);
 
         return report;
     }
 
+    private static void GenerateWarnings(
+        MeshHealthReport report)
+    {
+        if (report.TotalNodes == 0)
+            report.Warnings.Add("No mesh nodes found.");
+
+        if (report.OfflineNodes > 0)
+            report.Warnings.Add(
+                $"{report.OfflineNodes} node(s) offline.");
+
+        if (report.DegradedNodes > 0)
+            report.Warnings.Add(
+                $"{report.DegradedNodes} node(s) degraded.");
+
+        if (report.UnreachableNodes > 0)
+            report.Warnings.Add(
+                $"{report.UnreachableNodes} node(s) unreachable.");
+
+        if (report.UnavailableLinks > 0)
+            report.Warnings.Add(
+                $"{report.UnavailableLinks} link(s) unavailable.");
+
+        if (report.FailedRoutes > 0)
+            report.Warnings.Add(
+                $"{report.FailedRoutes} historical route(s) failed.");
+
+        if (report.AvailableLinks == 0 &&
+            report.TotalLinks > 0)
+        {
+            report.Warnings.Add(
+                "No available mesh connections.");
+        }
+    }
+
     private static MeshHealthStatus CalculateHealthStatus(
-    MeshHealthReport report)
+        MeshHealthReport report)
     {
         if (report.TotalNodes == 0 ||
             report.OnlineNodes == 0)
-        {
             return MeshHealthStatus.Offline;
-        }
+
+        if (report.UnreachableNodes > 0 ||
+            report.NetworkAvailability < 50 ||
+            report.AvailableLinks == 0 &&
+            report.TotalLinks > 0)
+            return MeshHealthStatus.Critical;
 
         if (report.OfflineNodes > 0 ||
-            report.UnreachableNodes > 0 ||
-            report.FailedRoutes > 0 ||
+            report.DegradedNodes > 0 ||
+            report.NetworkAvailability < 90 ||
             report.UnavailableLinks > 0)
-        {
-            return MeshHealthStatus.Critical;
-        }
-
-        if (report.DegradedNodes > 0)
             return MeshHealthStatus.Degraded;
 
         return MeshHealthStatus.Healthy;

@@ -247,6 +247,32 @@
                         Visibility="Collapsed"
                         Style="{StaticResource BaseButtonStyle}"/>
 
+                    <!-- Mesh Dashboard -->
+
+                    <Button
+                x:Name="MeshDashboardButton"
+                Content="Mesh Dashboard"
+                Click="MeshDashboard_Click"
+                Visibility="Collapsed"
+                Style="{StaticResource BaseButtonStyle}"/>
+
+                    <!-- Mesh Routing -->
+
+                    <Button
+                x:Name="MeshRoutingButton"
+                Content="Mesh Routing"
+                Click="MeshRouting_Click"
+                Visibility="Collapsed"
+                Style="{StaticResource BaseButtonStyle}"/>
+
+                    <!-- Network Topology -->
+                    <Button
+                        x:Name="NetworkTopologyButton"
+                        Content="Network Topology"
+                        Click="NetworkTopology_Click"
+                        Visibility="Collapsed"
+                        Style="{StaticResource BaseButtonStyle}"/>
+
                     <!-- USERS -->
 
                     <Button

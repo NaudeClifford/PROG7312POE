@@ -9,6 +9,7 @@ using SmartX.WPF.Views.Pages.Company;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.History;
 using SmartX.WPF.Views.Pages.Home;
+using SmartX.WPF.Views.Pages.Mesh;
 using SmartX.WPF.Views.Pages.Sensor;
 using SmartX.WPF.Views.Pages.Telemetry;
 using SmartX.WPF.Views.Pages.Users;
@@ -46,8 +47,9 @@ public partial class MainWindow : Window
         Alert,
         Command,
 
-        NetworkMesh,
-        CommandHistory
+        MeshDashboard,
+        MeshRouting,
+        NetworkTopology
     }
 
     public MainWindow(
@@ -310,6 +312,15 @@ public partial class MainWindow : Window
         CommandButton.Visibility =
             Visibility.Collapsed;
 
+        MeshDashboardButton.Visibility =
+            Visibility.Collapsed;
+
+        MeshRoutingButton.Visibility =
+            Visibility.Collapsed;
+
+        NetworkTopologyButton.Visibility =
+            Visibility.Collapsed;
+
         LogOutButton.Visibility =
             Visibility.Collapsed;
     }
@@ -528,13 +539,24 @@ public partial class MainWindow : Window
 
                 break;
 
-            case NavigationStage.NetworkMesh:
-            case NavigationStage.CommandHistory:
-                GatewayButton.Visibility =
-                    Visibility.Visible;
+            case NavigationStage.MeshDashboard:
+                GatewayButton.Visibility = Visibility.Visible;
+                MeshRoutingButton.Visibility = Visibility.Visible;
+                NetworkTopologyButton.Visibility = Visibility.Visible;
+                break;
 
-                HistoryButton.Visibility =
-                    Visibility.Visible;
+            case NavigationStage.MeshRouting:
+                MeshDashboardButton.Visibility = Visibility.Visible;
+                GatewayButton.Visibility = Visibility.Visible;
+                NetworkTopologyButton.Visibility = Visibility.Visible;
+
+                break;
+
+            case NavigationStage.NetworkTopology:
+                MeshRoutingButton.Visibility = Visibility.Visible;
+                GatewayButton.Visibility = Visibility.Visible;
+                MeshDashboardButton.Visibility = Visibility.Visible;
+
                 break;
         }
     }
@@ -588,13 +610,24 @@ public partial class MainWindow : Window
                 break;
 
 
-            case NavigationStage.NetworkMesh:
-            case NavigationStage.CommandHistory:
-                GatewayButton.Visibility =
-                    Visibility.Visible;
+            case NavigationStage.MeshDashboard:
+                GatewayButton.Visibility = Visibility.Visible;
+                MeshRoutingButton.Visibility = Visibility.Visible;
+                NetworkTopologyButton.Visibility = Visibility.Visible;
+                break;
 
-                HistoryButton.Visibility =
-                    Visibility.Visible;
+            case NavigationStage.MeshRouting:
+                MeshDashboardButton.Visibility = Visibility.Visible;
+                GatewayButton.Visibility = Visibility.Visible;
+                NetworkTopologyButton.Visibility = Visibility.Visible;
+
+                break;
+
+            case NavigationStage.NetworkTopology:
+                MeshRoutingButton.Visibility = Visibility.Visible;
+                GatewayButton.Visibility = Visibility.Visible;
+                MeshDashboardButton.Visibility = Visibility.Visible;
+
                 break;
         }
     }
@@ -660,25 +693,6 @@ public partial class MainWindow : Window
         HideNavigation();
 
         MainFrame.Navigate(_homePage);
-    }
-
-    private void SetOfflineStatus()
-    {
-        ConnectionStatusIndicator.Fill =
-            new System.Windows.Media.SolidColorBrush(
-                System.Windows.Media.Color.FromRgb(
-                    0xDC,
-                    0x35,
-                    0x45));
-
-        ConnectionStatusText.Text = "Offline";
-
-        ConnectionStatusText.Foreground =
-            new System.Windows.Media.SolidColorBrush(
-                System.Windows.Media.Color.FromRgb(
-                    0xC8,
-                    0x23,
-                    0x33));
     }
 
     private void Users_Click(
@@ -791,6 +805,41 @@ public partial class MainWindow : Window
 
         NavigateTo<RealTimeCommandStreamPage>(NavigationStage.Command);
     }
+
+    private void MeshDashboard_Click(
+    object sender,
+    RoutedEventArgs e)
+    {
+        if (!CanAccessGatewayArea())
+            return;
+
+        NavigateTo<MeshDashboardPage>(
+            NavigationStage.MeshDashboard);
+    }
+
+    private void MeshRouting_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (!CanAccessGatewayArea())
+            return;
+
+        NavigateTo<MeshRoutingPage>(
+            NavigationStage.MeshRouting);
+    }
+
+    private void Networking_Click(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (!CanAccessGatewayArea())
+            return;
+
+        NavigateTo<NetworkTopologyPage>(
+            NavigationStage.NetworkTopology);
+    }
+
+
 
     private bool CanAccessGatewayArea()
     {

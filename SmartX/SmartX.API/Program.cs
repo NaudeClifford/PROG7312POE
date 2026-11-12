@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication;
 using SmartX.API.Services.PredictiveEngine;
 using SmartX.Application;
+using SmartX.Application.Services.Mesh.Monitoring;
 using SmartX.Application.Services.PredictiveEngine;
 using SmartX.Application.Services.Sensors.Interfaces;
 using SmartX.Domain.Interfaces;
@@ -26,11 +27,16 @@ namespace SmartX.API
                 .AddSmartXMapping()
                 .AddControllers();
 
-            builder.Services.AddScoped<IPredictiveWarningService,
-                LivePredictiveWarningService>();
+            builder.Services.AddScoped<IPredictiveWarningService, LivePredictiveWarningService>();
 
-            builder.Services.AddScoped<IPredictiveSuggestionProvider,
-                PredictiveSuggestionProvider>();
+            builder.Services.AddScoped<IPredictiveSuggestionProvider, PredictiveSuggestionProvider>();
+
+
+            // Configure Mapster
+            MappingConfiguration.Configure();
+
+            // Register mapper
+            builder.Services.AddScoped<IMapper, MapsterObjectMapper>();
 
             builder.Services
                 .AddAuthentication(options =>
@@ -41,6 +47,7 @@ namespace SmartX.API
                 .AddScheme<AuthenticationSchemeOptions, FirebaseAuthHandler>(
                     "Firebase",
                     options => { });
+
             builder.Services.AddScoped<IFirebaseUserService, FirebaseAuthService>();
 
             builder.Services.AddAuthorization();
@@ -54,6 +61,10 @@ namespace SmartX.API
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            builder.Services.Configure<MeshMonitoringOptions>(
+
+            builder.Configuration.GetSection("MeshMonitoring"));
 
             var app = builder.Build();
             using (var scope = app.Services.CreateScope())

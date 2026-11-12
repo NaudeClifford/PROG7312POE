@@ -9,7 +9,7 @@ public static class MappingServiceCollectionExtensions
     {
         MappingConfiguration.Configure();
 
-        services.AddSingleton<IMapper, MapsterMapper>();
+        services.AddSingleton<IMapper, MapsterObjectMapper>();
 
         return services;
     }

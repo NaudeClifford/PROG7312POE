@@ -1,4 +1,6 @@
-﻿using SmartX.Application.Interfaces.Mesh;
+﻿
+using SmartX.Application.Interfaces.Mesh;
+using SmartX.Application.Services.Mesh.Monitoring;
 using SmartX.Domain.Entities.Mesh;
 using SmartX.Domain.Enums.Mesh;
 using SmartX.Domain.Interfaces.Mesh;
@@ -9,17 +11,19 @@ public class MeshLinkQualityService : IMeshLinkQualityService
 {
     private readonly IMeshLinkRepository _linkRepository;
     private readonly IMeshLogRepository _logRepository;
-
+    private readonly MeshMonitoringOptions _options;
     private const double SignalWeight = 0.5;
     private const double LatencyWeight = 0.3;
     private const double EnergyWeight = 0.2;
 
     public MeshLinkQualityService(
         IMeshLinkRepository linkRepository,
-        IMeshLogRepository logRepository)
+        IMeshLogRepository logRepository,
+        MeshMonitoringOptions options)
     {
         _linkRepository = linkRepository;
         _logRepository = logRepository;
+        _options = options;
     }
 
     public async Task EvaluateGatewayLinksAsync(
@@ -72,28 +76,38 @@ public class MeshLinkQualityService : IMeshLinkQualityService
     {
         var previousAvailability = link.IsAvailable;
 
-        var previousSignal = link.SignalStrengthDbm;
-        var previousLatency = link.LatencyMilliseconds;
-        var previousEnergy = link.EnergyCost;
+        var now = DateTime.UtcNow;
 
         var quality = CalculateLinkQuality(
             link.SignalStrengthDbm,
             link.LatencyMilliseconds,
             link.EnergyCost);
 
-        var isAvailable =
-            quality >= 20 &&
-            link.LastSeenAt >=
-            DateTime.UtcNow.AddMinutes(-2);
+        var isRecent =
+            link.LastSeenAt >= now.AddMinutes(
+                -_options.LinkTimeoutMinutes);
 
-        link.IsAvailable = isAvailable;
-        link.UpdatedAt = DateTime.UtcNow;
+        var isAvailable =
+            quality >= _options.MinimumLinkQuality &&
+            isRecent;
+
+        if (previousAvailability != isAvailable)
+        {
+            link.IsAvailable = isAvailable;
+            link.UpdatedAt = now;
+
+            await _linkRepository.UpdateAsync(
+                link,
+                cancellationToken);
+
+            // Log availability transition.
+        }
 
         await _linkRepository.UpdateAsync(
             link,
             cancellationToken);
 
-        if (previousAvailability != link.IsAvailable)
+        if (previousAvailability != isAvailable)
         {
             await _logRepository.AddAsync(
                 new MeshLog
@@ -102,15 +116,14 @@ public class MeshLinkQualityService : IMeshLinkQualityService
                     GatewayId = link.GatewayId,
                     ConnectionId = link.Id,
                     EventType = "LinkAvailabilityChanged",
-                    Message = link.IsAvailable
+                    Message = isAvailable
                         ? "Mesh link became available."
                         : "Mesh link became unavailable.",
-                    Severity = link.IsAvailable
+                    Severity = isAvailable
                         ? MeshLogSeverity.Information
                         : MeshLogSeverity.Warning,
-                    Details =
-                        $"Link quality: {quality:F2}%. " +
-                        $"Previous availability: {previousAvailability}.",
+                    Details = $"Link quality: {quality:F2}%. " +
+                              $"Previous availability: {previousAvailability}.",
                     Timestamp = DateTime.UtcNow
                 },
                 cancellationToken);
@@ -125,14 +138,19 @@ public class MeshLinkQualityService : IMeshLinkQualityService
         if (!signalStrengthDbm.HasValue ||
             !latencyMilliseconds.HasValue ||
             !energyCost.HasValue)
-        {
             return 0;
-        }
 
-        var signalQuality = Math.Clamp(
-            (signalStrengthDbm.Value + 100) * 2,
-            0,
-            100);
+        if (!double.IsFinite(signalStrengthDbm.Value) ||
+            !double.IsFinite(latencyMilliseconds.Value) ||
+            !double.IsFinite(energyCost.Value))
+            return 0;
+
+        if (latencyMilliseconds.Value < 0 ||
+            energyCost.Value < 0)
+            return 0;
+
+        var signalQuality = CalculateSignalQuality(
+            signalStrengthDbm.Value);
 
         var latencyQuality = CalculateLatencyQuality(
             latencyMilliseconds.Value);
@@ -153,32 +171,43 @@ public class MeshLinkQualityService : IMeshLinkQualityService
         double latencyMilliseconds,
         double energyCost)
     {
+        if (!double.IsFinite(linkQuality) ||
+            !double.IsFinite(latencyMilliseconds) ||
+            !double.IsFinite(energyCost) ||
+            latencyMilliseconds < 0 ||
+            energyCost < 0)
+        {
+            return double.MaxValue;
+        }
+
         return
             (100 - Math.Clamp(linkQuality, 0, 100)) * 0.5 +
             latencyMilliseconds * 0.3 +
             energyCost * 0.2;
     }
 
-    private static double CalculateLatencyQuality(
-        double latency)
+    private static double CalculateSignalQuality(double signal)
     {
-        if (!double.IsFinite(latency) || latency < 0)
-            return 0;
-
         return Math.Clamp(
-            100 - latency,
+            (signal + 100) * 2,
             0,
             100);
     }
 
-    private static double CalculateEnergyQuality(
-        double energy)
+    private double CalculateLatencyQuality(double latency)
     {
-        if (!double.IsFinite(energy) || energy < 0)
-            return 0;
-
         return Math.Clamp(
-            100 - energy,
+            100 * (1 - latency /
+                _options.MaximumLatencyMilliseconds),
+            0,
+            100);
+    }
+
+    private double CalculateEnergyQuality(double energy)
+    {
+        return Math.Clamp(
+            100 * (1 - energy /
+                _options.MaximumEnergyCost),
             0,
             100);
     }

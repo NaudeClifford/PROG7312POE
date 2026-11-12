@@ -25,6 +25,7 @@ using SmartX.Application.Services.Sensors;
 using SmartX.Application.Services.Sensors.Command;
 using SmartX.Application.Services.Sensors.Interfaces;
 using SmartX.Application.Services.Telemetry;
+using SmartX.Application.Services.Telemetry.Structures;
 using SmartX.Application.Validators;
 using SmartX.Application.Validators.Company;
 using SmartX.Application.Validators.Sensor;
@@ -54,15 +55,22 @@ public static class DependencyInjection
         services.AddScoped<UserBehaviorCrudService>();
 
         // Telemetry
-        services.AddScoped<ITelemetryStream, TelemetryStream>();
+        services.AddSingleton<ITelemetryStream, TelemetryStream>();
 
         services.AddScoped<GetTelemetryBySensorHandler>();
         services.AddScoped<GetLatestTelemetryBySensorHandler>();
         services.AddScoped<GetTelemetryByDateRangeHandler>();
         services.AddScoped<GetTelemetryByIdHandler>();
         services.AddScoped<CreateTelemetryHandler>();
-        services.AddScoped<TelemetryHistoryStore>();
         services.AddScoped<TelemetryService>();
+
+        // Telemetry indexes
+        services.AddSingleton<TelemetryHistoryStore>();
+        services.AddSingleton<TelemetryAvlTreeService>();
+        services.AddHostedService<TelemetryHistoryInitializer>();
+
+        // AVL query handler
+        services.AddScoped<GetTelemetryAvlHistoryHandler>();
 
         // User handlers
         services.AddScoped<GetUserByFirebaseUidHandler>();

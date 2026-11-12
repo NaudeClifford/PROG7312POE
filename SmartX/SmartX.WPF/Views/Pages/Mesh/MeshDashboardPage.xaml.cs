@@ -1,26 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+using SmartX.WPF.ViewModels.Mesh;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace SmartX.WPF.Views.Pages.Mesh
+namespace SmartX.WPF.Views.Pages.Mesh;
+
+public partial class MeshDashboardPage : Page
 {
-    /// <summary>
-    /// Interaction logic for MeshDashboardPage.xaml
-    /// </summary>
-    public partial class MeshDashboardPage : Page
+    private readonly MeshDashboardViewModel _viewModel;
+
+    public MeshDashboardPage(
+        MeshDashboardViewModel viewModel)
     {
-        public MeshDashboardPage()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+
+        _viewModel = viewModel;
+
+        DataContext = _viewModel;
+
+        Loaded += MeshDashboardPage_Loaded;
+    }
+
+    private async void MeshDashboardPage_Loaded(
+        object sender,
+        RoutedEventArgs e)
+    {
+        Loaded -= MeshDashboardPage_Loaded;
+
+        await _viewModel.LoadDashboardAsync();
     }
 }

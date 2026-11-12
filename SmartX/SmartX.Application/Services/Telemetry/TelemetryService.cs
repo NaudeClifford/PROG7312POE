@@ -2,6 +2,7 @@
 using SmartX.Application.Requests.Telemetry;
 using SmartX.Application.Services.Alerts;
 using SmartX.Application.Services.Sensors;
+using SmartX.Application.Services.Telemetry.Structures;
 using SmartX.Domain.Entities;
 using SmartX.Domain.Interfaces;
 using SmartX.Shared.Models;
@@ -18,6 +19,8 @@ public class TelemetryService
     private readonly ITelemetryStream _telemetryStream;
     private readonly ISensorAlertProcessor _sensorAlertProcessor;
     private readonly SensorRegistry _sensorRegistry;
+    private readonly TelemetryHistoryStore _historyStore;
+    private readonly TelemetryAvlTreeService _avlTreeService;
 
     private readonly IValidator<CreateTelemetryRequest>
         _validator;
@@ -29,7 +32,8 @@ public class TelemetryService
         IValidator<CreateTelemetryRequest> validator,
         ITelemetryStream telemetryStream,
         ISensorAlertProcessor sensorAlertProcessor,
-        SensorRegistry sensorRegistry)
+        SensorRegistry sensorRegistry, TelemetryHistoryStore historyStore,
+        TelemetryAvlTreeService avlTreeService)
     {
         _sensorAlertProcessor = sensorAlertProcessor;
         _sensorRegistry = sensorRegistry;
@@ -38,6 +42,9 @@ public class TelemetryService
         _gatewayRepository = gatewayRepository;
         _validator = validator;
         _telemetryStream = telemetryStream;
+        _historyStore = historyStore;
+        _avlTreeService = avlTreeService;
+
     }
 
     // CREATE
@@ -156,6 +163,12 @@ public class TelemetryService
         await _repository.AddAsync(
             telemetry,
             cancellationToken);
+
+        // UPDATE CHRONOLOGICAL HISTORY
+        _historyStore.Add(telemetry);
+
+        // UPDATE SENSOR-SPECIFIC AVL TREE
+        _avlTreeService.Add(telemetry);
 
         // PROCESS SENSOR ALERTS
         bool isCritical =

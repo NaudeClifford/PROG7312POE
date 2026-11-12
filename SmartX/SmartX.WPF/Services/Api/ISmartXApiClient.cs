@@ -7,6 +7,7 @@ using SmartX.Application.Requests.UserBehavior;
 using SmartX.Application.Services.Registration;
 using SmartX.Application.Services.Sensors.Command;
 using SmartX.Shared.DTOs;
+using SmartX.Shared.DTOs.Mesh;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
 using System.IO;
@@ -245,4 +246,134 @@ public interface ISmartXApiClient
     Task EnqueueAlertAsync(
     SensorAlert alert,
     CancellationToken cancellationToken = default);
+
+    // MESH DISCOVERY
+    Task<MeshDiscoveryDto> DiscoverMeshAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
+    Task<MeshOperationResultDto> SynchronizeMeshAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
+    // MESH TOPOLOGY
+    Task<MeshTopologyDto> GetMeshTopologyAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
+    Task<Guid> RegisterMeshNodeAsync(
+        MeshNodeDto node,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> UpdateMeshNodeAsync(
+        MeshNodeDto node,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> RemoveMeshNodeAsync(
+        Guid gatewayId,
+        Guid nodeId,
+        CancellationToken cancellationToken = default);
+
+    Task<Guid> RegisterMeshLinkAsync(
+        MeshLinkDto link,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> UpdateMeshLinkAsync(
+        MeshLinkDto link,
+        CancellationToken cancellationToken = default);
+
+    Task<bool> RemoveMeshLinkAsync(
+        Guid gatewayId,
+        Guid linkId,
+        CancellationToken cancellationToken = default);
+
+    // MESH HEALTH
+    Task<MeshHealthReportDto> GetMeshHealthAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
+    // MESH MONITORING
+    Task<MeshOperationResultDto> RefreshMeshMonitoringAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
+    Task<MeshOperationResultDto> CheckMeshNodeStatusAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
+    Task<MeshOperationResultDto> RecalculateMeshRoutesAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
+    // MESH LINK QUALITY
+    Task<MeshOperationResultDto> EvaluateGatewayLinksAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
+    Task<MeshOperationResultDto> EvaluateMeshLinkAsync(
+        Guid linkId,
+        CancellationToken cancellationToken = default);
+
+    // MESH ROUTING
+    Task<MeshRouteDto> FindMeshShortestPathAsync(
+        Guid gatewayId,
+        Guid sourceNodeId,
+        Guid destinationNodeId,
+        CancellationToken cancellationToken = default);
+
+    // MESH TRAVERSAL
+    Task<IReadOnlyList<Guid>> MeshBreadthFirstSearchAsync(
+        Guid gatewayId,
+        Guid startNodeId,
+        CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<Guid>> MeshDepthFirstSearchAsync(
+        Guid gatewayId,
+        Guid startNodeId,
+        CancellationToken cancellationToken = default);
+
+    Task<MeshRouteDto> FindMeshBfsRouteAsync(
+        Guid gatewayId,
+        Guid sourceNodeId,
+        Guid destinationNodeId,
+        CancellationToken cancellationToken = default);
+
+    Task<MeshRouteDto> FindMeshDfsRouteAsync(
+        Guid gatewayId,
+        Guid sourceNodeId,
+        Guid destinationNodeId,
+        CancellationToken cancellationToken = default);
+
+
+    // MESH SPANNING TREE
+    Task<IReadOnlyList<MeshConnectionDto>> GetMeshMinimumSpanningTreeAsync(
+        Guid gatewayId,
+        Guid startNodeId,
+        CancellationToken cancellationToken = default);
+
+    // MESH LOGGING
+    Task<IReadOnlyList<MeshLogDto>> GetMeshGatewayLogsAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<MeshLogDto>> GetMeshNodeLogsAsync(
+        Guid nodeId,
+        CancellationToken cancellationToken = default);
+
+    // MESH ROUTING
+
+    Task<MeshTraversalResultDto> BreadthFirstSearchAsync(
+        Guid gatewayId,
+        Guid startNodeId,
+        CancellationToken cancellationToken = default);
+
+    Task<MeshTraversalResultDto> DepthFirstSearchAsync(
+        Guid gatewayId,
+        Guid startNodeId,
+        CancellationToken cancellationToken = default);
+
+    Task<MeshSpanningTreeDto> GetMeshSpanningTreeAsync(
+        Guid gatewayId,
+        Guid startNodeId,
+        CancellationToken cancellationToken = default);
 }

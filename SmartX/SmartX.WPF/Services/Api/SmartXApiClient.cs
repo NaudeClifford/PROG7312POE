@@ -7,6 +7,7 @@ using SmartX.Application.Requests.UserBehavior;
 using SmartX.Application.Services.Registration;
 using SmartX.Application.Services.Sensors.Command;
 using SmartX.Shared.DTOs;
+using SmartX.Shared.DTOs.Mesh;
 using SmartX.Shared.DTOs.Sensors;
 using SmartX.Shared.DTOs.Telemetry;
 using SmartX.Shared.Models;
@@ -30,6 +31,7 @@ public class SmartXApiClient(
     {
         PropertyNameCaseInsensitive = true
     };
+
     private void AddAuthenticationHeader()
     {
         _httpClient.DefaultRequestHeaders.Authorization = null;
@@ -47,8 +49,7 @@ public class SmartXApiClient(
     }
 
     public async Task<bool> DeleteCompanyAsync(
-    Guid companyId,
-    CancellationToken cancellationToken = default)
+        Guid companyId, CancellationToken cancellationToken = default)
     {
         if (companyId == Guid.Empty)
             return false;
@@ -120,7 +121,7 @@ public class SmartXApiClient(
     }
 
     public async Task<IReadOnlyList<SensorDto>> GetSensorsAsync(
-    CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -139,8 +140,7 @@ public class SmartXApiClient(
     }
 
     public async Task<SensorDto?> GetSensorByIdAsync(
-    Guid id,
-    CancellationToken cancellationToken = default)
+        Guid id, CancellationToken cancellationToken = default)
     {
         if (id == Guid.Empty)
             return null;
@@ -165,8 +165,7 @@ public class SmartXApiClient(
     }
 
     public async Task<Guid> CreateSensorAsync(
-    CreateSensorRequest request,
-    CancellationToken cancellationToken = default)
+        CreateSensorRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
 
@@ -189,8 +188,7 @@ public class SmartXApiClient(
     }
 
     public async Task<bool> UpdateSensorAsync(
-    UpdateSensorRequest request,
-    CancellationToken cancellationToken = default)
+        UpdateSensorRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
 
@@ -226,8 +224,7 @@ public class SmartXApiClient(
     }
 
     public async Task<bool> DeleteSensorAsync(
-    Guid id,
-    CancellationToken cancellationToken = default)
+        Guid id, CancellationToken cancellationToken = default)
     {
         if (id == Guid.Empty)
             return false;
@@ -258,9 +255,8 @@ public class SmartXApiClient(
     }
 
     public async Task<IReadOnlyList<SensorLogFileDto>>
-     GetSensorLogFilesAsync(
-         Guid sensorId,
-         CancellationToken cancellationToken = default)
+        GetSensorLogFilesAsync(
+            Guid sensorId, CancellationToken cancellationToken = default)
     {
         if (sensorId == Guid.Empty)
             return [];
@@ -292,13 +288,9 @@ public class SmartXApiClient(
     }
 
     public async Task<SensorLogFileUploadResultDto>
-    UploadSensorLogFileAsync(
-        Guid sensorId,
-        string fileName,
-        Stream fileStream,
-        string contentType,
-        Guid userId,
-        CancellationToken cancellationToken = default)
+        UploadSensorLogFileAsync(
+            Guid sensorId, string fileName, Stream fileStream,
+            string contentType, Guid userId, CancellationToken cancellationToken = default)
     {
         if (sensorId == Guid.Empty)
             throw new ArgumentException(
@@ -355,9 +347,8 @@ public class SmartXApiClient(
     }
 
     public async Task<TelemetryDto?>
-    GetTelemetryByIdAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
+        GetTelemetryByIdAsync(
+            Guid id, CancellationToken cancellationToken = default)
     {
         if (id == Guid.Empty)
             return null;
@@ -396,9 +387,8 @@ public class SmartXApiClient(
     }
 
     public async Task<IReadOnlyList<TelemetryDto>>
-    GetTelemetryBySensorIdAsync(
-        Guid sensorId,
-        CancellationToken cancellationToken = default)
+        GetTelemetryBySensorIdAsync(
+            Guid sensorId, CancellationToken cancellationToken = default)
     {
         if (sensorId == Guid.Empty)
             return [];
@@ -429,9 +419,8 @@ public class SmartXApiClient(
     }
 
     public async Task<TelemetryDto?>
-    GetLatestTelemetryBySensorIdAsync(
-        Guid sensorId,
-        CancellationToken cancellationToken = default)
+        GetLatestTelemetryBySensorIdAsync(
+            Guid sensorId, CancellationToken cancellationToken = default)
     {
         if (sensorId == Guid.Empty)
             return null;
@@ -471,11 +460,9 @@ public class SmartXApiClient(
     }
 
     public async Task<IReadOnlyList<TelemetryDto>>
-    GetTelemetryByDateRangeAsync(
-        Guid sensorId,
-        DateTime from,
-        DateTime to,
-        CancellationToken cancellationToken = default)
+        GetTelemetryByDateRangeAsync(
+            Guid sensorId, DateTime from, DateTime to,
+            CancellationToken cancellationToken = default)
     {
         if (sensorId == Guid.Empty)
             return [];
@@ -534,8 +521,8 @@ public class SmartXApiClient(
     }
 
     public async Task<IReadOnlyList<UserDto>>
-    GetUsersAsync(
-        CancellationToken cancellationToken = default)
+        GetUsersAsync(
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -556,9 +543,8 @@ public class SmartXApiClient(
     }
 
     public async Task<IReadOnlyList<UserDto>>
-    GetUsersByCompanyIdAsync(
-        Guid companyId,
-        CancellationToken cancellationToken = default)
+        GetUsersByCompanyIdAsync(
+            Guid companyId, CancellationToken cancellationToken = default)
     {
         if (companyId == Guid.Empty)
             return [];
@@ -582,9 +568,8 @@ public class SmartXApiClient(
     }
 
     public async Task<UserDto?>
-    GetUserByIdAsync(
-        Guid id,
-        CancellationToken cancellationToken = default)
+        GetUserByIdAsync(
+            Guid id, CancellationToken cancellationToken = default)
     {
         if (id == Guid.Empty)
             return null;
@@ -615,10 +600,9 @@ public class SmartXApiClient(
     }
 
     public async Task<UserDto?>
-    GetUserByFirebaseUidAsync(
-        string firebaseUid,
-        string idToken,
-        CancellationToken cancellationToken = default)
+        GetUserByFirebaseUidAsync(
+            string firebaseUid, string idToken,
+            CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(firebaseUid))
             return null;
@@ -657,9 +641,8 @@ public class SmartXApiClient(
     }
 
     public async Task<Guid>
-    CreateUserAsync(
-        CreateUserRequest request,
-        CancellationToken cancellationToken = default)
+        CreateUserAsync(
+            CreateUserRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);
 
@@ -682,8 +665,7 @@ public class SmartXApiClient(
     }
 
     public async Task<bool> UpdateUserAsync(
-    UpdateUserRequest request,
-    CancellationToken cancellationToken = default)
+        UpdateUserRequest request, CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -712,8 +694,7 @@ public class SmartXApiClient(
     }
 
     public async Task<bool> DeleteUserAsync(
-    Guid id,
-    CancellationToken cancellationToken = default)
+        Guid id, CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -743,8 +724,7 @@ public class SmartXApiClient(
 
     public async Task<RegistrationResultDto>
         RegisterCompanyAsync(
-            RegisterCompanyRequest request,
-            CancellationToken cancellationToken = default)
+            RegisterCompanyRequest request, CancellationToken cancellationToken = default)
     {
         if (request is null)
             throw new ArgumentNullException(nameof(request));
@@ -835,7 +815,7 @@ public class SmartXApiClient(
     }
 
     public async Task<IReadOnlyList<CompanyDto>> GetCompaniesAsync(
-    CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -854,8 +834,7 @@ public class SmartXApiClient(
     }
 
     public async Task<CompanyDto?> GetCompanyByIdAsync(
-    Guid id,
-    CancellationToken cancellationToken = default)
+        Guid id, CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -906,8 +885,7 @@ public class SmartXApiClient(
     }
 
     public async Task<bool> UpdateCompanyAsync(
-    UpdateCompanyRequest request,
-    CancellationToken cancellationToken = default)
+        UpdateCompanyRequest request, CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -928,8 +906,7 @@ public class SmartXApiClient(
     }
 
     public async Task<bool> RequestCompanyDeletionAsync(
-    Guid companyId,
-    CancellationToken cancellationToken = default)
+        Guid companyId, CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -967,8 +944,7 @@ public class SmartXApiClient(
     }
 
     public async Task<bool> CancelDeletionAsync(
-    Guid companyId,
-    CancellationToken cancellationToken = default)
+        Guid companyId, CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -997,9 +973,8 @@ public class SmartXApiClient(
     }
 
     public async Task<CompanyConfigurationDto?>
-    GetCompanyConfigurationAsync(
-        Guid companyId,
-        CancellationToken cancellationToken = default)
+        GetCompanyConfigurationAsync(
+            Guid companyId, CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -1029,8 +1004,8 @@ public class SmartXApiClient(
     }
 
     public async Task<bool> UpdateCompanyConfigurationAsync(
-     UpdateCompanyConfigurationRequest request,
-     CancellationToken cancellationToken = default)
+        UpdateCompanyConfigurationRequest request,
+        CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -1054,8 +1029,7 @@ public class SmartXApiClient(
     }
 
     public async Task<bool> CompleteOnboardingAsync(
-    Guid companyId,
-    CancellationToken cancellationToken = default)
+        Guid companyId, CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -1076,8 +1050,7 @@ public class SmartXApiClient(
     }
 
     public async Task<bool> CompleteCompanyOnboardingAsync(
-    Guid companyId,
-    CancellationToken cancellationToken = default)
+        Guid companyId, CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -1092,9 +1065,9 @@ public class SmartXApiClient(
         return response.IsSuccessStatusCode;
     }
 
-
-    public async Task<IReadOnlyList<GatewayDto>> GetGatewaysAsync(
-    CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<GatewayDto>>
+        GetGatewaysAsync(
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -1113,9 +1086,8 @@ public class SmartXApiClient(
     }
 
     public async Task<IReadOnlyList<GatewayDto>>
-    GetGatewaysByCompanyIdAsync(
-        Guid companyId,
-        CancellationToken cancellationToken = default)
+        GetGatewaysByCompanyIdAsync(
+            Guid companyId, CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -1137,8 +1109,7 @@ public class SmartXApiClient(
     }
 
     public async Task<GatewayDto?> GetGatewayByIdAsync(
-    Guid id,
-    CancellationToken cancellationToken = default)
+        Guid id, CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -1164,8 +1135,7 @@ public class SmartXApiClient(
     }
 
     public async Task<Guid> CreateGatewayAsync(
-    CreateGatewayRequest request,
-    CancellationToken cancellationToken = default)
+        CreateGatewayRequest request, CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -1186,8 +1156,7 @@ public class SmartXApiClient(
     }
 
     public async Task<bool> UpdateGatewayAsync(
-    UpdateGatewayRequest request,
-    CancellationToken cancellationToken = default)
+        UpdateGatewayRequest request, CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -1219,8 +1188,7 @@ public class SmartXApiClient(
     }
 
     public async Task<bool> DeleteGatewayAsync(
-    Guid id,
-    CancellationToken cancellationToken = default)
+        Guid id, CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -1246,8 +1214,7 @@ public class SmartXApiClient(
     }
 
     public async Task<bool> DeleteGuestCompanyAsync(
-    Guid companyId,
-    CancellationToken cancellationToken = default)
+        Guid companyId, CancellationToken cancellationToken = default)
     {
         if (companyId == Guid.Empty)
             return false;
@@ -1279,9 +1246,8 @@ public class SmartXApiClient(
     }
 
     public async Task<IReadOnlyList<SensorDto>>
-     GetSensorsByGatewayIdAsync(
-         Guid gatewayId,
-         CancellationToken cancellationToken = default)
+        GetSensorsByGatewayIdAsync(
+            Guid gatewayId, CancellationToken cancellationToken = default)
     {
         if (gatewayId == Guid.Empty)
             return [];
@@ -1316,10 +1282,9 @@ public class SmartXApiClient(
     }
 
     public async Task<SensorCommandResult>
-    SendSensorCommandAsync(
-        Guid sensorId,
-        string command,
-        CancellationToken cancellationToken = default)
+        SendSensorCommandAsync(
+            Guid sensorId, string command,
+            CancellationToken cancellationToken = default)
     {
         if (sensorId == Guid.Empty)
             throw new ArgumentException(
@@ -1367,8 +1332,8 @@ public class SmartXApiClient(
 
     //UserBehavior
     public async Task<IReadOnlyList<UserBehaviorDto>>
-    GetUserBehaviorsAsync(
-        CancellationToken cancellationToken = default)
+        GetUserBehaviorsAsync(
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -1397,9 +1362,8 @@ public class SmartXApiClient(
     }
 
     public async Task<IReadOnlyList<UserBehaviorDto>>
-    GetUserBehaviorsBySensorIdAsync(
-        Guid sensorId,
-        CancellationToken cancellationToken = default)
+        GetUserBehaviorsBySensorIdAsync(
+            Guid sensorId, CancellationToken cancellationToken = default)
     {
         if (sensorId == Guid.Empty)
             return [];
@@ -1431,9 +1395,9 @@ public class SmartXApiClient(
     }
 
     public async Task<Guid>
-    CreateUserBehaviorAsync(
-        CreateUserBehaviorRequest request,
-        CancellationToken cancellationToken = default)
+        CreateUserBehaviorAsync(
+            CreateUserBehaviorRequest request,
+            CancellationToken cancellationToken = default)
     {
         AddAuthenticationHeader();
 
@@ -1464,9 +1428,8 @@ public class SmartXApiClient(
     }
 
     public async Task<IReadOnlyList<PredictiveSuggestionDto>>
-    GetPredictiveSuggestionsAsync(
-        Guid sensorId,
-        CancellationToken cancellationToken = default)
+        GetPredictiveSuggestionsAsync(
+            Guid sensorId, CancellationToken cancellationToken = default)
     {
         if (sensorId == Guid.Empty)
             throw new ArgumentException("Invalid sensor ID.");
@@ -1489,9 +1452,8 @@ public class SmartXApiClient(
     }
 
     public async Task<AnomalyRecommendationDto?>
-    AnalyzeSensorAnomalyAsync(
-        Guid sensorId,
-        CancellationToken cancellationToken = default)
+        AnalyzeSensorAnomalyAsync(
+            Guid sensorId, CancellationToken cancellationToken = default)
     {
         if (sensorId == Guid.Empty)
             throw new ArgumentException("Invalid sensor ID.");
@@ -1544,8 +1506,7 @@ public class SmartXApiClient(
 
     public async Task<SensorCommandResult>
         UndoLastSensorCommandAsync(
-            Guid sensorId,
-            CancellationToken cancellationToken = default)
+            Guid sensorId, CancellationToken cancellationToken = default)
     {
         if (sensorId == Guid.Empty)
             return SensorCommandResult.Fail(
@@ -1568,26 +1529,27 @@ public class SmartXApiClient(
         return result;
     }
 
-    // Add these methods inside SmartXApiClient.
-
-    public async Task<List<SensorAlert>> GetAlertsAsync(
-        CancellationToken cancellationToken = default)
+    public async Task<List<SensorAlert>>
+        GetAlertsAsync(
+            CancellationToken cancellationToken = default)
     {
         return await _httpClient.GetFromJsonAsync<List<SensorAlert>>(
             "api/alert",
             cancellationToken) ?? [];
     }
 
-    public async Task<int> GetPendingAlertCountAsync(
-        CancellationToken cancellationToken = default)
+    public async Task<int>
+        GetPendingAlertCountAsync(
+            CancellationToken cancellationToken = default)
     {
         return await _httpClient.GetFromJsonAsync<int>(
             "api/alert/count",
             cancellationToken);
     }
 
-    public async Task<SensorAlert?> ProcessNextAlertAsync(
-        CancellationToken cancellationToken = default)
+    public async Task<SensorAlert?>
+        ProcessNextAlertAsync(
+            CancellationToken cancellationToken = default)
     {
         using var response = await _httpClient.PostAsync(
             "api/alert/process-next",
@@ -1606,8 +1568,9 @@ public class SmartXApiClient(
             cancellationToken: cancellationToken);
     }
 
-    public async Task<List<SensorAlert>> ProcessAllAlertsAsync(
-        CancellationToken cancellationToken = default)
+    public async Task<List<SensorAlert>>
+        ProcessAllAlertsAsync(
+            CancellationToken cancellationToken = default)
     {
         using var response = await _httpClient.PostAsync(
             "api/alert/process-all",
@@ -1643,8 +1606,477 @@ public class SmartXApiClient(
         response.EnsureSuccessStatusCode();
     }
 
+    // MESH DISCOVERY
+    public async Task<MeshDiscoveryDto> DiscoverMeshAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            $"api/mesh/discovery/{gatewayId}");
+
+        return await SendAndReadAsync<MeshDiscoveryDto>(
+            request,
+            cancellationToken);
+    }
+
+    public async Task<MeshOperationResultDto> SynchronizeMeshAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            $"api/mesh/discovery/{gatewayId}/synchronize");
+
+        var result = await SendAndReadAsync<JsonElement>(
+            request,
+            cancellationToken);
+
+        return result.TryGetProperty("changes", out var changes)
+            ? new MeshOperationResultDto { Changes = changes.GetInt32() }
+            : new MeshOperationResultDto { Changes = 0 };
+    }
+
+    // MESH TOPOLOGY
+    public async Task<MeshTopologyDto> GetMeshTopologyAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            $"api/mesh/{gatewayId}/topology");
+
+        return await SendAndReadAsync<MeshTopologyDto>(
+            request,
+            cancellationToken);
+    }
+
+    public async Task<Guid> RegisterMeshNodeAsync(
+        MeshNodeDto node,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            "api/mesh/nodes")
+        {
+            Content = JsonContent.Create(node)
+        };
+
+        var result = await SendAndReadAsync<MeshNodeDto>(
+            request,
+            cancellationToken);
+
+        return result.Id;
+    }
+
+    public async Task<bool> UpdateMeshNodeAsync(
+        MeshNodeDto node,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Put,
+            "api/mesh/nodes")
+        {
+            Content = JsonContent.Create(node)
+        };
+
+        await SendWithoutReadAsync(request, cancellationToken);
+
+        return true;
+    }
+
+    public async Task<bool> RemoveMeshNodeAsync(
+        Guid gatewayId,
+        Guid nodeId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Delete,
+            $"api/mesh/{gatewayId}/nodes/{nodeId}");
+
+        await SendWithoutReadAsync(request, cancellationToken);
+
+        return true;
+    }
+
+    public async Task<Guid> RegisterMeshLinkAsync(
+        MeshLinkDto link,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            "api/mesh/links")
+        {
+            Content = JsonContent.Create(link)
+        };
+
+        var result = await SendAndReadAsync<MeshLinkDto>(
+            request,
+            cancellationToken);
+
+        return result.Id;
+    }
+
+    public async Task<bool> UpdateMeshLinkAsync(
+        MeshLinkDto link,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Put,
+            "api/mesh/links")
+        {
+            Content = JsonContent.Create(link)
+        };
+
+        await SendWithoutReadAsync(request, cancellationToken);
+
+        return true;
+    }
+
+    public async Task<bool> RemoveMeshLinkAsync(
+        Guid gatewayId,
+        Guid linkId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Delete,
+            $"api/mesh/{gatewayId}/links/{linkId}");
+
+        await SendWithoutReadAsync(request, cancellationToken);
+
+        return true;
+    }
+
+    // MESH HEALTH
+    public async Task<MeshHealthReportDto> GetMeshHealthAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            $"api/mesh/{gatewayId}/health");
+
+        return await SendAndReadAsync<MeshHealthReportDto>(
+            request,
+            cancellationToken);
+    }
+
+    // MESH MONITORING
+
+    public async Task<MeshOperationResultDto> RefreshMeshMonitoringAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            $"api/mesh/{gatewayId}/monitoring/refresh");
+
+        await SendWithoutReadAsync(request, cancellationToken);
+
+        return new MeshOperationResultDto { Success = true };
+    }
+
+    public async Task<MeshOperationResultDto> CheckMeshNodeStatusAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            $"api/mesh/{gatewayId}/monitoring/nodes");
+
+        await SendWithoutReadAsync(request, cancellationToken);
+
+        return new MeshOperationResultDto { Success = true };
+    }
+
+    public async Task<MeshOperationResultDto> RecalculateMeshRoutesAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            $"api/mesh/{gatewayId}/monitoring/routes");
+
+        await SendWithoutReadAsync(request, cancellationToken);
+
+        return new MeshOperationResultDto { Success = true };
+    }
+
+    // MESH LINK QUALITY
+    public async Task<MeshOperationResultDto> EvaluateGatewayLinksAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            $"api/mesh/{gatewayId}/links/evaluate");
+
+        await SendWithoutReadAsync(request, cancellationToken);
+
+        return new MeshOperationResultDto { Success = true };
+    }
+
+    public async Task<MeshOperationResultDto> EvaluateMeshLinkAsync(
+        Guid linkId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Post,
+            $"api/mesh/links/{linkId}/evaluate");
+
+        await SendWithoutReadAsync(request, cancellationToken);
+
+        return new MeshOperationResultDto { Success = true };
+    }
+
+    // MESH ROUTING
+    public async Task<MeshRouteDto> FindMeshShortestPathAsync(
+        Guid gatewayId,
+        Guid sourceNodeId,
+        Guid destinationNodeId,
+        CancellationToken cancellationToken = default)
+    {
+        var endpoint =
+            $"api/mesh/{gatewayId}/routing/shortest-path" +
+            $"?sourceNodeId={sourceNodeId}" +
+            $"&destinationNodeId={destinationNodeId}";
+
+        using var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            endpoint);
+
+        return await SendAndReadAsync<MeshRouteDto>(
+            request,
+            cancellationToken);
+    }
+
+    // MESH TRAVERSAL
+    public async Task<IReadOnlyList<Guid>> MeshBreadthFirstSearchAsync(
+        Guid gatewayId,
+        Guid startNodeId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            $"api/mesh/{gatewayId}/traversal/bfs/{startNodeId}");
+
+        return await SendAndReadAsync<List<Guid>>(
+            request,
+            cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<Guid>> MeshDepthFirstSearchAsync(
+        Guid gatewayId,
+        Guid startNodeId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            $"api/mesh/{gatewayId}/traversal/dfs/{startNodeId}");
+
+        return await SendAndReadAsync<List<Guid>>(
+            request,
+            cancellationToken);
+    }
+
+    public async Task<MeshRouteDto> FindMeshBfsRouteAsync(
+        Guid gatewayId,
+        Guid sourceNodeId,
+        Guid destinationNodeId,
+        CancellationToken cancellationToken = default)
+    {
+        var endpoint =
+            $"api/mesh/{gatewayId}/traversal/bfs-route" +
+            $"?sourceNodeId={sourceNodeId}" +
+            $"&destinationNodeId={destinationNodeId}";
+
+        using var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            endpoint);
+
+        return await SendAndReadAsync<MeshRouteDto>(
+            request,
+            cancellationToken);
+    }
+
+    public async Task<MeshRouteDto> FindMeshDfsRouteAsync(
+        Guid gatewayId,
+        Guid sourceNodeId,
+        Guid destinationNodeId,
+        CancellationToken cancellationToken = default)
+    {
+        var endpoint =
+            $"api/mesh/{gatewayId}/traversal/dfs-route" +
+            $"?sourceNodeId={sourceNodeId}" +
+            $"&destinationNodeId={destinationNodeId}";
+
+        using var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            endpoint);
+
+        return await SendAndReadAsync<MeshRouteDto>(
+            request,
+            cancellationToken);
+    }
+
+    // MESH SPANNING TREE
+    public async Task<IReadOnlyList<MeshConnectionDto>>
+        GetMeshMinimumSpanningTreeAsync(
+            Guid gatewayId,
+            Guid startNodeId,
+            CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            $"api/mesh/{gatewayId}/spanning-tree/{startNodeId}");
+
+        var result = await SendAndReadAsync<JsonElement>(
+            request,
+            cancellationToken);
+
+        if (!result.TryGetProperty(
+                "connections",
+                out var connections))
+        {
+            throw new InvalidOperationException(
+                "API response did not contain spanning tree connections.");
+        }
+
+        return connections.Deserialize<List<MeshConnectionDto>>(
+            JsonOptions) ?? [];
+    }
+
+    // MESH LOGGING
+    public async Task<IReadOnlyList<MeshLogDto>> GetMeshGatewayLogsAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            $"api/mesh/{gatewayId}/logs");
+
+        return await SendAndReadAsync<List<MeshLogDto>>(
+            request,
+            cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<MeshLogDto>> GetMeshNodeLogsAsync(
+        Guid nodeId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            $"api/mesh/nodes/{nodeId}/logs");
+
+        return await SendAndReadAsync<List<MeshLogDto>>(
+            request,
+            cancellationToken);
+    }
 
 
+    public async Task<MeshTraversalResultDto> BreadthFirstSearchAsync(
+        Guid gatewayId,
+        Guid startNodeId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            $"api/mesh/{gatewayId}/traversal/bfs/{startNodeId}");
+
+        return await SendAndReadAsync<MeshTraversalResultDto>(
+            request,
+            cancellationToken);
+    }
+
+
+    public async Task<MeshTraversalResultDto> DepthFirstSearchAsync(
+        Guid gatewayId,
+        Guid startNodeId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            $"api/mesh/{gatewayId}/traversal/dfs/{startNodeId}");
+
+        return await SendAndReadAsync<MeshTraversalResultDto>(
+            request,
+            cancellationToken);
+    }
+
+    public async Task<MeshSpanningTreeDto> GetMeshSpanningTreeAsync(
+        Guid gatewayId,
+        Guid startNodeId,
+        CancellationToken cancellationToken = default)
+    {
+        using var request = new HttpRequestMessage(
+            HttpMethod.Get,
+            $"api/mesh/{gatewayId}/spanning-tree/{startNodeId}");
+
+        return await SendAndReadAsync<MeshSpanningTreeDto>(
+            request,
+            cancellationToken);
+    }
+
+
+
+
+    private async Task SendWithoutReadAsync(
+    HttpRequestMessage request,
+    CancellationToken cancellationToken = default)
+    {
+        var method = request.Method.Method;
+
+        var endpoint = request.RequestUri?.ToString()
+                       ?? "Unknown endpoint";
+
+        try
+        {
+            using var response = await _httpClient.SendAsync(
+                request,
+                HttpCompletionOption.ResponseHeadersRead,
+                cancellationToken);
+
+            var body = await response.Content.ReadAsStringAsync(
+                cancellationToken);
+
+            System.Diagnostics.Debug.WriteLine(
+                $"[MESH API REQUEST] {method} {endpoint}");
+
+            System.Diagnostics.Debug.WriteLine(
+                $"[MESH API STATUS] {(int)response.StatusCode} {response.StatusCode}");
+
+            System.Diagnostics.Debug.WriteLine(
+                $"[MESH API RESPONSE] {body}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpRequestException(
+                    $"Mesh API request failed.\n" +
+                    $"Method: {method}\n" +
+                    $"Endpoint: {endpoint}\n" +
+                    $"Status: {(int)response.StatusCode} {response.StatusCode}\n" +
+                    $"Response: {body}",
+                    null,
+                    response.StatusCode);
+            }
+        }
+        catch (OperationCanceledException ex)
+            when (!cancellationToken.IsCancellationRequested)
+        {
+            throw new TimeoutException(
+                $"Mesh API request timed out.\n" +
+                $"Endpoint: {endpoint}",
+                ex);
+        }
+        catch (Exception ex)
+            when (ex is not OperationCanceledException)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                $"[MESH API ERROR] {method} {endpoint}: {ex}");
+
+            throw;
+        }
+    }
 
     private async Task<T> SendAndReadAsync<T>(
         HttpRequestMessage request,

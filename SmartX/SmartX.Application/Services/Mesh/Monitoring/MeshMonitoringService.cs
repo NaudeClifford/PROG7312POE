@@ -16,6 +16,7 @@ public class MeshMonitoringService : IMeshMonitoringService
 
     private readonly MeshGraphBuilder _graphBuilder;
     private readonly MeshRoutingService _routingService;
+    private readonly MeshMonitoringOptions _options;
 
     public MeshMonitoringService(
         IMeshNodeRepository nodeRepository,
@@ -23,7 +24,8 @@ public class MeshMonitoringService : IMeshMonitoringService
         IMeshLogRepository logRepository,
         IMeshRouteRepository routeRepository,
         MeshGraphBuilder graphBuilder,
-        MeshRoutingService routingService)
+        MeshRoutingService routingService,
+        MeshMonitoringOptions options)
     {
         _nodeRepository = nodeRepository;
         _linkRepository = linkRepository;
@@ -31,6 +33,7 @@ public class MeshMonitoringService : IMeshMonitoringService
         _routeRepository = routeRepository;
         _graphBuilder = graphBuilder;
         _routingService = routingService;
+        _options = options;
     }
 
     public async Task RefreshAsync(
@@ -189,5 +192,25 @@ public class MeshMonitoringService : IMeshMonitoringService
             throw new ArgumentException(
                 "A valid gateway ID is required.",
                 nameof(gatewayId));
+    }
+
+    private MeshNodeStatus DetermineNodeStatus(
+    MeshNode node,
+    HashSet<Guid> connectedNodeIds,
+    DateTime now)
+    {
+        var isRecent =
+            node.LastSeen.HasValue &&
+            node.LastSeen.Value >= now.AddMinutes(
+                -_options.NodeTimeoutMinutes);
+
+        if (isRecent)
+        {
+            return connectedNodeIds.Contains(node.Id)
+                ? MeshNodeStatus.Online
+                : MeshNodeStatus.Degraded;
+        }
+
+        return MeshNodeStatus.Offline;
     }
 }

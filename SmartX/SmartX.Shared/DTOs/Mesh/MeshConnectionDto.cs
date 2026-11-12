@@ -1,6 +1,12 @@
-﻿namespace SmartX.Shared.DTOs.Mesh
+﻿namespace SmartX.Shared.DTOs.Mesh;
+
+public class MeshConnectionDto
 {
-    public class MeshConnectionDto
-    {
-    }
+    public Guid SourceNodeId { get; set; }
+
+    public Guid DestinationNodeId { get; set; }
+
+    public double Cost { get; set; }
+
+    public double EnergyCost { get; set; }
 }

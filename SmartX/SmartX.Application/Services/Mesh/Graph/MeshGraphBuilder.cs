@@ -1,4 +1,5 @@
 ﻿
+using SmartX.Application.Interfaces.Mesh;
 using SmartX.Domain.Entities.Mesh;
 using SmartX.Domain.Enums.Mesh;
 
@@ -6,6 +7,14 @@ namespace SmartX.Application.Services.Mesh.Graph;
 
 public class MeshGraphBuilder
 {
+    private readonly IMeshLinkQualityService _linkQualityService;
+
+    public MeshGraphBuilder(
+        IMeshLinkQualityService linkQualityService)
+    {
+        _linkQualityService = linkQualityService;
+    }
+
     public MeshGraph Build(
         IEnumerable<MeshNode> nodes,
         IEnumerable<MeshLink> links)
@@ -15,62 +24,53 @@ public class MeshGraphBuilder
 
         var graph = new MeshGraph();
 
-        var nodeList = nodes.ToList();
+        var nodeLookup = nodes
+            .Where(x => x.Id != Guid.Empty)
+            .GroupBy(x => x.Id)
+            .ToDictionary(x => x.Key, x => x.First());
 
-        // Create graph vertices.
-        foreach (var node in nodeList)
+        // Build vertices.
+        foreach (var node in nodeLookup.Values)
         {
             graph.AddNode(new MeshGraphNode
             {
                 Id = node.Id,
                 Name = node.Name,
                 DeviceIdentifier = node.DeviceIdentifier,
-                IsOnline = node.Status ==
-                    MeshNodeStatus.Online
+                IsGateway = node.IsGateway,
+                IsOnline = node.Status == MeshNodeStatus.Online
             });
         }
 
-        var nodeIds = nodeList
-            .Select(x => x.Id)
-            .ToHashSet();
-
-        // Create graph edges.
+        // Build validated connections.
         foreach (var link in links)
         {
-            if (!link.IsAvailable)
+            if (!IsValidLink(link, nodeLookup))
                 continue;
 
-            if (!nodeIds.Contains(link.SourceNodeId) ||
-                !nodeIds.Contains(link.TargetNodeId))
+            var source = nodeLookup[link.SourceNodeId];
+            var destination = nodeLookup[link.TargetNodeId];
+
+            if (source.Status != MeshNodeStatus.Online ||
+                destination.Status != MeshNodeStatus.Online)
                 continue;
 
-            if (!link.LatencyMilliseconds.HasValue ||
-                !link.EnergyCost.HasValue)
+            var quality = _linkQualityService.CalculateLinkQuality(
+                link.SignalStrengthDbm,
+                link.LatencyMilliseconds,
+                link.EnergyCost);
+
+            var latency = link.LatencyMilliseconds!.Value;
+            var energy = link.EnergyCost!.Value;
+
+            var routingCost =
+                _linkQualityService.CalculateRoutingCost(
+                    quality,
+                    latency,
+                    energy);
+
+            if (!double.IsFinite(routingCost))
                 continue;
-
-            var source = nodeList.First(
-                x => x.Id == link.SourceNodeId);
-
-            var destination = nodeList.First(
-                x => x.Id == link.TargetNodeId);
-
-            // Do not create links to offline devices.
-            if (source.Status !=
-                    MeshNodeStatus.Online ||
-                destination.Status !=
-                    MeshNodeStatus.Online)
-                continue;
-
-            var latency = link.LatencyMilliseconds.Value;
-            var energy = link.EnergyCost.Value;
-
-            var signalQuality = CalculateSignalQuality(
-                link.SignalStrengthDbm);
-
-            var routingCost = CalculateRoutingCost(
-                latency,
-                energy,
-                signalQuality);
 
             graph.AddConnection(
                 link.SourceNodeId,
@@ -78,34 +78,41 @@ public class MeshGraphBuilder
                 routingCost,
                 latency,
                 energy,
-                signalQuality);
+                quality);
         }
 
         return graph;
     }
 
-    private static double CalculateSignalQuality(
-        double? signalStrengthDbm)
+    private static bool IsValidLink(
+        MeshLink link,
+        Dictionary<Guid, MeshNode> nodes)
     {
-        if (!signalStrengthDbm.HasValue)
-            return 0;
+        if (!link.IsAvailable)
+            return false;
 
-        // Convert approximate Wi-Fi dBm values
-        // into a 0-100 quality score.
-        return Math.Clamp(
-            (signalStrengthDbm.Value + 100) * 2,
-            0,
-            100);
-    }
+        if (link.Id == Guid.Empty ||
+            link.SourceNodeId == Guid.Empty ||
+            link.TargetNodeId == Guid.Empty)
+            return false;
 
-    private static double CalculateRoutingCost(
-        double latency,
-        double energy,
-        double signalQuality)
-    {
+        if (link.SourceNodeId == link.TargetNodeId)
+            return false;
+
+        if (!nodes.ContainsKey(link.SourceNodeId) ||
+            !nodes.ContainsKey(link.TargetNodeId))
+            return false;
+
+        if (!link.SignalStrengthDbm.HasValue ||
+            !link.LatencyMilliseconds.HasValue ||
+            !link.EnergyCost.HasValue)
+            return false;
+
         return
-            (latency * 0.4) +
-            (energy * 0.4) +
-            ((100 - signalQuality) * 0.2);
+            double.IsFinite(link.SignalStrengthDbm.Value) &&
+            double.IsFinite(link.LatencyMilliseconds.Value) &&
+            double.IsFinite(link.EnergyCost.Value) &&
+            link.LatencyMilliseconds.Value >= 0 &&
+            link.EnergyCost.Value >= 0;
     }
 }

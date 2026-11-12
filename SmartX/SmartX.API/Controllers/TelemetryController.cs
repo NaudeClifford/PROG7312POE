@@ -16,21 +16,21 @@ public class TelemetryController : ControllerBase
     private readonly GetTelemetryBySensorHandler _getTelemetryBySensorHandler;
     private readonly GetLatestTelemetryBySensorHandler _getLatestTelemetryBySensorHandler;
     private readonly GetTelemetryByDateRangeHandler _getTelemetryByDateRangeHandler;
-
+    private readonly GetTelemetryAvlHistoryHandler _getTelemetryAvlHistoryHandler;
     public TelemetryController(
         CreateTelemetryHandler createTelemetryHandler,
         GetTelemetryByIdHandler getTelemetryByIdHandler,
         GetTelemetryBySensorHandler getTelemetryBySensorHandler,
         GetLatestTelemetryBySensorHandler getLatestTelemetryBySensorHandler,
-        GetTelemetryByDateRangeHandler getTelemetryByDateRangeHandler)
+        GetTelemetryByDateRangeHandler getTelemetryByDateRangeHandler,
+        GetTelemetryAvlHistoryHandler getTelemetryAvlHistoryHandler)
     {
         _createTelemetryHandler = createTelemetryHandler;
         _getTelemetryByIdHandler = getTelemetryByIdHandler;
         _getTelemetryBySensorHandler = getTelemetryBySensorHandler;
-        _getLatestTelemetryBySensorHandler =
-            getLatestTelemetryBySensorHandler;
-        _getTelemetryByDateRangeHandler =
-            getTelemetryByDateRangeHandler;
+        _getLatestTelemetryBySensorHandler = getLatestTelemetryBySensorHandler;
+        _getTelemetryByDateRangeHandler = getTelemetryByDateRangeHandler;
+        _getTelemetryAvlHistoryHandler = getTelemetryAvlHistoryHandler;
     }
 
     [HttpPost]
@@ -85,7 +85,7 @@ public class TelemetryController : ControllerBase
                 new GetTelemetryBySensorQuery
                 {
                     SensorId = sensorId
-                }, User ,
+                }, User,
                 cancellationToken);
 
         return result.Success
@@ -134,6 +134,36 @@ public class TelemetryController : ControllerBase
 
         var result =
             await _getTelemetryByDateRangeHandler.HandleAsync(
+                new GetTelemetryByDateRangeQuery
+                {
+                    SensorId = sensorId,
+                    From = from,
+                    To = to
+                },
+                User,
+                cancellationToken);
+
+        return result.Success
+            ? Ok(result)
+            : BadRequest(result);
+    }
+
+    [HttpGet("sensor/{sensorId:guid}/history/avl")]
+    public async Task<IActionResult> GetTelemetryAvlHistory(
+        Guid sensorId,
+        [FromQuery] DateTime from,
+        [FromQuery] DateTime to,
+        CancellationToken cancellationToken)
+    {
+        if (sensorId == Guid.Empty)
+            return BadRequest("Sensor ID is required.");
+
+        if (from > to)
+            return BadRequest(
+                "The start date must be before the end date.");
+
+        var result =
+            await _getTelemetryAvlHistoryHandler.HandleAsync(
                 new GetTelemetryByDateRangeQuery
                 {
                     SensorId = sensorId,
