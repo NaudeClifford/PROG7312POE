@@ -8,6 +8,7 @@ public static class MeshConnectionMapper
     public static MeshConnection Map(SqliteDataReader reader)
     {
         var id = reader.GetOrdinal("Id");
+        var gatewayId = reader.GetOrdinal("GatewayId");
         var sourceNodeId = reader.GetOrdinal("SourceNodeId");
         var destinationNodeId = reader.GetOrdinal("DestinationNodeId");
         var signalStrength = reader.GetOrdinal("SignalStrength");
@@ -23,6 +24,7 @@ public static class MeshConnectionMapper
         {
             Id = Guid.Parse(reader.GetString(id)),
 
+            GatewayId = Guid.Parse(reader.GetString(gatewayId)),
             SourceNodeId = Guid.Parse(reader.GetString(sourceNodeId)),
             DestinationNodeId = Guid.Parse(reader.GetString(destinationNodeId)),
 

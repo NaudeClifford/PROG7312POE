@@ -2017,7 +2017,32 @@ public class SmartXApiClient(
             cancellationToken);
     }
 
+    public async Task<IReadOnlyList<MeshConnectionDto>> GetMeshConnectionsAsync(
+    Guid gatewayId,
+    CancellationToken cancellationToken = default)
+    {
+        var result = await _httpClient.GetFromJsonAsync<
+            List<MeshConnectionDto>>(
+            $"api/mesh/{gatewayId}/connections",
+            cancellationToken);
 
+        return result ?? [];
+    }
+
+    public async Task<IReadOnlyList<MeshRouteDto>> GetMeshRoutesAsync(
+    Guid gatewayId,
+    CancellationToken cancellationToken = default)
+    {
+        if (gatewayId == Guid.Empty)
+            return [];
+
+        var result = await _httpClient.GetFromJsonAsync<
+            List<MeshRouteDto>>(
+            $"api/mesh/{gatewayId}/routes",
+            cancellationToken);
+
+        return result ?? [];
+    }
 
 
     private async Task SendWithoutReadAsync(

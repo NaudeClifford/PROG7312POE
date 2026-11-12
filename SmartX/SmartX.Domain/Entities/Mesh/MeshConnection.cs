@@ -4,6 +4,8 @@ public class MeshConnection
 {
     public Guid Id { get; set; }
 
+    public Guid GatewayId { get; set; }
+
     public Guid SourceNodeId { get; set; }
 
     public Guid DestinationNodeId { get; set; }

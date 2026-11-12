@@ -6,6 +6,7 @@ using SmartX.Application.Services.Mesh.Routing;
 using SmartX.Application.Services.Mesh.SpanningTree;
 using SmartX.Application.Services.Mesh.Traversal;
 using SmartX.Domain.Entities.Mesh;
+using SmartX.Domain.Interfaces.Mesh;
 using SmartX.Shared.DTOs.Mesh;
 using SmartX.Shared.Mapping;
 
@@ -21,7 +22,8 @@ public class MeshController : ControllerBase
     private readonly IMeshMonitoringService _monitoringService;
     private readonly IMeshLinkQualityService _linkQualityService;
     private readonly IMeshLogService _logService;
-
+    private readonly IMeshConnectionRepository _connectionRepository;
+    private readonly IMeshRouteRepository _routeRepository;
     private readonly MeshGraphBuilder _graphBuilder;
     private readonly MeshRoutingService _routingService;
     private readonly MeshTraversalService _traversalService;
@@ -35,6 +37,8 @@ public class MeshController : ControllerBase
         IMeshHealthService healthService,
         IMeshMonitoringService monitoringService,
         IMeshLinkQualityService linkQualityService,
+        IMeshConnectionRepository connectionRepository,
+        IMeshRouteRepository routeRepository,
         IMeshLogService logService,
         MeshGraphBuilder graphBuilder,
         MeshRoutingService routingService,
@@ -47,8 +51,9 @@ public class MeshController : ControllerBase
         _healthService = healthService;
         _monitoringService = monitoringService;
         _linkQualityService = linkQualityService;
+        _routeRepository = routeRepository;
         _logService = logService;
-
+        _connectionRepository = connectionRepository;
         _graphBuilder = graphBuilder;
         _routingService = routingService;
         _traversalService = traversalService;
@@ -466,5 +471,37 @@ public class MeshController : ControllerBase
             gatewayId, cancellationToken);
 
         return _graphBuilder.Build(nodes, links);
+    }
+
+    [HttpGet("{gatewayId:guid}/connections")]
+    public async Task<IActionResult> GetConnections(
+    Guid gatewayId,
+    CancellationToken cancellationToken)
+    {
+        var connections = await _connectionRepository.GetByGatewayIdAsync(
+            gatewayId,
+            cancellationToken);
+
+        var dtos = connections
+            .Select(x => _mapper.Map<MeshConnectionDto>(x))
+            .ToList();
+
+        return Ok(dtos);
+    }
+
+    [HttpGet("{gatewayId:guid}/routes")]
+    public async Task<IActionResult> GetRoutes(
+    Guid gatewayId,
+    CancellationToken cancellationToken)
+    {
+        var routes = await _routeRepository.GetByGatewayIdAsync(
+            gatewayId,
+            cancellationToken);
+
+        var result = routes
+            .Select(x => _mapper.Map<MeshRouteDto>(x))
+            .ToList();
+
+        return Ok(result);
     }
 }

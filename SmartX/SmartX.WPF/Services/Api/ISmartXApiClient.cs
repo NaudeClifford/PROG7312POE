@@ -376,4 +376,14 @@ public interface ISmartXApiClient
         Guid gatewayId,
         Guid startNodeId,
         CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<MeshRouteDto>> GetMeshRoutesAsync(
+        Guid gatewayId,
+            CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<MeshConnectionDto>> GetMeshConnectionsAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
+
 }

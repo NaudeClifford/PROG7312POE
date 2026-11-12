@@ -7,6 +7,10 @@ public interface IMeshConnectionRepository
     Task<IReadOnlyList<MeshConnection>> GetAllAsync(
         CancellationToken cancellationToken = default);
 
+    Task<IReadOnlyList<MeshConnection>> GetByGatewayIdAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
     Task<IReadOnlyList<MeshConnection>> GetByNodeIdAsync(
         Guid nodeId,
         CancellationToken cancellationToken = default);

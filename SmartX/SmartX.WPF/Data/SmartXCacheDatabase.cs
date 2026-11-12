@@ -8,7 +8,7 @@ public class SmartXCacheDatabase
 {
     private readonly string _connectionString;
 
-    private const int CurrentSchemaVersion = 2;
+    private const int CurrentSchemaVersion = 3;
 
     public SmartXCacheDatabase()
     {
@@ -79,6 +79,22 @@ public class SmartXCacheDatabase
             await transaction.CommitAsync(cancellationToken);
 
             version = 2;
+        }
+
+        if (version < 3)
+        {
+            using var transaction =
+                (SqliteTransaction)await connection.BeginTransactionAsync(
+                    cancellationToken);
+
+            await CreateMeshTablesAsync(
+                connection,
+                transaction,
+                cancellationToken);
+
+            await transaction.CommitAsync(cancellationToken);
+
+            version = 3;
         }
 
         await SetSchemaVersionAsync(
@@ -271,5 +287,121 @@ public class SmartXCacheDatabase
 
         await command.ExecuteNonQueryAsync(
             cancellationToken);
+
+        //MESH
+
     }
+
+    // VERSION 3: MESH TABLES
+
+    private static async Task CreateMeshTablesAsync(
+        SqliteConnection connection,
+        SqliteTransaction transaction,
+        CancellationToken cancellationToken)
+    {
+        using var command = connection.CreateCommand();
+
+        command.Transaction = transaction;
+
+        command.CommandText = """
+        CREATE TABLE IF NOT EXISTS MeshNodes
+        (
+            Id TEXT PRIMARY KEY,
+            GatewayId TEXT NOT NULL,
+            DeviceId TEXT NOT NULL,
+            NodeType INTEGER NOT NULL,
+            DeviceIdentifier TEXT NOT NULL,
+            Name TEXT NOT NULL,
+            Status INTEGER NOT NULL,
+            IsGateway INTEGER NOT NULL,
+            BatteryLevel REAL NULL,
+            LastSeen TEXT NULL,
+            CreatedAt TEXT NOT NULL,
+            UpdatedAt TEXT NOT NULL
+        );
+
+        CREATE INDEX IF NOT EXISTS IX_MeshNodes_GatewayId
+        ON MeshNodes(GatewayId);
+
+        CREATE TABLE IF NOT EXISTS MeshLinks
+        (
+            Id TEXT PRIMARY KEY,
+            GatewayId TEXT NOT NULL,
+            SourceNodeId TEXT NOT NULL,
+            SourceNodeType INTEGER NOT NULL,
+            TargetNodeId TEXT NOT NULL,
+            TargetNodeType INTEGER NOT NULL,
+            SignalStrengthDbm REAL NULL,
+            LatencyMilliseconds REAL NULL,
+            EnergyCost REAL NULL,
+            IsAvailable INTEGER NOT NULL,
+            LastSeenAt TEXT NOT NULL,
+            CreatedAt TEXT NOT NULL,
+            UpdatedAt TEXT NOT NULL
+        );
+
+        CREATE INDEX IF NOT EXISTS IX_MeshLinks_GatewayId
+        ON MeshLinks(GatewayId);
+
+        CREATE TABLE IF NOT EXISTS MeshLogs
+        (
+            Id TEXT PRIMARY KEY,
+            GatewayId TEXT NOT NULL,
+            NodeId TEXT NULL,
+            ConnectionId TEXT NULL,
+            EventType TEXT NOT NULL,
+            Message TEXT NOT NULL,
+            Severity INTEGER NOT NULL,
+            Details TEXT NULL,
+            Timestamp TEXT NOT NULL
+        );
+
+        CREATE INDEX IF NOT EXISTS IX_MeshLogs_GatewayId
+        ON MeshLogs(GatewayId);
+
+        CREATE TABLE IF NOT EXISTS MeshRoutes
+        (
+            Id TEXT PRIMARY KEY,
+            GatewayId TEXT NOT NULL,
+            SourceNodeId TEXT NOT NULL,
+            DestinationNodeId TEXT NOT NULL,
+            NodePath TEXT NOT NULL,
+            Algorithm INTEGER NOT NULL,
+            TotalCost REAL NOT NULL,
+            TotalLatency REAL NOT NULL,
+            HopCount INTEGER NOT NULL,
+            IsSuccessful INTEGER NOT NULL,
+            CalculatedAt TEXT NOT NULL
+        );
+
+        CREATE INDEX IF NOT EXISTS IX_MeshRoutes_GatewayId
+        ON MeshRoutes(GatewayId);
+
+        CREATE TABLE IF NOT EXISTS MeshConnections
+        (
+            Id TEXT PRIMARY KEY,
+            GatewayId TEXT NOT NULL,
+            SourceNodeId TEXT NOT NULL,
+            DestinationNodeId TEXT NOT NULL,
+            SignalStrength REAL NULL,
+            LinkQuality REAL NOT NULL,
+            Latency REAL NOT NULL,
+            EnergyCost REAL NOT NULL,
+            RoutingCost REAL NOT NULL,
+            IsActive INTEGER NOT NULL,
+            LastUpdated TEXT NOT NULL,
+            CreatedAt TEXT NOT NULL
+        );
+
+        CREATE INDEX IF NOT EXISTS IX_MeshConnections_SourceNodeId
+        ON MeshConnections(SourceNodeId);
+
+        CREATE INDEX IF NOT EXISTS IX_MeshConnections_DestinationNodeId
+        ON MeshConnections(DestinationNodeId);
+        """;
+
+        await command.ExecuteNonQueryAsync(cancellationToken);
+    }
+
+
 }

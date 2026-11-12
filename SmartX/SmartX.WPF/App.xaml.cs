@@ -139,6 +139,14 @@ public partial class App
         services.AddSingleton<ILocalGatewayCache, SQLiteGatewayCache>();
         services.AddSingleton<ILocalUserBehaviorCache, SQLiteUserBehaviorCache>();
 
+        // MESH LOCAL CACHE
+        services.AddScoped<IMeshCacheSyncService, MeshCacheSyncService>();
+        services.AddScoped<ILocalMeshNodeCache, SQLiteMeshNodeCache>();
+        services.AddScoped<ILocalMeshLinkCache, SQLiteMeshLinkCache>();
+        services.AddScoped<ILocalMeshLogCache, SQLiteMeshLogCache>();
+        services.AddScoped<ILocalMeshRouteCache, SQLiteMeshRouteCache>();
+        services.AddScoped<ILocalMeshConnectionCache, SQLiteMeshConnectionCache>();
+
         // Synchronization
         services.AddSingleton<ICacheSyncService, CacheSyncService>();
 

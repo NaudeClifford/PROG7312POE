@@ -108,6 +108,19 @@ public class JsonMeshConnectionRepository
             _lock.Release();
         }
     }
+    public async Task<IReadOnlyList<MeshConnection>> GetByGatewayIdAsync(
+    Guid gatewayId,
+    CancellationToken cancellationToken = default)
+    {
+        if (gatewayId == Guid.Empty)
+            return [];
+
+        var connections = await GetAllAsync(cancellationToken);
+
+        return connections
+            .Where(x => x.GatewayId == gatewayId)
+            .ToList();
+    }
 
     private async Task<List<MeshConnection>> ReadUnsafeAsync(
         CancellationToken cancellationToken)

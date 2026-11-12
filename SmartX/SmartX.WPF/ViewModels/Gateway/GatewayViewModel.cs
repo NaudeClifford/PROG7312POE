@@ -12,7 +12,7 @@ using SmartX.WPF.ViewModels.Alerts;
 using SmartX.WPF.ViewModels.Base;
 using SmartX.WPF.Views.Pages.Gateway;
 using SmartX.WPF.Views.Pages.History;
-using SmartX.WPF.Views.Pages.Network;
+using SmartX.WPF.Views.Pages.Mesh;
 using SmartX.WPF.Views.Pages.Sensor;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -1111,7 +1111,7 @@ public class GatewayViewModel : ViewModelBase
             return;
 
         _navigationService
-            .NavigateTo<NetworkPage>();
+            .NavigateTo<NetworkTopologyPage>();
 
         await Task.CompletedTask;
     }
