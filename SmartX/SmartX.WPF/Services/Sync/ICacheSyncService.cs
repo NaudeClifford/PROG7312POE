@@ -28,8 +28,16 @@ public interface ICacheSyncService
         CancellationToken cancellationToken = default);
 
     Task<CompanyDto?> GetCompanyAsync(
-    Guid companyId,
-    CancellationToken cancellationToken = default);
+        Guid companyId,
+        CancellationToken cancellationToken = default);
 
+    // MESH SYNCHRONIZATION
 
+    Task SyncMeshRoutesAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
+
+    Task SyncMeshConnectionsAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default);
 }

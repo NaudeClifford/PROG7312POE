@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SmartX.Application.Authentication;
 using SmartX.Application.Interfaces.Mesh;
 using SmartX.Application.Interfaces.Sensors;
+using SmartX.Application.Services.Mesh.Discovery;
 using SmartX.Application.Services.Sensors;
 using SmartX.Domain.Interfaces;
 using SmartX.Domain.Interfaces.Mesh;
@@ -53,7 +54,8 @@ public static class DependencyInjection
         services.AddSingleton<IMeshConnectionRepository, JsonMeshConnectionRepository>();
         services.AddSingleton<IMeshRouteRepository, JsonMeshRouteRepository>();
         services.AddSingleton<IMeshLogRepository, JsonMeshLogRepository>();
-        services.AddScoped<IMeshDiscoveryProvider, IMeshDiscoveryProvider>();
+        services.AddScoped<IMeshDiscoveryProvider, MeshDiscoveryProvider>();
+        services.AddScoped<IMeshGatewayDiscoveryClient, MeshGatewayDiscoveryClient>();
 
         return services;
     }

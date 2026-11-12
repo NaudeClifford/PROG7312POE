@@ -1,6 +1,8 @@
-﻿using SmartX.Application.Interfaces.Mesh;
+﻿
+using SmartX.Application.Interfaces.Mesh;
 using SmartX.Domain.Entities.Mesh;
 using SmartX.Domain.Enums.Mesh;
+using SmartX.Domain.Interfaces;
 using SmartX.Domain.Interfaces.Mesh;
 
 namespace SmartX.Application.Services.Mesh.Discovery;
@@ -10,7 +12,8 @@ public class MeshDiscoveryService(
     IMeshTopologyService topologyService,
     IMeshNodeRepository nodeRepository,
     IMeshLinkRepository linkRepository,
-    IMeshLogRepository logRepository)
+    IMeshLogRepository logRepository,
+    ISensorRepository sensorRepository)
     : IMeshDiscoveryService
 {
     private readonly IMeshDiscoveryProvider _discoveryProvider =
@@ -28,6 +31,9 @@ public class MeshDiscoveryService(
     private readonly IMeshLogRepository _logRepository =
         logRepository;
 
+    private readonly ISensorRepository _sensorRepository =
+        sensorRepository;
+
     public async Task<MeshDiscoveryResult> DiscoverAsync(
         Guid gatewayId,
         CancellationToken cancellationToken = default)
@@ -40,7 +46,14 @@ public class MeshDiscoveryService(
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        // Ensure all discovered devices belong to this gateway.
+        if (result is null)
+            throw new InvalidOperationException(
+                "Mesh discovery returned no result.");
+
+        result.DiscoveredNodes ??= new List<MeshNode>();
+        result.DiscoveredLinks ??= new List<MeshLink>();
+
+        // Validate gateway discovery results.
         foreach (var node in result.DiscoveredNodes)
         {
             if (node.GatewayId != gatewayId)
@@ -59,6 +72,63 @@ public class MeshDiscoveryService(
             }
         }
 
+        // Retrieve actual registered sensors.
+        var sensors = await _sensorRepository.GetAllAsync(
+            cancellationToken);
+
+        var gatewaySensors = sensors
+            .Where(sensor =>
+                sensor.GatewayId == gatewayId &&
+                sensor.IsActive)
+            .ToList();
+
+        // Convert registered sensors into mesh nodes.
+        foreach (var sensor in gatewaySensors)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var existing = result.DiscoveredNodes.FirstOrDefault(
+                node =>
+                    node.DeviceId == sensor.Id &&
+                    node.NodeType == MeshNodeType.Sensor);
+
+            if (existing is not null)
+            {
+                existing.Name = sensor.Name;
+                existing.DeviceIdentifier =
+                    sensor.DeviceIdentifier;
+
+                continue;
+            }
+
+            result.DiscoveredNodes.Add(
+                new MeshNode
+                {
+                    Id = Guid.NewGuid(),
+
+                    GatewayId = gatewayId,
+
+                    // The sensor's actual database ID.
+                    DeviceId = sensor.Id,
+
+                    DeviceIdentifier =
+                        sensor.DeviceIdentifier,
+
+                    Name = sensor.Name,
+
+                    NodeType = MeshNodeType.Sensor,
+
+                    IsGateway = false,
+
+                    // Remains Offline until actual mesh
+                    // connectivity has been established.
+                    LastSeen = null,
+
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                });
+        }
+
         return result;
     }
 
@@ -67,6 +137,9 @@ public class MeshDiscoveryService(
         CancellationToken cancellationToken = default)
     {
         ValidateGateway(gatewayId);
+        await SynchronizeSensorsAsync(
+            gatewayId,
+            cancellationToken);
 
         var discovery = await DiscoverAsync(
             gatewayId,
@@ -118,8 +191,7 @@ public class MeshDiscoveryService(
             changes++;
         }
 
-        // Refresh the node list because newly discovered nodes
-        // may be required by discovered links.
+        // Refresh nodes before synchronizing links.
         var synchronizedNodes =
             await _nodeRepository.GetByGatewayIdAsync(
                 gatewayId,
@@ -129,7 +201,7 @@ public class MeshDiscoveryService(
             .Select(x => x.Id)
             .ToHashSet();
 
-        // Synchronize discovered links.
+        // Synchronize actual discovered links.
         foreach (var discovered in discovery.DiscoveredLinks)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -162,7 +234,7 @@ public class MeshDiscoveryService(
         }
 
         await _logRepository.AddAsync(
-            new MeshLog
+            new SmartX.Domain.Entities.Mesh.MeshLog
             {
                 Id = Guid.NewGuid(),
                 GatewayId = gatewayId,
@@ -171,12 +243,76 @@ public class MeshDiscoveryService(
                     $"Mesh discovery completed. " +
                     $"Nodes discovered: {discovery.DiscoveredNodes.Count}. " +
                     $"Links discovered: {discovery.DiscoveredLinks.Count}.",
-                Severity = MeshLogSeverity.Information,
+                Severity =
+                    SmartX.Domain.Enums.Mesh.MeshLogSeverity.Information,
                 Timestamp = DateTime.UtcNow
             },
             cancellationToken);
 
         return changes;
+    }
+
+    private async Task SynchronizeSensorsAsync(
+    Guid gatewayId,
+    CancellationToken cancellationToken)
+    {
+        var sensors = await _sensorRepository.GetAllAsync(
+            cancellationToken);
+
+        var gatewaySensors = sensors
+            .Where(x =>
+                x.GatewayId == gatewayId &&
+                x.IsActive)
+            .ToList();
+
+        var existingNodes =
+            await _nodeRepository.GetByGatewayIdAsync(
+                gatewayId,
+                cancellationToken);
+
+        foreach (var sensor in gatewaySensors)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var existing = existingNodes.FirstOrDefault(x =>
+                x.DeviceId == sensor.Id &&
+                x.NodeType == MeshNodeType.Sensor);
+
+            var node = new MeshNode
+            {
+                Id = existing?.Id ?? Guid.NewGuid(),
+
+                GatewayId = gatewayId,
+                DeviceId = sensor.Id,
+
+                DeviceIdentifier = sensor.DeviceIdentifier,
+                Name = sensor.Name,
+
+                NodeType = MeshNodeType.Sensor,
+                Status = MeshNodeStatus.Offline,
+
+                IsGateway = false,
+
+                BatteryLevel = existing?.BatteryLevel,
+                LastSeen = existing?.LastSeen,
+
+                CreatedAt = existing?.CreatedAt ?? DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            if (existing is null)
+            {
+                await _topologyService.RegisterNodeAsync(
+                    node,
+                    cancellationToken);
+            }
+            else
+            {
+                await _topologyService.UpdateNodeAsync(
+                    node,
+                    cancellationToken);
+            }
+        }
     }
 
     private static void ValidateGateway(Guid gatewayId)
@@ -187,14 +323,5 @@ public class MeshDiscoveryService(
                 "A valid gateway ID is required.",
                 nameof(gatewayId));
         }
-    }
-
-    private static (Guid First, Guid Second) NormalizeEndpoints(
-    Guid source,
-    Guid target)
-    {
-        return source.CompareTo(target) < 0
-            ? (source, target)
-            : (target, source);
     }
 }

@@ -317,4 +317,51 @@ public class MeshCacheSyncService(
         await SyncRoutesAsync(gatewayId, cancellationToken);
         await SyncConnectionsAsync(gatewayId, cancellationToken);
     }
+
+    public async Task SyncMeshRoutesAsync(
+    Guid gatewayId,
+    CancellationToken cancellationToken = default)
+    {
+        if (gatewayId == Guid.Empty)
+            return;
+
+        var routes = await _apiClient.GetMeshRoutesAsync(
+            gatewayId,
+            cancellationToken);
+
+        if (routes is null)
+            return;
+
+        var cachedRoutes = await _routeCache
+            .GetByGatewayIdAsync(
+                gatewayId,
+                cancellationToken);
+
+        var serverIds = routes
+            .Select(x => x.Id)
+            .ToHashSet();
+
+        foreach (var cached in cachedRoutes)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (!serverIds.Contains(cached.Id))
+            {
+                await _routeCache.DeleteAsync(
+                    cached.Id,
+                    cancellationToken);
+            }
+        }
+
+        foreach (var dto in routes)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var entity = _mapper.Map<MeshRoute>(dto);
+
+            await _routeCache.UpdateAsync(
+                entity,
+                cancellationToken);
+        }
+    }
 }

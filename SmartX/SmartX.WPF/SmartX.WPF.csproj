@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="Assets\Images\" />
+    <Folder Include="Resources\Mesh\" />
   </ItemGroup>
 
   <ItemGroup>

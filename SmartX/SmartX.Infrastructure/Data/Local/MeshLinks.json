@@ -1,0 +1,30 @@
+[
+  {
+    "Id": "88888888-8888-8888-8888-888888888888",
+    "GatewayId": "22222222-2222-2222-2222-222222222222",
+    "SourceNodeId": "55555555-5555-5555-5555-555555555555",
+    "TargetNodeId": "66666666-6666-6666-6666-666666666666",
+    "SignalStrengthDbm": -48,
+    "LatencyMilliseconds": 12.5,
+    "EnergyCost": 0.15,
+    "IsAvailable": true,
+    "LastSeenAt": "2026-11-13T10:00:00Z",
+    "CreatedAt": "2026-11-01T08:05:00Z",
+    "UpdatedAt": "2026-11-13T10:00:00Z",
+    "LinkQuality": 95.5
+  },
+  {
+    "Id": "99999999-9999-9999-9999-999999999999",
+    "GatewayId": "22222222-2222-2222-2222-222222222222",
+    "SourceNodeId": "55555555-5555-5555-5555-555555555555",
+    "TargetNodeId": "77777777-7777-7777-7777-777777777777",
+    "SignalStrengthDbm": -65,
+    "LatencyMilliseconds": 24.8,
+    "EnergyCost": 0.32,
+    "IsAvailable": true,
+    "LastSeenAt": "2026-11-13T09:58:00Z",
+    "CreatedAt": "2026-11-01T08:10:00Z",
+    "UpdatedAt": "2026-11-13T09:58:00Z",
+    "LinkQuality": 82.0
+  }
+]

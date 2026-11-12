@@ -1,4 +1,6 @@
-﻿namespace SmartX.Shared.DTOs.Mesh;
+﻿using SmartX.Domain.Enums.Mesh;
+
+namespace SmartX.Shared.DTOs.Mesh;
 
 public class MeshRouteDto
 {
@@ -10,9 +12,9 @@ public class MeshRouteDto
 
     public Guid DestinationNodeId { get; set; }
 
-    public List<Guid> NodePath { get; set; } = [];
+    public List<Guid> NodePath { get; set; } = new List<Guid>();
 
-    public int Algorithm { get; set; }
+    public RoutingAlgorithm Algorithm { get; set; }
 
     public double TotalCost { get; set; }
 

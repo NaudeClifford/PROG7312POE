@@ -425,6 +425,491 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "GetConnections",
+    "RelativePath": "api/mesh/{gatewayId}/connections",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "GetHealth",
+    "RelativePath": "api/mesh/{gatewayId}/health",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartX.Shared.DTOs.Mesh.MeshHealthReportDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "RemoveLink",
+    "RelativePath": "api/mesh/{gatewayId}/links/{linkId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "linkId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "EvaluateGatewayLinks",
+    "RelativePath": "api/mesh/{gatewayId}/links/evaluate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "GetGatewayLogs",
+    "RelativePath": "api/mesh/{gatewayId}/logs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "CheckNodeStatus",
+    "RelativePath": "api/mesh/{gatewayId}/monitoring/nodes",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "RefreshMonitoring",
+    "RelativePath": "api/mesh/{gatewayId}/monitoring/refresh",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "RecalculateRoutes",
+    "RelativePath": "api/mesh/{gatewayId}/monitoring/routes",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "RemoveNode",
+    "RelativePath": "api/mesh/{gatewayId}/nodes/{nodeId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "nodeId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "GetRoutes",
+    "RelativePath": "api/mesh/{gatewayId}/routes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "FindShortestPath",
+    "RelativePath": "api/mesh/{gatewayId}/routing/shortest-path",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "sourceNodeId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "destinationNodeId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "GetMinimumSpanningTree",
+    "RelativePath": "api/mesh/{gatewayId}/spanning-tree/{startNodeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "startNodeId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartX.Shared.DTOs.Mesh.MeshSpanningTreeDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "GetTopology",
+    "RelativePath": "api/mesh/{gatewayId}/topology",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "FindBfsRoute",
+    "RelativePath": "api/mesh/{gatewayId}/traversal/bfs-route",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "sourceNodeId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "destinationNodeId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "BreadthFirstSearch",
+    "RelativePath": "api/mesh/{gatewayId}/traversal/bfs/{startNodeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "startNodeId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "FindDfsRoute",
+    "RelativePath": "api/mesh/{gatewayId}/traversal/dfs-route",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "sourceNodeId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "destinationNodeId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "DepthFirstSearch",
+    "RelativePath": "api/mesh/{gatewayId}/traversal/dfs/{startNodeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "startNodeId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "Discover",
+    "RelativePath": "api/mesh/discovery/{gatewayId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "Synchronize",
+    "RelativePath": "api/mesh/discovery/{gatewayId}/synchronize",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "gatewayId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SmartX.Shared.DTOs.Mesh.MeshOperationResultDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "RegisterLink",
+    "RelativePath": "api/mesh/links",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SmartX.Shared.DTOs.Mesh.MeshLinkDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "UpdateLink",
+    "RelativePath": "api/mesh/links",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SmartX.Shared.DTOs.Mesh.MeshLinkDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "EvaluateLink",
+    "RelativePath": "api/mesh/links/{linkId}/evaluate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "linkId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "RegisterNode",
+    "RelativePath": "api/mesh/nodes",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SmartX.Shared.DTOs.Mesh.MeshNodeDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "UpdateNode",
+    "RelativePath": "api/mesh/nodes",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SmartX.Shared.DTOs.Mesh.MeshNodeDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.Mesh.MeshController",
+    "Method": "GetNodeLogs",
+    "RelativePath": "api/mesh/nodes/{nodeId}/logs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nodeId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SmartX.API.Controllers.PredictiveController",
     "Method": "GetWarnings",
     "RelativePath": "api/Predictive/gateway/{gatewayId}/warnings",
@@ -862,6 +1347,32 @@
     "ContainingType": "SmartX.API.Controllers.TelemetryController",
     "Method": "GetTelemetryByDateRange",
     "RelativePath": "api/Telemetry/sensor/{sensorId}/history",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "sensorId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "from",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "to",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SmartX.API.Controllers.TelemetryController",
+    "Method": "GetTelemetryAvlHistory",
+    "RelativePath": "api/Telemetry/sensor/{sensorId}/history/avl",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

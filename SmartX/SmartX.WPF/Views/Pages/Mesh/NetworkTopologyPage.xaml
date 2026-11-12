@@ -1,284 +1,221 @@
 ﻿<Page x:Class="SmartX.WPF.Views.Pages.Mesh.NetworkTopologyPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Background="#F3F6FB"
+      xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+      Background="{StaticResource MeshBackground}"
       Title="Network Topology">
-
-    <Page.Resources>
-
-        <Style x:Key="Card" TargetType="Border">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="CornerRadius" Value="11"/>
-            <Setter Property="Padding" Value="20"/>
-            <Setter Property="Margin" Value="0,0,12,12"/>
-            <Setter Property="BorderBrush" Value="#E5EAF2"/>
-            <Setter Property="BorderThickness" Value="1"/>
-        </Style>
-
-        <Style x:Key="SectionTitle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="#172554"/>
-            <Setter Property="Margin" Value="0,0,0,13"/>
-        </Style>
-
-        <Style x:Key="ActionButton" TargetType="Button">
-            <Setter Property="Background" Value="#2563EB"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Padding" Value="16,10"/>
-            <Setter Property="Margin" Value="0,0,8,8"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-
-        <Style x:Key="DataGridStyle" TargetType="DataGrid">
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="#334155"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="RowBackground" Value="White"/>
-            <Setter Property="AlternatingRowBackground" Value="#F8FAFC"/>
-            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
-            <Setter Property="HorizontalGridLinesBrush" Value="#E2E8F0"/>
-            <Setter Property="HeadersVisibility" Value="Column"/>
-            <Setter Property="CanUserAddRows" Value="False"/>
-            <Setter Property="CanUserResizeRows" Value="False"/>
-            <Setter Property="IsReadOnly" Value="True"/>
-            <Setter Property="AutoGenerateColumns" Value="True"/>
-            <Setter Property="RowHeight" Value="39"/>
-            <Setter Property="ColumnHeaderHeight" Value="40"/>
-            <Setter Property="FontSize" Value="12"/>
-        </Style>
-
-        <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#F1F5F9"/>
-            <Setter Property="Foreground" Value="#475569"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Padding" Value="10,8"/>
-            <Setter Property="BorderThickness" Value="0"/>
-        </Style>
-
-    </Page.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-        <Border Margin="20"
-Padding="25"
-Background="{StaticResource DarkBrush}"
-CornerRadius="24">
+        <StackPanel Margin="25">
 
-            <Grid Margin="10">
+            <!-- HEADER -->
 
-                <StackPanel Margin="26">
-
-                    <!-- HEADER -->
-
-                    <Border Background="#172554" BorderBrush="White" BorderThickness="2"
-                    CornerRadius="12"
+            <Border Background="#172554"
+                    CornerRadius="16"
                     Padding="25"
-                    Margin="0,0,0,20">
+                    Margin="0,0,0,18">
 
-                        <StackPanel>
+                <StackPanel>
+                    <TextBlock Text="SMARTX NETWORK INTELLIGENCE"
+                               Foreground="#38BDF8"
+                               FontSize="11"
+                               FontWeight="Bold"/>
 
-                            <TextBlock Text="Network Topology" Style="{StaticResource PageTitleStyle}"/>
+                    <TextBlock Text="Network Topology"
+                               Foreground="White"
+                               FontSize="30"
+                               FontWeight="Bold"
+                               Margin="0,8"/>
 
-                            <TextBlock Text="Explore registered mesh nodes and their network connections." Style="{StaticResource SectionTitle}" Foreground="White"/>
+                    <TextBlock Text="Visualize mesh nodes, network connections and infrastructure health."
+                               Foreground="#CBD5E1"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
 
-                        </StackPanel>
-                    </Border>
+            <!-- GATEWAY -->
 
-                    <!-- GATEWAY -->
+            <Border Style="{StaticResource MeshCard}">
+                <StackPanel>
+                    <TextBlock Text="Gateway Configuration"
+                               Style="{StaticResource MeshSectionTitle}"/>
 
-                    <Border Style="{StaticResource Card}">
-                        <StackPanel>
+                    <TextBox Text="{Binding GatewayId,
+                                     UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource MeshInput}"
+                             MaxWidth="550"
+                             HorizontalAlignment="Left"/>
 
-                            <TextBlock Text="Gateway Configuration"
-                               Style="{StaticResource SectionTitle}"/>
-
-                            <TextBlock Text="Gateway ID" Style="{StaticResource BodyTextStyleBlack}"/>
-
-                            <TextBox Text="{Binding GatewayId, UpdateSourceTrigger=PropertyChanged}"
-                             Height="37"
-                             Padding="9,7"
-                             BorderBrush="#CBD5E1"
-                             BorderThickness="1"
-                             VerticalContentAlignment="Center"
-                             MaxWidth="450"
-                             HorizontalAlignment="Center"/>
-
-                            <WrapPanel Margin="0,12,0,0">
-
-                                <Button Content="Load Topology"
-                                Style="{StaticResource BaseButtonStyle}"
+                    <WrapPanel Margin="0,10,0,0">
+                        <Button Content="Load Topology"
+                                Style="{StaticResource MeshButton}"
                                 Command="{Binding LoadTopologyCommand}"/>
 
-                                <Button Content="Discover Nodes"
-                                Style="{StaticResource BaseButtonStyle}"
+                        <Button Content="Discover Nodes"
+                                Style="{StaticResource MeshButton}"
                                 Command="{Binding DiscoverCommand}"/>
 
-                                <Button Content="Synchronize Network"
-                                Style="{StaticResource BaseButtonStyle}"
+                        <Button Content="Synchronize"
+                                Style="{StaticResource MeshButton}"
                                 Command="{Binding SynchronizeCommand}"/>
-
-                            </WrapPanel>
-
-                        </StackPanel>
-                    </Border>
-
-                    <!-- STATUS -->
-
-                    <Border Background="#EFF6FF"
-                    BorderBrush="#BFDBFE"
-                    BorderThickness="1"
-                    CornerRadius="8"
-                    Padding="13"
-                    Margin="0,0,12,15">
-
-                        <StackPanel>
-
-                            <TextBlock Text="{Binding StatusMessage}"
-                               Foreground="#1D4ED8"
-                               FontWeight="SemiBold"
-                               TextWrapping="Wrap"/>
-
-                            <TextBlock Text="{Binding ErrorMessage}"
-                               Foreground="#DC2626"
-                               TextWrapping="Wrap"
-                               Margin="0,5,0,0"/>
-
-                            <TextBlock Text="Loading topology..."
-                               Foreground="#2563EB"
-                               Margin="0,5,0,0">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsBusy}" Value="True">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-
-                        </StackPanel>
-                    </Border>
-
-                    <!-- STATISTICS -->
-
-                    <TextBlock Text="Topology Overview"
-                       Style="{StaticResource SectionTitle}" Foreground="White"/>
-
-                    <UniformGrid Columns="3">
-
-                        <Border Style="{StaticResource Card}">
-                            <StackPanel>
-                                <TextBlock Text="REGISTERED NODES"  Style="{StaticResource BodyTextStyleBlack}"/>
-
-                                <TextBlock Text="{Binding TotalNodes}"
-                                   FontSize="28"
-                                   FontWeight="Bold"
-                                   Foreground="#172554"/>
-                            </StackPanel>
-                        </Border>
-
-                        <Border Style="{StaticResource Card}">
-                            <StackPanel>
-                                <TextBlock Text="TOTAL CONNECTIONS"  Style="{StaticResource BodyTextStyleBlack}"/>
-
-                                <TextBlock Text="{Binding TotalLinks}"
-                                   FontSize="28"
-                                   FontWeight="Bold"
-                                   Foreground="#2563EB"/>
-                            </StackPanel>
-                        </Border>
-
-                        <Border Style="{StaticResource Card}">
-                            <StackPanel>
-                                <TextBlock Text="ACTIVE CONNECTIONS" Style="{StaticResource BodyTextStyleBlack}"/>
-
-                                <TextBlock Text="{Binding ActiveLinks}"
-                                   FontSize="28"
-                                   FontWeight="Bold"
-                                   Foreground="#16A34A"/>
-                            </StackPanel>
-                        </Border>
-
-                    </UniformGrid>
-
-                    <!-- NODE TABLE -->
-
-                    <Border Style="{StaticResource Card}">
-
-                        <StackPanel>
-
-                            <TextBlock Text="Registered Mesh Nodes"
-                               Style="{StaticResource SectionTitle}"/>
-
-                            <DataGrid ItemsSource="{Binding Nodes}"
-                              SelectedItem="{Binding SelectedNode}"
-                              Style="{StaticResource DataGridStyle}"
-                              MinHeight="180"
-                              MaxHeight="350"/>
-
-                        </StackPanel>
-                    </Border>
-
-                    <!-- LINK TABLE -->
-
-                    <Border Style="{StaticResource Card}">
-
-                        <StackPanel>
-
-                            <TextBlock Text="Mesh Connections"
-                               Style="{StaticResource SectionTitle}"/>
-
-                            <DataGrid ItemsSource="{Binding Links}"
-                              SelectedItem="{Binding SelectedLink}"
-                              Style="{StaticResource DataGridStyle}"
-                              MinHeight="180"
-                              MaxHeight="350"/>
-
-                        </StackPanel>
-                    </Border>
-
-                    <!-- SELECTED NODE -->
-
-                    <Border Style="{StaticResource Card}">
-
-                        <StackPanel>
-
-                            <TextBlock Text="Selected Node"
-                               Style="{StaticResource SectionTitle}"/>
-
-                            <TextBlock Text="{Binding SelectedNode.Id, TargetNullValue=No node selected}"
-                               Foreground="#334155"
-                               FontSize="12"
-                               TextWrapping="Wrap"/>
-
-                        </StackPanel>
-                    </Border>
-
-                    <!-- SELECTED LINK -->
-
-                    <Border Style="{StaticResource Card}">
-
-                        <StackPanel>
-
-                            <TextBlock Text="Selected Connection"
-                               Style="{StaticResource SectionTitle}"/>
-
-                            <TextBlock Text="{Binding SelectedLink.Id, TargetNullValue=No connection selected}"
-                               Foreground="#334155"
-                               FontSize="12"
-                               TextWrapping="Wrap"/>
-
-                        </StackPanel>
-                    </Border>
-
+                    </WrapPanel>
                 </StackPanel>
-            </Grid>
             </Border>
+
+            <!-- STATUS -->
+
+            <Border Background="#DBEAFE"
+                    CornerRadius="10"
+                    Padding="13"
+                    Margin="5">
+
+                <StackPanel>
+                    <TextBlock Text="{Binding StatusMessage}"
+                               Foreground="#1D4ED8"
+                               FontWeight="Bold"/>
+
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Foreground="#DC2626"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+            <!-- KPI -->
+
+            <UniformGrid Columns="4">
+
+                <Border Style="{StaticResource MeshCard}">
+                    <StackPanel>
+                        <TextBlock Text="REGISTERED NODES"
+                                   Foreground="#64748B"/>
+
+                        <TextBlock Text="{Binding TotalNodes}"
+                                   Style="{StaticResource MeshStatValue}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource MeshCard}">
+                    <StackPanel>
+                        <TextBlock Text="TOTAL CONNECTIONS"
+                                   Foreground="#64748B"/>
+
+                        <TextBlock Text="{Binding TotalLinks}"
+                                   Style="{StaticResource MeshStatValue}"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource MeshCard}">
+                    <StackPanel>
+                        <TextBlock Text="ACTIVE CONNECTIONS"
+                                   Foreground="#64748B"/>
+
+                        <TextBlock Text="{Binding ActiveLinks}"
+                                   Style="{StaticResource MeshStatValue}"
+                                   Foreground="#16A34A"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource MeshCard}">
+                    <StackPanel>
+                        <TextBlock Text="UNAVAILABLE LINKS"
+                                   Foreground="#64748B"/>
+
+                        <TextBlock Text="{Binding UnavailableLinks}"
+                                   Style="{StaticResource MeshStatValue}"
+                                   Foreground="#DC2626"/>
+                    </StackPanel>
+                </Border>
+
+            </UniformGrid>
+
+            <!-- GRAPHICAL TOPOLOGY -->
+
+            <Border Style="{StaticResource MeshCard}">
+                <StackPanel>
+
+                    <TextBlock Text="Network Connection Analytics"
+                               Style="{StaticResource MeshSectionTitle}"/>
+
+                    <lvc:CartesianChart
+                        Series="{Binding TopologyLinkSeries}"
+                        XAxes="{Binding TopologyXAxis}"
+                        YAxes="{Binding TopologyYAxis}"
+                        Height="260"/>
+
+                    <TextBlock Text="Connection distribution"
+                               Foreground="#64748B"
+                               FontSize="12"
+                               Margin="0,8"/>
+                </StackPanel>
+            </Border>
+
+            <!-- NODE OVERVIEW -->
+
+            <Border Style="{StaticResource MeshCard}">
+                <StackPanel>
+
+                    <TextBlock Text="Registered Mesh Nodes"
+                               Style="{StaticResource MeshSectionTitle}"/>
+
+                    <DataGrid ItemsSource="{Binding Nodes}"
+                              SelectedItem="{Binding SelectedNode}"
+                              MinHeight="180"
+                              MaxHeight="350"/>
+                </StackPanel>
+            </Border>
+
+            <!-- SELECTED NODE -->
+
+            <Border Style="{StaticResource MeshCard}">
+                <StackPanel>
+
+                    <TextBlock Text="Selected Node Details"
+                               Style="{StaticResource MeshSectionTitle}"/>
+
+                    <TextBlock Text="{Binding SelectedNode.Id,
+                                        TargetNullValue=No node selected}"
+                               Foreground="#2563EB"
+                               FontSize="13"
+                               TextWrapping="Wrap"/>
+
+                    <TextBlock Text="{Binding SelectedNode.Status,
+                                        TargetNullValue=Select a node}"
+                               Foreground="#64748B"
+                               Margin="0,8"/>
+                </StackPanel>
+            </Border>
+
+            <!-- CONNECTIONS -->
+
+            <Border Style="{StaticResource MeshCard}">
+                <StackPanel>
+
+                    <TextBlock Text="Mesh Connections"
+                               Style="{StaticResource MeshSectionTitle}"/>
+
+                    <DataGrid ItemsSource="{Binding Links}"
+                              SelectedItem="{Binding SelectedLink}"
+                              MinHeight="180"
+                              MaxHeight="350"/>
+                </StackPanel>
+            </Border>
+
+            <!-- SELECTED LINK -->
+
+            <Border Style="{StaticResource MeshCard}">
+                <StackPanel>
+
+                    <TextBlock Text="Selected Connection Details"
+                               Style="{StaticResource MeshSectionTitle}"/>
+
+                    <TextBlock Text="{Binding SelectedLink.Id,
+                                        TargetNullValue=No connection selected}"
+                               Foreground="#2563EB"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
     </ScrollViewer>
 </Page>

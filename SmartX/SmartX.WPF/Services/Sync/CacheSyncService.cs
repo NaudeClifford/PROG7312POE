@@ -1,4 +1,5 @@
 ﻿using SmartX.Domain.Entities;
+using SmartX.Domain.Entities.Mesh;
 using SmartX.Shared.DTOs;
 using SmartX.Shared.Mapping;
 using SmartX.WPF.Repositories.Local;
@@ -14,6 +15,8 @@ public class CacheSyncService(
     ILocalCompanyCache companyCache,
     ILocalGatewayCache gatewayCache,
     ILocalUserBehaviorCache userBehaviorCache,
+    ILocalMeshRouteCache meshRouteCache,
+    ILocalMeshConnectionCache meshConnectionCache,
     IMapper mapper) : ICacheSyncService
 {
     private readonly ISmartXApiClient _apiClient = apiClient;
@@ -23,7 +26,8 @@ public class CacheSyncService(
     private readonly ILocalCompanyCache _companyCache = companyCache;
     private readonly ILocalGatewayCache _gatewayCache = gatewayCache;
     private readonly ILocalUserBehaviorCache _userBehaviorCache = userBehaviorCache;
-
+    private readonly ILocalMeshRouteCache _meshRouteCache = meshRouteCache;
+    private readonly ILocalMeshConnectionCache _meshConnectionCache = meshConnectionCache;
     private readonly IMapper _mapper = mapper;
 
 
@@ -378,6 +382,118 @@ public class CacheSyncService(
         return dto;
     }
 
+    // MESH ROUTES
 
+    public async Task SyncMeshRoutesAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default)
+    {
+        if (gatewayId == Guid.Empty)
+            return;
 
+        var routes = await _apiClient.GetMeshRoutesAsync(
+            gatewayId,
+            cancellationToken);
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var cachedRoutes = await _meshRouteCache.GetAllAsync(
+            cancellationToken);
+
+        var cachedById = cachedRoutes
+            .Where(x => x.GatewayId == gatewayId)
+            .ToDictionary(x => x.Id);
+
+        var apiRouteIds = routes
+            .Select(x => x.Id)
+            .ToHashSet();
+
+        foreach (var dto in routes)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (cachedById.TryGetValue(dto.Id, out var cached))
+            {
+                if (dto.CalculatedAt <= cached.CalculatedAt)
+                    continue;
+            }
+
+            var route = _mapper.Map<MeshRoute>(dto);
+
+            await _meshRouteCache.UpdateAsync(
+                route,
+                cancellationToken);
+        }
+
+        foreach (var cached in cachedRoutes)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (cached.GatewayId == gatewayId &&
+                !apiRouteIds.Contains(cached.Id))
+            {
+                await _meshRouteCache.DeleteAsync(
+                    cached.Id,
+                    cancellationToken);
+            }
+        }
+    }
+    // MESH CONNECTIONS
+
+    public async Task SyncMeshConnectionsAsync(
+        Guid gatewayId,
+        CancellationToken cancellationToken = default)
+    {
+        if (gatewayId == Guid.Empty)
+            return;
+
+        var connections =
+            await _apiClient.GetMeshConnectionsAsync(
+                gatewayId,
+                cancellationToken);
+
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var cachedConnections =
+            await _meshConnectionCache.GetByGatewayIdAsync(
+                gatewayId,
+                cancellationToken);
+
+        var cachedById = cachedConnections
+            .ToDictionary(x => x.Id);
+
+        var apiConnectionIds = connections
+            .Select(x => x.Id)
+            .ToHashSet();
+
+        foreach (var dto in connections)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (cachedById.TryGetValue(dto.Id, out var cached))
+            {
+                if (dto.LastUpdated <= cached.LastUpdated)
+                    continue;
+            }
+
+            var connection =
+                _mapper.Map<MeshConnection>(dto);
+
+            await _meshConnectionCache.UpdateAsync(
+                connection,
+                cancellationToken);
+        }
+
+        foreach (var cached in cachedConnections)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (!apiConnectionIds.Contains(cached.Id))
+            {
+                await _meshConnectionCache.DeleteAsync(
+                    cached.Id,
+                    cancellationToken);
+            }
+        }
+    }
 }

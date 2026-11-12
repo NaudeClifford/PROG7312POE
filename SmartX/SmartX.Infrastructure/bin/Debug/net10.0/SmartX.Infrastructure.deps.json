@@ -609,6 +609,7 @@
           "Microsoft.AspNetCore.Http.Abstractions": "2.3.14",
           "Microsoft.AspNetCore.Http.Features": "5.0.17",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "11.0.0",
+          "Microsoft.Extensions.Hosting.Abstractions": "8.0.1",
           "Microsoft.Extensions.Logging.Abstractions": "11.0.0",
           "SmartX.Domain": "1.0.0",
           "SmartX.Shared": "1.0.0"

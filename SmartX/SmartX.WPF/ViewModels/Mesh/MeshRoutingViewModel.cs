@@ -1,4 +1,6 @@
-﻿using SmartX.Shared.DTOs.Mesh;
+﻿using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using SmartX.Shared.DTOs.Mesh;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
 using SmartX.WPF.Services.Session;
@@ -19,9 +21,7 @@ public class MeshRoutingViewModel : ViewModelBase
     private Guid destinationNodeId;
     private Guid startNodeId;
 
-    private bool isBusy;
     private string statusMessage = "Ready.";
-    private string errorMessage = string.Empty;
     private string resultMessage = string.Empty;
 
     private MeshRouteDto? routingResult;
@@ -51,6 +51,7 @@ public class MeshRoutingViewModel : ViewModelBase
         get => startNodeId;
         set => SetProperty(ref startNodeId, value);
     }
+
     public string StatusMessage
     {
         get => statusMessage;
@@ -66,13 +67,21 @@ public class MeshRoutingViewModel : ViewModelBase
     public MeshRouteDto? RoutingResult
     {
         get => routingResult;
-        set => SetProperty(ref routingResult, value);
+        set
+        {
+            if (SetProperty(ref routingResult, value))
+                OnPropertyChanged(nameof(RouteNodes));
+        }
     }
 
     public MeshTraversalResultDto? TraversalResult
     {
         get => traversalResult;
-        set => SetProperty(ref traversalResult, value);
+        set
+        {
+            if (SetProperty(ref traversalResult, value))
+                OnPropertyChanged(nameof(VisitedNodes));
+        }
     }
 
     public MeshSpanningTreeDto? SpanningTree
@@ -82,6 +91,8 @@ public class MeshRoutingViewModel : ViewModelBase
     }
 
     public ObservableCollection<Guid> RouteNodes { get; } = [];
+
+    public ObservableCollection<Guid> VisitedNodes { get; } = [];
 
     public ICommand ShortestPathCommand { get; }
     public ICommand BreadthFirstSearchCommand { get; }
@@ -98,40 +109,62 @@ public class MeshRoutingViewModel : ViewModelBase
     {
         _apiClient = apiClient;
 
-        ShortestPathCommand = new RelayCommand(
-            async _ => await FindShortestPathAsync());
+        GatewayId = session.GatewayId ?? Guid.Empty;
 
-        BreadthFirstSearchCommand = new RelayCommand(
-            async _ => await RunBfsAsync());
+        ShortestPathCommand =
+            new RelayCommand(async _ => await FindShortestPathAsync());
 
-        DepthFirstSearchCommand = new RelayCommand(
-            async _ => await RunDfsAsync());
+        BreadthFirstSearchCommand =
+            new RelayCommand(async _ => await RunBfsAsync());
 
-        FindBfsRouteCommand = new RelayCommand(
-            async _ => await FindBfsRouteAsync());
+        DepthFirstSearchCommand =
+            new RelayCommand(async _ => await RunDfsAsync());
 
-        FindDfsRouteCommand = new RelayCommand(
-            async _ => await FindDfsRouteAsync());
+        FindBfsRouteCommand =
+            new RelayCommand(async _ => await FindBfsRouteAsync());
 
-        SpanningTreeCommand = new RelayCommand(
-            async _ => await CalculateSpanningTreeAsync());
+        FindDfsRouteCommand =
+            new RelayCommand(async _ => await FindDfsRouteAsync());
+
+        SpanningTreeCommand =
+            new RelayCommand(async _ => await CalculateSpanningTreeAsync());
+    }
+
+    public Task InitializeAsync()
+    {
+        GatewayId = Session.GatewayId ?? Guid.Empty;
+
+        if (GatewayId == Guid.Empty)
+        {
+            ErrorMessage = "No valid gateway is selected.";
+            StatusMessage = "Gateway selection required.";
+        }
+
+        return Task.CompletedTask;
     }
 
     public async Task FindShortestPathAsync()
     {
+        if (!ValidateGateway() || !ValidateRoute())
+            return;
+
         await ExecuteAsync(async () =>
         {
-            ValidateGateway();
-            ValidateRoute();
-
             RoutingResult = await _apiClient.FindMeshShortestPathAsync(
                 GatewayId,
                 SourceNodeId,
                 DestinationNodeId);
 
-            ResultMessage = RoutingResult.Message;
+            UpdateRouteNodes();
 
-            StatusMessage = RoutingResult.Success
+            ResultMessage = RoutingResult.IsSuccessful
+                ? $"Shortest path found.\n" +
+                  $"Hops: {RoutingResult.HopCount}\n" +
+                  $"Total cost: {RoutingResult.TotalCost:F2}\n" +
+                  $"Latency: {RoutingResult.TotalLatency:F2} ms"
+                : "No shortest path found.";
+
+            StatusMessage = RoutingResult.IsSuccessful
                 ? "Shortest path calculated successfully."
                 : "No shortest path found.";
         });
@@ -139,53 +172,61 @@ public class MeshRoutingViewModel : ViewModelBase
 
     public async Task RunBfsAsync()
     {
+        if (!ValidateGateway() || !ValidateStartNode())
+            return;
+
         await ExecuteAsync(async () =>
         {
-            ValidateGateway();
-            ValidateStartNode();
-
             TraversalResult = await _apiClient.BreadthFirstSearchAsync(
                 GatewayId,
                 StartNodeId);
 
-            ResultMessage = TraversalResult.Message;
+            UpdateVisitedNodes();
 
+            ResultMessage = TraversalResult.Message;
             StatusMessage = "Breadth-first traversal completed.";
         });
     }
 
     public async Task RunDfsAsync()
     {
+        if (!ValidateGateway() || !ValidateStartNode())
+            return;
+
         await ExecuteAsync(async () =>
         {
-            ValidateGateway();
-            ValidateStartNode();
-
             TraversalResult = await _apiClient.DepthFirstSearchAsync(
                 GatewayId,
                 StartNodeId);
 
-            ResultMessage = TraversalResult.Message;
+            UpdateVisitedNodes();
 
+            ResultMessage = TraversalResult.Message;
             StatusMessage = "Depth-first traversal completed.";
         });
     }
 
     public async Task FindBfsRouteAsync()
     {
+        if (!ValidateGateway() || !ValidateRoute())
+            return;
+
         await ExecuteAsync(async () =>
         {
-            ValidateGateway();
-            ValidateRoute();
-
             RoutingResult = await _apiClient.FindMeshBfsRouteAsync(
                 GatewayId,
                 SourceNodeId,
                 DestinationNodeId);
 
-            ResultMessage = RoutingResult.Message;
+            UpdateRouteNodes();
 
-            StatusMessage = RoutingResult.Success
+            ResultMessage = RoutingResult.IsSuccessful
+                ? $"BFS route found.\n" +
+                  $"Hops: {RoutingResult.HopCount}\n" +
+                  $"Path: {string.Join(" → ", RoutingResult.NodePath)}"
+                : "No BFS route found.";
+
+            StatusMessage = RoutingResult.IsSuccessful
                 ? "BFS route found."
                 : "BFS route not found.";
         });
@@ -193,19 +234,25 @@ public class MeshRoutingViewModel : ViewModelBase
 
     public async Task FindDfsRouteAsync()
     {
+        if (!ValidateGateway() || !ValidateRoute())
+            return;
+
         await ExecuteAsync(async () =>
         {
-            ValidateGateway();
-            ValidateRoute();
-
             RoutingResult = await _apiClient.FindMeshDfsRouteAsync(
                 GatewayId,
                 SourceNodeId,
                 DestinationNodeId);
 
-            ResultMessage = RoutingResult.Message;
+            UpdateRouteNodes();
 
-            StatusMessage = RoutingResult.Success
+            ResultMessage = RoutingResult.IsSuccessful
+                ? $"DFS route found.\n" +
+                  $"Hops: {RoutingResult.HopCount}\n" +
+                  $"Path: {string.Join(" → ", RoutingResult.NodePath)}"
+                : "No DFS route found.";
+
+            StatusMessage = RoutingResult.IsSuccessful
                 ? "DFS route found."
                 : "DFS route not found.";
         });
@@ -213,11 +260,11 @@ public class MeshRoutingViewModel : ViewModelBase
 
     public async Task CalculateSpanningTreeAsync()
     {
+        if (!ValidateGateway() || !ValidateStartNode())
+            return;
+
         await ExecuteAsync(async () =>
         {
-            ValidateGateway();
-            ValidateStartNode();
-
             SpanningTree = await _apiClient.GetMeshSpanningTreeAsync(
                 GatewayId,
                 StartNodeId);
@@ -229,35 +276,77 @@ public class MeshRoutingViewModel : ViewModelBase
                 $"Total cost: {SpanningTree.TotalCost:F2}\n" +
                 $"Energy cost: {SpanningTree.TotalEnergyCost:F2}";
         });
+
+        UpdateRoutingCharts();
     }
 
-    private void ValidateGateway()
+    private void UpdateRouteNodes()
     {
-        if (GatewayId == Guid.Empty)
-            throw new InvalidOperationException(
-                "Enter a valid Gateway ID.");
+        RouteNodes.Clear();
+
+        if (RoutingResult != null)
+        {
+            foreach (var id in RoutingResult.NodePath)
+                RouteNodes.Add(id);
+        }
+
+        UpdateRoutingCharts();
     }
 
-    private void ValidateStartNode()
+    private void UpdateVisitedNodes()
     {
-        if (StartNodeId == Guid.Empty)
-            throw new InvalidOperationException(
-                "Enter a valid starting Node ID.");
+        VisitedNodes.Clear();
+
+        if (TraversalResult != null)
+        {
+            foreach (var id in TraversalResult.VisitedNodeIds)
+                VisitedNodes.Add(id);
+        }
+
+        UpdateRoutingCharts();
     }
 
-    private void ValidateRoute()
+    private bool ValidateGateway()
+    {
+        if (GatewayId != Guid.Empty)
+            return true;
+
+        ErrorMessage = "Enter a valid Gateway ID.";
+        StatusMessage = "Gateway selection required.";
+
+        return false;
+    }
+
+    private bool ValidateStartNode()
+    {
+        if (StartNodeId != Guid.Empty)
+            return true;
+
+        ErrorMessage = "Enter a valid starting Node ID.";
+        return false;
+    }
+
+    private bool ValidateRoute()
     {
         if (SourceNodeId == Guid.Empty)
-            throw new InvalidOperationException(
-                "Enter a valid source Node ID.");
+        {
+            ErrorMessage = "Enter a valid source Node ID.";
+            return false;
+        }
 
         if (DestinationNodeId == Guid.Empty)
-            throw new InvalidOperationException(
-                "Enter a valid destination Node ID.");
+        {
+            ErrorMessage = "Enter a valid destination Node ID.";
+            return false;
+        }
 
         if (SourceNodeId == DestinationNodeId)
-            throw new InvalidOperationException(
-                "Source and destination nodes must be different.");
+        {
+            ErrorMessage = "Source and destination nodes must be different.";
+            return false;
+        }
+
+        return true;
     }
 
     private async Task ExecuteAsync(Func<Task> operation)
@@ -277,7 +366,6 @@ public class MeshRoutingViewModel : ViewModelBase
         {
             ErrorMessage = ex.Message;
             StatusMessage = "API request failed.";
-
             Debug.WriteLine($"[MESH ROUTING API ERROR] {ex}");
         }
         catch (TimeoutException ex)
@@ -285,15 +373,16 @@ public class MeshRoutingViewModel : ViewModelBase
             ErrorMessage = ex.Message;
             StatusMessage = "Request timed out.";
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException ex)
         {
+            ErrorMessage = "The operation was cancelled.";
             StatusMessage = "Operation cancelled.";
+            Debug.WriteLine($"[MESH ROUTING CANCELLED] {ex}");
         }
         catch (Exception ex)
         {
             ErrorMessage = ex.Message;
             StatusMessage = "Routing operation failed.";
-
             Debug.WriteLine($"[MESH ROUTING ERROR] {ex}");
         }
         finally
@@ -301,4 +390,84 @@ public class MeshRoutingViewModel : ViewModelBase
             IsBusy = false;
         }
     }
+
+
+    public ISeries[] RouteSeries { get; private set; } = [];
+
+    public ISeries[] TraversalSeries { get; private set; } = [];
+
+    public ISeries[] SpanningTreeSeries { get; private set; } = [];
+
+    public Axis[] RoutingXAxis { get; } =
+    [
+        new Axis
+    {
+        Name = "Node Sequence",
+        MinLimit = 0
+    }
+    ];
+
+    public Axis[] RoutingYAxis { get; } =
+    [
+        new Axis
+    {
+        Name = "Sequence Position",
+        MinLimit = 0
+    }
+    ];
+
+    public void UpdateRoutingCharts()
+    {
+        RouteSeries =
+        [
+            new LineSeries<int>
+        {
+            Name = "Route",
+            Values = RouteNodes
+                .Select((_, index) => index + 1)
+                .ToArray(),
+
+            GeometrySize = 12,
+            LineSmoothness = 0
+        }
+        ];
+
+        TraversalSeries =
+        [
+            new ColumnSeries<int>
+        {
+            Name = "Visited Nodes",
+            Values = VisitedNodes
+                .Select((_, index) => index + 1)
+                .ToArray()
+        }
+        ];
+
+        if (SpanningTree != null)
+        {
+            SpanningTreeSeries =
+            [
+                new ColumnSeries<double>
+            {
+                Name = "Tree Cost",
+                Values = [SpanningTree.TotalCost]
+            },
+
+            new ColumnSeries<double>
+            {
+                Name = "Energy Cost",
+                Values = [SpanningTree.TotalEnergyCost]
+            }
+            ];
+        }
+        else
+        {
+            SpanningTreeSeries = [];
+        }
+
+        OnPropertyChanged(nameof(RouteSeries));
+        OnPropertyChanged(nameof(TraversalSeries));
+        OnPropertyChanged(nameof(SpanningTreeSeries));
+    }
+
 }

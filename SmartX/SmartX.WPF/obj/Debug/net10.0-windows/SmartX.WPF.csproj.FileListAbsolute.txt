@@ -116,7 +116,6 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Vi
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewaySetupPage.g.cs
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\History\HistoryPage.g.cs
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Home\HomePage.g.cs
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Network\NetworkPage.g.cs
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorEditPage.g.cs
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorSetupPage.g.cs
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Sensor\SensorsPage.g.cs
@@ -136,7 +135,6 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Vi
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Gateway\GatewayPage.baml
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\History\HistoryPage.baml
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Home\HomePage.baml
-D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Network\NetworkPage.baml
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Telemetry\TelemetryPage.baml
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Windows\MainWindow.baml
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\SmartX.WPF.g.resources
@@ -172,3 +170,5 @@ D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Vi
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Mesh\MeshDashboardPage.g.cs
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Mesh\MeshRoutingPage.g.cs
 D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Views\Pages\Mesh\NetworkTopologyPage.g.cs
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\bin\Debug\net10.0-windows\Microsoft.Extensions.Hosting.Abstractions.dll
+D:\ProgramData\Github\PROG7312POE\SmartX\SmartX.WPF\obj\Debug\net10.0-windows\Resources\Mesh\MeshTheme.baml

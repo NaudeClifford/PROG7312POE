@@ -1,4 +1,6 @@
 ﻿
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
 using SmartX.Shared.DTOs.Mesh;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
@@ -20,10 +22,7 @@ public class NetworkTopologyViewModel : ViewModelBase
     private MeshNodeDto? selectedNode;
     private MeshLinkDto? selectedLink;
 
-    private bool isBusy;
-
     private string statusMessage = "Ready.";
-    private string errorMessage = string.Empty;
 
     public Guid GatewayId
     {
@@ -59,6 +58,8 @@ public class NetworkTopologyViewModel : ViewModelBase
 
     public int ActiveLinks => Links.Count(x => x.IsAvailable);
 
+    public int UnavailableLinks => Links.Count(x => !x.IsAvailable);
+
     public ICommand LoadTopologyCommand { get; }
 
     public ICommand DiscoverCommand { get; }
@@ -73,58 +74,47 @@ public class NetworkTopologyViewModel : ViewModelBase
     {
         _apiClient = apiClient;
 
-        LoadTopologyCommand = new RelayCommand(
-            async _ => await LoadTopologyAsync());
+        GatewayId = session.GatewayId ?? Guid.Empty;
 
-        DiscoverCommand = new RelayCommand(
-            async _ => await DiscoverAsync());
+        LoadTopologyCommand =
+            new RelayCommand(async _ => await LoadTopologyAsync());
 
-        SynchronizeCommand = new RelayCommand(
-            async _ => await SynchronizeAsync());
+        DiscoverCommand =
+            new RelayCommand(async _ => await DiscoverAsync());
+
+        SynchronizeCommand =
+            new RelayCommand(async _ => await SynchronizeAsync());
+    }
+
+    public async Task InitializeAsync()
+    {
+        GatewayId = Session.GatewayId ?? Guid.Empty;
+
+        if (!ValidateGateway())
+            return;
+
+        await LoadTopologyAsync();
     }
 
     public async Task LoadTopologyAsync()
     {
-        await ExecuteAsync(async () =>
-        {
-            ValidateGateway();
+        if (!ValidateGateway())
+            return;
 
-            var topology = await _apiClient.GetMeshTopologyAsync(
-                GatewayId);
-
-            Nodes.Clear();
-
-            foreach (var node in topology.Nodes)
-                Nodes.Add(node);
-
-            Links.Clear();
-
-            foreach (var link in topology.Links)
-                Links.Add(link);
-
-            OnPropertyChanged(nameof(TotalNodes));
-            OnPropertyChanged(nameof(TotalLinks));
-            OnPropertyChanged(nameof(ActiveLinks));
-
-            SelectedNode = null;
-            SelectedLink = null;
-
-            StatusMessage = "Network topology loaded successfully.";
-        });
+        await ExecuteAsync(LoadTopologyCoreAsync);
     }
 
     public async Task DiscoverAsync()
     {
+        if (!ValidateGateway())
+            return;
+
         await ExecuteAsync(async () =>
         {
-            ValidateGateway();
-
-            var result = await _apiClient.DiscoverMeshAsync(
-                GatewayId);
+            var result = await _apiClient.DiscoverMeshAsync(GatewayId);
 
             StatusMessage =
-                $"Discovery completed. " +
-                $"Nodes: {result.DiscoveredNodes.Count}, " +
+                $"Discovery completed. Nodes: {result.DiscoveredNodes.Count}, " +
                 $"Links: {result.DiscoveredLinks.Count}.";
 
             await LoadTopologyCoreAsync();
@@ -133,12 +123,12 @@ public class NetworkTopologyViewModel : ViewModelBase
 
     public async Task SynchronizeAsync()
     {
+        if (!ValidateGateway())
+            return;
+
         await ExecuteAsync(async () =>
         {
-            ValidateGateway();
-
-            var result = await _apiClient.SynchronizeMeshAsync(
-                GatewayId);
+            var result = await _apiClient.SynchronizeMeshAsync(GatewayId);
 
             StatusMessage = result.Message;
 
@@ -148,8 +138,7 @@ public class NetworkTopologyViewModel : ViewModelBase
 
     private async Task LoadTopologyCoreAsync()
     {
-        var topology = await _apiClient.GetMeshTopologyAsync(
-            GatewayId);
+        var topology = await _apiClient.GetMeshTopologyAsync(GatewayId);
 
         Nodes.Clear();
 
@@ -161,16 +150,34 @@ public class NetworkTopologyViewModel : ViewModelBase
         foreach (var link in topology.Links)
             Links.Add(link);
 
+        NotifyStatistics();
+
+        SelectedNode = null;
+        SelectedLink = null;
+
+        StatusMessage = "Network topology loaded successfully.";
+
+        UpdateTopologyCharts();
+    }
+
+    private void NotifyStatistics()
+    {
         OnPropertyChanged(nameof(TotalNodes));
         OnPropertyChanged(nameof(TotalLinks));
         OnPropertyChanged(nameof(ActiveLinks));
+        OnPropertyChanged(nameof(UnavailableLinks));
+        UpdateTopologyCharts();
     }
 
-    private void ValidateGateway()
+    private bool ValidateGateway()
     {
-        if (GatewayId == Guid.Empty)
-            throw new InvalidOperationException(
-                "Enter a valid Gateway ID.");
+        if (GatewayId != Guid.Empty)
+            return true;
+
+        ErrorMessage = "Enter a valid Gateway ID.";
+        StatusMessage = "Gateway selection required.";
+
+        return false;
     }
 
     private async Task ExecuteAsync(Func<Task> operation)
@@ -189,7 +196,6 @@ public class NetworkTopologyViewModel : ViewModelBase
         {
             ErrorMessage = ex.Message;
             StatusMessage = "API request failed.";
-
             Debug.WriteLine($"[TOPOLOGY API ERROR] {ex}");
         }
         catch (TimeoutException ex)
@@ -197,15 +203,15 @@ public class NetworkTopologyViewModel : ViewModelBase
             ErrorMessage = ex.Message;
             StatusMessage = "Request timed out.";
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException ex)
         {
+            ErrorMessage = "The operation was cancelled.";
             StatusMessage = "Operation cancelled.";
         }
         catch (Exception ex)
         {
             ErrorMessage = ex.Message;
             StatusMessage = "Topology operation failed.";
-
             Debug.WriteLine($"[TOPOLOGY ERROR] {ex}");
         }
         finally
@@ -213,4 +219,55 @@ public class NetworkTopologyViewModel : ViewModelBase
             IsBusy = false;
         }
     }
+
+
+    public ISeries[] TopologyLinkSeries { get; private set; } = [];
+
+    public ISeries[] TopologyNodeSeries { get; private set; } = [];
+
+    public Axis[] TopologyXAxis { get; } =
+    [
+        new Axis
+    {
+        Labels = ["Active", "Unavailable"],
+        MinLimit = 0
+    }
+    ];
+
+    public Axis[] TopologyYAxis { get; } =
+    [
+        new Axis
+    {
+        MinLimit = 0
+    }
+    ];
+
+    public void UpdateTopologyCharts()
+    {
+        TopologyLinkSeries =
+        [
+            new ColumnSeries<int>
+        {
+            Name = "Connections",
+            Values = [ActiveLinks, UnavailableLinks],
+            Fill = new LiveChartsCore.SkiaSharpView.Painting.SolidColorPaint(
+                new SkiaSharp.SKColor(37, 99, 235))
+        }
+        ];
+
+        TopologyNodeSeries =
+        [
+            new PieSeries<int>
+        {
+            Name = "Nodes",
+            Values = [TotalNodes],
+            Fill = new LiveChartsCore.SkiaSharpView.Painting.SolidColorPaint(
+                new SkiaSharp.SKColor(14, 165, 233))
+        }
+        ];
+
+        OnPropertyChanged(nameof(TopologyLinkSeries));
+        OnPropertyChanged(nameof(TopologyNodeSeries));
+    }
+
 }

@@ -1,0 +1,44 @@
+[
+  {
+    "Id": "55555555-5555-5555-5555-555555555555",
+    "GatewayId": "22222222-2222-2222-2222-222222222222",
+    "DeviceId": "22222222-2222-2222-2222-222222222222",
+    "NodeType": "Gateway",
+    "DeviceIdentifier": "GW-SMARTX-001",
+    "Name": "Main SmartX Gateway",
+    "Status": "Online",
+    "IsGateway": true,
+    "BatteryLevel": 100,
+    "LastSeen": "2026-11-13T10:00:00Z",
+    "CreatedAt": "2026-11-01T08:00:00Z",
+    "UpdatedAt": "2026-11-13T10:00:00Z"
+  },
+  {
+    "Id": "66666666-6666-6666-6666-666666666666",
+    "GatewayId": "22222222-2222-2222-2222-222222222222",
+    "DeviceId": "33333333-3333-3333-3333-333333333333",
+    "NodeType": "Sensor",
+    "DeviceIdentifier": "AA:BB:CC:DD:EE:01",
+    "Name": "Temperature Sensor 01",
+    "Status": "Online",
+    "IsGateway": false,
+    "BatteryLevel": 92,
+    "LastSeen": "2026-11-13T09:59:00Z",
+    "CreatedAt": "2026-11-01T08:05:00Z",
+    "UpdatedAt": "2026-11-13T09:59:00Z"
+  },
+  {
+    "Id": "77777777-7777-7777-7777-777777777777",
+    "GatewayId": "22222222-2222-2222-2222-222222222222",
+    "DeviceId": "44444444-4444-4444-4444-444444444444",
+    "NodeType": "Sensor",
+    "DeviceIdentifier": "AA:BB:CC:DD:EE:02",
+    "Name": "Environmental Sensor 02",
+    "Status": "Online",
+    "IsGateway": false,
+    "BatteryLevel": 78,
+    "LastSeen": "2026-11-13T09:58:00Z",
+    "CreatedAt": "2026-11-01T08:10:00Z",
+    "UpdatedAt": "2026-11-13T09:58:00Z"
+  }
+]

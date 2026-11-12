@@ -426,9 +426,17 @@ public partial class MainWindow : Window
                 _navigationStage = NavigationStage.Command;
                 break;
 
-                //case NetworkMeshPage:
-                //_navigationStage = NavigationStage.NetworkMesh;
-                //break;
+            case MeshDashboardPage:
+                _navigationStage = NavigationStage.MeshDashboard;
+                break;
+
+            case MeshRoutingPage:
+                _navigationStage = NavigationStage.MeshRouting;
+                break;
+
+            case NetworkTopologyPage:
+                _navigationStage = NavigationStage.NetworkTopology;
+                break;
         }
 
         UpdateNavigation();
@@ -436,20 +444,73 @@ public partial class MainWindow : Window
 
     private void ApplyGuestNavigation()
     {
-        HomeButton.Visibility =
-            Visibility.Visible;
+        switch (_navigationStage)
+        {
+            case NavigationStage.Home:
+                GatewayButton.Visibility =
+                    Visibility.Visible;
+                break;
 
-        GatewayButton.Visibility =
-            Visibility.Visible;
+            case NavigationStage.Gateway:
+                break;
 
-        SensorsButton.Visibility =
-            Visibility.Visible;
+            case NavigationStage.Sensors:
+                GatewayButton.Visibility =
+                    Visibility.Visible;
 
-        TelemetryButton.Visibility =
-            Visibility.Visible;
+                TelemetryButton.Visibility =
+                    Visibility.Visible;
+                break;
 
-        LogOutButton.Visibility =
-            Visibility.Visible;
+            case NavigationStage.Telemetry:
+                GatewayButton.Visibility =
+                    Visibility.Visible;
+
+                SensorsButton.Visibility =
+                    Visibility.Visible;
+                break;
+
+            case NavigationStage.History:
+                GatewayButton.Visibility = Visibility.Visible;
+                AlertsButton.Visibility = Visibility.Visible;
+                CommandButton.Visibility = Visibility.Visible;
+                break;
+
+            case NavigationStage.Alert:
+                HistoryButton.Visibility = Visibility.Visible;
+                GatewayButton.Visibility = Visibility.Visible;
+                CommandButton.Visibility = Visibility.Visible;
+
+                break;
+
+            case NavigationStage.Command:
+                HistoryButton.Visibility = Visibility.Visible;
+                GatewayButton.Visibility = Visibility.Visible;
+                AlertsButton.Visibility = Visibility.Visible;
+
+                break;
+
+
+            case NavigationStage.MeshDashboard:
+                GatewayButton.Visibility = Visibility.Visible;
+                MeshRoutingButton.Visibility = Visibility.Visible;
+                NetworkTopologyButton.Visibility = Visibility.Visible;
+                break;
+
+            case NavigationStage.MeshRouting:
+                MeshDashboardButton.Visibility = Visibility.Visible;
+                GatewayButton.Visibility = Visibility.Visible;
+                NetworkTopologyButton.Visibility = Visibility.Visible;
+
+                break;
+
+            case NavigationStage.NetworkTopology:
+                MeshRoutingButton.Visibility = Visibility.Visible;
+                GatewayButton.Visibility = Visibility.Visible;
+                MeshDashboardButton.Visibility = Visibility.Visible;
+
+                break;
+        }
     }
 
     private void ApplyAdministratorNavigation()
@@ -828,7 +889,7 @@ public partial class MainWindow : Window
             NavigationStage.MeshRouting);
     }
 
-    private void Networking_Click(
+    private void NetworkTopology_Click(
         object sender,
         RoutedEventArgs e)
     {
@@ -843,9 +904,17 @@ public partial class MainWindow : Window
 
     private bool CanAccessGatewayArea()
     {
-        return _session.Role is
-            UserRole.Technician or
-            UserRole.Administrator;
+        bool hasGateway =
+            _session.GatewayId.HasValue &&
+            _session.GatewayId.Value != Guid.Empty;
+
+        bool authorized =
+            _session.IsGuest ||
+            _session.Role is
+                UserRole.Technician or
+                UserRole.Administrator;
+
+        return authorized && hasGateway;
     }
 
     private void NavigateTo<T>(

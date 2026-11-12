@@ -40,7 +40,9 @@ public class FirebaseAuthService : IFirebaseTokenService, IFirebaseUserService
                 serviceAccountPath);
         }
 
-        var credential = GoogleCredential.FromFile(serviceAccountPath);
+        var credential = CredentialFactory
+            .FromFile<ServiceAccountCredential>(serviceAccountPath)
+            .ToGoogleCredential();
 
         FirebaseApp.Create(new AppOptions
         {

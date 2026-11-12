@@ -52,7 +52,7 @@ namespace SmartX.WPF.Views.Pages.Gateway {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;V1.0.0.0;component/views/pages/gateway/gatewaysetuppage.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/SmartX.WPF;component/views/pages/gateway/gatewaysetuppage.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\..\Views\Pages\Gateway\GatewaySetupPage.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

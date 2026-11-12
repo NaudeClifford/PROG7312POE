@@ -1110,8 +1110,16 @@ public class GatewayViewModel : ViewModelBase
         if (!CanOpenGatewayArea)
             return;
 
-        _navigationService
-            .NavigateTo<NetworkTopologyPage>();
+        if (Session.GatewayId is not Guid gatewayId ||
+            gatewayId == Guid.Empty)
+        {
+            ErrorMessage =
+                "Please select a valid gateway before opening network features.";
+
+            return;
+        }
+
+        _navigationService.NavigateTo<MeshDashboardPage>();
 
         await Task.CompletedTask;
     }

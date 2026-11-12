@@ -11,6 +11,8 @@
                 <ResourceDictionary Source="/Resources/Styles/ComboBoxStyle.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/CardStyles.xaml"/>
                 <ResourceDictionary Source="/Resources/Styles/TextStyles.xaml"/>
+                <ResourceDictionary Source="/Resources/Mesh/MeshTheme.xaml"/>
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

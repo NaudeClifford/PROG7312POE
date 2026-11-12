@@ -1,4 +1,5 @@
-﻿
+﻿using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
 using SmartX.Shared.DTOs.Mesh;
 using SmartX.WPF.Services.Api;
 using SmartX.WPF.Services.Connectivity;
@@ -22,11 +23,8 @@ public class MeshDashboardViewModel : ViewModelBase
     private ObservableCollection<MeshLinkDto> links = [];
     private ObservableCollection<MeshLogDto> logs = [];
 
-    private bool isBusy;
     private string statusMessage = "Ready.";
-    private string errorMessage = string.Empty;
 
-    // PROPERTIES
     public Guid GatewayId
     {
         get => gatewayId;
@@ -40,14 +38,7 @@ public class MeshDashboardViewModel : ViewModelBase
         {
             if (SetProperty(ref health, value))
             {
-                OnPropertyChanged(nameof(TotalNodes));
-                OnPropertyChanged(nameof(OnlineNodes));
-                OnPropertyChanged(nameof(OfflineNodes));
-                OnPropertyChanged(nameof(DegradedNodes));
-                OnPropertyChanged(nameof(TotalLinks));
-                OnPropertyChanged(nameof(AvailableLinks));
-                OnPropertyChanged(nameof(NetworkAvailability));
-                OnPropertyChanged(nameof(HealthStatus));
+                NotifyStatistics();
             }
         }
     }
@@ -55,13 +46,21 @@ public class MeshDashboardViewModel : ViewModelBase
     public ObservableCollection<MeshNodeDto> Nodes
     {
         get => nodes;
-        set => SetProperty(ref nodes, value);
+        set
+        {
+            if (SetProperty(ref nodes, value))
+                NotifyStatistics();
+        }
     }
 
     public ObservableCollection<MeshLinkDto> Links
     {
         get => links;
-        set => SetProperty(ref links, value);
+        set
+        {
+            if (SetProperty(ref links, value))
+                NotifyStatistics();
+        }
     }
 
     public ObservableCollection<MeshLogDto> Logs
@@ -70,42 +69,38 @@ public class MeshDashboardViewModel : ViewModelBase
         set => SetProperty(ref logs, value);
     }
 
-    public bool IsNotBusy => !IsBusy;
-
     public string StatusMessage
     {
         get => statusMessage;
         set => SetProperty(ref statusMessage, value);
     }
 
-    // DASHBOARD STATISTICS
-    public int TotalNodes => Health?.TotalNodes ?? 0;
+    public int TotalNodes => Health?.TotalNodes ?? Nodes.Count;
+    public int OnlineNodes => Health?.OnlineNodes ?? Nodes.Count(x => x.Status == "Online");
+    public int OfflineNodes => Health?.OfflineNodes ?? Nodes.Count(x => x.Status == "Offline");
+    public int DegradedNodes => Health?.DegradedNodes ?? Nodes.Count(x => x.Status == "Degraded");
 
-    public int OnlineNodes => Health?.OnlineNodes ?? 0;
+    public int TotalLinks => Health?.TotalLinks ?? Links.Count;
+    public int AvailableLinks => Health?.AvailableLinks ?? Links.Count(x => x.IsAvailable);
+    public int UnavailableLinks => Health?.UnavailableLinks ?? Links.Count(x => !x.IsAvailable);
 
-    public int OfflineNodes => Health?.OfflineNodes ?? 0;
+    public int TotalRoutes => Health?.TotalRoutes ?? 0;
+    public int SuccessfulRoutes => Health?.SuccessfulRoutes ?? 0;
+    public int FailedRoutes => Health?.FailedRoutes ?? 0;
 
-    public int DegradedNodes => Health?.DegradedNodes ?? 0;
+    public double NetworkAvailability => Health?.NetworkAvailability ?? 0;
+    public double AverageLatency => Health?.AverageLatency ?? 0;
 
-    public int TotalLinks => Health?.TotalLinks ?? 0;
+    public string HealthStatus => Health?.Status ?? "Unknown";
 
-    public int AvailableLinks => Health?.AvailableLinks ?? 0;
+    public ObservableCollection<string> Warnings { get; } = [];
 
-    public double NetworkAvailability =>
-        Health?.NetworkAvailability ?? 0;
-
-    public string HealthStatus =>
-        Health?.Status ?? "Unknown";
-
-    // COMMANDS
     public ICommand LoadDashboardCommand { get; }
     public ICommand DiscoverCommand { get; }
     public ICommand SynchronizeCommand { get; }
     public ICommand RefreshMonitoringCommand { get; }
     public ICommand EvaluateLinksCommand { get; }
     public ICommand LoadLogsCommand { get; }
-
-    // CONSTRUCTOR
 
     public MeshDashboardViewModel(
         ISmartXApiClient apiClient,
@@ -114,6 +109,8 @@ public class MeshDashboardViewModel : ViewModelBase
         : base(connectivityService, session)
     {
         _apiClient = apiClient;
+
+        GatewayId = session.GatewayId ?? Guid.Empty;
 
         LoadDashboardCommand =
             new RelayCommand(async _ => await LoadDashboardAsync());
@@ -134,7 +131,44 @@ public class MeshDashboardViewModel : ViewModelBase
             new RelayCommand(async _ => await LoadLogsAsync());
     }
 
-    // LOAD DASHBOARD
+    private void NotifyStatistics()
+    {
+        OnPropertyChanged(nameof(TotalNodes));
+        OnPropertyChanged(nameof(OnlineNodes));
+        OnPropertyChanged(nameof(OfflineNodes));
+        OnPropertyChanged(nameof(DegradedNodes));
+        OnPropertyChanged(nameof(TotalLinks));
+        OnPropertyChanged(nameof(AvailableLinks));
+        OnPropertyChanged(nameof(UnavailableLinks));
+        OnPropertyChanged(nameof(TotalRoutes));
+        OnPropertyChanged(nameof(SuccessfulRoutes));
+        OnPropertyChanged(nameof(FailedRoutes));
+        OnPropertyChanged(nameof(NetworkAvailability));
+        OnPropertyChanged(nameof(AverageLatency));
+        OnPropertyChanged(nameof(HealthStatus));
+        UpdateDashboardCharts();
+    }
+
+    public async Task InitializeAsync()
+    {
+        GatewayId = Session.GatewayId ?? Guid.Empty;
+
+        if (GatewayId == Guid.Empty)
+            return;
+
+        IsBusy = true;
+
+        try
+        {
+            await DiscoverAsync();
+            await SynchronizeAsync();
+            await LoadDashboardAsync();
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
 
     public async Task LoadDashboardAsync()
     {
@@ -146,30 +180,25 @@ public class MeshDashboardViewModel : ViewModelBase
 
     private async Task LoadDashboardCoreAsync()
     {
-        var topology = await _apiClient.GetMeshTopologyAsync(
-            GatewayId);
+        var topology = await _apiClient.GetMeshTopologyAsync(GatewayId);
 
-        var healthResult = await _apiClient.GetMeshHealthAsync(
-            GatewayId);
+        var healthResult = await _apiClient.GetMeshHealthAsync(GatewayId);
 
-        var logsResult = await _apiClient.GetMeshGatewayLogsAsync(
-            GatewayId);
+        var logsResult = await _apiClient.GetMeshGatewayLogsAsync(GatewayId);
 
-        Nodes = new ObservableCollection<MeshNodeDto>(
-            topology.Nodes);
-
-        Links = new ObservableCollection<MeshLinkDto>(
-            topology.Links);
-
-        Logs = new ObservableCollection<MeshLogDto>(
-            logsResult);
+        Nodes = new ObservableCollection<MeshNodeDto>(topology.Nodes);
+        Links = new ObservableCollection<MeshLinkDto>(topology.Links);
+        Logs = new ObservableCollection<MeshLogDto>(logsResult);
 
         Health = healthResult;
 
+        Warnings.Clear();
+
+        foreach (var warning in healthResult.Warnings)
+            Warnings.Add(warning);
+
         StatusMessage = "Mesh dashboard loaded successfully.";
     }
-
-    // DISCOVERY
 
     public async Task DiscoverAsync()
     {
@@ -178,19 +207,16 @@ public class MeshDashboardViewModel : ViewModelBase
 
         await ExecuteAsync(async () =>
         {
-            var result = await _apiClient.DiscoverMeshAsync(
-                GatewayId);
+            var result = await _apiClient.DiscoverMeshAsync(GatewayId);
 
             StatusMessage =
-                $"Discovery completed. " +
-                $"Nodes: {result.DiscoveredNodes.Count}, " +
+                $"Discovery completed. Nodes: {result.DiscoveredNodes.Count}, " +
                 $"Links: {result.DiscoveredLinks.Count}.";
 
             await LoadDashboardCoreAsync();
         });
     }
 
-    // SYNCHRONIZATION
     public async Task SynchronizeAsync()
     {
         if (!ValidateGateway())
@@ -198,8 +224,7 @@ public class MeshDashboardViewModel : ViewModelBase
 
         await ExecuteAsync(async () =>
         {
-            var result = await _apiClient.SynchronizeMeshAsync(
-                GatewayId);
+            var result = await _apiClient.SynchronizeMeshAsync(GatewayId);
 
             StatusMessage = result.Message;
 
@@ -207,7 +232,6 @@ public class MeshDashboardViewModel : ViewModelBase
         });
     }
 
-    // MONITORING
     public async Task RefreshMonitoringAsync()
     {
         if (!ValidateGateway())
@@ -216,8 +240,7 @@ public class MeshDashboardViewModel : ViewModelBase
         await ExecuteAsync(async () =>
         {
             var result =
-                await _apiClient.RefreshMeshMonitoringAsync(
-                    GatewayId);
+                await _apiClient.RefreshMeshMonitoringAsync(GatewayId);
 
             StatusMessage = result.Message;
 
@@ -225,7 +248,6 @@ public class MeshDashboardViewModel : ViewModelBase
         });
     }
 
-    // LINK EVALUATION
     public async Task EvaluateLinksAsync()
     {
         if (!ValidateGateway())
@@ -234,8 +256,7 @@ public class MeshDashboardViewModel : ViewModelBase
         await ExecuteAsync(async () =>
         {
             var result =
-                await _apiClient.EvaluateGatewayLinksAsync(
-                    GatewayId);
+                await _apiClient.EvaluateGatewayLinksAsync(GatewayId);
 
             StatusMessage = result.Message;
 
@@ -243,7 +264,6 @@ public class MeshDashboardViewModel : ViewModelBase
         });
     }
 
-    // LOGGING
     public async Task LoadLogsAsync()
     {
         if (!ValidateGateway())
@@ -252,17 +272,14 @@ public class MeshDashboardViewModel : ViewModelBase
         await ExecuteAsync(async () =>
         {
             var result =
-                await _apiClient.GetMeshGatewayLogsAsync(
-                    GatewayId);
+                await _apiClient.GetMeshGatewayLogsAsync(GatewayId);
 
-            Logs = new ObservableCollection<MeshLogDto>(
-                result);
+            Logs = new ObservableCollection<MeshLogDto>(result);
 
             StatusMessage = "Mesh logs loaded successfully.";
         });
     }
 
-    // VALIDATION
     private bool ValidateGateway()
     {
         if (GatewayId != Guid.Empty)
@@ -274,7 +291,6 @@ public class MeshDashboardViewModel : ViewModelBase
         return false;
     }
 
-    // ERROR HANDLING
     private async Task ExecuteAsync(Func<Task> operation)
     {
         if (IsBusy)
@@ -291,37 +307,111 @@ public class MeshDashboardViewModel : ViewModelBase
         {
             ErrorMessage = ex.Message;
             StatusMessage = "API request failed.";
-
-            Debug.WriteLine(
-                $"[MESH API ERROR] {ex}");
+            Debug.WriteLine($"[MESH API ERROR] {ex}");
         }
         catch (TimeoutException ex)
         {
             ErrorMessage = ex.Message;
             StatusMessage = "API request timed out.";
-
-            Debug.WriteLine(
-                $"[MESH TIMEOUT] {ex}");
+            Debug.WriteLine($"[MESH TIMEOUT] {ex}");
         }
         catch (OperationCanceledException ex)
         {
             ErrorMessage = "The operation was cancelled.";
             StatusMessage = "Operation cancelled.";
-
-            Debug.WriteLine(
-                $"[MESH CANCELLED] {ex}");
+            Debug.WriteLine($"[MESH CANCELLED] {ex}");
         }
         catch (Exception ex)
         {
             ErrorMessage = ex.Message;
             StatusMessage = "Unexpected mesh operation error.";
-
-            Debug.WriteLine(
-                $"[MESH ERROR] {ex}");
+            Debug.WriteLine($"[MESH ERROR] {ex}");
         }
         finally
         {
             IsBusy = false;
         }
     }
+
+
+    public ISeries[] NodeHealthSeries { get; private set; } = [];
+
+    public ISeries[] LinkHealthSeries { get; private set; } = [];
+
+    public ISeries[] RoutingSeries { get; private set; } = [];
+
+    public Axis[] DashboardXAxis { get; } =
+    [
+        new Axis
+    {
+        Labels = ["Successful", "Failed"],
+        LabelsRotation = 0
+    }
+    ];
+
+    public Axis[] DashboardYAxis { get; } =
+    [
+        new Axis
+    {
+        MinLimit = 0
+    }
+    ];
+
+
+    public void UpdateDashboardCharts()
+    {
+        NodeHealthSeries =
+        [
+            new PieSeries<int>
+        {
+            Name = "Online",
+            Values = [OnlineNodes],
+            Fill = new LiveChartsCore.SkiaSharpView.Painting.SolidColorPaint(
+                new SkiaSharp.SKColor(22, 163, 74))
+        },
+
+        new PieSeries<int>
+        {
+            Name = "Offline",
+            Values = [OfflineNodes],
+            Fill = new LiveChartsCore.SkiaSharpView.Painting.SolidColorPaint(
+                new SkiaSharp.SKColor(239, 68, 68))
+        },
+
+        new PieSeries<int>
+        {
+            Name = "Degraded",
+            Values = [DegradedNodes],
+            Fill = new LiveChartsCore.SkiaSharpView.Painting.SolidColorPaint(
+                new SkiaSharp.SKColor(245, 158, 11))
+        }
+        ];
+
+        LinkHealthSeries =
+        [
+            new ColumnSeries<int>
+        {
+            Name = "Links",
+            Values = [AvailableLinks, UnavailableLinks],
+            Fill = new LiveChartsCore.SkiaSharpView.Painting.SolidColorPaint(
+                new SkiaSharp.SKColor(37, 99, 235))
+        }
+        ];
+
+        RoutingSeries =
+        [
+            new ColumnSeries<int>
+        {
+            Name = "Routes",
+            Values = [SuccessfulRoutes, FailedRoutes],
+            Fill = new LiveChartsCore.SkiaSharpView.Painting.SolidColorPaint(
+                new SkiaSharp.SKColor(14, 165, 233))
+        }
+        ];
+
+        OnPropertyChanged(nameof(NodeHealthSeries));
+        OnPropertyChanged(nameof(LinkHealthSeries));
+        OnPropertyChanged(nameof(RoutingSeries));
+    }
+
 }

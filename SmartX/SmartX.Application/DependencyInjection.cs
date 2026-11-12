@@ -115,6 +115,10 @@ public static class DependencyInjection
         services.AddScoped<IMeshDiscoveryService, MeshDiscoveryService>();
         services.AddScoped<IMeshHealthService, MeshHealthService>();
 
+        services.AddScoped<IMeshMonitoringService, MeshMonitoringService>();
+
+        services.AddSingleton(new MeshMonitoringOptions());
+
         return services;
     }
 }
