@@ -3,11 +3,22 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using SmartX.Application.Commands.Sensor;
 using SmartX.Application.Commands.Telemetry;
+using SmartX.Application.Interfaces.Mesh;
 using SmartX.Application.Queries.Telemetry;
 using SmartX.Application.Queries.Users;
 using SmartX.Application.Services;
 using SmartX.Application.Services.Alerts;
 using SmartX.Application.Services.CRUD;
+using SmartX.Application.Services.Mesh;
+using SmartX.Application.Services.Mesh.Discovery;
+using SmartX.Application.Services.Mesh.Graph;
+using SmartX.Application.Services.Mesh.Logging;
+using SmartX.Application.Services.Mesh.Monitoring;
+using SmartX.Application.Services.Mesh.Quality;
+using SmartX.Application.Services.Mesh.Routing;
+using SmartX.Application.Services.Mesh.SpanningTree;
+using SmartX.Application.Services.Mesh.Topology;
+using SmartX.Application.Services.Mesh.Traversal;
 using SmartX.Application.Services.PredictiveEngine;
 using SmartX.Application.Services.Registration;
 using SmartX.Application.Services.Sensors;
@@ -81,6 +92,20 @@ public static class DependencyInjection
 
         // Mapping
         services.AddSmartXMapping();
+
+        //Mesh services
+        services.AddScoped<MeshGraphBuilder>();
+        services.AddScoped<MeshRoutingService>();
+        services.AddScoped<MeshTraversalService>();
+        services.AddScoped<MinimumSpanningTreeService>();
+        services.AddScoped<MeshNetworkService>();
+        services.AddScoped<MeshMonitoringService>();
+
+        services.AddScoped<IMeshLinkQualityService, MeshLinkQualityService>();
+        services.AddScoped<IMeshLogService, MeshLogService>();
+        services.AddScoped<IMeshTopologyService, MeshTopologyService>();
+        services.AddScoped<IMeshDiscoveryService, MeshDiscoveryService>();
+        services.AddScoped<IMeshHealthService, MeshHealthService>();
 
         return services;
     }

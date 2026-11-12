@@ -15,6 +15,11 @@ public static class SensorMapper
         var location = reader.GetOrdinal("Location");
         var description = reader.GetOrdinal("Description");
         var isActive = reader.GetOrdinal("IsActive");
+        var ipAddress = reader.GetOrdinal("IpAddress");
+        var port = reader.GetOrdinal("Port");
+        var protocol = reader.GetOrdinal("Protocol");
+        var isSimulation = reader.GetOrdinal("IsSimulation");
+        var isConnectionEnabled = reader.GetOrdinal("IsConnectionEnabled");
         var gatewayId = reader.GetOrdinal("GatewayId");
         var hasActiveAlert = reader.GetOrdinal("HasActiveAlert");
         var activeAlertMessage = reader.GetOrdinal("ActiveAlertMessage");
@@ -31,6 +36,26 @@ public static class SensorMapper
             Location = reader.GetString(location),
             Description = reader.GetString(description),
             IsActive = reader.GetInt32(isActive) == 1,
+
+            IpAddress = reader.IsDBNull(ipAddress)
+                ? null
+                : reader.GetString(ipAddress),
+
+            Port = reader.IsDBNull(port)
+                ? null
+                : (int?)reader.GetInt32(port),
+
+            Protocol = reader.IsDBNull(protocol)
+                ? SensorProtocol.Simulation
+                : (SensorProtocol)reader.GetInt32(protocol),
+
+            IsSimulation = reader.IsDBNull(isSimulation)
+                ? true
+                : reader.GetInt32(isSimulation) == 1,
+
+            IsConnectionEnabled = reader.IsDBNull(isConnectionEnabled)
+                ? false
+                : reader.GetInt32(isConnectionEnabled) == 1,
 
             GatewayId = reader.IsDBNull(gatewayId)
                 ? null

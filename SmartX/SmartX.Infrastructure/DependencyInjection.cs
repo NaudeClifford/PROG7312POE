@@ -1,13 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartX.Application.Authentication;
+using SmartX.Application.Interfaces.Mesh;
 using SmartX.Application.Interfaces.Sensors;
 using SmartX.Application.Services.Sensors;
-using SmartX.Application.Services.Sensors.Interfaces;
 using SmartX.Domain.Interfaces;
+using SmartX.Domain.Interfaces.Mesh;
 using SmartX.Infrastructure.Authentication.Firebase;
 using SmartX.Infrastructure.Persistence.Mongo;
 using SmartX.Infrastructure.Repositories;
+using SmartX.Infrastructure.Repositories.Mesh;
 using SmartX.Infrastructure.Sensors;
 
 namespace SmartX.Infrastructure;
@@ -45,6 +47,13 @@ public static class DependencyInjection
 
         services.AddSingleton<ISensorProtocolAdapter, SimulationSensorAdapter>();
 
+        //Mesh
+        services.AddSingleton<IMeshNodeRepository, JsonMeshNodeRepository>();
+        services.AddSingleton<IMeshLinkRepository, JsonMeshLinkRepository>();
+        services.AddSingleton<IMeshConnectionRepository, JsonMeshConnectionRepository>();
+        services.AddSingleton<IMeshRouteRepository, JsonMeshRouteRepository>();
+        services.AddSingleton<IMeshLogRepository, JsonMeshLogRepository>();
+        services.AddScoped<IMeshDiscoveryProvider, IMeshDiscoveryProvider>();
 
         return services;
     }

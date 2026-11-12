@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace SmartX.Domain.Interfaces;
 
-namespace SmartX.Domain.Interfaces
+public interface IPacketPriorityQueue<T>
 {
-    internal interface IPacketPriorityQueue
-    {
-    }
+    int Count { get; }
+
+    void Enqueue(T item, double priority);
+
+    bool TryDequeue(out T? item);
+
+    bool TryPeek(out T? item);
+
+    void Clear();
 }
