@@ -103,7 +103,7 @@ jobs:
       - name: Start SmartX API
         shell: pwsh
         env:
-          API_PROJECT: smartX/SmartX.API/SmartX.API.csproj
+          API_PROJECT: SmartX/SmartX.API/SmartX.API.csproj
           API_PORT: 5080
           API_URL: http://127.0.0.1:5080
           ASPNETCORE_ENVIRONMENT: Development
