@@ -46,11 +46,13 @@ jobs:
 
       # 4. Restore all solution dependencies
       - name: Restore NuGet Dependencies
-        run: dotnet restore SmartX.sln
+        run: dotnet restore smartX/SmartX.sln
+
+
 
       # 5. Build all seven SmartX projects
       - name: Build SmartX Solution
-        run: dotnet build SmartX.sln --configuration Release --no-restore
+        run: dotnet build smartX/SmartX.sln --configuration Release --no-restore
 
       # 6. Run automated .NET tests, if a test project exists
       - name: Run Unit Tests
