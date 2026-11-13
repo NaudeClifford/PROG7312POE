@@ -79,6 +79,7 @@ public static class MappingConfiguration
         TypeAdapterConfig<MeshLog, MeshLogDto>
             .NewConfig();
 
-
+        TypeAdapterConfig<MeshRoute, MeshRouteDto>
+            .NewConfig();
     }
 }

@@ -159,14 +159,32 @@ public sealed class AlertsViewModel : ViewModelBase
     private async Task RefreshAlertsAsync(
     CancellationToken cancellationToken = default)
     {
-        var alerts = await _apiClient.GetAlertsAsync(cancellationToken);
+        System.Diagnostics.Debug.WriteLine(
+            "[ALERT REFRESH] Requesting GET api/alert");
+
+        var alerts = await _apiClient.GetAlertsAsync(
+            cancellationToken);
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[ALERT REFRESH] API returned: {alerts.Count}");
 
         Alerts.Clear();
 
         foreach (var alert in alerts)
+        {
             Alerts.Add(alert);
 
+            System.Diagnostics.Debug.WriteLine(
+                $"[ALERT REFRESH] Added: {alert.Message}");
+        }
+
         PendingAlertCount = Alerts.Count;
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[ALERT REFRESH] Collection count: {Alerts.Count}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[ALERT REFRESH] Collection reference: {Alerts.GetHashCode()}");
 
         RaiseCommandStates();
     }
@@ -178,40 +196,72 @@ public sealed class AlertsViewModel : ViewModelBase
 
     public async Task AddDemoAlertsAsync()
     {
-        var sensorId = PredictiveWarnings.Suggestions
-            .FirstOrDefault()?.SensorId;
-
-        if (sensorId is null)
-        {
-            ErrorMessage =
-                "Select a sensor or load predictive suggestions first.";
-
-            return;
-        }
+        System.Diagnostics.Debug.WriteLine("[ALERT DEMO] STARTED");
 
         try
         {
-            await _apiClient.EnqueueAlertAsync(new SensorAlert
+            ErrorMessage = string.Empty;
+
+            var sensorId = PredictiveWarnings.Suggestions
+                .FirstOrDefault()?.SensorId;
+
+            System.Diagnostics.Debug.WriteLine(
+                $"[ALERT DEMO] SENSOR ID: {sensorId}");
+
+            if (sensorId is null || sensorId == Guid.Empty)
+            {
+                ErrorMessage = "No valid sensor ID available.";
+                System.Diagnostics.Debug.WriteLine(
+                    "[ALERT DEMO] STOPPED: INVALID SENSOR ID");
+                return;
+            }
+
+            var firstAlert = new SensorAlert
             {
                 SensorId = sensorId.Value,
                 Message = "DEMO: Critical temperature warning.",
                 Severity = AlertSeverity.Critical,
                 Timestamp = DateTime.UtcNow
-            });
+            };
 
-            await _apiClient.EnqueueAlertAsync(new SensorAlert
+            System.Diagnostics.Debug.WriteLine(
+                "[ALERT DEMO] SENDING FIRST ALERT");
+
+            await _apiClient.EnqueueAlertAsync(firstAlert);
+
+            System.Diagnostics.Debug.WriteLine(
+                "[ALERT DEMO] FIRST ALERT SENT");
+
+            var secondAlert = new SensorAlert
             {
                 SensorId = sensorId.Value,
                 Message = "DEMO: Routine sensor status update.",
                 Severity = AlertSeverity.Medium,
                 Timestamp = DateTime.UtcNow
-            });
+            };
+
+            System.Diagnostics.Debug.WriteLine(
+                "[ALERT DEMO] SENDING SECOND ALERT");
+
+            await _apiClient.EnqueueAlertAsync(secondAlert);
+
+            System.Diagnostics.Debug.WriteLine(
+                "[ALERT DEMO] SECOND ALERT SENT");
+
+            System.Diagnostics.Debug.WriteLine(
+                "[ALERT DEMO] REFRESHING ALERTS");
 
             await RefreshAlertsAsync();
+
+            System.Diagnostics.Debug.WriteLine(
+                $"[ALERT DEMO] COMPLETE. COUNT: {Alerts.Count}");
         }
         catch (Exception ex)
         {
             ErrorMessage = $"Unable to add demo alerts: {ex.Message}";
+
+            System.Diagnostics.Debug.WriteLine(
+                $"[ALERT DEMO] ERROR: {ex}");
         }
     }
 

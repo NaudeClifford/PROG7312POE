@@ -13,7 +13,8 @@ public class MeshDiscoveryService(
     IMeshNodeRepository nodeRepository,
     IMeshLinkRepository linkRepository,
     IMeshLogRepository logRepository,
-    ISensorRepository sensorRepository)
+    ISensorRepository sensorRepository,
+    IMeshConnectionDiscoveryService connectionDiscoveryService)
     : IMeshDiscoveryService
 {
     private readonly IMeshDiscoveryProvider _discoveryProvider =
@@ -22,6 +23,7 @@ public class MeshDiscoveryService(
     private readonly IMeshTopologyService _topologyService =
         topologyService;
 
+    private readonly IMeshConnectionDiscoveryService _connectionDiscoveryService = connectionDiscoveryService;
     private readonly IMeshNodeRepository _nodeRepository =
         nodeRepository;
 
@@ -41,17 +43,25 @@ public class MeshDiscoveryService(
         ValidateGateway(gatewayId);
 
         var result = await _discoveryProvider.DiscoverAsync(
-            gatewayId,
-            cancellationToken);
+      gatewayId,
+      cancellationToken);
 
         cancellationToken.ThrowIfCancellationRequested();
 
         if (result is null)
+        {
             throw new InvalidOperationException(
                 "Mesh discovery returned no result.");
+        }
 
         result.DiscoveredNodes ??= new List<MeshNode>();
-        result.DiscoveredLinks ??= new List<MeshLink>();
+
+        var discoveredConnections =
+            await _connectionDiscoveryService.DiscoverConnectionsAsync(
+                gatewayId,
+                cancellationToken);
+
+        result.DiscoveredLinks = discoveredConnections.ToList();
 
         // Validate gateway discovery results.
         foreach (var node in result.DiscoveredNodes)
@@ -160,8 +170,12 @@ public class MeshDiscoveryService(
             .ToDictionary(x => x.Key, x => x.First());
 
         var linksByEndpoints = existingLinks
-            .GroupBy(x => (x.SourceNodeId, x.TargetNodeId))
-            .ToDictionary(x => x.Key, x => x.First());
+            .GroupBy(x => NormalizeEndpoints(
+                x.SourceNodeId,
+                x.TargetNodeId))
+            .ToDictionary(
+                x => x.Key,
+                x => x.First());
 
         int changes = 0;
 
@@ -186,6 +200,10 @@ public class MeshDiscoveryService(
                 await _topologyService.RegisterNodeAsync(
                     discovered,
                     cancellationToken);
+
+                nodesByDevice[
+                    (discovered.DeviceId, discovered.NodeType)
+                ] = discovered;
             }
 
             changes++;
@@ -212,9 +230,11 @@ public class MeshDiscoveryService(
                 continue;
             }
 
-            if (linksByEndpoints.TryGetValue(
-                (discovered.SourceNodeId, discovered.TargetNodeId),
-                out var existing))
+            var key = NormalizeEndpoints(
+                discovered.SourceNodeId,
+                discovered.TargetNodeId);
+
+            if (linksByEndpoints.TryGetValue(key, out var existing))
             {
                 discovered.Id = existing.Id;
                 discovered.CreatedAt = existing.CreatedAt;
@@ -228,6 +248,8 @@ public class MeshDiscoveryService(
                 await _topologyService.RegisterLinkAsync(
                     discovered,
                     cancellationToken);
+
+                linksByEndpoints[key] = discovered;
             }
 
             changes++;
@@ -289,7 +311,7 @@ public class MeshDiscoveryService(
                 Name = sensor.Name,
 
                 NodeType = MeshNodeType.Sensor,
-                Status = MeshNodeStatus.Offline,
+                Status = existing?.Status ?? MeshNodeStatus.Offline,
 
                 IsGateway = false,
 
@@ -313,6 +335,14 @@ public class MeshDiscoveryService(
                     cancellationToken);
             }
         }
+    }
+    private static (Guid First, Guid Second) NormalizeEndpoints(
+    Guid source,
+    Guid target)
+    {
+        return source.CompareTo(target) <= 0
+            ? (source, target)
+            : (target, source);
     }
 
     private static void ValidateGateway(Guid gatewayId)

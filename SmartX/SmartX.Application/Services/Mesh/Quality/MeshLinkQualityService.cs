@@ -10,6 +10,7 @@ namespace SmartX.Application.Services.Mesh.Quality;
 public class MeshLinkQualityService : IMeshLinkQualityService
 {
     private readonly IMeshLinkRepository _linkRepository;
+    private readonly IMeshNodeRepository _nodeRepository;
     private readonly IMeshLogRepository _logRepository;
     private readonly MeshMonitoringOptions _options;
     private const double SignalWeight = 0.5;
@@ -18,17 +19,28 @@ public class MeshLinkQualityService : IMeshLinkQualityService
 
     public MeshLinkQualityService(
         IMeshLinkRepository linkRepository,
+        IMeshNodeRepository nodeRepository,
         IMeshLogRepository logRepository,
         MeshMonitoringOptions options)
     {
         _linkRepository = linkRepository;
+        _nodeRepository = nodeRepository;
         _logRepository = logRepository;
         _options = options;
+
+        if (options.MaximumLatencyMilliseconds <= 0 ||
+        options.MaximumEnergyCost <= 0 ||
+        options.LinkTimeoutMinutes <= 0)
+        {
+            throw new ArgumentException(
+                "Mesh monitoring thresholds must be greater than zero.");
+        }
     }
 
+
     public async Task EvaluateGatewayLinksAsync(
-        Guid gatewayId,
-        CancellationToken cancellationToken = default)
+    Guid gatewayId,
+    CancellationToken cancellationToken = default)
     {
         if (gatewayId == Guid.Empty)
             throw new ArgumentException(
@@ -39,12 +51,26 @@ public class MeshLinkQualityService : IMeshLinkQualityService
             gatewayId,
             cancellationToken);
 
+        var nodes = await _nodeRepository.GetByGatewayIdAsync(
+            gatewayId,
+            cancellationToken);
+
+        var onlineNodeIds = nodes
+            .Where(x => x.Status == MeshNodeStatus.Online)
+            .Select(x => x.Id)
+            .ToHashSet();
+
         foreach (var link in links)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
+            var endpointsOnline =
+                onlineNodeIds.Contains(link.SourceNodeId) &&
+                onlineNodeIds.Contains(link.TargetNodeId);
+
             await EvaluateLinkInternalAsync(
                 link,
+                endpointsOnline,
                 cancellationToken);
         }
     }
@@ -65,13 +91,28 @@ public class MeshLinkQualityService : IMeshLinkQualityService
         if (link is null)
             return;
 
+        var nodes = await _nodeRepository.GetByGatewayIdAsync(
+            link.GatewayId,
+            cancellationToken);
+
+        var onlineNodeIds = nodes
+            .Where(x => x.Status == MeshNodeStatus.Online)
+            .Select(x => x.Id)
+            .ToHashSet();
+
+        var endpointsOnline =
+            onlineNodeIds.Contains(link.SourceNodeId) &&
+            onlineNodeIds.Contains(link.TargetNodeId);
+
         await EvaluateLinkInternalAsync(
             link,
+            endpointsOnline,
             cancellationToken);
     }
 
     private async Task EvaluateLinkInternalAsync(
         MeshLink link,
+        bool endpointsOnline,
         CancellationToken cancellationToken)
     {
         var previousAvailability = link.IsAvailable;
@@ -88,20 +129,12 @@ public class MeshLinkQualityService : IMeshLinkQualityService
                 -_options.LinkTimeoutMinutes);
 
         var isAvailable =
+            endpointsOnline &&
             quality >= _options.MinimumLinkQuality &&
             isRecent;
 
-        if (previousAvailability != isAvailable)
-        {
-            link.IsAvailable = isAvailable;
-            link.UpdatedAt = now;
-
-            await _linkRepository.UpdateAsync(
-                link,
-                cancellationToken);
-
-            // Log availability transition.
-        }
+        link.IsAvailable = isAvailable;
+        link.UpdatedAt = now;
 
         await _linkRepository.UpdateAsync(
             link,

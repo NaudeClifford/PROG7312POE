@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartX.Application.Authentication;
 using SmartX.Application.Requests.Gateway;
-using SmartX.Application.Services.Alerts;
 using SmartX.Application.Services.Telemetry;
 using SmartX.Application.Validators;
 using SmartX.Shared.Mapping;
@@ -96,22 +95,6 @@ public partial class App
 
         services.AddSingleton(apiOptions);
 
-        // API
-        services.AddHttpClient<ISmartXApiClient, SmartXApiClient>(
-            client =>
-            {
-
-                client.BaseAddress = new Uri(apiOptions.BaseUrl);
-
-
-            });
-
-        services.AddHttpClient<IConnectivityService, ConnectivityService>(
-    client =>
-    {
-        client.BaseAddress = new Uri(apiOptions.BaseUrl);
-    });
-
         //Services
         // API communication
         services.AddHttpClient<ISmartXApiClient, SmartXApiClient>(
@@ -120,9 +103,13 @@ public partial class App
                 client.BaseAddress = new Uri(apiOptions.BaseUrl);
             });
 
+        services.AddHttpClient<IConnectivityService, ConnectivityService>(
+client =>
+{
+    client.BaseAddress = new Uri(apiOptions.BaseUrl);
+});
         // Local services
         services.AddSingleton<ITelemetryStream, TelemetryStream>();
-        services.AddSingleton<AlertQueue>();
 
         //Session
         services.AddSingleton<SmartXSession>();

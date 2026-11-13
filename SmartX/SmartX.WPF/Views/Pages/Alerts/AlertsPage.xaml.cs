@@ -1,24 +1,28 @@
 ﻿using SmartX.WPF.ViewModels.Alerts;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace SmartX.WPF.Views.Pages.Alerts;
 
 public partial class AlertsPage : Page
 {
-    public AlertsPage(AlertsViewModel alertsViewModel)
+    private readonly AlertsViewModel _viewModel;
+
+    public AlertsPage(AlertsViewModel viewModel)
     {
         InitializeComponent();
 
-        DataContext = alertsViewModel;
+        _viewModel = viewModel;
+
+        DataContext = _viewModel;
 
         Loaded += AlertsPage_Loaded;
     }
 
-    private async void AlertsPage_Loaded(object sender, System.Windows.RoutedEventArgs e)
+    private async void AlertsPage_Loaded(
+        object sender,
+        RoutedEventArgs e)
     {
-        if (DataContext is AlertsViewModel viewModel)
-        {
-            await viewModel.LoadAsync();
-        }
+        await _viewModel.LoadAsync();
     }
 }

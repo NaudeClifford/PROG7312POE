@@ -156,4 +156,23 @@ public class MeshGraph
                 out var destination) &&
             destination.IsOnline);
     }
+
+    public void PrintGraph()
+    {
+        foreach (var node in _nodes.Values)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                $"Node: {node.Name} | " +
+                $"ID: {node.Id} | " +
+                $"Online: {node.IsOnline}");
+
+            foreach (var connection in node.Connections)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    $"  -> {connection.DestinationNodeId} | " +
+                    $"Active: {connection.IsActive} | " +
+                    $"Cost: {connection.RoutingCost}");
+            }
+        }
+    }
 }

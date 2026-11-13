@@ -71,9 +71,9 @@ public sealed class AlertController : ControllerBase
 
     // POST: api/alert
     [HttpPost]
-    public IActionResult EnqueueAlert(
-        [FromBody] SensorAlert alert)
+    public IActionResult EnqueueAlert([FromBody] SensorAlert alert)
     {
+
         if (alert.SensorId == Guid.Empty)
             return BadRequest("A valid sensor ID is required.");
 

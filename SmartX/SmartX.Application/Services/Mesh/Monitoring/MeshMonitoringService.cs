@@ -149,6 +149,8 @@ public class MeshMonitoringService : IMeshMonitoringService
 
         var graph = _graphBuilder.Build(nodes, links);
 
+        graph.PrintGraph();
+
         var gateway = nodes.FirstOrDefault(x => x.IsGateway);
 
         if (gateway is null)

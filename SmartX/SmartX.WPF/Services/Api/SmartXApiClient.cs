@@ -1595,13 +1595,25 @@ public class SmartXApiClient(
 
 
     public async Task EnqueueAlertAsync(
-        SensorAlert alert,
-        CancellationToken cancellationToken = default)
+    SensorAlert alert,
+    CancellationToken cancellationToken = default)
     {
+        System.Diagnostics.Debug.WriteLine(
+            "ENQUEUE ALERT API METHOD CALLED");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"Request URL: {_httpClient.BaseAddress}api/alert");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"Sensor ID: {alert.SensorId}");
+
         using var response = await _httpClient.PostAsJsonAsync(
             "api/alert",
             alert,
             cancellationToken);
+
+        System.Diagnostics.Debug.WriteLine(
+            $"HTTP STATUS: {response.StatusCode}");
 
         response.EnsureSuccessStatusCode();
     }

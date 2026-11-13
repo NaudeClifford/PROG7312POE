@@ -11,6 +11,20 @@ public class MeshTraversalService
     {
         ArgumentNullException.ThrowIfNull(graph);
 
+        var startNode = graph.GetNode(startNodeId);
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[BFS] Start Node: {startNodeId}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[BFS] Node Exists: {startNode != null}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[BFS] Node Online: {startNode?.IsOnline}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[BFS] Node Connections: {startNode?.Connections.Count}");
+
         if (graph.GetNode(startNodeId) is not { IsOnline: true })
             return [];
 
@@ -46,6 +60,19 @@ public class MeshTraversalService
         Guid startNodeId)
     {
         ArgumentNullException.ThrowIfNull(graph);
+        var startNode = graph.GetNode(startNodeId);
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[BFS] Start Node: {startNodeId}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[BFS] Node Exists: {startNode != null}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[BFS] Node Online: {startNode?.IsOnline}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[BFS] Node Connections: {startNode?.Connections.Count}");
 
         if (graph.GetNode(startNodeId) is not { IsOnline: true })
             return [];
@@ -159,6 +186,9 @@ public class MeshTraversalService
             foreach (var edge in edges)
             {
                 var neighbour = edge.DestinationNodeId;
+
+                if (graph.GetNode(neighbour) is not { IsOnline: true })
+                    continue;
 
                 if (!visited.Add(neighbour))
                     continue;

@@ -144,7 +144,9 @@ public class MeshTopologyService(
         link.CreatedAt = DateTime.UtcNow;
         link.UpdatedAt = DateTime.UtcNow;
         link.LastSeenAt = DateTime.UtcNow;
-        link.IsAvailable = false;
+        link.IsAvailable = link.SignalStrengthDbm.HasValue
+            && link.LatencyMilliseconds.HasValue
+            && link.EnergyCost.HasValue;
 
         await _linkRepository.AddAsync(
             link,

@@ -14,11 +14,12 @@ Title="Alerts">
 
         <Grid Margin="25">
 
+
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <!-- HEADER -->
@@ -90,9 +91,9 @@ Title="Alerts">
             <Border Grid.Row="2"
             Style="{StaticResource ElevatedCardStyle}"
             Padding="12"
-            Margin="0,0,0,15">
+            Margin="0,0,0,15" MinHeight="350">
 
-                <TabControl>
+                <TabControl MinHeight="350">
 
                     <!-- LIVE INBOX -->
                     <TabItem Header="Live Inbox">
@@ -126,7 +127,7 @@ Title="Alerts">
                                    Style="{StaticResource BodyTextStyleBlack}"/>
                             </Grid>
 
-                            <ListBox Grid.Row="1"
+                            <ListBox x:Name="AlertList"  Grid.Row="1"
                              ItemsSource="{Binding Alerts}"
                              BorderThickness="0"
                              Background="Transparent"

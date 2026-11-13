@@ -29,6 +29,8 @@ using SmartX.Application.Services.Telemetry.Structures;
 using SmartX.Application.Validators;
 using SmartX.Application.Validators.Company;
 using SmartX.Application.Validators.Sensor;
+using SmartX.Domain.Interfaces.Mesh;
+using SmartX.Infrastructure.Mesh.Simulation;
 using SmartX.Shared.Mapping;
 
 namespace SmartX.Application;
@@ -91,9 +93,7 @@ public static class DependencyInjection
         services.AddScoped<IAnomalyRecommendationService, StatisticalAnomalyRecommendationService>();
 
         // Alerts
-        services.AddScoped<AlertQueue>();
-
-        services.AddScoped<IAlertQueue>(sp => sp.GetRequiredService<AlertQueue>());
+        services.AddSingleton<IAlertQueue, AlertQueue>();
 
         services.AddScoped<ISensorAlertProcessor, SensorAlertProcessor>();
         services.AddScoped<SensorProcessingService>();
@@ -114,11 +114,29 @@ public static class DependencyInjection
         services.AddScoped<IMeshTopologyService, MeshTopologyService>();
         services.AddScoped<IMeshDiscoveryService, MeshDiscoveryService>();
         services.AddScoped<IMeshHealthService, MeshHealthService>();
-
         services.AddScoped<IMeshMonitoringService, MeshMonitoringService>();
+        services.AddScoped<IMeshConnectionDiscoveryService, MeshConnectionDiscoveryService>();
+        // services.AddScoped<IMeshGatewayConnectionClient, YourGatewayConnectionClient>();
+        services.AddScoped<IMeshGatewayConnectionClient, SimulatedMeshGatewayConnectionClient>();
+        services.AddScoped<IMeshConnectionDiscoveryService, MeshConnectionDiscoveryService>();
+        services.AddScoped<IMeshConnectionDiscoveryProvider, SimulatedMeshConnectionDiscoveryProvider>();
+
+        services.AddSingleton(
+            new MeshSensorMonitoringOptions
+            {
+                HeartbeatTimeoutSeconds = 60,
+                MonitoringIntervalSeconds = 15
+            });
+
+        services.AddScoped<IMeshSensorHeartbeatService, MeshSensorHeartbeatService>();
+        services.AddScoped<IMeshConnectionDiscoveryService, MeshConnectionDiscoveryService>();
 
         services.AddSingleton(new MeshMonitoringOptions());
 
+        services.AddHostedService<MeshSensorHeartbeatBackgroundService>();
+
+        services.AddScoped<IMeshLinkMonitoringService, MeshLinkMonitoringService>();
+        services.AddHostedService<SimulatedMeshHeartbeatBackgroundService>();
         return services;
     }
 }

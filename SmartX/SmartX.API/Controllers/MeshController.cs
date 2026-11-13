@@ -324,77 +324,145 @@ public class MeshController : ControllerBase
         if (!result.Success)
             return NotFound(new { Message = "No route found." });
 
-        return Ok(_mapper.Map<MeshRouteDto>(result));
+        return Ok(new MeshRouteDto
+        {
+            Id = Guid.NewGuid(),
+            GatewayId = gatewayId,
+            SourceNodeId = result.SourceNodeId,
+            DestinationNodeId = result.DestinationNodeId,
+            NodePath = result.NodePath,
+            TotalCost = result.TotalCost,
+            TotalLatency = result.TotalLatency,
+            HopCount = result.HopCount,
+            IsSuccessful = result.Success,
+            CalculatedAt = DateTime.UtcNow
+        });
     }
 
     // TRAVERSAL
 
     [HttpGet("{gatewayId:guid}/traversal/bfs/{startNodeId:guid}")]
     public async Task<IActionResult> BreadthFirstSearch(
-        Guid gatewayId,
-        Guid startNodeId,
-        CancellationToken cancellationToken)
+     Guid gatewayId,
+     Guid startNodeId,
+     CancellationToken cancellationToken)
     {
         var graph = await BuildGraphAsync(
-            gatewayId, cancellationToken);
+            gatewayId,
+            cancellationToken);
 
         var result = _traversalService.BreadthFirstSearch(
-            graph, startNodeId);
+            graph,
+            startNodeId);
 
-        return Ok(_mapper.Map<MeshTraversalResultDto>(result));
+        var dto = new MeshTraversalResultDto
+        {
+            Success = result.Count > 0,
+            Message = result.Count > 0
+                ? "Breadth-first traversal completed successfully."
+                : "No reachable online nodes found.",
+            StartNodeId = startNodeId,
+            VisitedNodeIds = result,
+            TotalVisited = result.Count
+        };
+
+        return Ok(dto);
     }
 
     [HttpGet("{gatewayId:guid}/traversal/dfs/{startNodeId:guid}")]
     public async Task<IActionResult> DepthFirstSearch(
-        Guid gatewayId,
-        Guid startNodeId,
-        CancellationToken cancellationToken)
+     Guid gatewayId,
+     Guid startNodeId,
+     CancellationToken cancellationToken)
     {
         var graph = await BuildGraphAsync(
-            gatewayId, cancellationToken);
+            gatewayId,
+            cancellationToken);
 
         var result = _traversalService.DepthFirstSearch(
-            graph, startNodeId);
+            graph,
+            startNodeId);
 
-        return Ok(_mapper.Map<MeshTraversalResultDto>(result));
+        var dto = new MeshTraversalResultDto
+        {
+            Success = result.Count > 0,
+            Message = result.Count > 0
+                ? "Depth-first traversal completed successfully."
+                : "No reachable online nodes found.",
+            StartNodeId = startNodeId,
+            VisitedNodeIds = result,
+            TotalVisited = result.Count
+        };
+
+        return Ok(dto);
     }
 
     [HttpGet("{gatewayId:guid}/traversal/bfs-route")]
     public async Task<IActionResult> FindBfsRoute(
-        Guid gatewayId,
-        [FromQuery] Guid sourceNodeId,
-        [FromQuery] Guid destinationNodeId,
-        CancellationToken cancellationToken)
+     Guid gatewayId,
+     [FromQuery] Guid sourceNodeId,
+     [FromQuery] Guid destinationNodeId,
+     CancellationToken cancellationToken)
     {
         var graph = await BuildGraphAsync(
-            gatewayId, cancellationToken);
+            gatewayId,
+            cancellationToken);
 
         var result = _traversalService.FindBfsRoute(
-            graph, sourceNodeId, destinationNodeId);
+            graph,
+            sourceNodeId,
+            destinationNodeId);
 
         if (!result.Success)
-            return NotFound(new { Message = "No BFS route found." });
+            return NotFound(new { Message = result.Message });
 
-        return Ok(_mapper.Map<MeshTraversalResultDto>(result));
+        return Ok(new MeshRouteDto
+        {
+            Id = Guid.NewGuid(),
+            GatewayId = gatewayId,
+            SourceNodeId = result.SourceNodeId,
+            DestinationNodeId = result.DestinationNodeId,
+            NodePath = result.NodePath,
+            TotalCost = result.TotalCost,
+            TotalLatency = result.TotalLatency,
+            HopCount = result.HopCount,
+            IsSuccessful = result.Success,
+            CalculatedAt = DateTime.UtcNow
+        });
     }
 
     [HttpGet("{gatewayId:guid}/traversal/dfs-route")]
     public async Task<IActionResult> FindDfsRoute(
-        Guid gatewayId,
-        [FromQuery] Guid sourceNodeId,
-        [FromQuery] Guid destinationNodeId,
-        CancellationToken cancellationToken)
+     Guid gatewayId,
+     [FromQuery] Guid sourceNodeId,
+     [FromQuery] Guid destinationNodeId,
+     CancellationToken cancellationToken)
     {
         var graph = await BuildGraphAsync(
-            gatewayId, cancellationToken);
+            gatewayId,
+            cancellationToken);
 
         var result = _traversalService.FindDfsRoute(
-            graph, sourceNodeId, destinationNodeId);
+            graph,
+            sourceNodeId,
+            destinationNodeId);
 
         if (!result.Success)
-            return NotFound(new { Message = "No DFS route found." });
+            return NotFound(new { Message = result.Message });
 
-        return Ok(_mapper.Map<MeshTraversalResultDto>(result));
+        return Ok(new MeshRouteDto
+        {
+            Id = Guid.NewGuid(),
+            GatewayId = gatewayId,
+            SourceNodeId = result.SourceNodeId,
+            DestinationNodeId = result.DestinationNodeId,
+            NodePath = result.NodePath,
+            TotalCost = result.TotalCost,
+            TotalLatency = result.TotalLatency,
+            HopCount = result.HopCount,
+            IsSuccessful = result.Success,
+            CalculatedAt = DateTime.UtcNow
+        });
     }
 
     // MINIMUM SPANNING TREE
@@ -415,6 +483,18 @@ public class MeshController : ControllerBase
             cancellationToken);
 
         var graph = _graphBuilder.Build(nodes, links);
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[MST] Nodes: {graph.NodeCount}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[MST] Edges: {graph.EdgeCount}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[MST] Start node exists: {graph.ContainsNode(startNodeId)}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[MST] Start node online: {graph.GetNode(startNodeId)?.IsOnline}");
 
         var result = _spanningTreeService.Calculate(
             graph,
@@ -460,17 +540,30 @@ public class MeshController : ControllerBase
 
     // GRAPH HELPER
 
-    private async Task< /* Your graph type */ dynamic> BuildGraphAsync(
-        Guid gatewayId,
-        CancellationToken cancellationToken)
+    private async Task<MeshGraph> BuildGraphAsync(
+    Guid gatewayId,
+    CancellationToken cancellationToken)
     {
         var nodes = await _topologyService.GetNodesAsync(
-            gatewayId, cancellationToken);
+            gatewayId,
+            cancellationToken);
 
         var links = await _topologyService.GetLinksAsync(
-            gatewayId, cancellationToken);
+            gatewayId,
+            cancellationToken);
 
-        return _graphBuilder.Build(nodes, links);
+        var graph = _graphBuilder.Build(nodes, links);
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[MESH] Gateway: {gatewayId}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[MESH] Nodes: {graph.NodeCount}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[MESH] Edges: {graph.EdgeCount}");
+
+        return graph;
     }
 
     [HttpGet("{gatewayId:guid}/connections")]

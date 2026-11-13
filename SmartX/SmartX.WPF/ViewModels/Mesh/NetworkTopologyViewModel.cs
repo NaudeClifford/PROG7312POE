@@ -205,7 +205,7 @@ public class NetworkTopologyViewModel : ViewModelBase
         }
         catch (OperationCanceledException ex)
         {
-            ErrorMessage = "The operation was cancelled.";
+            ErrorMessage = "The operation was cancelled." + ex;
             StatusMessage = "Operation cancelled.";
         }
         catch (Exception ex)

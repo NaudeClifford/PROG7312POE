@@ -2,6 +2,7 @@
 using SmartX.Application.Interfaces.Mesh;
 using SmartX.Domain.Entities.Mesh;
 using SmartX.Domain.Enums.Mesh;
+using System.Diagnostics;
 
 namespace SmartX.Application.Services.Mesh.Graph;
 
@@ -16,15 +17,18 @@ public class MeshGraphBuilder
     }
 
     public MeshGraph Build(
-        IEnumerable<MeshNode> nodes,
-        IEnumerable<MeshLink> links)
+     IEnumerable<MeshNode> nodes,
+     IEnumerable<MeshLink> links)
     {
         ArgumentNullException.ThrowIfNull(nodes);
         ArgumentNullException.ThrowIfNull(links);
 
+        var nodeList = nodes.ToList();
+        var linkList = links.ToList();
+
         var graph = new MeshGraph();
 
-        var nodeLookup = nodes
+        var nodeLookup = nodeList
             .Where(x => x.Id != Guid.Empty)
             .GroupBy(x => x.Id)
             .ToDictionary(x => x.Key, x => x.First());
@@ -42,18 +46,27 @@ public class MeshGraphBuilder
             });
         }
 
-        // Build validated connections.
-        foreach (var link in links)
+        int rejectedLinks = 0;
+        int acceptedLinks = 0;
+
+        // Build connections.
+        foreach (var link in linkList)
         {
             if (!IsValidLink(link, nodeLookup))
+            {
+                rejectedLinks++;
                 continue;
+            }
 
             var source = nodeLookup[link.SourceNodeId];
             var destination = nodeLookup[link.TargetNodeId];
 
             if (source.Status != MeshNodeStatus.Online ||
                 destination.Status != MeshNodeStatus.Online)
+            {
+                rejectedLinks++;
                 continue;
+            }
 
             var quality = _linkQualityService.CalculateLinkQuality(
                 link.SignalStrengthDbm,
@@ -69,8 +82,14 @@ public class MeshGraphBuilder
                     latency,
                     energy);
 
-            if (!double.IsFinite(routingCost))
+            if (!double.IsFinite(routingCost) ||
+                !double.IsFinite(quality) ||
+                quality < 0 ||
+                quality > 100)
+            {
+                rejectedLinks++;
                 continue;
+            }
 
             graph.AddConnection(
                 link.SourceNodeId,
@@ -79,40 +98,94 @@ public class MeshGraphBuilder
                 latency,
                 energy,
                 quality);
+
+            acceptedLinks++;
         }
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[MESH GRAPH] Nodes loaded: {graph.NodeCount}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[MESH GRAPH] Links received: {linkList.Count}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[MESH GRAPH] Links accepted: {acceptedLinks}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[MESH GRAPH] Links rejected: {rejectedLinks}");
+
+        System.Diagnostics.Debug.WriteLine(
+            $"[MESH GRAPH] Edges created: {graph.EdgeCount}");
 
         return graph;
     }
 
     private static bool IsValidLink(
-        MeshLink link,
-        Dictionary<Guid, MeshNode> nodes)
+     MeshLink link,
+     Dictionary<Guid, MeshNode> nodes)
     {
         if (!link.IsAvailable)
-            return false;
+        {
+            Debug.WriteLine(
+                $"[REJECTED] Link {link.Id}: IsAvailable = false");
 
-        if (link.Id == Guid.Empty ||
-            link.SourceNodeId == Guid.Empty ||
-            link.TargetNodeId == Guid.Empty)
             return false;
+        }
+
+        if (link.Id == Guid.Empty)
+        {
+            Debug.WriteLine("[REJECTED] Empty Link ID");
+            return false;
+        }
+
+        if (link.SourceNodeId == Guid.Empty ||
+            link.TargetNodeId == Guid.Empty)
+        {
+            Debug.WriteLine("[REJECTED] Empty node ID");
+            return false;
+        }
 
         if (link.SourceNodeId == link.TargetNodeId)
+        {
+            Debug.WriteLine("[REJECTED] Self connection");
             return false;
+        }
 
-        if (!nodes.ContainsKey(link.SourceNodeId) ||
-            !nodes.ContainsKey(link.TargetNodeId))
+        if (!nodes.ContainsKey(link.SourceNodeId))
+        {
+            Debug.WriteLine("[REJECTED] Source node missing");
             return false;
+        }
+
+        if (!nodes.ContainsKey(link.TargetNodeId))
+        {
+            Debug.WriteLine("[REJECTED] Destination node missing");
+            return false;
+        }
 
         if (!link.SignalStrengthDbm.HasValue ||
             !link.LatencyMilliseconds.HasValue ||
             !link.EnergyCost.HasValue)
+        {
+            Debug.WriteLine("[REJECTED] Missing connection metrics");
             return false;
+        }
 
-        return
-            double.IsFinite(link.SignalStrengthDbm.Value) &&
-            double.IsFinite(link.LatencyMilliseconds.Value) &&
-            double.IsFinite(link.EnergyCost.Value) &&
-            link.LatencyMilliseconds.Value >= 0 &&
-            link.EnergyCost.Value >= 0;
+        if (!double.IsFinite(link.SignalStrengthDbm.Value) ||
+            !double.IsFinite(link.LatencyMilliseconds.Value) ||
+            !double.IsFinite(link.EnergyCost.Value))
+        {
+            Debug.WriteLine("[REJECTED] Invalid numeric metrics");
+            return false;
+        }
+
+        if (link.LatencyMilliseconds.Value < 0 ||
+            link.EnergyCost.Value < 0)
+        {
+            Debug.WriteLine("[REJECTED] Negative metrics");
+            return false;
+        }
+
+        return true;
     }
 }

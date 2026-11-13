@@ -1,4 +1,5 @@
-﻿using SmartX.Application.Services.Mesh.Graph;
+﻿
+using SmartX.Application.Services.Mesh.Graph;
 
 namespace SmartX.Application.Services.Mesh.SpanningTree;
 
@@ -10,10 +11,18 @@ public class MinimumSpanningTreeService
     {
         ArgumentNullException.ThrowIfNull(graph);
 
+        if (startNodeId == Guid.Empty)
+            throw new ArgumentException(
+                "A valid starting node ID is required.",
+                nameof(startNodeId));
+
         if (graph.GetNode(startNodeId) is not { IsOnline: true })
             return [];
 
-        var visited = new HashSet<Guid>();
+        var visited = new HashSet<Guid>
+        {
+            startNodeId
+        };
 
         var result = new List<MeshConnectionResult>();
 
@@ -21,18 +30,12 @@ public class MinimumSpanningTreeService
             MeshConnectionResult,
             double>();
 
-        visited.Add(startNodeId);
-
         AddEdges(startNodeId);
 
-        while (queue.TryDequeue(
-                   out var connection,
-                   out _))
+        while (queue.TryDequeue(out var connection, out _))
         {
-            if (visited.Contains(connection.DestinationNodeId))
+            if (!visited.Add(connection.DestinationNodeId))
                 continue;
-
-            visited.Add(connection.DestinationNodeId);
 
             result.Add(connection);
 

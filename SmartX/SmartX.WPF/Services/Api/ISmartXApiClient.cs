@@ -385,5 +385,4 @@ public interface ISmartXApiClient
         Guid gatewayId,
         CancellationToken cancellationToken = default);
 
-
 }
