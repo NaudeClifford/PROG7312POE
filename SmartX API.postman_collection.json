@@ -1465,11 +1465,1599 @@
       "item": [
         {
           "name": "Get Company Configuration",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst response = pm.response.json();\r\nconst company = response.data;\r\n\r\npm.test(\"Request was successful\", function () {\r\n    pm.expect(response.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Name was updated\", function () {\r\n    pm.expect(company.name)\r\n        .to.eql(\"Updated Postman Company\");\r\n});\r\n\r\npm.test(\"Description was updated\", function () {\r\n    pm.expect(company.description)\r\n        .to.eql(\"Updated by automated API test\");\r\n});\r\n\r\npm.test(\"Company is active\", function () {\r\n    pm.expect(company.isActive)\r\n        .to.eql(true);\r\n});\r\n\r\npm.test(\"CreatedAt did not change\", function () {\r\n    const originalCreatedAt =\r\n        pm.environment.get(\"createdAt\");\r\n\r\n    pm.expect(company.createdAt)\r\n        .to.eql(originalCreatedAt);\r\n});\r\n\r\npm.test(\"UpdatedAt exists\", function () {\r\n    pm.expect(company.updatedAt).to.exist;\r\n});\r\n\r\npm.test(\"UpdatedAt changed\", function () {\r\n    const originalUpdatedAt =\r\n        pm.environment.get(\"updatedAt\");\r\n\r\n    pm.expect(company.updatedAt)\r\n        .to.not.eql(originalUpdatedAt);\r\n});\r\n"
+                ]
+              }
+            }
+          ],
           "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "J68VfDUxA9XdTp2RGJ02nZRwDm73",
+                  "type": "string"
+                }
+              ]
+            },
             "method": "GET",
             "header": [],
             "url": {
-              "raw": ""
+              "raw": "{{baseUrl}}/api/company-configuration/{{companyId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "company-configuration",
+                "{{companyId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Mesh",
+      "item": [
+        {
+          "name": "Discover mesh nodes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Discovery returned a valid response\", function () {\r\n    pm.expect(json).to.be.an(\"object\");\r\n});\r\n\r\npm.test(\"Discovered nodes collection exists\", function () {\r\n    pm.expect(json.discoveredNodes).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Discovered links collection exists\", function () {\r\n    pm.expect(json.discoveredLinks).to.be.an(\"array\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/discovery/{{gatewayId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "discovery",
+                "{{gatewayId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Synchronize mesh",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Synchronization succeeded\", function () {\r\n    pm.expect(json.success).to.eql(true);\r\n});\r\n\r\npm.test(\"Gateway ID returned\", function () {\r\n    pm.expect(json.gatewayId).to.eql(pm.environment.get(\"gatewayId\"));\r\n});\r\n\r\npm.test(\"Changes count is valid\", function () {\r\n    pm.expect(json.changes).to.be.a(\"number\");\r\n    pm.expect(json.changes).to.be.at.least(0);\r\n});\r\n\r\npm.test(\"Completion message returned\", function () {\r\n    pm.expect(json.message).to.be.a(\"string\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"success\": true,\r\n  \"gatewayId\": \"{{gatewayId}}\",\r\n  \"message\": \"Mesh synchronization completed.\",\r\n  \"changes\": 2,\r\n  \"timestamp\": \"2026-11-13T10:00:00Z\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/discovery/{{gatewayId}}/synchronize",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "discovery",
+                "{{gatewayId}}",
+                "synchronize"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Retrieve topology",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Gateway ID is correct\", function () {\r\n    pm.expect(json.gatewayId).to.eql(pm.environment.get(\"gatewayId\"));\r\n});\r\n\r\npm.test(\"Nodes are returned as an array\", function () {\r\n    pm.expect(json.nodes).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Links are returned as an array\", function () {\r\n    pm.expect(json.links).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Topology counts are correct\", function () {\r\n    pm.expect(json.totalNodes).to.eql(json.nodes.length);\r\n    pm.expect(json.totalLinks).to.eql(json.links.length);\r\n});\r\n\r\npm.test(\"Node structure is valid\", function () {\r\n    if (json.nodes.length > 0) {\r\n        pm.expect(json.nodes[0]).to.have.property(\"id\");\r\n        pm.expect(json.nodes[0]).to.have.property(\"deviceIdentifier\");\r\n        pm.expect(json.nodes[0]).to.have.property(\"nodeType\");\r\n        pm.expect(json.nodes[0]).to.have.property(\"status\");\r\n    }\r\n});\r\n\r\npm.test(\"Link structure is valid\", function () {\r\n    if (json.links.length > 0) {\r\n        pm.expect(json.links[0]).to.have.property(\"id\");\r\n        pm.expect(json.links[0]).to.have.property(\"sourceNodeId\");\r\n        pm.expect(json.links[0]).to.have.property(\"targetNodeId\");\r\n        pm.expect(json.links[0]).to.have.property(\"linkQuality\");\r\n    }\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"gatewayId\": \"{{gatewayId}}\",\r\n  \"nodes\": [],\r\n  \"links\": [],\r\n  \"totalNodes\": 0,\r\n  \"totalLinks\": 0,\r\n  \"onlineNodes\": 0,\r\n  \"offlineNodes\": 0\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/topology",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "topology"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register mesh node",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Node was created\", function () {\r\n    pm.expect(json.id).to.not.be.undefined;\r\n});\r\n\r\npm.test(\"Node has a valid gateway\", function () {\r\n    pm.expect(json.gatewayId).to.eql(pm.environment.get(\"gatewayId\"));\r\n});\r\n\r\npm.test(\"Node has an identifier\", function () {\r\n    pm.expect(json.deviceIdentifier).to.be.a(\"string\").and.not.empty;\r\n});\r\n\r\npm.environment.set(\"meshNodeId\", json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"gatewayId\": \"{{gatewayId}}\",\r\n  \"name\": \"Test Mesh Node\",\r\n  \"deviceIdentifier\": \"AA:BB:CC:DD:EE:01\",\r\n  \"nodeType\": \"Sensor\",\r\n  \"status\": \"Online\",\r\n  \"isGateway\": false,\r\n  \"lastSeen\": \"2026-11-13T10:00:00Z\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/nodes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "nodes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update mesh node",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Node update returned valid data\", function () {\r\n    pm.expect(json.id).to.eql(pm.environment.get(\"meshNodeId\"));\r\n});\r\n\r\npm.test(\"Updated node contains its name\", function () {\r\n    pm.expect(json.name).to.be.a(\"string\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": \"{{nodeId}}\",\r\n  \"gatewayId\": \"{{gatewayId}}\",\r\n  \"name\": \"Updated Test Mesh Node\",\r\n  \"deviceIdentifier\": \"AA:BB:CC:DD:EE:01\",\r\n  \"nodeType\": \"Sensor\",\r\n  \"status\": \"Online\",\r\n  \"isGateway\": false,\r\n  \"lastSeen\": \"2026-11-13T10:30:00Z\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/nodes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "nodes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete mesh node",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {\r\n    pm.response.to.have.status(204);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/nodes/{{nodeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "nodes",
+                "{{nodeId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register mesh link",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {\r\n    pm.response.to.have.status(201);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Link was created\", function () {\r\n    pm.expect(json.id).to.not.be.undefined;\r\n});\r\n\r\npm.test(\"Link has valid endpoints\", function () {\r\n    pm.expect(json.sourceNodeId).to.not.eql(json.targetNodeId);\r\n});\r\n\r\npm.environment.set(\"meshLinkId\", json.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"id\": \"00000000-0000-0000-0000-000000000000\",\r\n  \"gatewayId\": \"{{gatewayId}}\",\r\n  \"sourceNodeId\": \"{{nodeId}}\",\r\n  \"targetNodeId\": \"{{nodeId2}}\",\r\n  \"signalStrengthDbm\": -65,\r\n  \"latencyMilliseconds\": 25,\r\n  \"energyCost\": 2.5,\r\n  \"isAvailable\": true,\r\n  \"linkQuality\": 90\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/links",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "links"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update mesh link",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Link was updated\", function () {\r\n    pm.expect(json.id).to.eql(pm.environment.get(\"meshLinkId\"));\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/links",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "links"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete mesh link",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {\r\n    pm.response.to.have.status(204);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/links/{{linkId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "links",
+                "{{linkId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mesh health and monitoring",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Health report returned\", function () {\r\n    pm.expect(json).to.be.an(\"object\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "health"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh monitoring",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Monitoring refresh completed\", function () {\r\n    pm.expect(json.message).to.include(\"refreshed\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/monitoring/refresh",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "monitoring",
+                "refresh"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Check node statuses",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Node monitoring completed\", function () {\r\n    pm.expect(json.message).to.include(\"checked\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/monitoring/nodes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "monitoring",
+                "nodes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Recalculate routes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Routes recalculated\", function () {\r\n    pm.expect(json.message).to.include(\"recalculated\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/monitoring/routes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "monitoring",
+                "routes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Evaluate all gateway links",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Link evaluation completed\", function () {\r\n    pm.expect(json.message).to.include(\"evaluated\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/links/evaluate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "links",
+                "evaluate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Evaluate individual link",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Link evaluation returned a message\", function () {\r\n    pm.expect(json.message).to.be.a(\"string\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/links/{{linkId}}/evaluate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "links",
+                "{{linkId}}",
+                "evaluate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Find shortest path (DIJkstra)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Route was found\", function () {\r\n    pm.expect(json).to.be.an(\"object\");\r\n});\r\n\r\npm.test(\"Route has a path\", function () {\r\n    pm.expect(json.path).to.be.an(\"array\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/routing/shortest-path?sourceNodeId={{nodeId}}&destinationNodeId={{nodeId2}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "routing",
+                "shortest-path"
+              ],
+              "query": [
+                {
+                  "key": "sourceNodeId",
+                  "value": "{{nodeId}}"
+                },
+                {
+                  "key": "destinationNodeId",
+                  "value": "{{nodeId2}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Breadth-first search (BFS)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"BFS traversal returned results\", function () {\r\n    pm.expect(json).to.be.an(\"object\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/traversal/bfs/{{nodeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "traversal",
+                "bfs",
+                "{{nodeId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Depth-first search (DFS)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"DFS traversal returned results\", function () {\r\n    pm.expect(json).to.be.an(\"object\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/traversal/dfs/{{nodeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "traversal",
+                "dfs",
+                "{{nodeId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "BFS Route",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"BFS route returned successfully\", function () {\r\n    pm.expect(json).to.be.an(\"object\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/traversal/bfs-route?sourceNodeId={{sourceNodeId}}&destinationNodeId={{destinationNodeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "traversal",
+                "bfs-route"
+              ],
+              "query": [
+                {
+                  "key": "sourceNodeId",
+                  "value": "{{sourceNodeId}}"
+                },
+                {
+                  "key": "destinationNodeId",
+                  "value": "{{destinationNodeId}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DFS route",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"DFS route returned successfully\", function () {\r\n    pm.expect(json).to.be.an(\"object\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/traversal/dfs-route?sourceNodeId={{nodeId}}&destinationNodeId={{nodeId2}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "traversal",
+                "dfs-route"
+              ],
+              "query": [
+                {
+                  "key": "sourceNodeId",
+                  "value": "{{nodeId}}"
+                },
+                {
+                  "key": "destinationNodeId",
+                  "value": "{{nodeId2}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Minimum spanning tree",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Spanning tree returned\", function () {\r\n    pm.expect(json).to.be.an(\"object\");\r\n});\r\n\r\npm.test(\"Connections collection exists\", function () {\r\n    pm.expect(json.connections).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Total connections are correct\", function () {\r\n    pm.expect(json.totalConnections).to.eql(json.connections.length);\r\n});\r\n\r\npm.test(\"Total cost is numeric\", function () {\r\n    pm.expect(json.totalCost).to.be.a(\"number\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/spanning-tree/{{nodeId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "spanning-tree",
+                "{{nodeId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Gateway logs",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Gateway logs returned as an array\", function () {\r\n    pm.expect(json).to.be.an(\"array\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/logs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "logs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Node logs",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Node logs returned as an array\", function () {\r\n    pm.expect(json).to.be.an(\"array\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/nodes/{{nodeId}}/logs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "nodes",
+                "{{nodeId}}",
+                "logs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mesh connections",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Connections returned as an array\", function () {\r\n    pm.expect(json).to.be.an(\"array\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/connections",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "connections"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Stored mesh routes",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Routes returned as an array\", function () {\r\n    pm.expect(json).to.be.an(\"array\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/mesh/{{gatewayId}}/routes",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "mesh",
+                "{{gatewayId}}",
+                "routes"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Predictive",
+      "item": [
+        {
+          "name": "Get senosr suggestions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Suggestions returned as an array\", function () {\r\n    pm.expect(json).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Suggestion structure is valid\", function () {\r\n    if (json.length > 0) {\r\n        pm.expect(json[0]).to.be.an(\"object\");\r\n    }\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/predictive/sensors/{{sensorId}}/suggestions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "predictive",
+                "sensors",
+                "{{sensorId}}",
+                "suggestions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Analyse sensor anomaly",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Anomaly analysis completed\", function () {\r\n    pm.expect([200, 404]).to.include(pm.response.code);\r\n});\r\n\r\nif (pm.response.code === 200) {\r\n    const json = pm.response.json();\r\n\r\n    pm.test(\"Recommendation returned\", function () {\r\n        pm.expect(json).to.be.an(\"object\");\r\n    });\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/predictive/sensors/{{sensorId}}/anomaly",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "predictive",
+                "sensors",
+                "{{sensorId}}",
+                "anomaly"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Retrieve gateway predictive warnings",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Gateway warnings returned as an array\", function () {\r\n    pm.expect(json).to.be.an(\"array\");\r\n});\r\n\r\npm.test(\"Warning entries are valid\", function () {\r\n    if (json.length > 0) {\r\n        pm.expect(json[0]).to.be.an(\"object\");\r\n    }\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/predictive/gateway/{{gatewayId}}/warnings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "predictive",
+                "gateway",
+                "{{gatewayId}}",
+                "warnings"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Alerts",
+      "item": [
+        {
+          "name": "Enqueue alert",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 202\", function () {\r\n    pm.response.to.have.status(202);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Alert was accepted\", function () {\r\n    pm.expect(json.sensorId).to.not.eql(\"00000000-0000-0000-0000-000000000000\");\r\n});\r\n\r\npm.test(\"Alert message exists\", function () {\r\n    pm.expect(json.message).to.be.a(\"string\").and.not.empty;\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"sensorId\": \"{{sensorId}}\",\r\n  \"message\": \"Temperature exceeded normal operating threshold.\",\r\n  \"severity\": \"High\",\r\n  \"timestamp\": \"2026-11-13T10:00:00Z\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/alert",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "alert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get all alerts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Alerts returned as an array\", function () {\r\n    pm.expect(json).to.be.an(\"array\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/alert",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "alert"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get pending alert count",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Alert count is numeric\", function () {\r\n    pm.expect(json).to.be.a(\"number\");\r\n});\r\n\r\npm.test(\"Alert count is not negative\", function () {\r\n    pm.expect(json).to.be.at.least(0);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/alert/count",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "alert",
+                "count"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Process next alert",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Alert processing returned a valid status\", function () {\r\n    pm.expect([200, 204]).to.include(pm.response.code);\r\n});\r\n\r\nif (pm.response.code === 200) {\r\n    const json = pm.response.json();\r\n\r\n    pm.test(\"Processed alert returned\", function () {\r\n        pm.expect(json).to.be.an(\"object\");\r\n    });\r\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/alert/process-next",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "alert",
+                "process-next"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Process all alerts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Processed alerts returned as an array\", function () {\r\n    pm.expect(json).to.be.an(\"array\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/alert/process-all",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "alert",
+                "process-all"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Clear alerts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 204\", function () {\r\n    pm.response.to.have.status(204);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/alert",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "alert"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Sensor Command",
+      "item": [
+        {
+          "name": "Send command",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Command result returned\", function () {\r\n    pm.expect(json).to.be.an(\"object\");\r\n});\r\n\r\npm.test(\"Success property exists\", function () {\r\n    pm.expect(json).to.have.property(\"success\");\r\n    pm.expect(json.success).to.be.a(\"boolean\");\r\n});\r\n\r\npm.test(\"Response or error message exists\", function () {\r\n    pm.expect(\r\n        json.response !== null ||\r\n        json.errorMessage !== null\r\n    ).to.eql(true);\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"sensorId\": \"{{sensorId}}\",\r\n  \"command\": \"GET_STATUS\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/sensorcommand/send",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sensorcommand",
+                "send"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Undo last command",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});\r\n\r\nconst json = pm.response.json();\r\n\r\npm.test(\"Undo result returned\", function () {\r\n    pm.expect(json).to.be.an(\"object\");\r\n});\r\n\r\npm.test(\"Success property exists\", function () {\r\n    pm.expect(json.success).to.be.a(\"boolean\");\r\n});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{firebaseToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/sensorcommand/{{sensorId}}/undo",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sensorcommand",
+                "{{sensorId}}",
+                "undo"
+              ]
             }
           },
           "response": []
