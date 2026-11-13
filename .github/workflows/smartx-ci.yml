@@ -1,0 +1,189 @@
+
+name: SmartX CI Pipeline
+
+on:
+  push:
+    branches:
+      - "**"
+
+  pull_request:
+    branches:
+      - "**"
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: SmartX Build and API Tests
+    runs-on: windows-latest
+
+    env:
+      CONFIGURATION: Release
+      API_PROJECT: SmartX.API/SmartX.API.csproj
+      API_PORT: 5080
+      API_URL: http://127.0.0.1:5080
+
+    steps:
+
+      # 1. Checkout repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Install .NET 10
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      # 3. Install Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # 4. Restore all solution dependencies
+      - name: Restore NuGet Dependencies
+        run: dotnet restore SmartX.sln
+
+      # 5. Build all seven SmartX projects
+      - name: Build SmartX Solution
+        run: dotnet build SmartX.sln --configuration Release --no-restore
+
+      # 6. Run automated .NET tests, if a test project exists
+      - name: Run Unit Tests
+        shell: pwsh
+        run: |
+          $projects = Get-ChildItem -Path . -Filter "*.csproj" -Recurse |
+            Where-Object {
+              $_.FullName -notmatch '\\bin\\|\\obj\\' -and
+              $_.Name -match 'Test'
+            }
+
+          if ($projects.Count -eq 0) {
+            Write-Host "No dedicated test projects found. Skipping unit tests."
+            exit 0
+          }
+
+          foreach ($project in $projects) {
+            dotnet test $project.FullName `
+              --configuration Release `
+              --no-build
+            if ($LASTEXITCODE -ne 0) {
+              throw "Unit tests failed: $($project.Name)"
+            }
+          }
+
+      # 7. Configure Firebase
+      - name: Configure Firebase
+        shell: pwsh
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+        run: |
+          if ($env:FIREBASE_SERVICE_ACCOUNT) {
+            $path = Join-Path $env:RUNNER_TEMP "firebase-service-account.json"
+
+            Set-Content -Path $path `
+              -Value $env:FIREBASE_SERVICE_ACCOUNT `
+              -NoNewline
+
+            "Firebase__ServiceAccountPath=$path" >> $env:GITHUB_ENV
+          }
+
+          if ($env:FIREBASE_PROJECT_ID) {
+            "Firebase__ProjectId=$env:FIREBASE_PROJECT_ID" >> $env:GITHUB_ENV
+          }
+
+      # 8. Start SmartX API
+      - name: Start SmartX API
+        shell: pwsh
+        env:
+          ASPNETCORE_ENVIRONMENT: Development
+          ASPNETCORE_URLS: http://127.0.0.1:5080
+        run: |
+          $process = Start-Process `
+            -FilePath "dotnet" `
+            -ArgumentList @(
+              "run",
+              "--project", $env:API_PROJECT,
+              "--no-build",
+              "--configuration", "Release",
+              "--no-launch-profile"
+            ) `
+            -PassThru `
+            -RedirectStandardOutput "$env:RUNNER_TEMP\smartx-api.log" `
+            -RedirectStandardError "$env:RUNNER_TEMP\smartx-api-error.log"
+
+          $process.Id | Out-File "$env:RUNNER_TEMP\smartx-api.pid"
+
+      # 9. Wait for API
+      - name: Wait for SmartX API
+        shell: pwsh
+        run: |
+          $ready = $false
+
+          for ($i = 0; $i -lt 60; $i++) {
+
+            $connection = Test-NetConnection `
+              -ComputerName 127.0.0.1 `
+              -Port 5080 `
+              -WarningAction SilentlyContinue
+
+            if ($connection.TcpTestSucceeded) {
+              $ready = $true
+              break
+            }
+
+            Start-Sleep -Seconds 2
+          }
+
+          if (-not $ready) {
+            Get-Content "$env:RUNNER_TEMP\smartx-api.log" -ErrorAction SilentlyContinue
+            Get-Content "$env:RUNNER_TEMP\smartx-api-error.log" -ErrorAction SilentlyContinue
+            throw "SmartX API failed to start."
+          }
+
+          Write-Host "SmartX API is running."
+
+      # 10. Install Newman
+      - name: Install Newman
+        run: npm install -g newman
+
+      # 11. Prepare test results
+      - name: Prepare Test Results
+        run: New-Item -ItemType Directory -Force TestResults
+
+      # 12. Run Postman collection from root directory
+      - name: Run Postman API Tests
+        run: |
+          newman run SmartX.postman_collection.json `
+            --env-var "baseUrl=$env:API_URL" `
+            --reporters cli,junit `
+            --reporter-junit-export TestResults/postman-results.xml
+
+      # 13. Upload test results
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: SmartX-Test-Results
+          path: |
+            TestResults/
+            ${{ runner.temp }}/smartx-api.log
+            ${{ runner.temp }}/smartx-api-error.log
+          if-no-files-found: ignore
+
+      # 14. Stop SmartX API
+      - name: Stop SmartX API
+        if: always()
+        shell: pwsh
+        run: |
+          $pidFile = "$env:RUNNER_TEMP\smartx-api.pid"
+
+          if (Test-Path $pidFile) {
+            $apiPid = [int](Get-Content $pidFile)
+            Stop-Process -Id $apiPid -Force -ErrorAction SilentlyContinue
+          }
